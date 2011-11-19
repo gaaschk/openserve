@@ -149,10 +149,10 @@
 				<configuration>
 					<databases>
 						<database>
-							<driverClassName>com.mysql.jdbc.Driver</driverClassName>
-							<userName>root</userName>
-							<password></password>
-							<url>jdbc:mysql://localhost:3306/phoenix</url>
+							<driverClassName>${database.driver}</driverClassName>
+							<userName>${database.username}</userName>
+							<password>${database.password}</password>
+							<url>${database.url}</url>
 							<schemaNames>phoenix</schemaNames>
 						</database>
 					</databases>
@@ -186,7 +186,6 @@
 			</plugin>
 		</plugins>
 	</build>
-
 	<repositories>
 		<repository>
 			<id>gsoft.central</id>
@@ -199,4 +198,33 @@
 			<url>http://maven.springframework.org/milestone</url>
 		</repository>
 	</repositories>
+	<profiles>
+		<profile>
+			<id>teamcity.profile</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>system.teamcity.projectName</name>
+					<value>Phoenix</value>
+				</property>
+			</activation>
+			<properties>
+				<database.driver>com.mysql.jdbc.Driver</database.driver>
+				<database.url>jdbc:mysql://localhost:3306/phoenix</database.url>
+				<database.username>root</database.username>
+				<database.password>5eqUxet7</database.password>
+			</properties>
+		</profile>
+		<profile>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<database.driver>com.mysql.jdbc.Driver</database.driver>
+				<database.url>jdbc:mysql://localhost:3306/phoenix</database.url>
+				<database.username>root</database.username>
+				<database.password></database.password>
+			</properties>
+		</profile>
+	</profiles>
 </project>
