@@ -14,6 +14,9 @@ public class Person implements PhoenixDomainObject{
 	private String ssn;
 	private String firstName;
 	private String lastName;
+	
+	public Person(){}
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Long getPersonID() {

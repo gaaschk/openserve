@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly=true)
 public class LoanEntryService {
 	@Resource
 	private MaintainLoanLogic maintainLoanLogic;
@@ -23,6 +23,7 @@ public class LoanEntryService {
 	@Resource
 	private SystemSettingsLogic systemSettingsLogic;
 	
+	@Transactional
 	public Long addNewLoan(LoanEntryDocument loanEntryDocument){
 		Loan newLoan = new Loan();
 		newLoan.setStartingPrincipal(loanEntryDocument.getStartingPrincipal());
