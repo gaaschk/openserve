@@ -153,7 +153,7 @@
 							<userName>${database.username}</userName>
 							<password>${database.password}</password>
 							<url>${database.url}</url>
-							<schemaNames>phoenix</schemaNames>
+							<schemaNames>${database.schema}</schemaNames>
 						</database>
 					</databases>
 					<scriptLocations>src/main/dbscripts</scriptLocations>
@@ -213,6 +213,7 @@
 				<database.url>jdbc:mysql://localhost:3306/phoenixci</database.url>
 				<database.username>root</database.username>
 				<database.password>5eqUxet7</database.password>
+				<database.schema>phoenixci</database.schema>
 			</properties>
 		</profile>
 		<profile>
@@ -221,9 +222,10 @@
 			</activation>
 			<properties>
 				<database.driver>com.mysql.jdbc.Driver</database.driver>
-				<database.url>jdbc:mysql://192.168.10.9:3306/phoenix</database.url>
+				<database.url>jdbc:mysql://localhost:3306/phoenix</database.url>
 				<database.username>root</database.username>
 				<database.password></database.password>
+				<database.schema>phoenix</database.schema>
 			</properties>
 		</profile>
 	</profiles>
