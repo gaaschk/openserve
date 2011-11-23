@@ -13,7 +13,7 @@
 	<!-- Load in application properties reference -->
 	<bean id="applicationProperties"
 			class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
-		<property name="location" value="#{systemProperties['env.IS_CI']=='true'?'classpath:phoenix/application.properties':'classpath:phoenix/ci.application.properties'}" />
+		<property name="location" value="#{systemProperties['env.IS_CI']=='true'?'classpath:phoenix/ci.application.properties':'classpath:phoenix/application.properties'}" />
 	</bean>
 	
 	<context:annotation-config />
