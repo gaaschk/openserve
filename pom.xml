@@ -190,7 +190,7 @@
 		<repository>
 			<id>gsoft.central</id>
 			<name>GSoft Central</name>
-			<url>https://gaaschk.dyndns-home.com/artifactory/repo/</url>
+			<url>https://www.laertessoft.biz/artifactory/repo/</url>
 		</repository>
 		<repository>
 			<id>repository.springframework.milestone</id>
