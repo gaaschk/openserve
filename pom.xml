@@ -210,7 +210,7 @@
 			</activation>
 			<properties>
 				<database.driver>com.mysql.jdbc.Driver</database.driver>
-				<database.url>jdbc:mysql://localhost:3306/phoenix</database.url>
+				<database.url>jdbc:mysql://localhost:3306/phoenixci</database.url>
 				<database.username>root</database.username>
 				<database.password>5eqUxet7</database.password>
 			</properties>
