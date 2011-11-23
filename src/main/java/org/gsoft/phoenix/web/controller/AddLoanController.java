@@ -1,7 +1,6 @@
 package org.gsoft.phoenix.web.controller;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 
 import org.gsoft.phoenix.domain.Person;
 import org.gsoft.phoenix.service.LoanEntryService;
@@ -57,6 +56,7 @@ public class AddLoanController {
 	public ModelAndView saveLoan(@ModelAttribute("loanModel") LoanEntryModel loanModel, ModelAndView model){
 		System.out.println("In the save loan method.");
 		Person person = personService.findPersonBySSN(loanModel.getPerson().getSsn());
+		if(person==null)person = personService.savePerson(person);
 		person.setFirstName(loanModel.getPerson().getFirstName());
 		person.setLastName(loanModel.getPerson().getLastName());
 		LoanEntryDocument newLoanDoc = new LoanEntryDocument();
