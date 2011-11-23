@@ -221,7 +221,7 @@
 			</activation>
 			<properties>
 				<database.driver>com.mysql.jdbc.Driver</database.driver>
-				<database.url>jdbc:mysql://localhost:3306/phoenix</database.url>
+				<database.url>jdbc:mysql://192.168.10.9:3306/phoenix</database.url>
 				<database.username>root</database.username>
 				<database.password></database.password>
 			</properties>
