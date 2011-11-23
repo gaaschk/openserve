@@ -7,6 +7,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <c:url value="/content/phoenixweb/images" var="imagesUrl" />
-<c:url value="/content/phoenixweb/css" var="cssUrl" />
+<c:url value="/content/nobranding/style" var="cssUrl" />
+<c:url value="style.css" var="cssName"/>
 <c:url value="/content/phoenixweb/js" var="jsUrl" />
 <c:url value="/web/home" var="baseUrl" />

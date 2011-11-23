@@ -4,12 +4,12 @@
 	<head>
 		<title>PhoenixWeb :: Home</title>
 		<c:if test="${empty cookie['ppmsc.embedded']}">
-			<link rel="stylesheet" href="${cssUrl}/lighttodark.css" type="text/css" media="screen" title="mesa" charset="utf-8" />
+			<link rel="stylesheet" href="${cssUrl}/${cssName}" type="text/css" media="screen" title="phoenixweb" charset="utf-8" />
 		</c:if>
 		<c:if test="${!empty cookie['ppmsc.embedded']}">
-			<link rel="stylesheet" href="${cssUrl}/lighttodark.css" type="text/css" media="screen" title="mesa" charset="utf-8" />
+			<link rel="stylesheet" href="${cssUrl}/${cssName}" type="text/css" media="screen" title="phoenixweb" charset="utf-8" />
 		</c:if>
-		<link rel="stylesheet" href="${cssUrl}/jquery-ui-1.7.2.custom.css" type="text/css" media="screen" title="mesa" charset="utf-8" />
+		<link rel="stylesheet" href="${cssUrl}/jquery-ui-1.7.2.custom.css" type="text/css" media="screen" title="phoenixweb" charset="utf-8" />
 		<script charset="utf-8" type="text/javascript" src="${jsUrl}/jquery-1.3.2.js"></script>
 		<script charset="utf-8" type="text/javascript" src="${jsUrl}/jquery-ui-1.7.2.custom.min.js"></script>
 		<script charset="utf-8" type="text/javascript" src="${jsUrl}/jquery.jeditable.js"></script>

@@ -31,11 +31,18 @@ public class DatabaseUtility {
 		dbprops.setProperty("database.url",dbURL);
 		dbprops.setProperty("database.schemaNames",dbSchemas);
 		dbprops.setProperty("dbMaintainer.script.locations", "src/main/dbscripts");
+		dbprops.setProperty("autoCreateDbMaintainScriptsTable", "true");
 		MainFactory factory = new MainFactory(dbprops);
 		DBClearer clearer = factory.createDBClearer();
 		clearer.clearDatabase();
 		DbMaintainer dbmaintainer = factory.createDbMaintainer();
 		dbmaintainer.updateDatabase(false);
+		System.out.println("*************************************************************************************");
+		System.out.println("Using database: " + dbprops.getProperty("database.driverClassName") +
+				", " + dbprops.getProperty("database.url") +
+				", " + dbprops.getProperty("database.userName") + 
+				", " + dbprops.getProperty("database.password") +
+				", autoCreateDbMaintainScriptsTable=" + dbprops.getProperty("autoCreateDbMaintainScriptsTable"));
 		System.out.println("Database refreshed");
 	}
 }
