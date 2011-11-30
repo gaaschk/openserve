@@ -1,12 +1,9 @@
 <%@ include file="/WEB-INF/jsp/includes.jsp" %>
 <form:form modelAttribute="personModel">
-	<table>
-		<tr>
-			<td>SSN:</td>
-			<td><form:input path="ssn"/></td>
-		</tr>
-		<tr>
-	 		<td colspan="2"><input type="submit" align="center" value="Search"></input></td>
-		</tr>
-	</table>
+	<fieldset>
+		<label>SSN:</label>		
+		<form:input path="ssn" type="text" data-meiomask-options="{mask: '999-99-9999', autoTab: true, removeIfInvalid: true}" data-meiomask="fixed"/>
+	</fieldset>
+	<input type="submit" value="Search"></input>
 </form:form>
+

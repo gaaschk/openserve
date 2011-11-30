@@ -11,4 +11,9 @@ public class MainController {
 	public ModelAndView loanMainPage(ModelAndView model){
 		return new ModelAndView("home/index");
 	}
+	
+	@RequestMapping(value="testmask")
+	public ModelAndView loadTest(ModelAndView model){
+		return new ModelAndView("testmask");
+	}
 }

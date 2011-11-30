@@ -1,4 +1,4 @@
-package org.gsoft.phoenix.web.model;
+package org.gsoft.phoenix.web.controller.addloan.model;
 
 public class PersonModel {
 	private Long personID;
@@ -19,6 +19,7 @@ public class PersonModel {
 	}
 
 	public void setSsn(String ssn) {
+		ssn = ssn.replaceAll("-", "");
 		this.ssn = ssn;
 	}
 

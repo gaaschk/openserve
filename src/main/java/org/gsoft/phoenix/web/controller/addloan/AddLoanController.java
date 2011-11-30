@@ -1,4 +1,4 @@
-package org.gsoft.phoenix.web.controller;
+package org.gsoft.phoenix.web.controller.addloan;
 
 import javax.annotation.Resource;
 
@@ -6,10 +6,10 @@ import org.gsoft.phoenix.domain.Person;
 import org.gsoft.phoenix.service.LoanEntryService;
 import org.gsoft.phoenix.service.PersonService;
 import org.gsoft.phoenix.service.domain.LoanEntryDocument;
-import org.gsoft.phoenix.web.model.LoanEntryModel;
-import org.gsoft.phoenix.web.model.LoanEntryModelConverter;
-import org.gsoft.phoenix.web.model.PersonModel;
-import org.gsoft.phoenix.web.model.PersonModelConverter;
+import org.gsoft.phoenix.web.controller.addloan.model.LoanEntryModel;
+import org.gsoft.phoenix.web.controller.addloan.model.LoanEntryModelConverter;
+import org.gsoft.phoenix.web.controller.addloan.model.PersonModel;
+import org.gsoft.phoenix.web.controller.addloan.model.PersonModelConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;

@@ -1,4 +1,4 @@
-package org.gsoft.phoenix.web.model;
+package org.gsoft.phoenix.web.controller.addloan.model;
 
 import javax.annotation.Resource;
 
