@@ -17,8 +17,8 @@
 		<script type="text/javascript" src="${jsUrl}/coin-slider.min.js"></script>
 		-->
 		
-		<script src="${jsUrl}/mootools-core-1.3-full-nocompat.js" type="text/javascript" charset="utf-8"></script>
-		<script src="${jsUrl}/mootools-more-1.3.0.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${jsUrl}/mootools-core-1.4.1-full-compat.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${jsUrl}/mootools-more-1.4.0.1.js" type="text/javascript" charset="utf-8"></script>
 		
 		<script src="${jsUrl}/Meio.Mask.js" type="text/javascript"></script>
 		<script src="${jsUrl}/Meio.Mask.Fixed.js" type="text/javascript"></script>
@@ -28,7 +28,7 @@
 		<script src="${jsUrl}/Meio.Mask.Regexp.js" type="text/javascript"></script>
 		<script src="${jsUrl}/Meio.Mask.Extras.js" type="text/javascript"></script>
 		<style type="text/css">
-			fieldset{ display: compact; border-style: none;}
+			fieldset{ display: table; border-style: none;}
 			label{ float: left; width: 100px; }
 		</style>
 	</head>
@@ -60,25 +60,23 @@
 		</div>
 		<div class="footer">
 			<div class="footer_resize">
-				<span>1.877.456.4PPS (4777) &#8226; Borrowers </span>
-				<br/>
-				<span>1.877.458.4PPS (4777) &#8226; Financial Partners </span>
+				<span>1.877.COLOGY3</span>
 				<br/>
 				<span>
-					<a href="http://www.ppslc.com/disclaimer.php">Website Disclaimer and Privacy Policy</a>
+					<a href="http://www2.cology.com/privacy-policy">Privacy Policy</a>
 				</span>
 				<br/>
-				<span>Copyright &copy; 2010  Panhandle-Plains Management and Servicing Corporation</span>
+				<span>Copyright &copy; </span>
 			</div>
 		</div>
 	<script type="text/javascript">
-		$$('input').each(
+		$$('input[data-meiomask]').each(
 				function(input) {
 					input.meiomask(input.get('data-meiomask'), JSON
 							.decode(input.get('data-meiomask-options')));
 				});
-		$$('input').each(function(input) {
-			console.log(input.get('meiomask'));
+		$$('input[data-meiomask]').each(function(input) {
+			console.log("meiomask: " + input.get('data-meiomask'));
 		});
 	</script>
 </body>

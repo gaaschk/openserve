@@ -8,24 +8,24 @@
 	</fieldset>
 	<fieldset>
 		<label>First Name:</label>
-		<form:input path="person.firstName"/>
+		<form:input path="person.firstName" type="text"/>
 	</fieldset>
 	<fieldset>
 		<label>Last Name:</label>
-		<form:input path="person.lastName"/>
+		<form:input path="person.lastName" type="text"/>
 	</fieldset>
 	<h3>Loan Data</h3>
 	<fieldset>
 		<label>Starting Principal:</label>
-		<form:input path="startingPrincipal" type="text" data-meiomask-options="{mask: '999-99-9999', autoTab: true, removeIfInvalid: true}" data-meiomask="fixed"/>
+		<form:input class="masked" path="startingPrincipal" type="text" data-meiomask="reverse.dollar"/>
 	</fieldset>
 	<fieldset>
 		<label>Starting Interest:</label>
-		<form:input path="startingInterest" data-meiomask="regexp.currency" />
+		<form:input class="masked" path="startingInterest" data-meiomask="reverse.dollar" />
 	</fieldset>
 	<fieldset>
 		<label>Starting Fees:</label>
-		<form:input path="startingFees" data-meiomask="regexp.currency" />
+		<form:input class="masked" path="startingFees" data-meiomask="reverse.dollar" />
 	</fieldset>
 	<input type="submit" value="Save Loan"></input>
 </form:form>

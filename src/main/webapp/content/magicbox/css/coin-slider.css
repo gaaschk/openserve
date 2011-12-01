@@ -5,7 +5,7 @@
 .coin-slider {
 	padding:0;
 	overflow:hidden;
-	zoom:1;
+	/*zoom:1;*/
 	position:relative;
 	float:right;
 }

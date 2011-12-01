@@ -2,6 +2,7 @@ package org.gsoft.phoenix.web.controller.addloan.model;
 
 import java.math.BigDecimal;
 
+
 public class LoanEntryModel {
 	private Long loanID;
 	private PersonModel person;

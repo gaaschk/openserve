@@ -20,6 +20,14 @@
 	<context:component-scan base-package="org.gsoft.phoenix" />
 	<data:repositories base-package="org.gsoft.phoenix.repositories" />
 
+	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+    	<property name="converters">
+        	<list>
+            	<bean class="org.gsoft.phoenix.util.CurrencyConverterFactory"/>
+        	</list>
+    	</property>
+	</bean>
+
 	<!-- DataSource configuration -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
