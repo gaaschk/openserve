@@ -3,8 +3,5 @@ create table Loan(
 	StartingPrincipal INTEGER NOT NULL,
 	StartingInterest FLOAT NOT NULL,
 	StartingFees INTEGER NOT NULL,
-	CurrentPrincipal INTEGER,
-	CurrentInterest FLOAT,
-	CurrentFees INTEGER,
 	Margin FLOAT NOT NULL
 );

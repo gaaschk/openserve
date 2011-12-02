@@ -2,6 +2,7 @@ package org.gsoft.phoenix.buslogic;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -32,5 +33,9 @@ public class MaintainLoanLogic {
 	
 	public Integer getLoanPrincipalBalanceAsOf(Loan loan, Date asOfDate){
 		return loanEventLogic.findMostRecentLoanEventWithTransactionEffectivePriorToDate(loan.getLoanID(), asOfDate).getLoanTransaction().getEndingPrincipal();
+	}
+	
+	public List<Loan> getAllLoansForBorrower(Long borrowerID){
+		return loanRepository.findAllLoansByBorrowerPersonID(borrowerID);
 	}
 }

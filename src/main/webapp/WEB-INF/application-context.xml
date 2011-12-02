@@ -20,10 +20,15 @@
 	<context:component-scan base-package="org.gsoft.phoenix" />
 	<data:repositories base-package="org.gsoft.phoenix.repositories" />
 
-	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+    	<property name="formatters">
+    		<list>
+    			<bean class="org.gsoft.phoenix.util.formatter.CurrencyInPenniesFormatAnnotationFormatterFactory"/>
+    		</list>
+    	</property>
     	<property name="converters">
         	<list>
-            	<bean class="org.gsoft.phoenix.util.CurrencyConverterFactory"/>
+        		<bean class="org.gsoft.phoenix.util.CurrencyInPenniesConverterFactory"/>
         	</list>
     	</property>
 	</bean>

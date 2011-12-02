@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@SessionAttributes({"loanModel"})
+@SessionAttributes({"loanModel","ssn"})
 public class AddLoanController {
 	@Resource
 	private PersonService personService;
@@ -66,7 +66,8 @@ public class AddLoanController {
 		loanModel.getPerson().setPersonID(person.getPersonID());
 		model.addObject("loanModel", loanModel);
 		System.out.println("Loan Saved. [loanID="+loanID+", personID="+person.getPersonID()+"]");
-		model.setViewName("addloan/savedloanresult");
+		model.addObject("ssn", person.getSsn());
+		model.setViewName("redirect:../accountsummary/home.do");
 		return model;
 	}
 }

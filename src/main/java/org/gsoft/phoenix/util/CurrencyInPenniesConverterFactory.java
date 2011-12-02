@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 
-public class CurrencyConverterFactory implements ConverterFactory<String, Number>{
+public class CurrencyInPenniesConverterFactory implements ConverterFactory<String, Number>{
 	public <T extends Number> Converter<String, T> getConverter(Class<T> targetType){
 		return new StringToCurrencyConverter<T>(targetType);
 	}
@@ -14,7 +14,7 @@ public class CurrencyConverterFactory implements ConverterFactory<String, Number
         private Class<T> currencyType;
 
         public StringToCurrencyConverter(Class<T> currencyType) {
-            this.currencyType = currencyType;
+        	this.currencyType = currencyType;
         }
 
         public T convert(String source) {
