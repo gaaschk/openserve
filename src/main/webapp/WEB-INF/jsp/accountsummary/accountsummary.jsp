@@ -24,8 +24,26 @@
 		</td>
 	</tr>
 </table>
-<table border="1">
-	<caption align="top"><h3 align="left">Loans</h3></caption>
+<style type="text/css">
+table.loans{
+	border-width: thin;
+	border-style: inset;
+	caption-side: top;
+}
+table.loans caption{
+	align: right;
+	font-weight: bolder;
+	font-size: medium;
+}
+table.loans tr td input{
+	text-align: right;
+}
+table.loans caption label{
+	text-align: left;
+}
+</style>
+<table class="loans">
+	<caption><label>Loans</label></caption>
 	<tr>
 		<th><label>Current Principal</label></th>
 		<th><label>Current Interest</label></th>
