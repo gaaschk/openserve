@@ -38,4 +38,8 @@ public class MaintainLoanLogic {
 	public List<Loan> getAllLoansForBorrower(Long borrowerID){
 		return loanRepository.findAllLoansByBorrowerPersonID(borrowerID);
 	}
+
+	public Loan getLoanByID(Long loanID){
+		return loanRepository.findOne(loanID);
+	}
 }

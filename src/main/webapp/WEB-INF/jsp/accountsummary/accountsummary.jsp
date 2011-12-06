@@ -42,19 +42,49 @@ table.loans caption label{
 	text-align: left;
 }
 </style>
-<table class="loans">
+<table class="loans" id="loantable">
 	<caption><label>Loans</label></caption>
 	<tr>
+		<th><label></label></th>
 		<th><label>Current Principal</label></th>
 		<th><label>Current Interest</label></th>
 		<th><label>Current Fees</label></th>
 	</tr>
 	<c:forEach var="loan" items="${accountmodel.loans}" varStatus="index">
-		<tr>
-			<td><form:input disabled="true" path="loans[${index.count-1}].currentPrincipal"/></td>
-			<td><form:input disabled="true" path="loans[${index.count-1}].currentInterest"/></td>
-			<td><form:input disabled="true" path="loans[${index.count-1}].currentFees"/></td>
+		<tr class="loanrow" >
+			<td><input type="radio" class="loanrowrb" id="${loan.loanID}"/></td>
+			<td><form:input class="loancell" disabled="false" path="loans[${index.count-1}].currentPrincipal"/></td>
+			<td><form:input class="loancell" disabled="true" path="loans[${index.count-1}].currentInterest"/></td>
+			<td><form:input class="loancell" disabled="true" path="loans[${index.count-1}].currentFees"/></td>
 		</tr>
 	</c:forEach>
 </table>
 </form:form>
+<div id="loanDetail">
+	<p>Select a loan for detail</p>	
+</div>
+
+<script type="text/javascript">
+window.addEvent('domready', function() {
+ 
+	var loans = $$("#loantable .loanrowrb");
+	loans.each(function(loan, i) {
+		loan.addEvent("click", function(event) {
+			var selectedloans = $$("#loantable .loanrowrb")
+			for(var idx = 0; idx < selectedloans.length; idx++){
+				if(selectedloans[idx] != this)
+					selectedloans[idx].checked = false;
+			}
+			var documenturl = new URI(document.location.href);
+			var url = documenturl.get('scheme')+'://'+documenturl.get('host')+':'+documenturl.get('port')+documenturl.get('directory')+'loandetail.do?loandetailid='+this.id;
+			new Request.HTML({
+				url: url,
+				method: 'get',
+				update: 'loanDetail',
+				evalScripts: true, /* this is the default */
+				onComplete: function(){console.log('ajax complete!')}
+				}).send();
+		});
+	});
+});
+</script>

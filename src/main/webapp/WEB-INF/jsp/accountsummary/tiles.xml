@@ -7,4 +7,8 @@
         <put-attribute name="menu" value="/WEB-INF/jsp/accountsummary/menu.jsp" />
         <put-attribute name="content" value="/WEB-INF/jsp/accountsummary/accountsummary.jsp" />
     </definition>
+    
+    <definition name="accountsummary/loandetail" template="/WEB-INF/jsp/empty_template.jsp">
+    	<put-attribute name="content" value="/WEB-INF/jsp/accountsummary/loandetail.jsp"/>
+    </definition>
 </tiles-definitions>

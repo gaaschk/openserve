@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 public class LoanSummaryModelConverter {
 	public LoanSummaryModel convertToModel(Loan loan){
 		LoanSummaryModel model = new LoanSummaryModel();
+		model.setLoanID(loan.getLoanID());
 		model.setCurrentPrincipal(loan.getCurrentPrincipal());
 		model.setCurrentInterest(loan.getCurrentInterest());
 		model.setCurrentFees(loan.getCurrentFees());

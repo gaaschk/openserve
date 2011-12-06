@@ -1,5 +1,6 @@
 package org.gsoft.phoenix.web.controller.accountsummary;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -39,13 +41,22 @@ public class AccountSummaryController {
 		Person borrower = personService.findPersonBySSN(ssn);
 		PersonModel personModel = personModelConverter.convertToModel(borrower);
 		accountSummaryModel.setBorrower(personModel);
-		List<Loan> loans = accountSummaryService.getAllLoanForBorrower(borrower.getPersonID());
+		List<Loan> loans = accountSummaryService.getAllLoansForBorrower(borrower.getPersonID());
 		accountSummaryModel.setLoans(new ArrayList<LoanSummaryModel>());
 		for(Loan loan:loans){
 			accountSummaryModel.getLoans().add(loanSummaryModelConverter.convertToModel(loan));
 		}
 		model.addObject("accountmodel", accountSummaryModel);
 		model.setViewName("accountsummary/accountsummary");
+		return model;
+	}
+	
+	@RequestMapping(value="accountsummary/loandetail.do", method=RequestMethod.GET)
+	public ModelAndView showLoanDetail(@RequestParam("loandetailid") String loanid, ModelAndView model){
+		Loan theLoan = accountSummaryService.getLoanByID(new Long(loanid));
+		LoanSummaryModel loanDetailModel = loanSummaryModelConverter.convertToModel(theLoan);
+		model.addObject("loandetailmodel", loanDetailModel);
+		model.setViewName("accountsummary/loandetail");
 		return model;
 	}
 }

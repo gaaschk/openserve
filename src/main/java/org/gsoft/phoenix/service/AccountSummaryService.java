@@ -15,7 +15,11 @@ public class AccountSummaryService {
 	@Resource
 	private MaintainLoanLogic maintainLoanLogic;
 	
-	public List<Loan> getAllLoanForBorrower(Long borrowerID){
+	public List<Loan> getAllLoansForBorrower(Long borrowerID){
 		return maintainLoanLogic.getAllLoansForBorrower(borrowerID);
+	}
+	
+	public Loan getLoanByID(Long loanID){
+		return maintainLoanLogic.getLoanByID(loanID);
 	}
 }

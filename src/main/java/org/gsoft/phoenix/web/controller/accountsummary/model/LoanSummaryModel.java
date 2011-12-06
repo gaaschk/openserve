@@ -9,6 +9,7 @@ public class LoanSummaryModel {
 	private Integer currentPrincipal;
 	private BigDecimal currentInterest;
 	private Integer currentFees;
+	private boolean selected;
 	
 	public Long getLoanID(){
 		return loanID;
@@ -36,5 +37,11 @@ public class LoanSummaryModel {
 	}
 	public void setCurrentFees(Integer currentFees) {
 		this.currentFees = currentFees;
+	}
+	public boolean isSelected() {
+		return selected;
+	}
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 }
