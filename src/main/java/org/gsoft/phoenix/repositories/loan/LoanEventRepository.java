@@ -1,6 +1,7 @@
 package org.gsoft.phoenix.repositories.loan;
 
 import java.util.Date;
+import java.util.List;
 
 import org.gsoft.phoenix.domain.loan.LoanEvent;
 import org.gsoft.phoenix.repositories.BaseRepository;
@@ -18,4 +19,7 @@ public interface LoanEventRepository extends BaseRepository<LoanEvent, Long>{
 	@Query("select le from LoanEvent le where le.loanTransaction is not null and " +
 			"le.loanEventID = (select max(le2.loanEventID) from LoanEvent le2 where le2.loanID = :loanID)")
 	public LoanEvent findMostRecentLoanEventWithTransaction(@Param("loanID") Long loanID);
+	
+	@Query("select le from LoanEvent le where le.loanID = :loanID")
+	public List<LoanEvent> findAllByLoanID(@Param("loanID") Long loanID);
 }

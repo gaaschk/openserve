@@ -1,4 +1,47 @@
 <%@ include file="/WEB-INF/jsp/includes.jsp" %>
+<style type="text/css">
+table.loans{
+	border-width: thin;
+	border-style: inset;
+	caption-side: top;
+}
+table.loans caption{
+	align: right;
+	font-weight: bolder;
+	font-size: medium;
+}
+table.loans tr td input{
+	text-align: right;
+}
+table.loans caption label{
+	text-align: left;
+}
+</style>
+
+<script type="text/javascript">
+window.addEvent('domready', function() {
+ 
+	var loans = $$("#loantable .loanrowrb");
+	loans.each(function(loan, i) {
+		loan.addEvent("click", function(event) {
+			var selectedloans = $$("#loantable .loanrowrb")
+			for(var idx = 0; idx < selectedloans.length; idx++){
+				if(selectedloans[idx] != this)
+					selectedloans[idx].checked = false;
+			}
+			var documenturl = new URI(document.location.href);
+			var url = documenturl.get('scheme')+'://'+documenturl.get('host')+':'+documenturl.get('port')+documenturl.get('directory')+'loandetail.do?loandetailid='+this.id;
+			new Request.HTML({
+				url: url,
+				method: 'get',
+				update: 'loanDetail',
+				evalScripts: true /* this is the default */
+				}).send();
+		});
+	});
+});
+</script>
+
 <form:form commandName="accountmodel">
 <table>
 	<tr>
@@ -24,24 +67,6 @@
 		</td>
 	</tr>
 </table>
-<style type="text/css">
-table.loans{
-	border-width: thin;
-	border-style: inset;
-	caption-side: top;
-}
-table.loans caption{
-	align: right;
-	font-weight: bolder;
-	font-size: medium;
-}
-table.loans tr td input{
-	text-align: right;
-}
-table.loans caption label{
-	text-align: left;
-}
-</style>
 <table class="loans" id="loantable">
 	<caption><label>Loans</label></caption>
 	<tr>
@@ -53,7 +78,7 @@ table.loans caption label{
 	<c:forEach var="loan" items="${accountmodel.loans}" varStatus="index">
 		<tr class="loanrow" >
 			<td><input type="radio" class="loanrowrb" id="${loan.loanID}"/></td>
-			<td><form:input class="loancell" disabled="false" path="loans[${index.count-1}].currentPrincipal"/></td>
+			<td><form:input class="loancell" disabled="true" path="loans[${index.count-1}].currentPrincipal"/></td>
 			<td><form:input class="loancell" disabled="true" path="loans[${index.count-1}].currentInterest"/></td>
 			<td><form:input class="loancell" disabled="true" path="loans[${index.count-1}].currentFees"/></td>
 		</tr>
@@ -64,27 +89,3 @@ table.loans caption label{
 	<p>Select a loan for detail</p>	
 </div>
 
-<script type="text/javascript">
-window.addEvent('domready', function() {
- 
-	var loans = $$("#loantable .loanrowrb");
-	loans.each(function(loan, i) {
-		loan.addEvent("click", function(event) {
-			var selectedloans = $$("#loantable .loanrowrb")
-			for(var idx = 0; idx < selectedloans.length; idx++){
-				if(selectedloans[idx] != this)
-					selectedloans[idx].checked = false;
-			}
-			var documenturl = new URI(document.location.href);
-			var url = documenturl.get('scheme')+'://'+documenturl.get('host')+':'+documenturl.get('port')+documenturl.get('directory')+'loandetail.do?loandetailid='+this.id;
-			new Request.HTML({
-				url: url,
-				method: 'get',
-				update: 'loanDetail',
-				evalScripts: true, /* this is the default */
-				onComplete: function(){console.log('ajax complete!')}
-				}).send();
-		});
-	});
-});
-</script>

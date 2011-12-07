@@ -1,6 +1,5 @@
 package org.gsoft.phoenix.web.controller.accountsummary;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +10,8 @@ import org.gsoft.phoenix.domain.Person;
 import org.gsoft.phoenix.service.AccountSummaryService;
 import org.gsoft.phoenix.service.PersonService;
 import org.gsoft.phoenix.web.controller.accountsummary.model.AccountSummaryModel;
+import org.gsoft.phoenix.web.controller.accountsummary.model.LoanDetailModel;
+import org.gsoft.phoenix.web.controller.accountsummary.model.LoanDetailModelConverter;
 import org.gsoft.phoenix.web.controller.accountsummary.model.LoanSummaryModel;
 import org.gsoft.phoenix.web.controller.accountsummary.model.LoanSummaryModelConverter;
 import org.gsoft.phoenix.web.controller.addloan.model.PersonModel;
@@ -34,8 +35,22 @@ public class AccountSummaryController {
 	private PersonModelConverter personModelConverter;
 	@Resource
 	private LoanSummaryModelConverter loanSummaryModelConverter;
+	@Resource
+	private LoanDetailModelConverter loanDetailModelConverter;
 	
 	@RequestMapping(value="accountsummary/home.do", method=RequestMethod.GET)
+	public ModelAndView loadPersonSearch(ModelAndView model){
+		model.addObject("personModel", new PersonModel());
+		model.setViewName("accountsummary/personsearch");
+		return model;
+	}
+	
+	@RequestMapping(value="accountsummary/home.do", method=RequestMethod.POST)
+	public ModelAndView findPerson(@ModelAttribute("personModel") PersonModel person, ModelAndView model){
+		return loadAccount(person.getSsn(), model);
+	}
+
+	@RequestMapping(value="accountsummary/accountsummary.do", method=RequestMethod.GET)
 	public ModelAndView loadAccount(@ModelAttribute("ssn") String ssn, ModelAndView model){
 		AccountSummaryModel accountSummaryModel = new AccountSummaryModel();
 		Person borrower = personService.findPersonBySSN(ssn);
@@ -54,7 +69,7 @@ public class AccountSummaryController {
 	@RequestMapping(value="accountsummary/loandetail.do", method=RequestMethod.GET)
 	public ModelAndView showLoanDetail(@RequestParam("loandetailid") String loanid, ModelAndView model){
 		Loan theLoan = accountSummaryService.getLoanByID(new Long(loanid));
-		LoanSummaryModel loanDetailModel = loanSummaryModelConverter.convertToModel(theLoan);
+		LoanDetailModel loanDetailModel = loanDetailModelConverter.convertToModel(theLoan);
 		model.addObject("loandetailmodel", loanDetailModel);
 		model.setViewName("accountsummary/loandetail");
 		return model;
