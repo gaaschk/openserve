@@ -27,6 +27,23 @@
 		<script src="${jsUrl}/Meio.Mask.Reverse.js" type="text/javascript"></script>
 		<script src="${jsUrl}/Meio.Mask.Regexp.js" type="text/javascript"></script>
 		<script src="${jsUrl}/Meio.Mask.Extras.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			window.addEvent('domready', function() {
+  				//time to implement fancy show / hide
+  				Element.implement({
+    				//implement show
+				    fancyShow: function() {
+      					this.show();
+      					this.fade('in');
+    				},	
+    				//implement hide
+    				fancyHide: function() {
+      					this.fade('out');
+      					this.hide();
+    				}
+  				});
+			});		
+		</script>
 		<style type="text/css">
 			fieldset{ display: table; border-style: none;}
 			label{ float: left; width: 100px; }
