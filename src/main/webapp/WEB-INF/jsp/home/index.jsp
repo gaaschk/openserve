@@ -1,2 +1,2 @@
 <%@ include file="/WEB-INF/jsp/includes.jsp"%>
-<a href="../addloan/index.do">Add a new Loan</a>
+<h1>This is a really cool application</h1>

@@ -2,9 +2,10 @@
 <style type="text/css">
 #tabContainer{ 
   position:relative; 
-  width:400px;
+  width:700px;
   border-style: inset;
   border-width: thin;
+  
 } 
 
 #tabMenu{ 

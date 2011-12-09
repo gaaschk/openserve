@@ -4,7 +4,7 @@
        "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <tiles-definitions>
     <definition name="accountsummary/accountsummary" template="/WEB-INF/jsp/template.jsp">
-        <put-attribute name="menu" value="/WEB-INF/jsp/accountsummary/menu.jsp" />
+        <put-attribute name="menu" value="/WEB-INF/jsp/home/menu.jsp" />
         <put-attribute name="content" value="/WEB-INF/jsp/accountsummary/accountsummary.jsp" />
     </definition>
     
@@ -13,7 +13,7 @@
     </definition>
 
     <definition name="accountsummary/personsearch" template="/WEB-INF/jsp/template.jsp">
-        <put-attribute name="menu" value="/WEB-INF/jsp/accountsummary/menu.jsp" />
+        <put-attribute name="menu" value="/WEB-INF/jsp/home/menu.jsp" />
         <put-attribute name="content" value="/WEB-INF/jsp/addloan/personsearch.jsp" />
     </definition>
 </tiles-definitions>

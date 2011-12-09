@@ -4,9 +4,9 @@
 	<head>
 		<title>PhoenixWeb :: Home</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<!-- 
 		<link href="${cssUrl}/${cssName}" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" type="text/css" href="${cssUrl}/coin-slider.css" />
-		<!-- 
 		<script type="text/javascript" src="${jsUrl}/cufon-yui.js"></script>
 		<script type="text/javascript" src="${jsUrl}/cufon-times.js"></script>
 		<script type="text/javascript" src="${jsUrl}/jquery-1.4.2.min.js"></script>
@@ -16,9 +16,19 @@
 		<script type="text/javascript" src="${jsUrl}/script.js"></script>
 		<script type="text/javascript" src="${jsUrl}/coin-slider.min.js"></script>
 		-->
+
+		<link rel="stylesheet" type="text/css" href="/phoenixweb/content/mocha/themes/default/css/Content.css" />
+		<link rel="stylesheet" type="text/css" href="/phoenixweb/content/mocha/themes/default/css/Core.css" />
+		<link rel="stylesheet" type="text/css" href="/phoenixweb/content/mocha/themes/default/css/Layout.css" />
+		<link rel="stylesheet" type="text/css" href="/phoenixweb/content/mocha/themes/default/css/Dock.css" />
+		<link rel="stylesheet" type="text/css" href="/phoenixweb/content/mocha/themes/default/css/Window.css" />
+		<link rel="stylesheet" type="text/css" href="/phoenixweb/content/mocha/themes/default/css/Tabs.css" />
 		
 		<script src="${jsUrl}/mootools-core-1.4.1-full-compat.js" type="text/javascript" charset="utf-8"></script>
 		<script src="${jsUrl}/mootools-more-1.4.0.1.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src="${jsUrl}/mocha.js" type="text/javascript"></script>
+		<script src="${jsUrl}/mocha-init.js" type="text/javascript"></script>
 		
 		<script src="${jsUrl}/Meio.Mask.js" type="text/javascript"></script>
 		<script src="${jsUrl}/Meio.Mask.Fixed.js" type="text/javascript"></script>
@@ -50,51 +60,50 @@
 		</style>
 	</head>
 	<body>
-		<div class="main">
-			<div class="header_resize">
-				<div class="header">	
-					<img src="${imagesUrl}/cology-logo.png" alt="Cology, Inc." />
-				   	<div class="clr"></div>
-					<div class="menu_nav">
-						<tiles:insertAttribute name="menu" />	
+	  <div id="desktop">
+		<div id="dektopHeader">
+			<div id="desktopTitlebarWrapper">
+				<div id="desktopTitlebar">
+					<h1 class="applicationTitle">Phoenix</h1>
+					<h2 class="tagline">
+						A <span class="taglineEm">Loan Servicing</span> Application
+					</h2>
+					<div id="topNav">
+						<tiles:insertAttribute name="menu" />
 					</div>
-				    <div class="clr"></div>
 				</div>
 			</div>
-		<div class="sidebar">
-			<div class="sidebar_resize">
-				A Menu Item Goes here.
-			</div>
+		<div id="desktopNavbar">	
+			<ul>
+				<li class="menu-item"><a href="../addloan/index.do">Add a new Loan</a></li>
+				<li class="menu-item"><a href="/phoenixweb/web/payment/search.do">Payment</a></li>
+				<li class="menu-item"><a href="/phoenixweb/web/accountsummary/home.do">Account Summary</a></li>
+			</ul>
 		</div>
-		<div class="content">
-			<div class="content_resize">
-				<div class="article">
+		<div id="pageWrapper">
 					<tiles:insertAttribute name="content" />
-				</div>
-			</div>
 		</div>
-		<div class="clr"></div>
-		</div>
-		<div class="footer">
-			<div class="footer_resize">
-				<span>1.877.COLOGY3</span>
+		
+		<div id="desktopFooterWrapper">
+			<div id="desktopFooter">
+				<span>1.877.MYNUMBER</span>
 				<br/>
 				<span>
-					<a href="http://www2.cology.com/privacy-policy">Privacy Policy</a>
+					<a href="">Privacy Policy</a>
 				</span>
 				<br/>
 				<span>Copyright &copy; </span>
 			</div>
 		</div>
-	<script type="text/javascript">
-		$$('input[data-meiomask]').each(
+		<script type="text/javascript">
+			$$('input[data-meiomask]').each(
 				function(input) {
 					input.meiomask(input.get('data-meiomask'), JSON
 							.decode(input.get('data-meiomask-options')));
 				});
-		$$('input[data-meiomask]').each(function(input) {
-			console.log("meiomask: " + input.get('data-meiomask'));
-		});
-	</script>
+			$$('input[data-meiomask]').each(function(input) {
+				console.log("meiomask: " + input.get('data-meiomask'));
+			});
+		</script>
 </body>
 </html>
