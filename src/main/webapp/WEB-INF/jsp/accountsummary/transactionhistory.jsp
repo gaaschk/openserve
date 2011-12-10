@@ -19,6 +19,13 @@
 			<td><form:input disabled="true" path="loanHistory[${index.count-1}].loanEventEffectiveDate"/></td>
 			<td><form:input disabled="true" path="loanHistory[${index.count-1}].loanEventPostDate"/></td>
 			<td><form:input disabled="true" path="loanHistory[${index.count-1}].loanEventType"/></td>
+			<td><form:input disabled="true" path="loanHistory[${index.count-1}].interestAccrued"/></td>
+			<td><form:input disabled="true" path="loanHistory[${index.count-1}].principalChange"/></td>
+			<td><form:input disabled="true" path="loanHistory[${index.count-1}].interestChange"/></td>
+			<td><form:input disabled="true" path="loanHistory[${index.count-1}].feesChange"/></td>
+			<td><form:input disabled="true" path="loanHistory[${index.count-1}].endingPrincipal"/></td>
+			<td><form:input disabled="true" path="loanHistory[${index.count-1}].endingInterest"/></td>
+			<td><form:input disabled="true" path="loanHistory[${index.count-1}].endingFees"/></td>
 		</tr>
 	 </c:forEach>
   </table>

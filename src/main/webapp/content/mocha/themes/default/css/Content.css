@@ -99,7 +99,7 @@ dd {
 }
 
 /* Forms */
-
+/*
 form fieldset {
 	border: 2px solid #e5e5e5;
 	clear: both;
@@ -107,7 +107,7 @@ form fieldset {
 	overflow: hidden;
 	padding: 9px 18px;
 }
-
+*/
 form legend {
 	background: #e5e5e5;
 	color: #262626;
@@ -118,8 +118,8 @@ form legend {
 form label {
 	font-weight: bold;
 	margin-right: 6px;
-	text-align: right;
-	width: 50px;
+	margin-left: 6px;
+    text-align: left;
 }
 
 textarea, input, select {
