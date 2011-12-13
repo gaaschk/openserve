@@ -36,6 +36,6 @@ public class CurrencyInPenniesFormatAnnotationFormatterFactory implements
 
     private Formatter<Number> configureFormatterFrom(CurrencyInPenniesFormat annotation,
                                                      Class<?> fieldType) {
-    	return new CurrencyInPenniesFormatter();
+    	return new CurrencyInPenniesFormatter(annotation.subPennyPrecision());
     }
 }

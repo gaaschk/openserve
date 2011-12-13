@@ -1,6 +1,5 @@
 package org.gsoft.phoenix.buslogic;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -24,9 +23,9 @@ public class MaintainLoanLogic {
 		Loan savedLoan = this.loanRepository.save(loan);
 		LoanEvent addedEvent = loanEventLogic.createLoanEventWithTransaction(savedLoan, LoanEventType.LOAN_ADDED, 
 				effectiveDate);
-		addedEvent.getLoanTransaction().setFeesChange(loan.getStartingFees()*(-1));
-		addedEvent.getLoanTransaction().setInterestChange(loan.getStartingInterest().multiply(new BigDecimal(-1)));
-		addedEvent.getLoanTransaction().setPrincipalChange(loan.getStartingPrincipal()*(-1));
+		addedEvent.getLoanTransaction().setFeesChange(loan.getStartingFees());
+		addedEvent.getLoanTransaction().setInterestChange(loan.getStartingInterest());
+		addedEvent.getLoanTransaction().setPrincipalChange(loan.getStartingPrincipal());
 		loanEventLogic.applyLoanEvent(addedEvent);
 		return savedLoan;
 	}

@@ -20,6 +20,12 @@ public class CurrencyInPenniesFormatter extends AbstractNumberFormatter{
 	private RoundingMode roundingMode;
 
 	private Currency currency;
+	
+	private int subPenniesPrecision = 0;
+	
+	public CurrencyInPenniesFormatter(int subPennyPrecision){
+		this.subPenniesPrecision = subPennyPrecision;
+	}
 
 	/**
 	 * Specify the desired number of fraction digits.
@@ -69,7 +75,7 @@ public class CurrencyInPenniesFormatter extends AbstractNumberFormatter{
 	protected NumberFormat getNumberFormat(Locale locale) {
 		DecimalFormat format = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
 		format.setParseBigDecimal(true);
-		format.setMaximumFractionDigits(this.fractionDigits);
+		format.setMaximumFractionDigits(this.fractionDigits+this.subPenniesPrecision);
 		format.setMinimumFractionDigits(this.fractionDigits);
 		if (this.roundingMode != null && roundingModeOnDecimalFormat) {
 			format.setRoundingMode(this.roundingMode);

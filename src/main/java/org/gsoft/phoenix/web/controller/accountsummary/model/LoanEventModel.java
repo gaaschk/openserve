@@ -43,7 +43,7 @@ public class LoanEventModel {
 	public void setLoanEventPostDate(Date loanEventPostDate) {
 		this.loanEventPostDate = loanEventPostDate;
 	}
-	@CurrencyInPenniesFormat
+	@CurrencyInPenniesFormat(subPennyPrecision=4)
 	public BigDecimal getInterestAccrued() {
 		return interestAccrued;
 	}
@@ -64,7 +64,7 @@ public class LoanEventModel {
 	public void setPrincipalChange(Integer principalChange) {
 		this.principalChange = principalChange;
 	}
-	@CurrencyInPenniesFormat
+	@CurrencyInPenniesFormat(subPennyPrecision=4)
 	public BigDecimal getInterestChange() {
 		return interestChange;
 	}
@@ -85,7 +85,7 @@ public class LoanEventModel {
 	public void setEndingPrincipal(Integer endingPrincipal) {
 		this.endingPrincipal = endingPrincipal;
 	}
-	@CurrencyInPenniesFormat
+	@CurrencyInPenniesFormat(subPennyPrecision=4)
 	public BigDecimal getEndingInterest() {
 		return endingInterest;
 	}
