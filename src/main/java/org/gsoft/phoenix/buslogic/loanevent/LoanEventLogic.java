@@ -76,9 +76,9 @@ public class LoanEventLogic {
 				lastInterest = lastTransaction.getEndingInterest();
 				lastPrincipal = lastTransaction.getEndingPrincipal();
 			}
-			savedTransaction.setEndingFees(lastFees - savedTransaction.getFeesChange());
-			savedTransaction.setEndingPrincipal(lastPrincipal - savedTransaction.getPrincipalChange());
-			savedTransaction.setEndingInterest(lastInterest.subtract(savedTransaction.getInterestChange()));
+			savedTransaction.setEndingFees(lastFees + savedTransaction.getFeesChange());
+			savedTransaction.setEndingPrincipal(lastPrincipal + savedTransaction.getPrincipalChange());
+			savedTransaction.setEndingInterest(lastInterest.add(savedTransaction.getInterestChange()));
 		}
 		return this.loanEventRepository.save(loanEvent);
 	}

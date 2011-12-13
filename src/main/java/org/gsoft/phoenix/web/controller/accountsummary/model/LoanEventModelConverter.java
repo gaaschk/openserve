@@ -13,6 +13,7 @@ public class LoanEventModelConverter {
 		loanEventModel.setLoanEventPostDate(loanEvent.getPostDate());
 		if(loanEvent.getLoanTransaction() != null){
 			loanEventModel.setInterestAccrued(loanEvent.getLoanTransaction().getInterestAccrued());
+			loanEventModel.setInterestPaid(loanEvent.getLoanTransaction().getInterestPaid());
 			loanEventModel.setPrincipalChange(loanEvent.getLoanTransaction().getPrincipalChange());
 			loanEventModel.setInterestChange(loanEvent.getLoanTransaction().getInterestChange());
 			loanEventModel.setFeesChange(loanEvent.getLoanTransaction().getFeesChange());

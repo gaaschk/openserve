@@ -55,17 +55,17 @@ public class PaymentLogic {
 			LoanEvent lastEvent = loanEventLogic.findMostRecentLoanEventWithTransactionEffectivePriorToDate(theLoan.getLoanID(), payment.getEffectiveDate());
 			LoanEvent newEvent = loanEventLogic.createLoanEventWithTransaction(theLoan, LoanEventType.PAYMENT_APPLIED, payment.getEffectiveDate());
 			int amountToApply = loanPayment.getAppliedAmount();
-			int feeAmount = (amountToApply>=lastEvent.getLoanTransaction().getEndingFees())?lastEvent.getLoanTransaction().getEndingFees():amountToApply;
-			amountToApply -= feeAmount;
+			int feeAmount = (-1)*((amountToApply>=lastEvent.getLoanTransaction().getEndingFees())?lastEvent.getLoanTransaction().getEndingFees():amountToApply);
+			amountToApply += feeAmount;
 			BigDecimal accruedInterest = lastEvent.getLoanTransaction().getEndingInterest().add(newEvent.getLoanTransaction().getInterestAccrued());
-			int interestAmount = (amountToApply>=accruedInterest.intValue())?accruedInterest.intValue():amountToApply;
-			amountToApply -= interestAmount;
-			int principalAmount = (amountToApply>=lastEvent.getLoanTransaction().getEndingPrincipal())?lastEvent.getLoanTransaction().getEndingPrincipal():amountToApply;
-			amountToApply -= principalAmount;
+			int interestAmount = (-1)*((amountToApply>=accruedInterest.intValue())?accruedInterest.intValue():amountToApply);
+			amountToApply += interestAmount;
+			int principalAmount = (-1)*((amountToApply>=lastEvent.getLoanTransaction().getEndingPrincipal())?lastEvent.getLoanTransaction().getEndingPrincipal():amountToApply);
+			amountToApply += principalAmount;
 			LoanTransaction newTransaction = newEvent.getLoanTransaction();
 			newTransaction.setFeesChange(feeAmount);
 			newTransaction.setInterestPaid(new BigDecimal(interestAmount));
-			newTransaction.setInterestChange(newTransaction.getInterestAccrued().subtract(newTransaction.getInterestPaid()).multiply(new BigDecimal(-1)));
+			newTransaction.setInterestChange(newTransaction.getInterestAccrued().add(newTransaction.getInterestPaid()));
 			newTransaction.setPrincipalChange(principalAmount);
 			loanEventLogic.applyLoanEvent(newEvent);
 		}
