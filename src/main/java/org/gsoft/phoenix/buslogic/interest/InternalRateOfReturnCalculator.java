@@ -1,6 +1,5 @@
 package org.gsoft.phoenix.buslogic.interest;
 
-import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -38,11 +37,11 @@ public class InternalRateOfReturnCalculator {
 	}
 	
 	public static void main(String ... args){
-		double disbursedAmount = 15000;
-		double originationFee = 1800;
+		double disbursedAmount = 15600;
+		double originationFee = 600;
 		double interestRate = .05;
-		DateTime capStart = new DateTime(2011, 1, 1, 0,0,0);
-		DateTime gradSep = new DateTime(2011, 1, 1, 0,0,0);
+		DateTime capStart = new DateTime(2011, 9, 1, 0,0,0);
+		DateTime gradSep = new DateTime(2011, 9, 1, 0,0,0);
 		gradSep = gradSep.plusYears(0);
 		List<Double> capAmounts = CapitalizationLogic.estimateCapEvents(disbursedAmount, interestRate, capStart.toDate(), gradSep.toDate());
 		int loanTerm = 180;

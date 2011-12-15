@@ -71,6 +71,7 @@ window.addEvent('domready', function() {
 	<caption><label>Loans</label></caption>
 	<tr>
 		<th><label></label></th>
+		<th><label>Loan Type</label></th>
 		<th><label>Current Principal</label></th>
 		<th><label>Current Interest</label></th>
 		<th><label>Current Fees</label></th>
@@ -78,6 +79,7 @@ window.addEvent('domready', function() {
 	<c:forEach var="loan" items="${accountmodel.loans}" varStatus="index">
 		<tr class="loanrow" >
 			<td><input type="radio" class="loanrowrb" id="${loan.loanID}"/></td>
+			<td><form:input class="loancell" disabled="true" path="loans[${index.count-1}].loanType"/></td>
 			<td><form:input class="loancell" disabled="true" path="loans[${index.count-1}].currentPrincipal"/></td>
 			<td><form:input class="loancell" disabled="true" path="loans[${index.count-1}].currentInterest"/></td>
 			<td><form:input class="loancell" disabled="true" path="loans[${index.count-1}].currentFees"/></td>

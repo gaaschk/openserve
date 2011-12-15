@@ -1,12 +1,14 @@
 package org.gsoft.phoenix.domain.loan;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
@@ -29,6 +31,7 @@ public class Loan implements PhoenixDomainObject{
 	private Integer currentFees;
 	private BigDecimal margin;
 	private LoanEvent lastLoanEvent;
+	private List<Disbursement> disbursements;
 	
 	@Id
 	@GeneratedValue( strategy=GenerationType.AUTO)
@@ -117,5 +120,12 @@ public class Loan implements PhoenixDomainObject{
 	}
 	public void setLastLoanEvent(LoanEvent lastLoanEvent) {
 		this.lastLoanEvent = lastLoanEvent;
+	}
+	@OneToMany(mappedBy="loan")
+	public List<Disbursement> getDisbursements() {
+		return disbursements;
+	}
+	public void setDisbursements(List<Disbursement> disbursements) {
+		this.disbursements = disbursements;
 	}
 }
