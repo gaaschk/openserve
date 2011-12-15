@@ -16,6 +16,13 @@
 	</fieldset>
 	<h3>Loan Data</h3>
 	<fieldset>
+		<label>Loan Type:</label>
+		<form:select path="loanType">
+     		<form:option value="-" label="--Please Select"/>
+     		<form:options/>
+		</form:select>
+	</fieldset>
+	<fieldset>
 		<label>Starting Principal:</label>
 		<form:input class="masked" path="startingPrincipal" type="text" data-meiomask="reverse.dollar"/>
 	</fieldset>

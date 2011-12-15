@@ -2,7 +2,7 @@ package org.gsoft.phoenix.buslogic.payment;
 
 import java.util.List;
 
-import org.gsoft.phoenix.domain.Loan;
+import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.payment.Payment;
 import org.springframework.stereotype.Component;
 

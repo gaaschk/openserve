@@ -6,11 +6,6 @@
   border-style: inset;
   border-width: thin;
 }
-
-#panel{
-	scrollbars: true;
-}
-
 </style>
 <script type="text/javascript"> 
 window.addEvent('domready', function() { initTabs(); }); 

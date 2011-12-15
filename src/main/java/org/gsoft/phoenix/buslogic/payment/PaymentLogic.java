@@ -6,11 +6,11 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.gsoft.phoenix.buslogic.MaintainLoanLogic;
+import org.gsoft.phoenix.buslogic.loan.LoanLookupLogic;
 import org.gsoft.phoenix.buslogic.loanevent.LoanEventLogic;
 import org.gsoft.phoenix.buslogic.payment.allocation.DefaultPaymentAllocationLogic;
 import org.gsoft.phoenix.buslogic.system.SystemSettingsLogic;
-import org.gsoft.phoenix.domain.Loan;
+import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.loan.LoanEvent;
 import org.gsoft.phoenix.domain.loan.LoanEventType;
 import org.gsoft.phoenix.domain.loan.LoanTransaction;
@@ -33,7 +33,7 @@ public class PaymentLogic {
 	@Resource
 	private LoanEventLogic loanEventLogic;
 	@Resource
-	private MaintainLoanLogic maintainLoanLogic;
+	private LoanLookupLogic loanLookupLogic;
 	
 	public void applyPayment(long borrowerPersonID, int amount, Date effectiveDate){
 		Payment payment = new Payment();
@@ -42,7 +42,7 @@ public class PaymentLogic {
 		payment.setPaymentAmount(amount);
 		payment.setBorrowerPersonID(borrowerPersonID);
 		
-		List<Loan> loans = maintainLoanLogic.getAllLoansForBorrower(borrowerPersonID);
+		List<Loan> loans = loanLookupLogic.getAllLoansForBorrower(borrowerPersonID);
 		paymentAllocationLogic.allocatePayment(payment, loans);
 		payment = paymentRepository.save(payment);
 		

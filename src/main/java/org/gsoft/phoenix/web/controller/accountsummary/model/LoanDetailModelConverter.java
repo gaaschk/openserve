@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.gsoft.phoenix.domain.Loan;
+import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.loan.LoanEvent;
 import org.gsoft.phoenix.service.AccountSummaryService;
 import org.springframework.stereotype.Component;

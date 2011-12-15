@@ -1,6 +1,6 @@
 package org.gsoft.phoenix.web.controller.accountsummary.model;
 
-import org.gsoft.phoenix.domain.Loan;
+import org.gsoft.phoenix.domain.loan.Loan;
 import org.springframework.stereotype.Component;
 
 @Component

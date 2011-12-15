@@ -3,13 +3,21 @@ package org.gsoft.phoenix.service.domain;
 import java.math.BigDecimal;
 
 import org.gsoft.phoenix.domain.Person;
+import org.gsoft.phoenix.domain.loan.LoanType;
 
 public class LoanEntryDocument {
+	private LoanType loanType;
 	private Person borrower;
 	private Integer startingPrincipal;
 	private BigDecimal startingInterest;
 	private Integer startingFees;
 	
+	public LoanType getLoanType() {
+		return loanType;
+	}
+	public void setLoanType(LoanType loanType) {
+		this.loanType = loanType;
+	}
 	public Person getBorrower() {
 		return borrower;
 	}

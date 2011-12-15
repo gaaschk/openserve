@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.gsoft.phoenix.domain.Loan;
 import org.gsoft.phoenix.domain.Person;
+import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.service.AccountSummaryService;
 import org.gsoft.phoenix.service.PersonService;
 import org.gsoft.phoenix.web.controller.accountsummary.model.AccountSummaryModel;

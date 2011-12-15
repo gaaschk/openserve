@@ -1,21 +1,25 @@
-package org.gsoft.phoenix.domain;
+package org.gsoft.phoenix.domain.loan;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import org.gsoft.phoenix.domain.loan.LoanEvent;
+import org.gsoft.phoenix.domain.PhoenixDomainObject;
 import org.gsoft.phoenix.repositories.loan.LoanEventRepository;
 import org.gsoft.phoenix.util.ApplicationContextLocator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
 
 @Entity
 public class Loan implements PhoenixDomainObject{
 	private static final long serialVersionUID = 7541874847320220624L;
 	private Long loanID;
+	private LoanType loanType;
 	private Long borrowerPersonID;
 	private Integer startingPrincipal;
 	private BigDecimal startingInterest;
@@ -33,6 +37,16 @@ public class Loan implements PhoenixDomainObject{
 	}
 	public void setLoanID(Long loanID) {
 		this.loanID = loanID;
+	}
+	@Type( type = "org.gsoft.phoenix.util.jpa.GenericEnumUserType", parameters={
+			@Parameter(name = "enumClass", value = "org.gsoft.phoenix.domain.loan.LoanType")
+	})
+    @Column( name = "LoanTypeID" )
+	public LoanType getLoanType() {
+		return loanType;
+	}
+	public void setLoanType(LoanType loanType) {
+		this.loanType = loanType;
 	}
 	public Long getBorrowerPersonID() {
 		return borrowerPersonID;

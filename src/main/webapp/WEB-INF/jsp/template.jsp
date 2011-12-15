@@ -52,6 +52,9 @@
       					this.hide();
     				}
   				});
+  				$('page').set({
+  					scrollbars: true
+  				});
 			});		
 		</script>
 		<style type="text/css">
@@ -62,26 +65,27 @@
 	<body>
 	  <div id="desktop">
 		<div id="dektopHeader">
-			<div id="desktopTitlebarWrapper">
-				<div id="desktopTitlebar">
-					<h1 class="applicationTitle">Phoenix</h1>
-					<h2 class="tagline">
-						A <span class="taglineEm">Loan Servicing</span> Application
-					</h2>
-					<div id="topNav">
-						<tiles:insertAttribute name="menu" />
-					</div>
-				</div>
+		  <div id="desktopTitlebarWrapper">
+		    <div id="desktopTitlebar">
+			  <h1 class="applicationTitle">Phoenix</h1>
+			  <h2 class="tagline">A <span class="taglineEm">Loan Servicing</span> Application</h2>
+			  <div id="topNav">
+			    <tiles:insertAttribute name="menu" />
+			  </div>
 			</div>
-		<div id="desktopNavbar">	
+		  </div>
+		  <div id="desktopNavbar">	
 			<ul>
 				<li class="menu-item"><a href="../addloan/index.do">Add a new Loan</a></li>
 				<li class="menu-item"><a href="/phoenixweb/web/payment/search.do">Payment</a></li>
 				<li class="menu-item"><a href="/phoenixweb/web/accountsummary/home.do">Account Summary</a></li>
 			</ul>
-		</div>
+		  </div>
+		</div><!-- desktop header end -->
 		<div id="pageWrapper">
-					<tiles:insertAttribute name="content" />
+		  <div class="panel" id="page">
+		    <tiles:insertAttribute name="content" />
+		  </div>
 		</div>
 		
 		<div id="desktopFooterWrapper">
@@ -95,15 +99,16 @@
 				<span>Copyright &copy; </span>
 			</div>
 		</div>
-		<script type="text/javascript">
-			$$('input[data-meiomask]').each(
-				function(input) {
-					input.meiomask(input.get('data-meiomask'), JSON
+	</div><!-- desktop end -->
+	<script type="text/javascript">
+	  $$('input[data-meiomask]').each(
+		function(input) {
+		  input.meiomask(input.get('data-meiomask'), JSON
 							.decode(input.get('data-meiomask-options')));
-				});
-			$$('input[data-meiomask]').each(function(input) {
-				console.log("meiomask: " + input.get('data-meiomask'));
 			});
-		</script>
+	  $$('input[data-meiomask]').each(function(input) {
+			console.log("meiomask: " + input.get('data-meiomask'));
+		});
+	</script>
 </body>
 </html>

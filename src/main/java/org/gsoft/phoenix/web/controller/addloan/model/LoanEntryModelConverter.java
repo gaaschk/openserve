@@ -13,6 +13,7 @@ public class LoanEntryModelConverter {
 	
 	public LoanEntryDocument convertFromModel(LoanEntryModel loanModel){
 		LoanEntryDocument newLoanDoc = new LoanEntryDocument();
+		newLoanDoc.setLoanType(loanModel.getLoanType());
 		Person person = personModelConverter.convertFromModel(loanModel.getPerson());
 		newLoanDoc.setBorrower(person);
 		newLoanDoc.setStartingPrincipal(loanModel.getStartingPrincipal());

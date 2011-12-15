@@ -1,8 +1,11 @@
 package org.gsoft.phoenix.web.controller.addloan;
 
+import java.util.ArrayList;
+
 import javax.annotation.Resource;
 
 import org.gsoft.phoenix.domain.Person;
+import org.gsoft.phoenix.domain.loan.LoanType;
 import org.gsoft.phoenix.service.LoanEntryService;
 import org.gsoft.phoenix.service.PersonService;
 import org.gsoft.phoenix.service.domain.LoanEntryDocument;

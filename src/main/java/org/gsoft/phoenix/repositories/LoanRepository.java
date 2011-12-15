@@ -2,7 +2,7 @@ package org.gsoft.phoenix.repositories;
 
 import java.util.List;
 
-import org.gsoft.phoenix.domain.Loan;
+import org.gsoft.phoenix.domain.loan.Loan;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;

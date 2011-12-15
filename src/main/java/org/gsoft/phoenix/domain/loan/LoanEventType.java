@@ -3,8 +3,8 @@ package org.gsoft.phoenix.domain.loan;
 import org.gsoft.phoenix.util.jpa.PhoenixEnum;
 
 public enum LoanEventType implements PhoenixEnum<LoanEventType> {
-	LOAN_ADDED(10L, "LOAN_ADDED", "Loan Added"), PAYMENT_APPLIED(20L,
-			"PAYMENT_APPLIED", "Payment Applied to Loan");
+	LOAN_ADDED(10L, "LOAN_ADDED", "Loan Added"), 
+	PAYMENT_APPLIED(20L, "PAYMENT_APPLIED", "Payment Applied to Loan");
 
 	private Long loanEventTypeID;
 	private String loanEventName;

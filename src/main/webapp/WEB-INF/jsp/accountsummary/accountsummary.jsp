@@ -41,7 +41,7 @@ window.addEvent('domready', function() {
 	});
 });
 </script>
-
+<div class="panel">
 <form:form commandName="accountmodel">
 <table>
 	<tr>
@@ -88,4 +88,4 @@ window.addEvent('domready', function() {
 <div id="loanDetail">
 	<p>Select a loan for detail</p>	
 </div>
-
+</div>

@@ -3,7 +3,7 @@ package org.gsoft.phoenix.buslogic.payment.allocation;
 import java.util.List;
 
 import org.gsoft.phoenix.buslogic.payment.PaymentAllocationLogic;
-import org.gsoft.phoenix.domain.Loan;
+import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.payment.LoanPayment;
 import org.gsoft.phoenix.domain.payment.Payment;
 import org.springframework.stereotype.Component;

@@ -2,7 +2,7 @@ package org.gsoft.phoenix.buslogic.interest;
 
 import java.math.BigDecimal;
 
-import org.gsoft.phoenix.domain.Loan;
+import org.gsoft.phoenix.domain.loan.Loan;
 import org.springframework.stereotype.Component;
 
 @Component

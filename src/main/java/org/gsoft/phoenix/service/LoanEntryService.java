@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 
 import javax.annotation.Resource;
 
-import org.gsoft.phoenix.buslogic.MaintainLoanLogic;
 import org.gsoft.phoenix.buslogic.MaintainPersonLogic;
+import org.gsoft.phoenix.buslogic.loan.AddLoanLogic;
 import org.gsoft.phoenix.buslogic.system.SystemSettingsLogic;
-import org.gsoft.phoenix.domain.Loan;
 import org.gsoft.phoenix.domain.Person;
+import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.service.domain.LoanEntryDocument;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly=true)
 public class LoanEntryService {
 	@Resource
-	private MaintainLoanLogic maintainLoanLogic;
+	private AddLoanLogic maintainLoanLogic;
 	@Resource
 	private MaintainPersonLogic maintainPersonLogic;
 	@Resource
@@ -26,6 +26,7 @@ public class LoanEntryService {
 	@Transactional
 	public Long addNewLoan(LoanEntryDocument loanEntryDocument){
 		Loan newLoan = new Loan();
+		newLoan.setLoanType(loanEntryDocument.getLoanType());
 		newLoan.setStartingPrincipal(loanEntryDocument.getStartingPrincipal());
 		newLoan.setStartingInterest(loanEntryDocument.getStartingInterest());
 		newLoan.setStartingFees(loanEntryDocument.getStartingFees());
