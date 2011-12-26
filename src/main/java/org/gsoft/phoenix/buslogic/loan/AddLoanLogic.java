@@ -8,7 +8,7 @@ import org.gsoft.phoenix.buslogic.loanevent.LoanEventLogic;
 import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.loan.LoanEvent;
 import org.gsoft.phoenix.domain.loan.LoanEventType;
-import org.gsoft.phoenix.repositories.LoanRepository;
+import org.gsoft.phoenix.repositories.loan.LoanRepository;
 import org.springframework.stereotype.Component;
 
 @Component

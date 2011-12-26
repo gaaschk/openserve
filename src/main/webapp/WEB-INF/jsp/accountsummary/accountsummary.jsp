@@ -39,7 +39,38 @@ window.addEvent('domready', function() {
 				}).send();
 		});
 	});
+	
+	initAccountTabs();
 });
+
+function initAccountTabs() { $$('#accounttabs a').each(function(el) { 
+  el.addEvent('click',function(e) { 
+    var ev = new Event(e).stop(); 
+      tabState(el);
+      /*load appropriate pane here*/ 
+      if(this == $('loaninfotab')){
+      	$('paymentHistoryPane').fancyHide();
+      	$('loanDetailPane').fancyShow();
+      }
+      else if(this == $('paymenttab')){
+      	$('loanDetailPane').fancyHide();
+      	$('paymentHistoryPane').fancyShow();
+      }
+    });
+  });
+  $('paymentHistoryPane').fancyHide();
+  $('loanDetailPane').fancyShow();
+} 
+
+function tabState(ael) { 
+  $$('.tab-menu a').each(function(el) { 
+    if(el.hasClass('active')) { 
+      el.removeClass('active'); 
+      } 
+    }); 
+  ael.addClass('active'); 
+} 
+
 </script>
 <div class="panel">
 <form:form commandName="accountmodel">
@@ -87,7 +118,17 @@ window.addEvent('domready', function() {
 	</c:forEach>
 </table>
 </form:form>
-<div id="loanDetail">
-	<p>Select a loan for detail</p>	
+<div class="panel">
+	<ul class="tab-menu" id="accounttabs">
+  	  <li><a href="#" class="active" id="loaninfotab"><span>Loan Information</span></a></li>
+      <li><a href="#" id="paymenttab"><span>Payment History</span></a></li>
+    </ul>
+</div>
+<div class="panel" id="loanDetailPane">
+  <div id="loanDetail">
+  </div>
+</div>
+<div class="panel" id="paymentHistoryPane">
+  <jsp:include page="payments.jsp"/>
 </div>
 </div>

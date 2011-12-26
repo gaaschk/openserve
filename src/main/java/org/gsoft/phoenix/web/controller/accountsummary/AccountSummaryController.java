@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import org.gsoft.phoenix.domain.Person;
 import org.gsoft.phoenix.domain.loan.Loan;
+import org.gsoft.phoenix.domain.payment.Payment;
 import org.gsoft.phoenix.service.AccountSummaryService;
 import org.gsoft.phoenix.service.PersonService;
 import org.gsoft.phoenix.web.controller.accountsummary.model.AccountSummaryModel;
@@ -14,6 +15,8 @@ import org.gsoft.phoenix.web.controller.accountsummary.model.LoanDetailModel;
 import org.gsoft.phoenix.web.controller.accountsummary.model.LoanDetailModelConverter;
 import org.gsoft.phoenix.web.controller.accountsummary.model.LoanSummaryModel;
 import org.gsoft.phoenix.web.controller.accountsummary.model.LoanSummaryModelConverter;
+import org.gsoft.phoenix.web.controller.accountsummary.model.PaymentHistoryModel;
+import org.gsoft.phoenix.web.controller.accountsummary.model.PaymentHistoryModelConverter;
 import org.gsoft.phoenix.web.controller.addloan.model.PersonModel;
 import org.gsoft.phoenix.web.controller.addloan.model.PersonModelConverter;
 import org.springframework.stereotype.Controller;
@@ -37,6 +40,8 @@ public class AccountSummaryController {
 	private LoanSummaryModelConverter loanSummaryModelConverter;
 	@Resource
 	private LoanDetailModelConverter loanDetailModelConverter;
+	@Resource
+	private PaymentHistoryModelConverter paymentModelConverter;
 	
 	@RequestMapping(value="accountsummary/home.do", method=RequestMethod.GET)
 	public ModelAndView loadPersonSearch(ModelAndView model){
@@ -62,6 +67,9 @@ public class AccountSummaryController {
 			accountSummaryModel.getLoans().add(loanSummaryModelConverter.convertToModel(loan));
 		}
 		model.addObject("accountmodel", accountSummaryModel);
+		List<Payment> payments = accountSummaryService.getAllPaymentsforBorrower(borrower.getPersonID());
+		PaymentHistoryModel paymentHistoryModel = paymentModelConverter.convertToModel(payments);
+		model.addObject("paymenthistorymodel", paymentHistoryModel);
 		model.setViewName("accountsummary/accountsummary");
 		return model;
 	}

@@ -10,7 +10,11 @@
 
     <definition name="addloan/enterloan" template="/WEB-INF/jsp/template.jsp">
         <put-attribute name="menu" value="/WEB-INF/jsp/home/menu.jsp" />
-        <put-attribute name="content" value="/WEB-INF/jsp/addloan/enterloan.jsp" />
+        <put-attribute name="content" value="addloan/loandetail" />
+    </definition>
+    
+    <definition name="addloan/loandetail" template="/WEB-INF/jsp/addloan/enterloantemplate.jsp">
+    	<put-attribute name="detail" value="/WEB-INF/jsp/addloan/addloandetail.jsp"/>
     </definition>
     
     <definition name="addloan/savedloanresult" template="/WEB-INF/jsp/template.jsp">

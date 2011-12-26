@@ -16,7 +16,7 @@ import org.gsoft.phoenix.domain.loan.LoanEventType;
 import org.gsoft.phoenix.domain.loan.LoanTransaction;
 import org.gsoft.phoenix.domain.payment.LoanPayment;
 import org.gsoft.phoenix.domain.payment.Payment;
-import org.gsoft.phoenix.repositories.LoanRepository;
+import org.gsoft.phoenix.repositories.loan.LoanRepository;
 import org.gsoft.phoenix.repositories.payment.PaymentRepository;
 import org.springframework.stereotype.Component;
 

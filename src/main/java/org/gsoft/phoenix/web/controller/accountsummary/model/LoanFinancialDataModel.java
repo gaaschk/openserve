@@ -2,10 +2,12 @@ package org.gsoft.phoenix.web.controller.accountsummary.model;
 
 import java.math.BigDecimal;
 
+import org.gsoft.phoenix.domain.loan.LoanType;
 import org.gsoft.phoenix.util.formatter.CurrencyInPenniesFormat;
 
 public class LoanFinancialDataModel {
 	private Long loanID;
+	private LoanType loanType;
 	private Integer currentPrincipal;
 	private BigDecimal currentInterest;
 	private Integer currentFees;
@@ -16,6 +18,12 @@ public class LoanFinancialDataModel {
 	}
 	public void setLoanID(Long loanID){
 		this.loanID = loanID;
+	}
+	public LoanType getLoanType() {
+		return loanType;
+	}
+	public void setLoanType(LoanType loanType) {
+		this.loanType = loanType;
 	}
 	@CurrencyInPenniesFormat
 	public Integer getCurrentPrincipal() {

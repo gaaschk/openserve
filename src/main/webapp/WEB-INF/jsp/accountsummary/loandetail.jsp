@@ -39,17 +39,15 @@ function tabState(ael) {
 } 
 </script>
 <h3>Loan Detail</h3>
-
-
 <div class="panel">
 	<ul class="tab-menu" id="detailTabs">
   	  <li><a href="#" class="active" id="loanfintab"><span>Loan Detail</span></a></li>
       <li><a href="#" id="loanhisttab"><span>Transaction History</span></a></li>
     </ul>
 </div>
-  <div class="panel" id="loanFinancialPane">
-  	<jsp:include page="loanfinancialdata.jsp"/>
-  </div>
-  <div class="panel" id="transactionHistoryPane">
-  	<jsp:include page="transactionhistory.jsp"/>
-  </div>
+<div class="panel" id="loanFinancialPane">
+  <jsp:include page="loanfinancialdata.jsp"/>
+</div>
+<div class="panel" id="transactionHistoryPane">
+  <jsp:include page="transactionhistory.jsp"/>
+</div>

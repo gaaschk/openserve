@@ -7,7 +7,9 @@ import javax.annotation.Resource;
 import org.gsoft.phoenix.buslogic.loan.LoanLookupLogic;
 import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.loan.LoanEvent;
+import org.gsoft.phoenix.domain.payment.Payment;
 import org.gsoft.phoenix.repositories.loan.LoanEventRepository;
+import org.gsoft.phoenix.repositories.payment.PaymentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,8 @@ public class AccountSummaryService {
 	private LoanLookupLogic loanLookupLogic;
 	@Resource
 	private LoanEventRepository loanEventRepository;
+	@Resource
+	private PaymentRepository paymentRepository;
 	
 	public List<Loan> getAllLoansForBorrower(Long borrowerID){
 		return loanLookupLogic.getAllLoansForBorrower(borrowerID);
@@ -29,5 +33,9 @@ public class AccountSummaryService {
 	
 	public List<LoanEvent> getAllLoanEventsForLoan(Long loanID){
 		return loanEventRepository.findAllByLoanID(loanID);
+	}
+	
+	public List<Payment> getAllPaymentsforBorrower(Long borrowerID){
+		return paymentRepository.findAllPaymentsByBorrowerPersonID(borrowerID);
 	}
 }

@@ -1,8 +1,9 @@
-package org.gsoft.phoenix.repositories;
+package org.gsoft.phoenix.repositories.loan;
 
 import java.util.List;
 
 import org.gsoft.phoenix.domain.loan.Loan;
+import org.gsoft.phoenix.repositories.BaseRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;

@@ -21,6 +21,7 @@ public class LoanDetailModelConverter {
 		LoanDetailModel model = new LoanDetailModel();
 		LoanFinancialDataModel finModel = new LoanFinancialDataModel();
 		finModel.setLoanID(loan.getLoanID());
+		finModel.setLoanType(loan.getLoanType());
 		finModel.setCurrentPrincipal(loan.getCurrentPrincipal());
 		finModel.setCurrentInterest(loan.getCurrentInterest());
 		finModel.setCurrentFees(loan.getCurrentFees());
