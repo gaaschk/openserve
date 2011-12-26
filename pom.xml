@@ -160,6 +160,12 @@
 				</configuration>
 				<executions>
 					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>updateDatabase</goal>
+						</goals>
+					</execution>
+					<execution>
 						<phase>install</phase>
 						<goals>
 							<goal>updateDatabase</goal>
