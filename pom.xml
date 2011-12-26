@@ -206,7 +206,7 @@
 	</repositories>
 	<profiles>
 		<profile>
-			<id>teamcity.profile</id>
+			<id>teamcity.maven.profile</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 				<property>
