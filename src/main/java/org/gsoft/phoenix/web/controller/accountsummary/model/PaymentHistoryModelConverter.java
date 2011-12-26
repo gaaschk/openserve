@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gsoft.phoenix.domain.payment.Payment;
-import org.gsoft.phoenix.web.controller.payment.model.PaymentModel;
 import org.springframework.stereotype.Component;
 
 @Component
