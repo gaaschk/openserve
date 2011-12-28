@@ -38,4 +38,9 @@ public class AccountSummaryService {
 	public List<Payment> getAllPaymentsforBorrower(Long borrowerID){
 		return paymentRepository.findAllPaymentsByBorrowerPersonID(borrowerID);
 	}
+
+	public Payment getPaymentByPaymentID(Long paymentID){
+		Payment payment = paymentRepository.findOne(paymentID);
+		return payment;
+	}
 }

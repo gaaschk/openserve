@@ -24,7 +24,7 @@ window.addEvent('domready', function() {
 	var loans = $$("#loantable .loanrowrb");
 	loans.each(function(loan, i) {
 		loan.addEvent("click", function(event) {
-			var selectedloans = $$("#loantable .loanrowrb")
+			var selectedloans = $$("#loantable .loanrowrb");
 			for(var idx = 0; idx < selectedloans.length; idx++){
 				if(selectedloans[idx] != this)
 					selectedloans[idx].checked = false;
@@ -98,10 +98,18 @@ function tabState(ael) {
 		</td>
 	</tr>
 </table>
+<div class="panel">
+	<ul class="tab-menu" id="accounttabs">
+  	  <li><a href="#" class="active" id="loaninfotab"><span>Loan Information</span></a></li>
+      <li><a href="#" id="paymenttab"><span>Payment History</span></a></li>
+    </ul>
+</div>
+<div class="panel" id="loanDetailPane">
 <table class="loans" id="loantable">
+	<col style="width: 30px;"/>
 	<caption><label>Loans</label></caption>
 	<tr>
-		<th><label></label></th>
+		<th></th>
 		<th><label>Loan Type</label></th>
 		<th><label>Current Principal</label></th>
 		<th><label>Current Interest</label></th>
@@ -117,17 +125,10 @@ function tabState(ael) {
 		</tr>
 	</c:forEach>
 </table>
-</form:form>
-<div class="panel">
-	<ul class="tab-menu" id="accounttabs">
-  	  <li><a href="#" class="active" id="loaninfotab"><span>Loan Information</span></a></li>
-      <li><a href="#" id="paymenttab"><span>Payment History</span></a></li>
-    </ul>
-</div>
-<div class="panel" id="loanDetailPane">
   <div id="loanDetail">
   </div>
 </div>
+</form:form>
 <div class="panel" id="paymentHistoryPane">
   <jsp:include page="payments.jsp"/>
 </div>

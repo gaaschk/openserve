@@ -14,6 +14,25 @@
   		<param-value>/WEB-INF/application-context.xml</param-value>
 	</context-param>
 
+	<!-- The OpenEntityManagerInViewFilter filter (and associated filter 
+	     mapping) is necessary to keep the hibernate session open
+	     while the Spring MVC controller is trying to build the view, 
+	     more specifically so that the controller can access hibernate
+	     objects and convert them into model objects for the view. -->
+	<filter>
+    	<filter-name>OpenEntityManagerInViewFilter</filter-name>
+    	<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+    	<init-param>
+        	<param-name>entityManagerFactoryBeanName</param-name>
+        	<param-value>entityManagerFactory</param-value>
+    	</init-param>
+	</filter>
+	
+	<filter-mapping>
+    	<filter-name>OpenEntityManagerInViewFilter</filter-name>
+    	<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 	<listener>
   		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>

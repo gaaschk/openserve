@@ -17,6 +17,7 @@ import org.gsoft.phoenix.web.controller.accountsummary.model.LoanSummaryModel;
 import org.gsoft.phoenix.web.controller.accountsummary.model.LoanSummaryModelConverter;
 import org.gsoft.phoenix.web.controller.accountsummary.model.PaymentHistoryModel;
 import org.gsoft.phoenix.web.controller.accountsummary.model.PaymentHistoryModelConverter;
+import org.gsoft.phoenix.web.controller.accountsummary.model.PaymentModel;
 import org.gsoft.phoenix.web.controller.addloan.model.PersonModel;
 import org.gsoft.phoenix.web.controller.addloan.model.PersonModelConverter;
 import org.springframework.stereotype.Controller;
@@ -80,6 +81,15 @@ public class AccountSummaryController {
 		LoanDetailModel loanDetailModel = loanDetailModelConverter.convertToModel(theLoan);
 		model.addObject("loandetailmodel", loanDetailModel);
 		model.setViewName("accountsummary/loandetail");
+		return model;
+	}
+
+	@RequestMapping(value="accountsummary/paymentdetail.do", method=RequestMethod.GET)
+	public ModelAndView showPaymentDetail(@RequestParam("paymentdetailid") String paymentid, ModelAndView model){
+		Payment thePayment = accountSummaryService.getPaymentByPaymentID(new Long(paymentid));
+		PaymentModel paymentModel = paymentModelConverter.convertToModel(thePayment);
+		model.addObject("selectedpayment", paymentModel);
+		model.setViewName("accountsummary/paymentdetail");
 		return model;
 	}
 }
