@@ -1,5 +1,7 @@
 package org.gsoft.phoenix.web.controller.accountsummary.model;
 
+import org.gsoft.phoenix.util.formatter.CurrencyInPenniesFormat;
+
 public class LoanPaymentModel {
 	private Long loanID;
 	private Integer appliedAmount;
@@ -10,6 +12,7 @@ public class LoanPaymentModel {
 	public void setLoanID(Long loanID) {
 		this.loanID = loanID;
 	}
+	@CurrencyInPenniesFormat
 	public Integer getAppliedAmount() {
 		return appliedAmount;
 	}
