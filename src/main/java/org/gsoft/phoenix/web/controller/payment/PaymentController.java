@@ -10,6 +10,7 @@ import org.gsoft.phoenix.service.payment.PaymentService;
 import org.gsoft.phoenix.web.controller.addloan.model.PersonModel;
 import org.gsoft.phoenix.web.controller.addloan.model.PersonModelConverter;
 import org.gsoft.phoenix.web.controller.payment.model.PaymentModel;
+import org.gsoft.phoenix.web.person.PersonSearchCriteria;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,16 +31,16 @@ public class PaymentController {
 	
 	@RequestMapping(value="payment/search.do", method=RequestMethod.GET)
 	public String loadMainAddLoanPage(Model model){
-		PersonModel person = new PersonModel();
-		model.addAttribute("personModel", person);
+		PersonSearchCriteria person = new PersonSearchCriteria();
+		model.addAttribute("personSearchCriteria", person);
 		return "payment/search";
 	}
 	
 	@RequestMapping(value="payment/search.do", method=RequestMethod.POST)
-	public ModelAndView findBorrowerAndLoadPaymentPage(@ModelAttribute("personModel") PersonModel personModel, ModelAndView model){
-		Person person = personService.findPersonBySSN(personModel.getSsn());
+	public ModelAndView findBorrowerAndLoadPaymentPage(@ModelAttribute("personSearchCriteria") PersonSearchCriteria personSearchCriteria, ModelAndView model){
+		Person person = personService.findPersonBySSN(personSearchCriteria.getSsn());
 		PersonModel newPersonModel = personModelConverter.convertToModel(person);
-		newPersonModel.setSsn(personModel.getSsn());
+		newPersonModel.setSsn(personSearchCriteria.getSsn());
 		PaymentModel paymentModel = new PaymentModel();
 		paymentModel.setTheBorrower(newPersonModel);
 		model.addObject("paymentModel", paymentModel);

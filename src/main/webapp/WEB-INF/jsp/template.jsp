@@ -4,18 +4,6 @@
 	<head>
 		<title>PhoenixWeb :: Home</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<!-- 
-		<link href="${cssUrl}/${cssName}" rel="stylesheet" type="text/css" />
-		<link rel="stylesheet" type="text/css" href="${cssUrl}/coin-slider.css" />
-		<script type="text/javascript" src="${jsUrl}/cufon-yui.js"></script>
-		<script type="text/javascript" src="${jsUrl}/cufon-times.js"></script>
-		<script type="text/javascript" src="${jsUrl}/jquery-1.4.2.min.js"></script>
-		<script type="text/javascript" src="${jsUrl}/mootools-core-1.4.1-full-compat.js"></script>
-		<script type='text/javascript' src='${jsUrl}/dFilter.js'></script> 
-		<script type='text/javascript' src='${jsUrl}/iMask-full.js'></script>
-		<script type="text/javascript" src="${jsUrl}/script.js"></script>
-		<script type="text/javascript" src="${jsUrl}/coin-slider.min.js"></script>
-		-->
 
 		<link rel="stylesheet" type="text/css" href="/phoenixweb/content/mocha/themes/default/css/Content.css" />
 		<link rel="stylesheet" type="text/css" href="/phoenixweb/content/mocha/themes/default/css/Core.css" />
@@ -76,9 +64,10 @@
 		  </div>
 		  <div id="desktopNavbar">	
 			<ul>
-				<li class="menu-item"><a href="../addloan/index.do">Add a new Loan</a></li>
+				<li class="menu-item"><a href="/phoenixweb/web/addloan">Add a new Loan</a></li>
 				<li class="menu-item"><a href="/phoenixweb/web/payment/search.do">Payment</a></li>
 				<li class="menu-item"><a href="/phoenixweb/web/accountsummary/home.do">Account Summary</a></li>
+				<li class="menu-item"><a href="/phoenixweb/web/disclosure/home.do">Generate Disclosures</a></li>
 			</ul>
 		  </div>
 		</div><!-- desktop header end -->

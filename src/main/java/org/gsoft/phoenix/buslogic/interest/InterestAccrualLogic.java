@@ -20,12 +20,17 @@ public class InterestAccrualLogic {
 	private LoanLookupLogic loanLookupLogic;
 	
 	public BigDecimal calculateLoanInterestAmountForPeriod(Loan loan, Date fromDate, Date toDate){
-		BigDecimal rate = interestFactory.getBaseRateForLoan(loan);
 		Days days = Days.daysBetween(new DateTime(fromDate.getTime()), new DateTime(toDate.getTime()));
-		BigDecimal actualRate = rate.add(loan.getMargin());
+		BigDecimal actualRate = this.getInterestRateForLoan(loan);
 		BigDecimal dailyRate = actualRate.divide(new BigDecimal(365.25),35,RoundingMode.HALF_EVEN);
 		Integer principal = loanLookupLogic.getLoanPrincipalBalanceAsOf(loan, fromDate);
 		BigDecimal dailyIntAmount = dailyRate.multiply(new BigDecimal(principal));
 		return dailyIntAmount.multiply(new BigDecimal(days.getDays()));
+	}
+	
+	public BigDecimal getInterestRateForLoan(Loan loan){
+		BigDecimal rate = interestFactory.getBaseRateForLoan(loan);
+		BigDecimal actualRate = rate.add(loan.getMargin());
+		return actualRate;
 	}
 }

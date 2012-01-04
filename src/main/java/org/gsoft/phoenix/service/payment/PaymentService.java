@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly=true)
 public class PaymentService {
 	@Resource
 	private PaymentLogic paymentLogic;
 	
+	@Transactional
 	public void applyPayment(long borrowerPersonID, int amount, Date effectiveDate){
 		paymentLogic.applyPayment(borrowerPersonID, amount, effectiveDate);
 	}

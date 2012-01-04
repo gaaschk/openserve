@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly=true)
 public class SystemSettingsService {
 	@Resource
 	private SystemSettingsLogic systemSettingsLogic;
@@ -18,10 +18,12 @@ public class SystemSettingsService {
 		return systemSettingsLogic.getCurrentSystemDate();
 	}
 	
+	@Transactional
 	public Date setSystemDateDeltaByCalendarUnit(int unit, int amount){
 		return this.systemSettingsLogic.setSystemDateDeltaByCalendarUnit(unit, amount);
 	}
 	
+	@Transactional
 	public Date adjustSystemDateByCalendarUnit(int unit, int amount){
 		return this.systemSettingsLogic.adjustSystemDateByCalendarUnit(unit, amount);
 	}

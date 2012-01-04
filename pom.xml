@@ -11,6 +11,7 @@
 		<dbmaintain.version>2.4</dbmaintain.version>
 		<org.springframework.version>3.1.0.RELEASE</org.springframework.version>
 		<org.hibernate.version>3.6.7.Final</org.hibernate.version>
+		<org.slf4j-version>1.6.1</org.slf4j-version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -25,11 +26,24 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>${org.springframework.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${org.springframework.version}</version>
+			<exclusions>
+				<!-- Exclude Commons Logging in favor of SLF4j -->
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				 </exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -51,6 +65,19 @@
 			<artifactId>spring-test</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
+
+		<!-- Spring Web Flow -->
+		<dependency>
+    		<groupId>org.springframework.webflow</groupId>
+    		<artifactId>spring-webflow</artifactId>
+    		<version>2.3.0.RELEASE</version>
+    		<exclusions>
+    			<exclusion>
+    				<artifactId>commons-logging</artifactId>
+    				<groupId>commons-logging</groupId>
+    			</exclusion>
+    		</exclusions>
+		</dependency> 
 
 		<!-- Servlet -->
 		<dependency>
@@ -121,11 +148,36 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.18</version>
 		</dependency>
+		
 		<!-- DBMaintain -->
 		<dependency>
 			<groupId>org.dbmaintain</groupId>
 			<artifactId>dbmaintain-maven-plugin</artifactId>
 			<version>${dbmaintain.version}</version>
+		</dependency>
+
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${org.slf4j-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${org.slf4j-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${org.slf4j-version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+			<scope>runtime</scope>
 		</dependency>
 
 	</dependencies>

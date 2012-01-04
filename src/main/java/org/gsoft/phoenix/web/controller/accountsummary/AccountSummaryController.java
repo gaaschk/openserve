@@ -20,6 +20,7 @@ import org.gsoft.phoenix.web.controller.accountsummary.model.PaymentHistoryModel
 import org.gsoft.phoenix.web.controller.accountsummary.model.PaymentModel;
 import org.gsoft.phoenix.web.controller.addloan.model.PersonModel;
 import org.gsoft.phoenix.web.controller.addloan.model.PersonModelConverter;
+import org.gsoft.phoenix.web.person.PersonSearchCriteria;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,14 +47,14 @@ public class AccountSummaryController {
 	
 	@RequestMapping(value="accountsummary/home.do", method=RequestMethod.GET)
 	public ModelAndView loadPersonSearch(ModelAndView model){
-		model.addObject("personModel", new PersonModel());
+		model.addObject("personSearchCriteria", new PersonSearchCriteria());
 		model.setViewName("accountsummary/personsearch");
 		return model;
 	}
 	
 	@RequestMapping(value="accountsummary/home.do", method=RequestMethod.POST)
-	public ModelAndView findPerson(@ModelAttribute("personModel") PersonModel person, ModelAndView model){
-		return loadAccount(person.getSsn(), model);
+	public ModelAndView findPerson(@ModelAttribute("personSearchCriteria") PersonSearchCriteria personSearchCriteria, ModelAndView model){
+		return loadAccount(personSearchCriteria.getSsn(), model);
 	}
 
 	@RequestMapping(value="accountsummary/accountsummary.do", method=RequestMethod.GET)

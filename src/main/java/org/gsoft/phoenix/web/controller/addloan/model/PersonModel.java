@@ -1,6 +1,9 @@
 package org.gsoft.phoenix.web.controller.addloan.model;
 
-public class PersonModel {
+import java.io.Serializable;
+
+public class PersonModel implements Serializable {
+	private static final long serialVersionUID = -183900265755869L;
 	private Long personID;
 	private String ssn;
 	private String firstName;

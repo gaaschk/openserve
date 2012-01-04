@@ -31,6 +31,8 @@ public class Loan implements PhoenixDomainObject{
 	private Integer currentFees;
 	private BigDecimal margin;
 	private LoanEvent lastLoanEvent;
+	private Integer remainingLoanTerm;
+	
 	private List<Disbursement> disbursements;
 	
 	@Id
@@ -120,6 +122,12 @@ public class Loan implements PhoenixDomainObject{
 	}
 	public void setLastLoanEvent(LoanEvent lastLoanEvent) {
 		this.lastLoanEvent = lastLoanEvent;
+	}
+	public Integer getRemainingLoanTerm() {
+		return remainingLoanTerm;
+	}
+	public void setRemainingLoanTerm(Integer remainingLoanTerm) {
+		this.remainingLoanTerm = remainingLoanTerm;
 	}
 	@OneToMany(mappedBy="loan")
 	public List<Disbursement> getDisbursements() {

@@ -9,6 +9,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Months;
+import org.joda.time.Years;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -72,6 +73,21 @@ public class InternalRateOfReturnCalculator {
 		line += this.padWithSpaces("YTM rate: " + ytmRate + ", ", 33);
 		System.out.print(line);
 		return adjustedIssuePrice*ytmRate;
+	}
+	
+	public double calculateOIDUsingDecliningBalanceMethod(DateTime beginDate, DateTime endDate, DateTime maturityDate, double aip, double matureValue){
+		int daysToMaturity = Days.daysBetween(beginDate, maturityDate).getDays();
+		int daysInPeriod = Days.daysBetween(beginDate, endDate).getDays();
+		double dailyRate = (1d/(double)daysToMaturity)*2d;
+		double accumulatedOID = 0;
+		double currentCost = aip;
+		for(int day=0;day<daysInPeriod;day++){
+			double oidExpense = currentCost*dailyRate;
+			accumulatedOID += oidExpense;
+			currentCost -= oidExpense;
+		}
+		
+		return accumulatedOID;
 	}
 	
 	public void runOIDCalculation(List<OIDEvent> oidEvents){
@@ -153,13 +169,34 @@ public class InternalRateOfReturnCalculator {
 		}
 		return aip;
 	}
-	
+
+	private double compoundAtAPRForDateRange(DateTime begin, DateTime end, double rate, double aip){
+		int years = Years.yearsBetween(begin, end).getYears();
+		int days = Days.daysBetween(begin.plusYears(years), end).getDays();
+		double accumulatedAmount = 0;
+		while(years > 0){
+			double accruedAmount = aip*rate;
+			accumulatedAmount += accruedAmount;
+			aip += accruedAmount;
+			years--;
+		}
+		double accruedAmount = aip*(rate/365.25)*days;
+		accumulatedAmount += accruedAmount;
+		return accumulatedAmount;
+	}
+
 	public static void main(String ... args){
+		DateTime carrletonBegin = new DateTime(2006, 12, 21, 0,0,0);
+		DateTime carrletonEnd = new DateTime(2008, 7, 15, 0,0,0);
+		DateTime carrletonMaturity = new DateTime(2020,7,5,0,0,0);
+		
 		InternalRateOfReturnCalculator calculator = new InternalRateOfReturnCalculator();
+		double oidAmount = calculator.compoundAtAPRForDateRange(carrletonBegin, carrletonEnd, .057647, 8750);
+		oidAmount += (oidAmount*(.057647/365.25)*25);
+		System.out.println("OID:" + oidAmount);
+		/*
 		double carrletonYTMRate = calculator.calculateBondYTM(7312.59, 0, 7409.59, 180);
 		System.out.println("Carrleton YTM Rate: " + carrletonYTMRate);
-		DateTime carrletonBegin = new DateTime(2003, 9, 1, 0,0,0);
-		DateTime carrletonEnd = new DateTime(2005, 7, 3, 0,0,0);
 		int periods = Months.monthsBetween(carrletonBegin, carrletonEnd).getMonths();
 		
 		System.out.println("Carrleton First OID Amount: " + 7312.59*carrletonYTMRate);
@@ -178,6 +215,7 @@ public class InternalRateOfReturnCalculator {
 			}
 		});
 		calculator.runOIDCalculation(events);
+		*/
 	}
 	
 	class OIDEvent{

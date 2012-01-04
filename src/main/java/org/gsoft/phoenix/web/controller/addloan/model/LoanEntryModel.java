@@ -1,11 +1,14 @@
 package org.gsoft.phoenix.web.controller.addloan.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import org.gsoft.phoenix.domain.loan.LoanType;
 
 
-public class LoanEntryModel {
+public class LoanEntryModel implements Serializable{
+	private static final long serialVersionUID = -4761897960840405245L;
+
 	private Long loanID;
 	private LoanType loanType;
 	private PersonModel person;

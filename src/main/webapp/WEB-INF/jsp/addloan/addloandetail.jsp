@@ -18,4 +18,4 @@
 		<label>Starting Fees:</label>
 		<form:input class="masked" path="startingFees" data-meiomask="reverse.dollar" />
 	</fieldset>
-	<input type="submit" value="Save Loan"></input>
+	<input type="submit" name="_eventId_save" value="Save Loan"/>
