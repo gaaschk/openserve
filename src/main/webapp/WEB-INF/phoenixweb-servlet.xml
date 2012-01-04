@@ -25,7 +25,7 @@
 
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-		p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" />
+		p:prefix="/WEB-INF/" p:suffix=".jsp" />
 
 	<bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
 		<property name="order" value="1" />

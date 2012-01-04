@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/includes.jsp" %>
+<%@ include file="/WEB-INF/views/includes.jsp" %>
 <style type="text/css">
 table.loans{
 	border-width: thin;

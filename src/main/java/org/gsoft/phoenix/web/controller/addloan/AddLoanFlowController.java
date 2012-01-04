@@ -11,11 +11,9 @@ import org.gsoft.phoenix.web.controller.addloan.model.LoanEntryModelConverter;
 import org.gsoft.phoenix.web.controller.addloan.model.PersonModel;
 import org.gsoft.phoenix.web.controller.addloan.model.PersonModelConverter;
 import org.gsoft.phoenix.web.person.PersonSearchCriteria;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.stereotype.Service;
 
-@Component("addLoanFlowController")
+@Service
 public class AddLoanFlowController {
 	@Resource
 	private PersonService personService;

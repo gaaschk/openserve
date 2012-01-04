@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/includes.jsp"%>
+<%@ include file="/WEB-INF/views/includes.jsp"%>
 
 <form:form modelAttribute="paymentModel">
 <table>
@@ -29,5 +29,5 @@
 		<label>Payment Amount:</label>		
 		<form:input class="masked" path="paymentAmount" type="text" data-meiomask="reverse.dollar"/>
 	</fieldset>
-	<input type="submit" value="Apply Payment"></input>
+	<input type="submit" name="_eventId_submitPayment" value="Apply Payment"></input>
 </form:form>

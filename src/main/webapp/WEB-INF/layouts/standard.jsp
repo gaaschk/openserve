@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<%@ include file="/WEB-INF/jsp/includes.jsp" %>
+<%@ include file="/WEB-INF/views/includes.jsp" %>
 <html>
 	<head>
 		<title>PhoenixWeb :: Home</title>
@@ -65,7 +65,7 @@
 		  <div id="desktopNavbar">	
 			<ul>
 				<li class="menu-item"><a href="/phoenixweb/web/addloan">Add a new Loan</a></li>
-				<li class="menu-item"><a href="/phoenixweb/web/payment/search.do">Payment</a></li>
+				<li class="menu-item"><a href="/phoenixweb/web/payment">Payment</a></li>
 				<li class="menu-item"><a href="/phoenixweb/web/accountsummary/home.do">Account Summary</a></li>
 				<li class="menu-item"><a href="/phoenixweb/web/disclosure/home.do">Generate Disclosures</a></li>
 			</ul>

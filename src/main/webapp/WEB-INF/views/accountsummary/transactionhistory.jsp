@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/includes.jsp" %>
+<%@ include file="/WEB-INF/views/includes.jsp" %>
 <form:form commandName="loandetailmodel">
   <table class="loanevents" id="loaneventtable">
 	<caption><label>Loan History</label></caption>

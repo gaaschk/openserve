@@ -1,10 +1,12 @@
 package org.gsoft.phoenix.web.controller.payment.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.gsoft.phoenix.web.controller.addloan.model.PersonModel;
 
-public class PaymentModel {
+public class PaymentEntryModel implements Serializable{
+	private static final long serialVersionUID = -2289069982845305280L;
 	private PersonModel theBorrower;
 	private Integer paymentAmount;
 	private Date paymentEffectiveDate;

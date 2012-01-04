@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/includes.jsp" %>
+<%@ include file="/WEB-INF/views/includes.jsp" %>
 <form:form commandName="loandetailmodel.loanFinancialData">
 	<fieldset>
 		<label>Loan Type:</label>

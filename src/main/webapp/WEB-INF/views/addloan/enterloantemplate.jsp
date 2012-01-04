@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/includes.jsp" %>
+<%@ include file="/WEB-INF/views/includes.jsp" %>
 <h1>Enter Loan Information</h1>
 <form:form modelAttribute="loanModel">
 	<h3>Person Data</h3>

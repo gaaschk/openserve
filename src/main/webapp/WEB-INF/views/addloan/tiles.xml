@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition name="addloan/index" extends="standardLayout">
+        <put-attribute name="content" value="/WEB-INF/views/addloan/personsearch.jsp" />
+    </definition>
+
+    <definition name="addloan/enterloan" extends="standardLayout">
+        <put-attribute name="content" value="addloan/loandetail" />
+    </definition>
+    
+    <definition name="addloan/loandetail" template="/WEB-INF/views/addloan/enterloantemplate.jsp">
+    	<put-attribute name="detail" value="/WEB-INF/views/addloan/addloandetail.jsp"/>
+    </definition>
+    
+    <definition name="addloan/savedloanresult" extends="standardLayout">
+        <put-attribute name="content" value="/WEB-INF/views/addloan/savedloanresult.jsp" />
+    </definition>
+</tiles-definitions>

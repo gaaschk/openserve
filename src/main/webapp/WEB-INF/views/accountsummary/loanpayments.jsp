@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/includes.jsp" %>
+<%@ include file="/WEB-INF/views/includes.jsp" %>
 <form:form commandName="selectedpayment">
   <table class="loanpaymenttable">
     <tr>

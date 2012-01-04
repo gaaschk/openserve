@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/includes.jsp" %>
+<%@ include file="/WEB-INF/views/includes.jsp" %>
 	<fieldset>
 		<label>Loan Type:</label>
 		<form:select path="loanType">
