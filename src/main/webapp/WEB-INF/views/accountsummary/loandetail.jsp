@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/views/includes.jsp" %>
+<%@ include file="/WEB-INF/layouts/includes.jsp" %>
 <style type="text/css">
 #tabContainer{ 
   position:relative; 

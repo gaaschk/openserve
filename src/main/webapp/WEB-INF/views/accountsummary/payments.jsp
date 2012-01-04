@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/views/includes.jsp" %>
+<%@ include file="/WEB-INF/layouts/includes.jsp" %>
 <script type="text/javascript">
 window.addEvent('domready', function() {
 	var paymentrows = $$('.paymentrow .paymentrowrb');

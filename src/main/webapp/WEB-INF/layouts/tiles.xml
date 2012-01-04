@@ -7,9 +7,11 @@
 	<definition name="standardLayout" template="/WEB-INF/layouts/standard.jsp">
         <put-attribute name="menu" value="/WEB-INF/layouts/menu.jsp" />
 	</definition>
+	
+	<definition name="emptyLayout" template="/WEB-INF/layouts/empty_template.jsp"/>
 
     <definition name="error" extends="standardLayout">
-        <put-attribute name="content" value="/WEB-INF/views/error.jsp" />
+        <put-attribute name="content" value="/WEB-INF/layouts/error.jsp" />
     </definition>
 
 </tiles-definitions>

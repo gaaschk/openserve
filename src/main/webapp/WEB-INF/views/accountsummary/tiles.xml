@@ -7,11 +7,11 @@
         <put-attribute name="content" value="/WEB-INF/views/accountsummary/accountsummary.jsp" />
     </definition>
     
-    <definition name="accountsummary/loandetail" template="/WEB-INF/views/empty_template.jsp">
+    <definition name="accountsummary/loandetail" extends="emptyLayout">
     	<put-attribute name="content" value="/WEB-INF/views/accountsummary/loandetail.jsp"/>
     </definition>
 
-	<definition name="accountsummary/paymentdetail" template="/WEB-INF/views/empty_template.jsp">
+	<definition name="accountsummary/paymentdetail" extends="emptyLayout">
 		<put-attribute name="content" value="/WEB-INF/views/accountsummary/loanpayments.jsp"/>
 	</definition>
 
