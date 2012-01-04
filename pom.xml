@@ -194,6 +194,13 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<warName>phoenixweb</warName>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.dbmaintain</groupId>
 				<artifactId>dbmaintain-maven-plugin</artifactId>
 				<version>${dbmaintain.version}</version>
