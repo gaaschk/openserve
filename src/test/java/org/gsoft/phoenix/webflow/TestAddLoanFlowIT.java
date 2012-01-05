@@ -27,7 +27,7 @@ public class TestAddLoanFlowIT extends AbstractXmlFlowExecutionTests {
 	
 	@Override
 	protected FlowDefinitionResource getResource(FlowDefinitionResourceFactory resourceFactory) {
-		return resourceFactory.createFileResource("src/main/webapp/WEB-INF/jsp/addloan/addloan-flow.xml");
+		return resourceFactory.createFileResource("src/main/webapp/WEB-INF/views/addloan/addloan-flow.xml");
 	}
 
 
