@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                          http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<on-start>
+		<evaluate expression="new org.gsoft.phoenix.web.person.PersonSearchCriteria()" result="flowScope.personSearchCriteria"/>
+	</on-start>
+
+	<view-state id="borrowerSearch" view="disclosure/index" model="personSearchCriteria">
+		<transition on="search" to="selectLoansToDisclose">
+			<evaluate expression="loanDisclosureFlowController.findPerson(personSearchCriteria)" result="flowScope.loanModel"/>		
+		</transition>
+	</view-state>
+	
+	<view-state id="selectLoansToDisclose" view="disclosure/selectloans" model="disclosureModel">
+		<transition on="save" to="loanDisclosureComplete">
+			<evaluate expression="loanDisclosureFlowController.saveLoan(loanModel)" result="flowScope.loanId"/>		
+		</transition>
+	</view-state>
+	
+	<end-state id="loanDisclosureComplete" />
+</flow>

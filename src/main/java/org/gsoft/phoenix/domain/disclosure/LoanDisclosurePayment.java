@@ -10,20 +10,20 @@ import javax.persistence.ManyToOne;
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
 
 @Entity
-public class DisclosurePayment implements PhoenixDomainObject{
+public class LoanDisclosurePayment implements PhoenixDomainObject{
 	private static final long serialVersionUID = 3438237766896319509L;
-	private Long disclosurePaymentID;
+	private Long loanDisclosurePaymentID;
 	private Integer paymentAmount;
 	private Integer paymentCount;
-	private Disclosure disclosure;
+	private LoanDisclosure loanDisclosure;
 	
 	@Id
 	@GeneratedValue( strategy=GenerationType.AUTO)
-	public Long getDisclosurePaymentID() {
-		return disclosurePaymentID;
+	public Long getLoanDisclosurePaymentID() {
+		return loanDisclosurePaymentID;
 	}
-	public void setDisclosurePaymentID(Long disclosurePaymentID) {
-		this.disclosurePaymentID = disclosurePaymentID;
+	public void setLoanDisclosurePaymentID(Long loanDisclosurePaymentID) {
+		this.loanDisclosurePaymentID = loanDisclosurePaymentID;
 	}
 	public Integer getPaymentAmount() {
 		return paymentAmount;
@@ -39,10 +39,10 @@ public class DisclosurePayment implements PhoenixDomainObject{
 	}
 	@ManyToOne
 	@JoinColumn(name="DisclosureID", insertable=false, updatable=false)
-	public Disclosure getDisclosure() {
-		return disclosure;
+	public LoanDisclosure getLoanDisclosure() {
+		return loanDisclosure;
 	}
-	public void setDisclosure(Disclosure disclosure) {
-		this.disclosure = disclosure;
+	public void setLoanDisclosure(LoanDisclosure loanDisclosure) {
+		this.loanDisclosure = loanDisclosure;
 	}
 }

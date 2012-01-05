@@ -20,7 +20,7 @@ import org.springframework.webflow.test.MockFlowBuilderContext;
 import org.springframework.webflow.test.execution.AbstractXmlFlowExecutionTests;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("file:src/main/webapp/WEB-INF/application-context.xml")
+@ContextConfiguration("classpath:/META-INF/spring/application-context.xml")
 public class TestAddLoanFlowIT extends AbstractXmlFlowExecutionTests {
 	@Resource
 	private AddLoanFlowController addLoanFlowController;

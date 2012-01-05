@@ -19,7 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("file:src/main/webapp/WEB-INF/application-context.xml")
+@ContextConfiguration("classpath:/META-INF/spring/application-context.xml")
 public class TestPaymentServiceIT {
 	@Resource
 	private DatabaseUtility dbutility;

@@ -12,22 +12,22 @@ import javax.persistence.OneToMany;
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
 
 @Entity
-public class Disclosure implements PhoenixDomainObject {
+public class LoanDisclosure implements PhoenixDomainObject {
 	private static final long serialVersionUID = -248336175803533637L;
 
-	private Long disclosureID;
+	private Long loanDisclosureID;
 	private Long loanID;
 	private Date disclosureDate;
 	private Date EffectiveDate;
-	private List<DisclosurePayment> disclosurePayments;
+	private List<LoanDisclosurePayment> disclosurePayments;
 	
 	@Id
 	@GeneratedValue( strategy=GenerationType.AUTO)
-	public Long getDisclosureID() {
-		return disclosureID;
+	public Long getLoanDisclosureID() {
+		return loanDisclosureID;
 	}
-	public void setDisclosureID(Long disclosureID) {
-		this.disclosureID = disclosureID;
+	public void setLoanisclosureID(Long loanDisclosureID) {
+		this.loanDisclosureID = loanDisclosureID;
 	}
 	public Long getLoanID() {
 		return loanID;
@@ -47,11 +47,11 @@ public class Disclosure implements PhoenixDomainObject {
 	public void setEffectiveDate(Date effectiveDate) {
 		EffectiveDate = effectiveDate;
 	}
-	@OneToMany(mappedBy="disclosure")
-	public List<DisclosurePayment> getDisclosurePayments() {
+	@OneToMany(mappedBy="loanDisclosure")
+	public List<LoanDisclosurePayment> getDisclosurePayments() {
 		return disclosurePayments;
 	}
-	public void setDisclosurePayments(List<DisclosurePayment> disclosurePayments) {
+	public void setDisclosurePayments(List<LoanDisclosurePayment> disclosurePayments) {
 		this.disclosurePayments = disclosurePayments;
 	}
 }
