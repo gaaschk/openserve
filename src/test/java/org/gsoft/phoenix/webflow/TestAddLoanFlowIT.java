@@ -46,7 +46,7 @@ public class TestAddLoanFlowIT extends AbstractXmlFlowExecutionTests {
 	    assertCurrentStateEquals("borrowerSearch");
 	    assertTrue(getRequiredFlowAttribute("personSearchCriteria") instanceof PersonSearchCriteria);
 	    
-	    context.setEventId("submit");
+	    context.setEventId("search");
 	    
 	    resumeFlow(context);
 	    assertCurrentStateEquals("enterLoanDetails");
@@ -57,7 +57,7 @@ public class TestAddLoanFlowIT extends AbstractXmlFlowExecutionTests {
 	    loanModel.setStartingInterest(new BigDecimal(1000));
 	    loanModel.setStartingFees(1000);
 	    
-	    context.setEventId("submit");
+	    context.setEventId("save");
 	    
 	    resumeFlow(context);
 	    
