@@ -26,7 +26,7 @@ public class LoanDisclosure implements PhoenixDomainObject {
 	public Long getLoanDisclosureID() {
 		return loanDisclosureID;
 	}
-	public void setLoanisclosureID(Long loanDisclosureID) {
+	public void setLoanDisclosureID(Long loanDisclosureID) {
 		this.loanDisclosureID = loanDisclosureID;
 	}
 	public Long getLoanID() {
