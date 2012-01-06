@@ -1,4 +1,4 @@
-package org.gsoft.phoenix.buslogic.disclosure;
+package org.gsoft.phoenix.buslogic.amortization;
 
 import java.math.BigDecimal;
 

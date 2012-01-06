@@ -1,4 +1,4 @@
-package org.gsoft.phoenix.domain.disclosure;
+package org.gsoft.phoenix.domain.amortization;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,20 +10,20 @@ import javax.persistence.ManyToOne;
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
 
 @Entity
-public class LoanDisclosurePayment implements PhoenixDomainObject{
+public class AmortizationLoanPayment implements PhoenixDomainObject{
 	private static final long serialVersionUID = 3438237766896319509L;
-	private Long loanDisclosurePaymentID;
+	private Long amortizationLoanPaymentID;
 	private Integer paymentAmount;
 	private Integer paymentCount;
-	private LoanDisclosure loanDisclosure;
+	private LoanAmortizationSchedule loanAmortizationSchedule;
 	
 	@Id
 	@GeneratedValue( strategy=GenerationType.AUTO)
-	public Long getLoanDisclosurePaymentID() {
-		return loanDisclosurePaymentID;
+	public Long getAmortizationLoanPaymentID() {
+		return amortizationLoanPaymentID;
 	}
-	public void setLoanDisclosurePaymentID(Long loanDisclosurePaymentID) {
-		this.loanDisclosurePaymentID = loanDisclosurePaymentID;
+	public void setAmortizationLoanPaymentID(Long amortizationLoanPaymentID) {
+		this.amortizationLoanPaymentID = amortizationLoanPaymentID;
 	}
 	public Integer getPaymentAmount() {
 		return paymentAmount;
@@ -38,11 +38,11 @@ public class LoanDisclosurePayment implements PhoenixDomainObject{
 		this.paymentCount = paymentCount;
 	}
 	@ManyToOne
-	@JoinColumn(name="DisclosureID", insertable=false, updatable=false)
-	public LoanDisclosure getLoanDisclosure() {
-		return loanDisclosure;
+	@JoinColumn(name="LoanAmortizationScheduleID")
+	public LoanAmortizationSchedule getLoanAmortizationSchedule() {
+		return loanAmortizationSchedule;
 	}
-	public void setLoanDisclosure(LoanDisclosure loanDisclosure) {
-		this.loanDisclosure = loanDisclosure;
+	public void setLoanAmortizationSchedule(LoanAmortizationSchedule loanAmortizationSchedule) {
+		this.loanAmortizationSchedule = loanAmortizationSchedule;
 	}
 }

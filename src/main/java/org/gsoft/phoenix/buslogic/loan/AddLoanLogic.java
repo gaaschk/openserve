@@ -20,6 +20,8 @@ public class AddLoanLogic {
 	
 	public Loan addNewLoan(Loan loan, Date effectiveDate){
 		Loan savedLoan = this.loanRepository.save(loan);
+		if(savedLoan.getRemainingLoanTerm() == null)
+			savedLoan.setRemainingLoanTerm(180);
 		LoanEvent addedEvent = loanEventLogic.createLoanEventWithTransaction(savedLoan, LoanEventType.LOAN_ADDED, 
 				effectiveDate);
 		addedEvent.getLoanTransaction().setFeesChange(loan.getStartingFees());

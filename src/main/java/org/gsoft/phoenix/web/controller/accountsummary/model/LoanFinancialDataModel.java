@@ -1,11 +1,14 @@
 package org.gsoft.phoenix.web.controller.accountsummary.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import org.gsoft.phoenix.domain.loan.LoanType;
 import org.gsoft.phoenix.util.formatter.CurrencyInPenniesFormat;
 
-public class LoanFinancialDataModel {
+public class LoanFinancialDataModel implements Serializable{
+	private static final long serialVersionUID = 2799991603651710288L;
+
 	private Long loanID;
 	private LoanType loanType;
 	private Integer currentPrincipal;

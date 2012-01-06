@@ -67,7 +67,7 @@
 				<li class="menu-item"><a href="/phoenixweb/web/addloan">Add a new Loan</a></li>
 				<li class="menu-item"><a href="/phoenixweb/web/payment">Payment</a></li>
 				<li class="menu-item"><a href="/phoenixweb/web/accountsummary/home.do">Account Summary</a></li>
-				<li class="menu-item"><a href="/phoenixweb/web/disclosure/home.do">Generate Disclosures</a></li>
+				<li class="menu-item"><a href="/phoenixweb/web/amortization">Generate Amortization Schedules</a></li>
 			</ul>
 		  </div>
 		</div><!-- desktop header end -->
