@@ -3,7 +3,7 @@ package org.gsoft.phoenix.web.controller.addloan.model;
 import javax.annotation.Resource;
 
 import org.gsoft.phoenix.domain.Person;
-import org.gsoft.phoenix.service.domain.LoanEntryDocument;
+import org.gsoft.phoenix.service.loanentry.domain.NewLoanData;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,8 +11,8 @@ public class LoanEntryModelConverter {
 	@Resource
 	private PersonModelConverter personModelConverter;
 	
-	public LoanEntryDocument convertFromModel(LoanEntryModel loanModel){
-		LoanEntryDocument newLoanDoc = new LoanEntryDocument();
+	public NewLoanData convertFromModel(LoanEntryModel loanModel){
+		NewLoanData newLoanDoc = new NewLoanData();
 		newLoanDoc.setLoanType(loanModel.getLoanType());
 		Person person = personModelConverter.convertFromModel(loanModel.getPerson());
 		newLoanDoc.setBorrower(person);

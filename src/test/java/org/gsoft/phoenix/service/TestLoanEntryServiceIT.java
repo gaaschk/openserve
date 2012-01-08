@@ -5,7 +5,8 @@ import java.io.IOException;
 import javax.annotation.Resource;
 
 import org.gsoft.phoenix.data.DatabaseUtility;
-import org.gsoft.phoenix.service.domain.LoanEntryDocument;
+import org.gsoft.phoenix.service.loanentry.LoanEntryService;
+import org.gsoft.phoenix.service.loanentry.domain.NewLoanData;
 import org.gsoft.phoenix.util.LoanFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +31,7 @@ public class TestLoanEntryServiceIT {
 	
 	@Test
 	public void testAddLoan() throws IOException{
-		LoanEntryDocument newLoan = loanFactory.getLoanByID(1);
+		NewLoanData newLoan = loanFactory.getLoanByID(1);
 		Long loanid = loanEntryService.addNewLoan(newLoan);
 	}
 }

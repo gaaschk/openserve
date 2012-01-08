@@ -1,4 +1,4 @@
-package org.gsoft.phoenix.service;
+package org.gsoft.phoenix.service.loanentry;
 
 import java.math.BigDecimal;
 
@@ -9,7 +9,7 @@ import org.gsoft.phoenix.buslogic.loan.AddLoanLogic;
 import org.gsoft.phoenix.buslogic.system.SystemSettingsLogic;
 import org.gsoft.phoenix.domain.Person;
 import org.gsoft.phoenix.domain.loan.Loan;
-import org.gsoft.phoenix.service.domain.LoanEntryDocument;
+import org.gsoft.phoenix.service.loanentry.domain.NewLoanData;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +24,7 @@ public class LoanEntryService {
 	private SystemSettingsLogic systemSettingsLogic;
 	
 	@Transactional
-	public Long addNewLoan(LoanEntryDocument loanEntryDocument){
+	public Long addNewLoan(NewLoanData loanEntryDocument){
 		Loan newLoan = new Loan();
 		newLoan.setLoanType(loanEntryDocument.getLoanType());
 		newLoan.setStartingPrincipal(loanEntryDocument.getStartingPrincipal());
