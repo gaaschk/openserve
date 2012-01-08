@@ -8,6 +8,7 @@ import org.gsoft.phoenix.buslogic.loanevent.LoanEventLogic;
 import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.loan.LoanEvent;
 import org.gsoft.phoenix.domain.loan.LoanEventType;
+import org.gsoft.phoenix.domain.loan.LoanTypeProfile;
 import org.gsoft.phoenix.repositories.loan.LoanRepository;
 import org.springframework.stereotype.Component;
 
@@ -17,11 +18,13 @@ public class AddLoanLogic {
 	private LoanRepository loanRepository;
 	@Resource
 	private LoanEventLogic loanEventLogic;
+	@Resource
+	private LoanTypeLogic loanTypeLogic;
 	
 	public Loan addNewLoan(Loan loan, Date effectiveDate){
 		Loan savedLoan = this.loanRepository.save(loan);
-		if(savedLoan.getRemainingLoanTerm() == null)
-			savedLoan.setRemainingLoanTerm(180);
+		LoanTypeProfile loanTypeProfile = loanTypeLogic.getLoanTypeProfileForLoan(loan);
+		savedLoan.setRemainingLoanTerm(loanTypeProfile.getMaximumLoanTerm());
 		LoanEvent addedEvent = loanEventLogic.createLoanEventWithTransaction(savedLoan, LoanEventType.LOAN_ADDED, 
 				effectiveDate);
 		addedEvent.getLoanTransaction().setFeesChange(loan.getStartingFees());

@@ -23,6 +23,7 @@ public class Loan implements PhoenixDomainObject{
 	private Long loanID;
 	private LoanType loanType;
 	private Long borrowerPersonID;
+	private Long effectiveLoanTypeProfileID;
 	private Integer startingPrincipal;
 	private BigDecimal startingInterest;
 	private Integer startingFees;
@@ -58,6 +59,12 @@ public class Loan implements PhoenixDomainObject{
 	}
 	public void setBorrowerPersonID(Long borrowerPersonID) {
 		this.borrowerPersonID = borrowerPersonID;
+	}
+	public Long getEffectiveLoanTypeProfileID() {
+		return effectiveLoanTypeProfileID;
+	}
+	public void setEffectiveLoanTypeProfileID(Long effectiveLoanTypeProfileID) {
+		this.effectiveLoanTypeProfileID = effectiveLoanTypeProfileID;
 	}
 	public Integer getStartingPrincipal() {
 		return startingPrincipal;

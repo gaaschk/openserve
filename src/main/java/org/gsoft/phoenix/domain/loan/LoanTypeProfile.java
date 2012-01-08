@@ -8,11 +8,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.gsoft.phoenix.domain.PhoenixDomainObject;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 @Entity
-public class LoanTypeProfile {
+public class LoanTypeProfile implements PhoenixDomainObject{
+	private static final long serialVersionUID = 6245557328161056820L;
 	private Long loanTypeProfileID;
 	private LoanType loanType;
 	private Date effectiveDate;
