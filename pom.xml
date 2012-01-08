@@ -216,6 +216,7 @@
 					</databases>
 					<scriptLocations>src/main/dbscripts</scriptLocations>
 					<autoCreateDbMaintainScriptsTable>true</autoCreateDbMaintainScriptsTable>
+					<qualifier>scripts</qualifier>
 				</configuration>
 				<executions>
 					<execution>
@@ -237,6 +238,13 @@
 						<goals>
 							<goal>clearDatabase</goal>
 							<goal>updateDatabase</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>package.dbscripts</id>
+						<phase>package</phase>
+						<goals>
+							<goal>createScriptArchive</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -285,6 +293,15 @@
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
+			<!-- 
+			<properties>
+				<database.driver>com.mysql.jdbc.Driver</database.driver>
+				<database.url>jdbc:mysql://192.168.10.9:3306/phoenix</database.url>
+				<database.username>root</database.username>
+				<database.password>5eqUxet7</database.password>
+				<database.schema>phoenix</database.schema>
+			</properties>
+			-->
 			<properties>
 				<database.driver>com.mysql.jdbc.Driver</database.driver>
 				<database.url>jdbc:mysql://localhost:3306/phoenix</database.url>
