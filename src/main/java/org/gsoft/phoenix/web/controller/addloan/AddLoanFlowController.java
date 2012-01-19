@@ -3,9 +3,9 @@ package org.gsoft.phoenix.web.controller.addloan;
 import javax.annotation.Resource;
 
 import org.gsoft.phoenix.domain.Person;
+import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.service.PersonService;
 import org.gsoft.phoenix.service.loanentry.LoanEntryService;
-import org.gsoft.phoenix.service.loanentry.domain.NewLoanData;
 import org.gsoft.phoenix.web.controller.addloan.model.LoanEntryModel;
 import org.gsoft.phoenix.web.controller.addloan.model.LoanEntryModelConverter;
 import org.gsoft.phoenix.web.controller.addloan.model.PersonModel;
@@ -34,7 +34,7 @@ public class AddLoanFlowController {
 	}
 
 	public Long saveLoan(LoanEntryModel loanModel){
-		NewLoanData newLoanDoc = loanModelConverter.convertFromModel(loanModel);
+		Loan newLoanDoc = loanModelConverter.convertFromModel(loanModel);
 		Long loanID = loanEntryService.addNewLoan(newLoanDoc);
 		return loanID;
 	}

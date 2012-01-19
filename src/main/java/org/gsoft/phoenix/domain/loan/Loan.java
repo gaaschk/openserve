@@ -8,9 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import org.gsoft.phoenix.domain.Person;
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
 import org.gsoft.phoenix.repositories.loan.LoanEventRepository;
 import org.gsoft.phoenix.util.ApplicationContextLocator;
@@ -33,6 +35,8 @@ public class Loan implements PhoenixDomainObject{
 	private BigDecimal margin;
 	private LoanEvent lastLoanEvent;
 	private Integer remainingLoanTerm;
+	//Relationships
+	private Person borrower;
 	
 	private List<Disbursement> disbursements;
 	
@@ -142,5 +146,12 @@ public class Loan implements PhoenixDomainObject{
 	}
 	public void setDisbursements(List<Disbursement> disbursements) {
 		this.disbursements = disbursements;
+	}
+	@ManyToOne
+	public Person getBorrower() {
+		return borrower;
+	}
+	public void setBorrower(Person borrower) {
+		this.borrower = borrower;
 	}
 }

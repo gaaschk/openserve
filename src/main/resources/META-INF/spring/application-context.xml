@@ -56,4 +56,6 @@
 	</bean>
 
 	<tx:annotation-driven />
+	
+	<import resource="security-context.xml"/>
 </beans>

@@ -2,7 +2,6 @@ package org.gsoft.phoenix.repositories.payment;
 
 import java.util.List;
 
-import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.payment.Payment;
 import org.gsoft.phoenix.repositories.BaseRepository;
 import org.springframework.data.jpa.repository.Query;

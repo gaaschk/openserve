@@ -13,7 +13,7 @@ import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
 
 public class GenericEnumUserType implements UserType, ParameterizedType {
-	private Class clazz = null;
+	private Class<?> clazz = null;
 
 	private static final int[] SQL_TYPES = { Types.BIGINT };
 
@@ -21,7 +21,7 @@ public class GenericEnumUserType implements UserType, ParameterizedType {
 		return SQL_TYPES;
 	}
 
-	public Class returnedClass() {
+	public Class<?> returnedClass() {
 		return clazz;
 	}
 

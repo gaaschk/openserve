@@ -15,13 +15,13 @@ create table LoanEvent(
 
 create table LoanTransaction(
 	LoanTransactionID BIGINT PRIMARY KEY AUTO_INCREMENT,
-	InterestAccrued FLOAT,
-	InterestPaid FLOAT,
+	InterestAccrued DECIMAL(20,6),
+	InterestPaid DECIMAL(20,6),
 	PrincipalChange INTEGER,
-	InterestChange FLOAT,
+	InterestChange DECIMAL(20,6),
 	FeesChange INTEGER,
 	EndingPrincipal INTEGER,
-	EndingInterest FLOAT,
+	EndingInterest DECIMAL(20,6),
 	EndingFees INTEGER
 );
 

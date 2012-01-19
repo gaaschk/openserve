@@ -1,16 +1,15 @@
 package org.gsoft.phoenix.service.payment;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.annotation.Resource;
 
 import org.gsoft.phoenix.data.DatabaseUtility;
 import org.gsoft.phoenix.domain.Person;
+import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.service.PersonService;
 import org.gsoft.phoenix.service.SystemSettingsService;
 import org.gsoft.phoenix.service.loanentry.LoanEntryService;
-import org.gsoft.phoenix.service.loanentry.domain.NewLoanData;
 import org.gsoft.phoenix.util.LoanFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,8 +40,8 @@ public class TestPaymentServiceIT {
 
 	@Test
 	public void test() {
-		NewLoanData newLoan = loanFactory.getLoanByID(1);
-		Long loanid = loanEntryService.addNewLoan(newLoan);
+		Loan newLoan = loanFactory.getLoanByID(1);
+		loanEntryService.addNewLoan(newLoan);
 		Person person = personService.findPersonBySSN(newLoan.getBorrower().getSsn());
 		systemSettingsService.adjustSystemDateByCalendarUnit(Calendar.MONTH, 1);
 		paymentService.applyPayment(person.getPersonID(), 100000, systemSettingsService.getCurrentSystemDate());

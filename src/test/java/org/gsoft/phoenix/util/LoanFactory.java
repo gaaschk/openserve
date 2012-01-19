@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 
 import javax.annotation.Resource;
 
+import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.loan.LoanType;
-import org.gsoft.phoenix.service.loanentry.domain.NewLoanData;
 import org.springframework.stereotype.Repository;
 
 
@@ -14,8 +14,8 @@ public class LoanFactory {
 	@Resource
 	private PersonFactory personFactory;
 	
-	public NewLoanData getLoanByID(int testLoanID){
-		NewLoanData newLoan = new NewLoanData();
+	public Loan getLoanByID(int testLoanID){
+		Loan newLoan = new Loan();
 		newLoan.setLoanType(LoanType.MORTGAGE);
 		newLoan.setStartingFees(0);
 		newLoan.setStartingInterest(new BigDecimal(0));
