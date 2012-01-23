@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 import org.gsoft.phoenix.buslogic.loan.AddLoanLogic;
 import org.gsoft.phoenix.buslogic.system.SystemSettingsLogic;
 import org.gsoft.phoenix.domain.loan.Loan;
-import org.gsoft.phoenix.rulesengine.RunRulesEngine;
+import org.gsoft.phoenix.rulesengine.annotation.RunRulesEngine;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

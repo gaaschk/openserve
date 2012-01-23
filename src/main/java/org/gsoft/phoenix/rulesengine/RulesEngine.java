@@ -98,7 +98,8 @@ public class RulesEngine {
     
     private boolean initialized;
     
-    private boolean topLevel = true;
+    private boolean isRunning = false;
+    private boolean isOpen = false;
     
     /**
      * Creates a new rules engine instance with no context.
@@ -133,11 +134,11 @@ public class RulesEngine {
      *            One or more domain objects to be added to the context.
      */
     public void addContext( final PhoenixDomainObject... addedContext ) {
-        // memorize status of the flag we use to determine if we try to run rules
-        final boolean enteredTopLevel = this.topLevel;
-        this.topLevel = false;
-        
-        // null objects should never be passed to addContext()
+        if(!this.isOpen){
+        	RulesEngine.LOG.trace("call to addContext made while rules engine is closed.  objects ignored.");
+        	return;
+        }
+    	// null objects should never be passed to addContext()
         if ( addedContext == null ) {
             throw new IllegalArgumentException( "Null object passed into context." );
         }
@@ -147,30 +148,45 @@ public class RulesEngine {
         
         // gather any new rules & facts that are relevant to the added context
         this.incorporateNewContextObjects( addedContext );
-        
-        // as this method is reentrant, the rule evaluation loop should only
-        // occur at the top level call
-        if ( enteredTopLevel ) {
-            
-            // top level BRE will always need to add its own copy of system
-            // settings, if one does not exist
-            this.addUniversalContext();
-            
-            try {
-                boolean shouldContinue = true;
-                while ( shouldContinue ) {
-                    shouldContinue = this.evaluateFactsAndFireRules();
-                    RulesEngine.LOG.trace( "--- Resetting Eval Queue ---" );
-                    this.resetEvalQueue();
-                }
-            }
-            finally {
-                this.topLevel = enteredTopLevel;
-            }
-        }
     }
     
-    /**
+    public void evaluateRules(){
+    	try{
+    		if(!this.isRunning){
+    			isRunning = true;
+    			this.addUniversalContext();
+    			boolean shouldContinue = true;
+    			while ( shouldContinue ) {
+    				shouldContinue = this.evaluateFactsAndFireRules();
+    				RulesEngine.LOG.trace( "--- Resetting Eval Queue ---" );
+    				this.resetEvalQueue();
+    			}
+    		}
+    	}
+    	finally{
+    		this.isRunning = false;
+    	}
+   }
+    
+    public void forceStop(){
+    	this.isRunning = false;
+    	this.clearContext();
+    }
+    
+    public void open(){
+    	this.isOpen = true;
+    }
+    
+    public void close(){
+    	this.clearContext();
+    	this.isOpen = false;
+    }
+    
+	public boolean isOpen() {
+		return this.isOpen;
+	}
+
+	/**
      * replaces old context if it already exists, otherwise adds the new object to the BRE context
      * 
      * @param old
@@ -191,7 +207,9 @@ public class RulesEngine {
         this.factsByContext.clear();
         this.contextObjectVersionMap.clear();
         this.factExpressionByDefinition.clear();
-        this.topLevel = true;
+        if(this.isRunning){
+        	this.addUniversalContext();
+        }
     }
     
     /**
@@ -678,4 +696,5 @@ public class RulesEngine {
             }
         }
     }
+
 }

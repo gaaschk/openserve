@@ -18,11 +18,13 @@ import javax.persistence.Transient;
 import org.gsoft.phoenix.domain.Person;
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
 import org.gsoft.phoenix.repositories.loan.LoanEventRepository;
+import org.gsoft.phoenix.rulesengine.annotation.RulesEngineEntity;
 import org.gsoft.phoenix.util.ApplicationContextLocator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 @Entity
+@RulesEngineEntity
 public class Loan extends PhoenixDomainObject{
 	private static final long serialVersionUID = 7541874847320220624L;
 	private Long loanID;

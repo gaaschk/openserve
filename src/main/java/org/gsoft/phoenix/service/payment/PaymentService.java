@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.annotation.Resource;
 
 import org.gsoft.phoenix.buslogic.payment.PaymentLogic;
+import org.gsoft.phoenix.rulesengine.annotation.RunRulesEngine;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ public class PaymentService {
 	
 	@PreAuthorize("hasRole('PERM_AddPayment')")
 	@Transactional
+	@RunRulesEngine
 	public void applyPayment(long borrowerPersonID, int amount, Date effectiveDate){
 		paymentLogic.applyPayment(borrowerPersonID, amount, effectiveDate);
 	}
