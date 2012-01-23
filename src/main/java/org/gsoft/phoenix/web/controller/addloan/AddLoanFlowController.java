@@ -35,7 +35,7 @@ public class AddLoanFlowController {
 
 	public Long saveLoan(LoanEntryModel loanModel){
 		Loan newLoanDoc = loanModelConverter.convertFromModel(loanModel);
-		Long loanID = loanEntryService.addNewLoan(newLoanDoc);
-		return loanID;
+		Loan loan = loanEntryService.addNewLoan(newLoanDoc);
+		return loan.getLoanID();
 	}
 }

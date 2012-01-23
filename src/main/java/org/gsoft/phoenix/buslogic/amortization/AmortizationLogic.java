@@ -52,6 +52,7 @@ public class AmortizationLogic {
 		lastPayment.setPaymentAmount(lastPaymentAmount);
 		lastPayment.setPaymentCount(1);
 		loanAmortizationSchedule.addAmortizationLoanPayment(lastPayment);
+		loan.setMinimumPaymentAmount(paymentAmount);
 		return loanAmortizationSchedule;
 	}
 }

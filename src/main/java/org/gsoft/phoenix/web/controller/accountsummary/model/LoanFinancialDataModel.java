@@ -14,6 +14,7 @@ public class LoanFinancialDataModel implements Serializable{
 	private Integer currentPrincipal;
 	private BigDecimal currentInterest;
 	private Integer currentFees;
+	private Integer minimumPaymentAmount; 
 	private boolean selected;
 	
 	public Long getLoanID(){
@@ -48,6 +49,13 @@ public class LoanFinancialDataModel implements Serializable{
 	}
 	public void setCurrentFees(Integer currentFees) {
 		this.currentFees = currentFees;
+	}
+	@CurrencyInPenniesFormat
+	public Integer getMinimumPaymentAmount() {
+		return minimumPaymentAmount;
+	}
+	public void setMinimumPaymentAmount(Integer minimumPaymentAmount) {
+		this.minimumPaymentAmount = minimumPaymentAmount;
 	}
 	public boolean isSelected() {
 		return selected;

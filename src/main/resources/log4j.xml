@@ -41,7 +41,7 @@
 	</logger>
 
 	<logger name="org.springframework.web">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 
 	<logger name="org.springframework.integration">
@@ -53,7 +53,15 @@
 	</logger>
 
 	<logger name="org.springframework.webflow">
-		<level value="debug" />
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework.aop">
+		<level value="info" />
+	</logger>
+
+	<logger name="ruleTrace">
+		<level value="trace" />
 	</logger>
 
 	<!-- Root Logger -->

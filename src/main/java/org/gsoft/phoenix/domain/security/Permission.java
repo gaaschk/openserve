@@ -5,12 +5,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
 
 @Entity
 @Table(name="SecPermission")
-public class Permission implements PhoenixDomainObject{
+public class Permission extends PhoenixDomainObject{
 	private static final long serialVersionUID = -4606078266819681320L;
 	private Long permissionID;
 	private String name;
@@ -28,5 +29,10 @@ public class Permission implements PhoenixDomainObject{
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	@Override
+	@Transient
+	public Long getID() {
+		return this.getPermissionID();
 	}
 }

@@ -12,13 +12,13 @@ public class LoanEntryModelConverter {
 	private PersonModelConverter personModelConverter;
 	
 	public Loan convertFromModel(LoanEntryModel loanModel){
-		Loan newLoanDoc = new Loan();
-		newLoanDoc.setLoanType(loanModel.getLoanType());
+		Loan newLoan = new Loan();
+		newLoan.setLoanType(loanModel.getLoanType());
 		Person person = personModelConverter.convertFromModel(loanModel.getPerson());
-		newLoanDoc.setBorrower(person);
-		newLoanDoc.setStartingPrincipal(loanModel.getStartingPrincipal());
-		newLoanDoc.setStartingInterest(loanModel.getStartingInterest());
-		newLoanDoc.setStartingFees(loanModel.getStartingFees());
-		return newLoanDoc;
+		newLoan.setBorrower(person);
+		newLoan.setStartingPrincipal(loanModel.getStartingPrincipal());
+		newLoan.setStartingInterest(loanModel.getStartingInterest());
+		newLoan.setStartingFees(loanModel.getStartingFees());
+		return newLoan;
 	}
 }

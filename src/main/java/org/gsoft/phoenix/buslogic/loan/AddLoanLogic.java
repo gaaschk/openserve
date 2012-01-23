@@ -22,15 +22,15 @@ public class AddLoanLogic {
 	private LoanTypeLogic loanTypeLogic;
 	
 	public Loan addNewLoan(Loan loan, Date effectiveDate){
-		Loan savedLoan = this.loanRepository.save(loan);
+		loan = this.loanRepository.save(loan);
 		LoanTypeProfile loanTypeProfile = loanTypeLogic.getLoanTypeProfileForLoan(loan);
-		savedLoan.setRemainingLoanTerm(loanTypeProfile.getMaximumLoanTerm());
-		LoanEvent addedEvent = loanEventLogic.createLoanEventWithTransaction(savedLoan, LoanEventType.LOAN_ADDED, 
+		loan.setRemainingLoanTerm(loanTypeProfile.getMaximumLoanTerm());
+		LoanEvent addedEvent = loanEventLogic.createLoanEventWithTransaction(loan, LoanEventType.LOAN_ADDED, 
 				effectiveDate);
 		addedEvent.getLoanTransaction().setFeesChange(loan.getStartingFees());
 		addedEvent.getLoanTransaction().setInterestChange(loan.getStartingInterest());
 		addedEvent.getLoanTransaction().setPrincipalChange(loan.getStartingPrincipal());
 		loanEventLogic.applyLoanEvent(addedEvent);
-		return savedLoan;
+		return loan;
 	}
 }

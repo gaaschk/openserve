@@ -11,11 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
 
 @Entity
-public class LoanAmortizationSchedule implements PhoenixDomainObject {
+public class LoanAmortizationSchedule extends PhoenixDomainObject {
 	private static final long serialVersionUID = -248336175803533637L;
 
 	private Long loanAmortizationScheduleID;
@@ -59,5 +60,10 @@ public class LoanAmortizationSchedule implements PhoenixDomainObject {
 	}
 	public void setAmortizationSchedule(AmortizationSchedule amortizationSchedule) {
 		this.amortizationSchedule = amortizationSchedule;
+	}
+	@Override
+	@Transient
+	public Long getID() {
+		return this.getLoanAmortizationScheduleID();
 	}
 }

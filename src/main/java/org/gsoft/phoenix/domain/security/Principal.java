@@ -7,13 +7,14 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
 
 @Entity
 @Table(name="SecPrincipal")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Principal implements PhoenixDomainObject{
+public class Principal extends PhoenixDomainObject{
 	private static final long serialVersionUID = -4382980089519074792L;
 	private Long principalID;
 	private String name;
@@ -38,5 +39,10 @@ public class Principal implements PhoenixDomainObject{
 	}
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+	@Override
+	@Transient
+	public Long getID() {
+		return this.getPrincipalID();
 	}
 }

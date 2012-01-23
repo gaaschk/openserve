@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LoanRepository extends BaseRepository<Loan, Long> {
-	@Query("select l from Loan l where l.borrowerPersonID = :borrowerPersonID")
+	@Query("select l from Loan l where l.borrower.personID = :borrowerPersonID")
 	public List<Loan> findAllLoansByBorrowerPersonID(@Param("borrowerPersonID") Long borrowerPersonID);
 }

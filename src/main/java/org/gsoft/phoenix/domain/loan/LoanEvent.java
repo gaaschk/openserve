@@ -9,13 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 @Entity
-public class LoanEvent implements PhoenixDomainObject{
+public class LoanEvent extends PhoenixDomainObject{
 	private static final long serialVersionUID = 3330293203610183990L;
 	private Long loanEventID;
 	private Long loanID;
@@ -89,5 +90,11 @@ public class LoanEvent implements PhoenixDomainObject{
 
 	public void setLoanTransaction(LoanTransaction loanTransaction) {
 		this.loanTransaction = loanTransaction;
+	}
+
+	@Override
+	@Transient
+	public Long getID() {
+		return this.getLoanEventID();
 	}
 }

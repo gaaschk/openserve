@@ -25,6 +25,7 @@ public class LoanDetailModelConverter {
 		finModel.setCurrentPrincipal(loan.getCurrentPrincipal());
 		finModel.setCurrentInterest(loan.getCurrentInterest());
 		finModel.setCurrentFees(loan.getCurrentFees());
+		finModel.setMinimumPaymentAmount(loan.getMinimumPaymentAmount());
 		List<LoanEvent> loanEvents = accountSummaryService.getAllLoanEventsForLoan(loan.getLoanID());
 		ArrayList<LoanEventModel> loanHistory = new ArrayList<LoanEventModel>();
 		for(LoanEvent loanEvent:loanEvents){

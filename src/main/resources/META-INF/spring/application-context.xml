@@ -1,6 +1,10 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:data="http://www.springframework.org/schema/data/jpa"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:data="http://www.springframework.org/schema/data/jpa"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
       http://www.springframework.org/schema/beans/spring-beans.xsd
       http://www.springframework.org/schema/context
@@ -8,7 +12,11 @@
       http://www.springframework.org/schema/tx
       http://www.springframework.org/schema/tx/spring-tx.xsd
       http://www.springframework.org/schema/data/jpa
-      http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+      http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+      http://www.springframework.org/schema/aop
+      http://www.springframework.org/schema/aop/spring-aop.xsd
+      http://www.springframework.org/schema/task
+      http://www.springframework.org/schema/task/spring-task.xsd">
 
 	<!-- Load in application properties reference -->
 	<bean id="applicationProperties"
@@ -19,7 +27,18 @@
 	<context:annotation-config />
 	<context:component-scan base-package="org.gsoft.phoenix" />
 	<data:repositories base-package="org.gsoft.phoenix.repositories" />
-
+	<task:annotation-driven/>
+	<aop:aspectj-autoproxy/>
+  	<!-- thread scope is needed by spring-aop -->
+  	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+      <property name="scopes">
+          <map>
+              <entry key="thread">
+                  <bean class="org.springframework.context.support.SimpleThreadScope"/>
+              </entry>
+          </map>
+      </property>
+  	</bean>
 	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
     	<property name="formatters">
     		<list>

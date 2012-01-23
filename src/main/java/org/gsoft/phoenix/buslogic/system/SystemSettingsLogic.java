@@ -19,7 +19,7 @@ public class SystemSettingsLogic {
 	private SystemSettingsRepository systemSettingsRepository;
 	
 	public Date getCurrentSystemDate(){
-		SystemSettings settings = systemSettingsRepository.findOne(10L);
+		SystemSettings settings = systemSettingsRepository.findOne(CURRENT_SETTINGS_ID);
 		return this.getAdjustedSystemDate(settings);
 	}
 		
@@ -34,6 +34,10 @@ public class SystemSettingsLogic {
 		SystemSettings settings = systemSettingsRepository.findOne(CURRENT_SETTINGS_ID);
 		this.adjustSystemDateByCalendarUnit(settings, calendarUnit, amount);
 		return this.getAdjustedSystemDate(settings);
+	}
+	
+	public SystemSettings getCurrentSystemSettings(){
+		return systemSettingsRepository.findOne(CURRENT_SETTINGS_ID);
 	}
 	
 	private Date getAdjustedSystemDate(SystemSettings systemSettings){

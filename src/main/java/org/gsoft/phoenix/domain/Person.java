@@ -4,11 +4,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.NaturalId;
 
 @Entity
-public class Person implements PhoenixDomainObject{
+public class Person extends PhoenixDomainObject{
 	private static final long serialVersionUID = 7097467900225137835L;
 	private Long personID;
 	private String ssn;
@@ -43,5 +44,11 @@ public class Person implements PhoenixDomainObject{
 	}
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	@Override
+	@Transient
+	public Long getID() {
+		return this.getPersonID();
 	}
 }

@@ -7,13 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 @Entity
-public class LoanTypeProfile implements PhoenixDomainObject{
+public class LoanTypeProfile extends PhoenixDomainObject{
 	private static final long serialVersionUID = 6245557328161056820L;
 	private Long loanTypeProfileID;
 	private LoanType loanType;
@@ -56,5 +57,10 @@ public class LoanTypeProfile implements PhoenixDomainObject{
 	}
 	public void setMaximumLoanTerm(Integer maximumLoanTerm) {
 		this.maximumLoanTerm = maximumLoanTerm;
+	}
+	@Override
+	@Transient
+	public Long getID() {
+		return this.getLoanTypeProfileID();
 	}
 }

@@ -1,13 +1,16 @@
 package org.gsoft.phoenix.domain.loan;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
@@ -20,11 +23,10 @@ import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 @Entity
-public class Loan implements PhoenixDomainObject{
+public class Loan extends PhoenixDomainObject{
 	private static final long serialVersionUID = 7541874847320220624L;
 	private Long loanID;
 	private LoanType loanType;
-	private Long borrowerPersonID;
 	private Long effectiveLoanTypeProfileID;
 	private Integer startingPrincipal;
 	private BigDecimal startingInterest;
@@ -35,9 +37,10 @@ public class Loan implements PhoenixDomainObject{
 	private BigDecimal margin;
 	private LoanEvent lastLoanEvent;
 	private Integer remainingLoanTerm;
+	private Date repaymentStartDate;
+	private Integer minimumPaymentAmount;
 	//Relationships
 	private Person borrower;
-	
 	private List<Disbursement> disbursements;
 	
 	@Id
@@ -57,12 +60,6 @@ public class Loan implements PhoenixDomainObject{
 	}
 	public void setLoanType(LoanType loanType) {
 		this.loanType = loanType;
-	}
-	public Long getBorrowerPersonID() {
-		return borrowerPersonID;
-	}
-	public void setBorrowerPersonID(Long borrowerPersonID) {
-		this.borrowerPersonID = borrowerPersonID;
 	}
 	public Long getEffectiveLoanTypeProfileID() {
 		return effectiveLoanTypeProfileID;
@@ -140,6 +137,18 @@ public class Loan implements PhoenixDomainObject{
 	public void setRemainingLoanTerm(Integer remainingLoanTerm) {
 		this.remainingLoanTerm = remainingLoanTerm;
 	}
+	public Date getRepaymentStartDate() {
+		return repaymentStartDate;
+	}
+	public void setRepaymentStartDate(Date repaymentStartDate) {
+		this.repaymentStartDate = repaymentStartDate;
+	}
+	public Integer getMinimumPaymentAmount() {
+		return minimumPaymentAmount;
+	}
+	public void setMinimumPaymentAmount(Integer minimumPaymentAmount) {
+		this.minimumPaymentAmount = minimumPaymentAmount;
+	}
 	@OneToMany(mappedBy="loan")
 	public List<Disbursement> getDisbursements() {
 		return disbursements;
@@ -147,11 +156,18 @@ public class Loan implements PhoenixDomainObject{
 	public void setDisbursements(List<Disbursement> disbursements) {
 		this.disbursements = disbursements;
 	}
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="BorrowerPersonID")
 	public Person getBorrower() {
 		return borrower;
 	}
 	public void setBorrower(Person borrower) {
 		this.borrower = borrower;
+	}
+
+	@Override
+	@Transient
+	public Long getID() {
+		return this.getLoanID();
 	}
 }

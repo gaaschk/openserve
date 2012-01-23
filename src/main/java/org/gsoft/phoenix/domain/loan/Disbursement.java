@@ -8,9 +8,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+
+import org.gsoft.phoenix.domain.PhoenixDomainObject;
 
 @Entity
-public class Disbursement {
+public class Disbursement extends PhoenixDomainObject{
+	private static final long serialVersionUID = -8488460178826929454L;
 	private Long disbursementID;
 	private Loan loan;
 	private Date disbursementEffectiveDate;
@@ -43,5 +47,10 @@ public class Disbursement {
 	}
 	public void setDisbursementAmount(Integer disbursementAmount) {
 		this.disbursementAmount = disbursementAmount;
+	}
+	@Override
+	@Transient
+	public Long getID() {
+		return this.getDisbursementID();
 	}
 }

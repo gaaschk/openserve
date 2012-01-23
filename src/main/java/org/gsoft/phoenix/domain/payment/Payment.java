@@ -11,11 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
 
 @Entity
-public class Payment implements PhoenixDomainObject{
+public class Payment extends PhoenixDomainObject{
 	private static final long serialVersionUID = -7219483954230532294L;
 	private Long paymentID;
 	private Long borrowerPersonID;
@@ -65,5 +66,10 @@ public class Payment implements PhoenixDomainObject{
 	}
 	public void setLoanPayments(List<LoanPayment> loanPayments) {
 		this.loanPayments = loanPayments;
+	}
+	@Override
+	@Transient
+	public Long getID() {
+		return this.getPaymentID();
 	}
 }

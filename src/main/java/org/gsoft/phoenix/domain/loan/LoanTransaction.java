@@ -6,11 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
 
 @Entity
-public class LoanTransaction implements PhoenixDomainObject{
+public class LoanTransaction extends PhoenixDomainObject{
 	private static final long serialVersionUID = 5151555488279150572L;
 	private Long loanTransactionID;
 	private BigDecimal interestAccrued = new BigDecimal(0);
@@ -77,5 +78,10 @@ public class LoanTransaction implements PhoenixDomainObject{
 	}
 	public void setEndingFees(Integer endingFees) {
 		this.endingFees = endingFees;
+	}
+	@Override
+	@Transient
+	public Long getID() {
+		return this.getLoanTransactionID();
 	}
 }
