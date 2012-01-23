@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.annotation.Resource;
 
+import org.gsoft.phoenix.AuthenticatingTest;
 import org.gsoft.phoenix.data.DatabaseUtility;
 import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.service.loanentry.LoanEntryService;
@@ -16,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/META-INF/spring/application-context.xml")
-public class TestLoanEntryServiceIT {
+public class TestLoanEntryServiceIT extends AuthenticatingTest{
 	@Resource
 	private LoanEntryService loanEntryService;
 	@Resource
@@ -31,6 +32,7 @@ public class TestLoanEntryServiceIT {
 	
 	@Test
 	public void testAddLoan() throws IOException{
+		super.authenticate();
 		Loan newLoan = loanFactory.getLoanByID(1);
 		loanEntryService.addNewLoan(newLoan);
 	}

@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import javax.annotation.Resource;
 
+import org.gsoft.phoenix.AuthenticatingTest;
 import org.gsoft.phoenix.data.DatabaseUtility;
 import org.gsoft.phoenix.domain.Person;
 import org.gsoft.phoenix.domain.loan.Loan;
@@ -19,7 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/META-INF/spring/application-context.xml")
-public class TestPaymentServiceIT {
+public class TestPaymentServiceIT extends AuthenticatingTest{
 	@Resource
 	private DatabaseUtility dbutility;
 	@Resource
@@ -40,6 +41,7 @@ public class TestPaymentServiceIT {
 
 	@Test
 	public void test() {
+		super.authenticate();
 		Loan newLoan = loanFactory.getLoanByID(1);
 		loanEntryService.addNewLoan(newLoan);
 		Person person = personService.findPersonBySSN(newLoan.getBorrower().getSsn());

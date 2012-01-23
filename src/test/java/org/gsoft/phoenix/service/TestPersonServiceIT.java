@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.annotation.Resource;
 
+import org.gsoft.phoenix.AuthenticatingTest;
 import org.gsoft.phoenix.data.DatabaseUtility;
 import org.gsoft.phoenix.domain.Person;
 import org.junit.Before;
@@ -14,7 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/META-INF/spring/application-context.xml")
-public class TestPersonServiceIT {
+public class TestPersonServiceIT extends AuthenticatingTest{
 	@Resource
 	private PersonService personService;
 	@Resource
@@ -27,6 +28,7 @@ public class TestPersonServiceIT {
 
 	@Test
 	public void test() {
+		super.authenticate();
 		Person borrower = new Person();
 		borrower.setSsn("000000000");
 		borrower.setFirstName("John");
