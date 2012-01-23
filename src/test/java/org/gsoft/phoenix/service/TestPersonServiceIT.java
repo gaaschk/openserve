@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.annotation.Resource;
 
-import org.gsoft.phoenix.AuthenticatingTest;
+import org.gsoft.phoenix.Authenticator;
 import org.gsoft.phoenix.data.DatabaseUtility;
 import org.gsoft.phoenix.domain.Person;
 import org.junit.Before;
@@ -15,12 +15,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/META-INF/spring/application-context.xml")
-public class TestPersonServiceIT extends AuthenticatingTest{
+public class TestPersonServiceIT{
 	@Resource
 	private PersonService personService;
 	@Resource
 	private DatabaseUtility dbutility;
-
+	@Resource
+	private Authenticator authenticator;
+	
 	@Before
 	public void refreshDatabase() throws IOException{
 		dbutility.refreshDatabase();
@@ -28,7 +30,7 @@ public class TestPersonServiceIT extends AuthenticatingTest{
 
 	@Test
 	public void test() {
-		super.authenticate();
+		authenticator.authenticate();
 		Person borrower = new Person();
 		borrower.setSsn("000000000");
 		borrower.setFirstName("John");
