@@ -26,9 +26,9 @@ public class LoanFactory {
 		disb.setDisbursementEffectiveDate(new Date());
 		disb.setDisbursementAmount(1000000);
 		newLoan.getDisbursements().add(disb);
+		newLoan.setStartingPrincipal(1000000);
 		newLoan.setStartingFees(0);
 		newLoan.setStartingInterest(new BigDecimal(0));
-		
 		newLoan.setBorrower(personFactory.getPersonByID(1));
 		
 		return newLoan;
