@@ -22,6 +22,7 @@ public class LoanFactory {
 		newLoan.setLoanType(LoanType.MORTGAGE);
 		newLoan.setDisbursements(new ArrayList<Disbursement>());
 		Disbursement disb = new Disbursement();
+		disb.setLoan(newLoan);
 		disb.setDisbursementEffectiveDate(new Date());
 		disb.setDisbursementAmount(1000000);
 		newLoan.getDisbursements().add(disb);
