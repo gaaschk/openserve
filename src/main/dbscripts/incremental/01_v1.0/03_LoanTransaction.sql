@@ -1,7 +1,7 @@
 create table LoanEventType(
 	LoanEventTypeID BIGINT PRIMARY KEY,
-	LoanEventName VARCHAR(15),
-	LoanEventDesc VARCHAR(45)
+	LoanEventName VARCHAR(25),
+	LoanEventDesc VARCHAR(75)
 );
 
 create table LoanEvent(

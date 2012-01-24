@@ -28,7 +28,6 @@ import org.hibernate.annotations.Type;
 public class Loan extends PhoenixDomainObject{
 	private static final long serialVersionUID = 7541874847320220624L;
 	private Long loanID;
-	private LoanType loanType;
 	private Long effectiveLoanTypeProfileID;
 	private Integer startingPrincipal;
 	private BigDecimal startingInterest;
@@ -41,6 +40,8 @@ public class Loan extends PhoenixDomainObject{
 	private Integer remainingLoanTerm;
 	private Date repaymentStartDate;
 	private Integer minimumPaymentAmount;
+	//Enumerations
+	private LoanType loanType;
 	//Relationships
 	private Person borrower;
 	private List<Disbursement> disbursements;

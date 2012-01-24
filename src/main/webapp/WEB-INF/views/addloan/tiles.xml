@@ -18,4 +18,8 @@
     <definition name="addloan/savedloanresult" extends="standardLayout">
         <put-attribute name="content" value="/WEB-INF/views/addloan/savedloanresult.jsp" />
     </definition>
+    
+    <definition name="addloan/adddisbursement" extends="standardLayout">
+    	<put-attribute name="content" value="/WEB-INF/views/addloan/disbursemententry.jsp"/>
+    </definition>
 </tiles-definitions>

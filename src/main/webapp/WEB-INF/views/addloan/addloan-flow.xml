@@ -9,11 +9,18 @@
 	</on-start>
 
 	<view-state id="borrowerSearch" view="addloan/index" model="personSearchCriteria">
-		<transition on="search" to="enterLoanDetails">
+		<transition on="search" to="enterDisbursements">
 			<evaluate expression="addLoanFlowController.findPerson(personSearchCriteria)" result="flowScope.loanModel"/>		
 		</transition>
 	</view-state>
 	
+	<view-state id="enterDisbursements" view="addloan/adddisbursement" model="loanModel">
+		<transition on="disbursementAdded" to="enterDisbursements">
+			<evaluate expression="addLoanFlowController.addDisbursement(loanModel)"/>
+		</transition>
+		<transition on="doneAdding" to="enterLoanDetails" bind="false"/>
+	</view-state>
+
 	<view-state id="enterLoanDetails" view="addloan/enterloan" model="loanModel">
 		<transition on="save" to="addLoanComplete">
 			<evaluate expression="addLoanFlowController.saveLoan(loanModel)" result="flowScope.loanId"/>		

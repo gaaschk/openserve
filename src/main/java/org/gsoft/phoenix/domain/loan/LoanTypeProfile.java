@@ -17,10 +17,12 @@ import org.hibernate.annotations.Type;
 public class LoanTypeProfile extends PhoenixDomainObject{
 	private static final long serialVersionUID = 6245557328161056820L;
 	private Long loanTypeProfileID;
-	private LoanType loanType;
 	private Date effectiveDate;
 	private Date endDate;
 	private Integer maximumLoanTerm;
+	//Enumerations
+	private LoanType loanType;
+	private RepaymentStartType repaymentStartType;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -62,5 +64,15 @@ public class LoanTypeProfile extends PhoenixDomainObject{
 	@Transient
 	public Long getID() {
 		return this.getLoanTypeProfileID();
+	}
+	@Type( type = "org.gsoft.phoenix.util.jpa.GenericEnumUserType", parameters={
+			@Parameter(name = "enumClass", value = "org.gsoft.phoenix.domain.loan.RepaymentStartType")
+	})
+    @Column( name = "RepaymentStartTypeID" )
+	public RepaymentStartType getRepaymentStartType() {
+		return repaymentStartType;
+	}
+	public void setRepaymentStartType(RepaymentStartType repaymentStartType) {
+		this.repaymentStartType = repaymentStartType;
 	}
 }
