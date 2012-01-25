@@ -2,6 +2,7 @@ package org.gsoft.phoenix.buslogic.loanevent;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -27,9 +28,9 @@ public class LoanEventLogic {
 	@Resource
 	private LoanEventRepository loanEventRepository;
 	@Resource
-	private LoanTransactionRepository loanTransactionRepository;
-	@Resource
 	private InterestAccrualLogic interestAccrualLogic;
+	@Resource
+	private LoanTransactionRepository loanTransactionRepository;
 	
 	/**
 	 * This method will create a loanevent without persisting it.  All of the monetary values 
@@ -44,26 +45,27 @@ public class LoanEventLogic {
 	 * @return
 	 */
 	public LoanEvent createLoanEvent(Loan loan, LoanEventType loanEventType, Date effectiveDate, BigDecimal netAmount, boolean allocateToPrincipal, boolean allocateToInterest, boolean allocateToFees){
-		LoanEvent loanEvent = this.createLoanEvent(loan, loanEventType, effectiveDate);
-		loanEvent = this.applyLoanEvent(loanEvent, netAmount, allocateToPrincipal, allocateToInterest, allocateToFees);
-		this.adjustLoanEventsAfter(loanEvent);
+		LoanEvent lastEvent = this.findMostRecentLoanEventWithTransactionEffectivePriorToDate(loan.getLoanID(), effectiveDate);
+		LoanEvent loanEvent = this.createLoanEvent(loan, lastEvent, loanEventType, effectiveDate);
+		loanEvent = this.applyLoanEvent(loanEvent, lastEvent, netAmount, allocateToPrincipal, allocateToInterest, allocateToFees);
+		this.adjustLoanEventsAfter(loan, loanEvent);
 		return loanEvent;
 	}
 
 	public LoanEvent createLoanEvent(Loan loan, LoanEventType loanEventType, Date effectiveDate, int principalChange, BigDecimal interestChange, int feesChange){
-		LoanEvent loanEvent = this.createLoanEvent(loan, loanEventType, effectiveDate);
-		loanEvent = this.applyLoanEvent(loanEvent, principalChange, interestChange, feesChange);
-		this.adjustLoanEventsAfter(loanEvent);
+		LoanEvent lastEvent = this.findMostRecentLoanEventWithTransactionEffectivePriorToDate(loan.getLoanID(), effectiveDate);
+		LoanEvent loanEvent = this.createLoanEvent(loan, lastEvent, loanEventType, effectiveDate);
+		loanEvent = this.applyLoanEvent(loanEvent, lastEvent, principalChange, interestChange, feesChange);
+		this.adjustLoanEventsAfter(loan, loanEvent);
 		return loanEvent;
 	}
 
-	private LoanEvent createLoanEvent(Loan loan, LoanEventType loanEventType, Date effectiveDate){
+	private LoanEvent createLoanEvent(Loan loan, LoanEvent lastEvent, LoanEventType loanEventType, Date effectiveDate){
 		LoanEvent loanEvent = new LoanEvent();
 		loanEvent.setLoanID(loan.getLoanID());
 		loanEvent.setEffectiveDate(effectiveDate);
 		loanEvent.setLoanEventType(loanEventType);
 		loanEvent.setPostDate(systemSettingsLogic.getCurrentSystemDate());
-		LoanEvent lastEvent = this.findMostRecentLoanEventWithTransactionEffectivePriorToDate(loanEvent.getLoanID(), loanEvent.getEffectiveDate());
 		if(lastEvent != null && DateTimeComparator.getDateOnlyInstance().compare(lastEvent.getEffectiveDate(), effectiveDate) == 0)
 			loanEvent.setSequence(lastEvent.getSequence()+1);
 		else
@@ -74,28 +76,33 @@ public class LoanEventLogic {
 		
 		LoanTransaction loanTransaction = new LoanTransaction();
 		loanTransaction.setInterestAccrued(accruedInterest);
+		loanTransaction = loanTransactionRepository.save(loanTransaction);
 		loanEvent.setLoanTransaction(loanTransaction);
-		return loanEvent;
+		return loanEventRepository.save(loanEvent);
 	}
 	
-	private void adjustLoanEventsAfter(LoanEvent loanEvent){
-		List<LoanEvent> dirtyEvents = loanEventRepository.findAllLoanEventsAfterDate(loanEvent.getEffectiveDate());
+	private void adjustLoanEventsAfter(Loan loan, LoanEvent loanEvent){
+		List<LoanEvent> dirtyEvents = loanEventRepository.findAllLoanEventsAfterDate(loan.getLoanID(), loanEvent.getEffectiveDate());
+		Collections.reverse(dirtyEvents);
 		LoanEvent lastDirty = loanEvent;
 		for(LoanEvent dirtyEvent:dirtyEvents){
+			if(DateTimeComparator.getDateOnlyInstance().compare(new DateTime(dirtyEvent.getEffectiveDate()), new DateTime(lastDirty.getEffectiveDate())) == 0)
+				dirtyEvent.setSequence(lastDirty.getSequence()+1);
+			else
+				dirtyEvent.setSequence(0);
+			BigDecimal accruedInterest = interestAccrualLogic.calculateLoanInterestAmountForPeriod(loan, lastDirty.getEffectiveDate(), dirtyEvent.getEffectiveDate());
+			dirtyEvent.getLoanTransaction().setInterestAccrued(accruedInterest);
 			if(dirtyEvent.getLoanEventType().isFixedAllocation()){
-				this.applyLoanEvent(dirtyEvent, dirtyEvent.getLoanTransaction().getPrincipalChange(), 
+				this.applyLoanEvent(dirtyEvent, lastDirty, dirtyEvent.getLoanTransaction().getPrincipalChange(), 
 						dirtyEvent.getLoanTransaction().getInterestChange(), 
 						dirtyEvent.getLoanTransaction().getPrincipalChange());
 			}
 			else{
 				BigDecimal netAmount = new BigDecimal(dirtyEvent.getLoanTransaction().getPrincipalChange()).add(dirtyEvent.getLoanTransaction().getInterestChange()).add(new BigDecimal(dirtyEvent.getLoanTransaction().getFeesChange()));
-				this.applyLoanEvent(loanEvent, netAmount, dirtyEvent.getLoanEventType().allocateToPrincipal(), 
+				this.applyLoanEvent(dirtyEvent, lastDirty, netAmount, dirtyEvent.getLoanEventType().allocateToPrincipal(), 
 						dirtyEvent.getLoanEventType().allocateToInterest(),  dirtyEvent.getLoanEventType().allocateToFees());
 			}
-			if(DateTimeComparator.getDateOnlyInstance().compare(new DateTime(dirtyEvent.getEffectiveDate()), new DateTime(lastDirty.getEffectiveDate())) == 0)
-				dirtyEvent.setSequence(lastDirty.getSequence()+1);
-			else
-				dirtyEvent.setSequence(0);
+			lastDirty = dirtyEvent;
 		}
 	}
 	
@@ -105,18 +112,12 @@ public class LoanEventLogic {
 	 * @param loanEvent
 	 * @return
 	 */
-	public LoanEvent applyLoanEvent(LoanEvent loanEvent, BigDecimal netAmount, boolean allocateToPrincipal, boolean allocateToInterest, boolean allocateToFees){
-		LoanTransaction savedTransaction = this.loanTransactionRepository.save(loanEvent.getLoanTransaction());
-		loanEvent.setLoanTransaction(savedTransaction);
-		LoanEvent lastEvent = this.findMostRecentLoanEventWithTransactionEffectivePriorToDate(loanEvent.getLoanID(), loanEvent.getEffectiveDate());
+	public LoanEvent applyLoanEvent(LoanEvent loanEvent, LoanEvent lastEvent, BigDecimal netAmount, boolean allocateToPrincipal, boolean allocateToInterest, boolean allocateToFees){
 		loanEvent = this.allocationNetToBalances(loanEvent, lastEvent, netAmount, allocateToPrincipal, allocateToInterest, allocateToFees);
 		return this.loanEventRepository.save(loanEvent);
 	}
 
-	public LoanEvent applyLoanEvent(LoanEvent loanEvent, int principalChange, BigDecimal interestChange, int feesChange){
-		LoanTransaction savedTransaction = this.loanTransactionRepository.save(loanEvent.getLoanTransaction());
-		loanEvent.setLoanTransaction(savedTransaction);
-		LoanEvent lastEvent = this.findMostRecentLoanEventWithTransactionEffectivePriorToDate(loanEvent.getLoanID(), loanEvent.getEffectiveDate());
+	public LoanEvent applyLoanEvent(LoanEvent loanEvent, LoanEvent lastEvent, int principalChange, BigDecimal interestChange, int feesChange){
 		int endingFees = (lastEvent==null)?0:lastEvent.getLoanTransaction().getEndingFees();
 		BigDecimal endingInterest = (lastEvent==null)?BigDecimal.ZERO:lastEvent.getLoanTransaction().getEndingInterest().add(loanEvent.getLoanTransaction().getInterestAccrued());
 		int endingPrincipal = (lastEvent==null)?0:lastEvent.getLoanTransaction().getEndingPrincipal();
@@ -151,19 +152,19 @@ public class LoanEventLogic {
 		int endingFees = (lastEvent==null)?0:lastEvent.getLoanTransaction().getEndingFees();
 		BigDecimal endingInterest = (lastEvent==null)?BigDecimal.ZERO:lastEvent.getLoanTransaction().getEndingInterest().add(loanEvent.getLoanTransaction().getInterestAccrued());
 		int endingPrincipal = (lastEvent==null)?0:lastEvent.getLoanTransaction().getEndingPrincipal();
-		if(allocateToFees && endingFees > 0 && netAmount.compareTo(BigDecimal.ZERO) != 0){
+		if(allocateToFees){
 			int appliedFees = (endingFees<netAmount.abs().intValue())?endingFees*-1:netAmount.intValue();
 			loanEvent.getLoanTransaction().setFeesChange(appliedFees);
 			netAmount = netAmount.subtract(new BigDecimal(appliedFees));
 			loanEvent.getLoanTransaction().setEndingFees(endingFees + appliedFees);
 		}
-		if(allocateToInterest && endingInterest.compareTo(BigDecimal.ZERO) > 0 && netAmount.compareTo(BigDecimal.ZERO) != 0){
+		if(allocateToInterest){
 			BigDecimal appliedInterest = (endingInterest.compareTo(netAmount.abs())<0)?endingInterest.setScale(0, RoundingMode.DOWN).negate():netAmount;
 			loanEvent.getLoanTransaction().setInterestChange(appliedInterest);
 			netAmount = netAmount.subtract(appliedInterest);
 			loanEvent.getLoanTransaction().setEndingInterest(endingInterest.add(appliedInterest));
 		}
-		if(allocateToPrincipal && endingPrincipal > 0 && netAmount.compareTo(BigDecimal.ZERO) != 0){
+		if(allocateToPrincipal){
 			int appliedPrincipal = (endingPrincipal<netAmount.abs().intValue())?endingPrincipal*-1:netAmount.intValue();
 			loanEvent.getLoanTransaction().setPrincipalChange(appliedPrincipal);
 			netAmount = netAmount.subtract(new BigDecimal(appliedPrincipal));

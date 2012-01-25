@@ -20,9 +20,9 @@ public interface LoanEventRepository extends BaseRepository<LoanEvent, Long>{
 			"le.loanEventID = (select max(le2.loanEventID) from LoanEvent le2 where le2.loanID = :loanID)")
 	public LoanEvent findMostRecentLoanEventWithTransaction(@Param("loanID") Long loanID);
 	
-	@Query("select le from LoanEvent le where le.loanID = :loanID")
+	@Query("select le from LoanEvent le where le.loanID = :loanID order by le.effectiveDate desc, le.sequence desc")
 	public List<LoanEvent> findAllByLoanID(@Param("loanID") Long loanID);
 	
-	@Query("select le from LoanEvent le where le.effectiveDate > :fromDate")
-	public List<LoanEvent> findAllLoanEventsAfterDate(@Param("fromDate") Date fromDate);
+	@Query("select le from LoanEvent le where le.loanID = :loanID and le.effectiveDate > :fromDate order by le.effectiveDate desc, le.sequence desc")
+	public List<LoanEvent> findAllLoanEventsAfterDate(@Param("loanID") Long loanID, @Param("fromDate") Date fromDate);
 }
