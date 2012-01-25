@@ -95,9 +95,6 @@ public class Loan extends PhoenixDomainObject{
 		}
 		return currentPrincipal;
 	}
-	public void setCurrentPrincipal(Integer currentPrincipal) {
-		this.currentPrincipal = currentPrincipal;
-	}
 	@Transient
 	public BigDecimal getCurrentInterest() {
 		if(currentInterest == null && this.getLastLoanEvent() != null){
@@ -105,18 +102,12 @@ public class Loan extends PhoenixDomainObject{
 		}
 		return currentInterest;
 	}
-	public void setCurrentInterest(BigDecimal currentInterest) {
-		this.currentInterest = currentInterest;
-	}
 	@Transient
 	public Integer getCurrentFees() {
 		if(currentFees == null && this.getLastLoanEvent() != null){
 			this.currentFees = this.getLastLoanEvent().getLoanTransaction().getEndingFees();
 		}
 		return currentFees;
-	}
-	public void setCurrentFees(Integer currentFees) {
-		this.currentFees = currentFees;
 	}
 	public BigDecimal getMargin() {
 		return margin;
@@ -130,9 +121,6 @@ public class Loan extends PhoenixDomainObject{
 			lastLoanEvent = ApplicationContextLocator.getApplicationContext().getBean(LoanEventRepository.class).findMostRecentLoanEventWithTransaction(this.getLoanID());
 		}
 		return lastLoanEvent;
-	}
-	public void setLastLoanEvent(LoanEvent lastLoanEvent) {
-		this.lastLoanEvent = lastLoanEvent;
 	}
 	public Integer getRemainingLoanTerm() {
 		return remainingLoanTerm;

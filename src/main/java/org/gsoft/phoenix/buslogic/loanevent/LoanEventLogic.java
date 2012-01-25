@@ -16,9 +16,6 @@ import org.gsoft.phoenix.domain.loan.LoanEventType;
 import org.gsoft.phoenix.domain.loan.LoanTransaction;
 import org.gsoft.phoenix.repositories.loan.LoanEventRepository;
 import org.gsoft.phoenix.repositories.loan.LoanTransactionRepository;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeComparator;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -45,7 +42,7 @@ public class LoanEventLogic {
 	 * @return
 	 */
 	public LoanEvent createLoanEvent(Loan loan, LoanEventType loanEventType, Date effectiveDate, BigDecimal netAmount, boolean allocateToPrincipal, boolean allocateToInterest, boolean allocateToFees){
-		LoanEvent lastEvent = this.findMostRecentLoanEventWithTransactionEffectivePriorToDate(loan.getLoanID(), effectiveDate);
+		LoanEvent lastEvent = loanEventRepository.findMostRecentLoanEventWithTransactionEffectiveOnOrBeforeDate(loan.getLoanID(), effectiveDate);
 		LoanEvent loanEvent = this.createLoanEvent(loan, lastEvent, loanEventType, effectiveDate);
 		loanEvent = this.applyLoanEvent(loanEvent, lastEvent, netAmount, allocateToPrincipal, allocateToInterest, allocateToFees);
 		this.adjustLoanEventsAfter(loan, loanEvent);
@@ -53,7 +50,7 @@ public class LoanEventLogic {
 	}
 
 	public LoanEvent createLoanEvent(Loan loan, LoanEventType loanEventType, Date effectiveDate, int principalChange, BigDecimal interestChange, int feesChange){
-		LoanEvent lastEvent = this.findMostRecentLoanEventWithTransactionEffectivePriorToDate(loan.getLoanID(), effectiveDate);
+		LoanEvent lastEvent = loanEventRepository.findMostRecentLoanEventWithTransactionEffectiveOnOrBeforeDate(loan.getLoanID(), effectiveDate);
 		LoanEvent loanEvent = this.createLoanEvent(loan, lastEvent, loanEventType, effectiveDate);
 		loanEvent = this.applyLoanEvent(loanEvent, lastEvent, principalChange, interestChange, feesChange);
 		this.adjustLoanEventsAfter(loan, loanEvent);
@@ -66,14 +63,14 @@ public class LoanEventLogic {
 		loanEvent.setEffectiveDate(effectiveDate);
 		loanEvent.setLoanEventType(loanEventType);
 		loanEvent.setPostDate(systemSettingsLogic.getCurrentSystemDate());
-		if(lastEvent != null && DateTimeComparator.getDateOnlyInstance().compare(lastEvent.getEffectiveDate(), effectiveDate) == 0)
-			loanEvent.setSequence(lastEvent.getSequence()+1);
-		else
-			loanEvent.setSequence(0);
 		BigDecimal accruedInterest = new BigDecimal(0);
-		if(lastEvent != null)
+		if(lastEvent != null){
+			loanEvent.setSequence(lastEvent.getSequence()+1);
 			accruedInterest = interestAccrualLogic.calculateLoanInterestAmountForPeriod(loan, lastEvent.getEffectiveDate(), effectiveDate);
-		
+		}
+		else{
+			loanEvent.setSequence(0);
+		}
 		LoanTransaction loanTransaction = new LoanTransaction();
 		loanTransaction.setInterestAccrued(accruedInterest);
 		loanTransaction = loanTransactionRepository.save(loanTransaction);
@@ -86,10 +83,7 @@ public class LoanEventLogic {
 		Collections.reverse(dirtyEvents);
 		LoanEvent lastDirty = loanEvent;
 		for(LoanEvent dirtyEvent:dirtyEvents){
-			if(DateTimeComparator.getDateOnlyInstance().compare(new DateTime(dirtyEvent.getEffectiveDate()), new DateTime(lastDirty.getEffectiveDate())) == 0)
-				dirtyEvent.setSequence(lastDirty.getSequence()+1);
-			else
-				dirtyEvent.setSequence(0);
+			dirtyEvent.setSequence(lastDirty.getSequence()+1);
 			BigDecimal accruedInterest = interestAccrualLogic.calculateLoanInterestAmountForPeriod(loan, lastDirty.getEffectiveDate(), dirtyEvent.getEffectiveDate());
 			dirtyEvent.getLoanTransaction().setInterestAccrued(accruedInterest);
 			if(dirtyEvent.getLoanEventType().isFixedAllocation()){
@@ -172,11 +166,4 @@ public class LoanEventLogic {
 		}
 		return loanEvent;
 	}
-	
-	public LoanEvent findMostRecentLoanEventWithTransactionEffectivePriorToDate(Long loanID, Date checkDate){
-		List<LoanEvent> loanEvent = this.loanEventRepository.findMostRecentLoanEventWithTransactionEffectivePriorToDate(loanID, checkDate, new PageRequest(0, 1));
-		if(loanEvent == null || loanEvent.size() == 0)
-			return null;
-		return loanEvent.get(0);
-	} 
 }

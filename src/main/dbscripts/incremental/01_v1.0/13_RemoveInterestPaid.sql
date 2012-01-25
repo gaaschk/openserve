@@ -1,0 +1,1 @@
+alter table LoanTransaction drop column InterestPaid;

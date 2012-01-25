@@ -15,7 +15,6 @@ public class LoanTransaction extends PhoenixDomainObject{
 	private static final long serialVersionUID = 5151555488279150572L;
 	private Long loanTransactionID;
 	private BigDecimal interestAccrued = new BigDecimal(0);
-	private BigDecimal interestPaid = new BigDecimal(0);
 	private Integer principalChange = 0;
 	private BigDecimal interestChange = new BigDecimal(0);
 	private Integer feesChange = 0;
@@ -36,12 +35,6 @@ public class LoanTransaction extends PhoenixDomainObject{
 	}
 	public void setInterestAccrued(BigDecimal interestAccrued) {
 		this.interestAccrued = interestAccrued;
-	}
-	public BigDecimal getInterestPaid() {
-		return interestPaid;
-	}
-	public void setInterestPaid(BigDecimal interestPaid) {
-		this.interestPaid = interestPaid;
 	}
 	public Integer getPrincipalChange() {
 		return principalChange;

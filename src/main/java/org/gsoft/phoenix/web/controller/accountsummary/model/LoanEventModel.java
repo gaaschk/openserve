@@ -12,7 +12,6 @@ public class LoanEventModel {
 	private Date loanEventEffectiveDate;
 	private Date loanEventPostDate;
 	private BigDecimal interestAccrued;
-	private BigDecimal interestPaid;
 	private Integer principalChange;
 	private BigDecimal interestChange;
 	private Integer feesChange;
@@ -51,13 +50,6 @@ public class LoanEventModel {
 	}
 	public void setInterestAccrued(BigDecimal interestAccrued) {
 		this.interestAccrued = interestAccrued;
-	}
-	@CurrencyInPenniesFormat
-	public BigDecimal getInterestPaid() {
-		return interestPaid;
-	}
-	public void setInterestPaid(BigDecimal interestPaid) {
-		this.interestPaid = interestPaid;
 	}
 	@CurrencyInPenniesFormat
 	public Integer getPrincipalChange() {

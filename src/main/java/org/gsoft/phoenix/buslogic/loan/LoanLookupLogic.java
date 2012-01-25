@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.gsoft.phoenix.buslogic.loanevent.LoanEventLogic;
 import org.gsoft.phoenix.domain.loan.Loan;
+import org.gsoft.phoenix.repositories.loan.LoanEventRepository;
 import org.gsoft.phoenix.repositories.loan.LoanRepository;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +15,10 @@ public class LoanLookupLogic {
 	@Resource
 	private LoanRepository loanRepository;
 	@Resource
-	private LoanEventLogic loanEventLogic;
+	private LoanEventRepository loanEventRepository;
 
 	public Integer getLoanPrincipalBalanceAsOf(Loan loan, Date asOfDate){
-		return loanEventLogic.findMostRecentLoanEventWithTransactionEffectivePriorToDate(loan.getLoanID(), asOfDate).getLoanTransaction().getEndingPrincipal();
+		return loanEventRepository.findMostRecentLoanEventWithTransactionEffectiveOnOrBeforeDate(loan.getLoanID(), asOfDate).getLoanTransaction().getEndingPrincipal();
 	}
 	
 	public List<Loan> getAllLoansForBorrower(Long borrowerID){

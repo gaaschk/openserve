@@ -7,7 +7,6 @@
 		<th><label>Posted Date</label></th>
 		<th><label>Event Type</label></th>
 		<th><label>Accrued Interest</label></th>
-		<th><label>Interest Paid</label></th>
 		<th><label>Principal Change</label></th>
 		<th><label>Interest Change</label></th>
 		<th><label>Fees Change</label></th>	
@@ -21,7 +20,6 @@
 			<td><form:input disabled="true" path="loanHistory[${index.count-1}].loanEventPostDate"/></td>
 			<td><form:input disabled="true" path="loanHistory[${index.count-1}].loanEventType"/></td>
 			<td><form:input disabled="true" path="loanHistory[${index.count-1}].interestAccrued"/></td>
-			<td><form:input disabled="true" path="loanHistory[${index.count-1}].interestPaid"/></td>
 			<td><form:input disabled="true" path="loanHistory[${index.count-1}].principalChange"/></td>
 			<td><form:input disabled="true" path="loanHistory[${index.count-1}].interestChange"/></td>
 			<td><form:input disabled="true" path="loanHistory[${index.count-1}].feesChange"/></td>
