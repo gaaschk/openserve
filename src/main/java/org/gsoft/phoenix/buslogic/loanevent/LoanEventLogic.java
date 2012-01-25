@@ -1,6 +1,7 @@
 package org.gsoft.phoenix.buslogic.loanevent;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -157,7 +158,7 @@ public class LoanEventLogic {
 			loanEvent.getLoanTransaction().setEndingFees(endingFees + appliedFees);
 		}
 		if(allocateToInterest && endingInterest.compareTo(BigDecimal.ZERO) > 0 && netAmount.compareTo(BigDecimal.ZERO) != 0){
-			BigDecimal appliedInterest = (endingInterest.compareTo(netAmount.abs())<0)?endingInterest.negate():netAmount;
+			BigDecimal appliedInterest = (endingInterest.compareTo(netAmount.abs())<0)?endingInterest.setScale(0, RoundingMode.DOWN).negate():netAmount;
 			loanEvent.getLoanTransaction().setInterestChange(appliedInterest);
 			netAmount = netAmount.subtract(appliedInterest);
 			loanEvent.getLoanTransaction().setEndingInterest(endingInterest.add(appliedInterest));

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import org.gsoft.phoenix.util.formatter.CurrencyInPenniesFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class LoanEventModel {
 	private Long loanID;
@@ -31,6 +32,7 @@ public class LoanEventModel {
 	public void setLoanEventType(String loanEventType) {
 		this.loanEventType = loanEventType;
 	}
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	public Date getLoanEventEffectiveDate() {
 		return loanEventEffectiveDate;
 	}
@@ -43,7 +45,7 @@ public class LoanEventModel {
 	public void setLoanEventPostDate(Date loanEventPostDate) {
 		this.loanEventPostDate = loanEventPostDate;
 	}
-	@CurrencyInPenniesFormat(subPennyPrecision=4)
+	@CurrencyInPenniesFormat(subPennyPrecision=6)
 	public BigDecimal getInterestAccrued() {
 		return interestAccrued;
 	}
@@ -64,7 +66,7 @@ public class LoanEventModel {
 	public void setPrincipalChange(Integer principalChange) {
 		this.principalChange = principalChange;
 	}
-	@CurrencyInPenniesFormat(subPennyPrecision=4)
+	@CurrencyInPenniesFormat(subPennyPrecision=6)
 	public BigDecimal getInterestChange() {
 		return interestChange;
 	}
@@ -85,7 +87,7 @@ public class LoanEventModel {
 	public void setEndingPrincipal(Integer endingPrincipal) {
 		this.endingPrincipal = endingPrincipal;
 	}
-	@CurrencyInPenniesFormat(subPennyPrecision=4)
+	@CurrencyInPenniesFormat(subPennyPrecision=6)
 	public BigDecimal getEndingInterest() {
 		return endingInterest;
 	}

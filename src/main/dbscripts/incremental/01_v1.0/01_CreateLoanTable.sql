@@ -1,3 +1,4 @@
+#just a comment to force a database rebuild.
 create table Loan(
 	LoanID BIGINT PRIMARY KEY AUTO_INCREMENT,
 	StartingPrincipal INTEGER NOT NULL,
