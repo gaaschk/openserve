@@ -12,6 +12,10 @@
 	</c:forEach>
 </table>
 	<fieldset>
+		<label>Effective Date:</label>
+		<form:input class="masked" path="effectiveDate" type="text" data-meiomask="fixed.date-us"/>
+	</fieldset>
+	<fieldset>
 		<label>Loan Type:</label>
 		<form:select path="loanType">
      		<form:option value="-" label="--Please Select"/>

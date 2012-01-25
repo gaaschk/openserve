@@ -1,7 +1,5 @@
 package org.gsoft.phoenix.web.controller.payment;
 
-import java.util.Date;
-
 import javax.annotation.Resource;
 
 import org.gsoft.phoenix.domain.Person;
@@ -32,7 +30,7 @@ public class PaymentEntryFlowController {
 	}
 	
 	public void submitPayment(PaymentEntryModel paymentModel){
-		paymentService.applyPayment(paymentModel.getTheBorrower().getPersonID(), paymentModel.getPaymentAmount(), new Date());
+		paymentService.applyPayment(paymentModel.getTheBorrower().getPersonID(), paymentModel.getPaymentAmount(), paymentModel.getPaymentEffectiveDate());
 	}
 
 }

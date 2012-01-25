@@ -3,7 +3,7 @@ create table Payment(
 	BorrowerPersonID BIGINT,
 	PaymentAmount INTEGER,
 	PostDate DATETIME,
-	EffectiveDate DATETIME
+	EffectiveDate DATE
 );
 
 create table LoanPayment(

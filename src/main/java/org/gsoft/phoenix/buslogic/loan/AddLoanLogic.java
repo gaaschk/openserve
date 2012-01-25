@@ -27,22 +27,19 @@ public class AddLoanLogic {
 		loan = this.loanRepository.save(loan);
 		LoanTypeProfile loanTypeProfile = loanTypeLogic.getLoanTypeProfileForLoan(loan);
 		loan.setRemainingLoanTerm(loanTypeProfile.getMaximumLoanTerm());
-		LoanEvent addedEvent = loanEventLogic.createLoanEventWithTransaction(loan, LoanEventType.LOAN_ADDED, effectiveDate);
-		loanEventLogic.applyLoanEvent(addedEvent);
+		loanEventLogic.createLoanEvent(loan, LoanEventType.LOAN_ADDED, effectiveDate, 0, BigDecimal.ZERO, 0);
 		LoanEvent lastDisbEvent = null;
 		for(Disbursement disbursement:loan.getDisbursements()){
-			LoanEvent disbEvent = loanEventLogic.createLoanEventWithTransaction(loan, LoanEventType.DISBURSEMENT_ADDED, effectiveDate);
-			disbEvent.getLoanTransaction().setPrincipalChange(disbursement.getDisbursementAmount());
-			lastDisbEvent = loanEventLogic.applyLoanEvent(disbEvent);
+			lastDisbEvent = loanEventLogic.createLoanEvent(loan, LoanEventType.DISBURSEMENT_ADDED, effectiveDate, disbursement.getDisbursementAmount(), BigDecimal.ZERO, 0);
 		}
-		LoanEvent adjustmentEvent = loanEventLogic.createLoanEventWithTransaction(loan, LoanEventType.LOAN_ADD_ADJUSTMENT, effectiveDate);
-		adjustmentEvent.getLoanTransaction().setPrincipalChange(loan.getStartingPrincipal() - lastDisbEvent.getLoanTransaction().getEndingPrincipal());
-		adjustmentEvent.getLoanTransaction().setInterestChange(loan.getStartingInterest().subtract(lastDisbEvent.getLoanTransaction().getEndingInterest()));
-		adjustmentEvent.getLoanTransaction().setFeesChange(loan.getStartingFees() - lastDisbEvent.getLoanTransaction().getEndingFees());
-		if(adjustmentEvent.getLoanTransaction().getInterestChange().compareTo(BigDecimal.ZERO) != 0 ||
-				adjustmentEvent.getLoanTransaction().getPrincipalChange() != 0 ||
-				adjustmentEvent.getLoanTransaction().getFeesChange() != 0)
-			loanEventLogic.applyLoanEvent(adjustmentEvent);
+		if(!loan.getStartingPrincipal().equals(lastDisbEvent.getLoanTransaction().getEndingPrincipal()) ||
+				loan.getStartingInterest().compareTo(lastDisbEvent.getLoanTransaction().getEndingInterest()) != 0 ||
+				!loan.getStartingFees().equals(lastDisbEvent.getLoanTransaction().getEndingFees())){
+			loanEventLogic.createLoanEvent(loan, LoanEventType.LOAN_ADD_ADJUSTMENT, effectiveDate,
+					loan.getStartingPrincipal() - lastDisbEvent.getLoanTransaction().getEndingPrincipal(),
+					loan.getStartingInterest().subtract(lastDisbEvent.getLoanTransaction().getEndingInterest()),
+					loan.getStartingFees() - lastDisbEvent.getLoanTransaction().getEndingFees());
+		}
 		return loan;
 	}
 }

@@ -1,6 +1,7 @@
 package org.gsoft.phoenix.service.loanentry;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.annotation.Resource;
 
@@ -24,8 +25,15 @@ public class LoanEntryService {
 	@Transactional
 	@RunRulesEngine
 	public Loan addNewLoan(Loan newLoan){
+		return this.addNewLoan(newLoan, systemSettingsLogic.getCurrentSystemDate());
+	}
+
+	@PreAuthorize("hasRole('PERM_AddLoan')")
+	@Transactional
+	@RunRulesEngine
+	public Loan addNewLoan(Loan newLoan, Date effectiveDate){
 		newLoan.setMargin(new BigDecimal(0));
-		newLoan = maintainLoanLogic.addNewLoan(newLoan, systemSettingsLogic.getCurrentSystemDate());
+		newLoan = maintainLoanLogic.addNewLoan(newLoan, effectiveDate);
 		return newLoan;
 	}
 }

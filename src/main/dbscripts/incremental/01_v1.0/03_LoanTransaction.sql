@@ -9,7 +9,7 @@ create table LoanEvent(
 	LoanEventTypeID BIGINT,
 	LoanTransactionID BIGINT,
 	LoanID BIGINT,
-	EffectiveDate DATETIME,
+	EffectiveDate DATE,
 	PostDate DATETIME
 );
 

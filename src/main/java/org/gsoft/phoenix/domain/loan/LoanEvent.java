@@ -22,6 +22,7 @@ public class LoanEvent extends PhoenixDomainObject{
 	private Long loanID;
 	private LoanEventType loanEventType;
 	private Date effectiveDate;
+	private Integer sequence;
 	private Date postDate;
 	
 	private LoanTransaction loanTransaction;
@@ -69,6 +70,16 @@ public class LoanEvent extends PhoenixDomainObject{
 
 	public void setEffectiveDate(Date effectiveDate) {
 		this.effectiveDate = effectiveDate;
+	}
+
+
+	public Integer getSequence() {
+		return sequence;
+	}
+
+
+	public void setSequence(Integer sequence) {
+		this.sequence = sequence;
 	}
 
 

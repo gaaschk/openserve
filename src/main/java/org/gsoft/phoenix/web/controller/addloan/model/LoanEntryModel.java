@@ -2,6 +2,7 @@ package org.gsoft.phoenix.web.controller.addloan.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.gsoft.phoenix.domain.loan.LoanType;
@@ -17,6 +18,7 @@ public class LoanEntryModel implements Serializable{
 	private Integer startingPrincipal;
 	private BigDecimal startingInterest;
 	private Integer startingFees;
+	private Date effectiveDate;
 	private List<DisbursementModel> addedDisbursements;
 	private DisbursementModel newDisbursement;
 	
@@ -58,6 +60,12 @@ public class LoanEntryModel implements Serializable{
 	}
 	public void setStartingFees(Integer startingFees) {
 		this.startingFees = startingFees;
+	}
+	public Date getEffectiveDate() {
+		return effectiveDate;
+	}
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = effectiveDate;
 	}
 	public List<DisbursementModel> getAddedDisbursements() {
 		return addedDisbursements;

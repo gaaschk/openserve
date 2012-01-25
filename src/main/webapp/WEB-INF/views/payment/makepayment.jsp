@@ -26,6 +26,10 @@
 	</tr>
 </table>
 	<fieldset>
+		<label>Effective Date:</label>		
+		<form:input class="masked" path="paymentEffectiveDate" type="text" data-meiomask="fixed.date-us"/>
+	</fieldset>
+	<fieldset>
 		<label>Payment Amount:</label>		
 		<form:input class="masked" path="paymentAmount" type="text" data-meiomask="reverse.dollar"/>
 	</fieldset>
