@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.gsoft.phoenix.domain.loan.LoanType;
 import org.gsoft.phoenix.util.formatter.CurrencyInPenniesFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 public class LoanEntryModel implements Serializable{
@@ -42,6 +43,14 @@ public class LoanEntryModel implements Serializable{
 	}
 	@CurrencyInPenniesFormat
 	public Integer getStartingPrincipal() {
+		if(this.startingPrincipal == null && this.getAddedDisbursements() != null && this.getAddedDisbursements().size() > 0){
+			int principal = 0;
+			for(DisbursementModel disb:this.getAddedDisbursements()){
+				if(this.getEffectiveDate() != null && !this.getEffectiveDate().before(disb.getDisbursementDate()))
+					principal += disb.getDisbursementAmount();
+			}
+			startingPrincipal = principal;
+		}
 		return startingPrincipal;
 	}
 	public void setStartingPrincipal(Integer startingPrincipal) {
@@ -61,7 +70,16 @@ public class LoanEntryModel implements Serializable{
 	public void setStartingFees(Integer startingFees) {
 		this.startingFees = startingFees;
 	}
+	@DateTimeFormat(pattern="MM/dd/yyyy")
 	public Date getEffectiveDate() {
+		if(this.effectiveDate == null && this.getAddedDisbursements() != null && this.getAddedDisbursements().size() > 0){
+			Date earliestDate = null;
+			for(DisbursementModel disb:this.getAddedDisbursements()){
+				if(earliestDate == null || earliestDate.after(disb.getDisbursementDate()))
+					earliestDate = disb.getDisbursementDate();
+			}
+			this.effectiveDate = earliestDate;
+		}
 		return effectiveDate;
 	}
 	public void setEffectiveDate(Date effectiveDate) {

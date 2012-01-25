@@ -41,8 +41,6 @@ public class AddLoanFlowController {
 		if(loanModel.getAddedDisbursements() == null)
 			loanModel.setAddedDisbursements(new ArrayList<DisbursementModel>());
 		loanModel.getAddedDisbursements().add(loanModel.getNewDisbursement());
-		int startingPrincipal = (loanModel.getStartingPrincipal()==null)?0:loanModel.getStartingPrincipal();
-		loanModel.setStartingPrincipal(startingPrincipal + loanModel.getNewDisbursement().getDisbursementAmount());
 		loanModel.setNewDisbursement(new DisbursementModel());
 	}
 	

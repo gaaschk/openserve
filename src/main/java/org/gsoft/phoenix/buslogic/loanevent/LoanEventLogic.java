@@ -89,7 +89,7 @@ public class LoanEventLogic {
 			if(dirtyEvent.getLoanEventType().isFixedAllocation()){
 				this.applyLoanEvent(dirtyEvent, lastDirty, dirtyEvent.getLoanTransaction().getPrincipalChange(), 
 						dirtyEvent.getLoanTransaction().getInterestChange(), 
-						dirtyEvent.getLoanTransaction().getPrincipalChange());
+						dirtyEvent.getLoanTransaction().getFeesChange());
 			}
 			else{
 				BigDecimal netAmount = new BigDecimal(dirtyEvent.getLoanTransaction().getPrincipalChange()).add(dirtyEvent.getLoanTransaction().getInterestChange()).add(new BigDecimal(dirtyEvent.getLoanTransaction().getFeesChange()));
@@ -115,18 +115,16 @@ public class LoanEventLogic {
 		int endingFees = (lastEvent==null)?0:lastEvent.getLoanTransaction().getEndingFees();
 		BigDecimal endingInterest = (lastEvent==null)?BigDecimal.ZERO:lastEvent.getLoanTransaction().getEndingInterest().add(loanEvent.getLoanTransaction().getInterestAccrued());
 		int endingPrincipal = (lastEvent==null)?0:lastEvent.getLoanTransaction().getEndingPrincipal();
-		if(feesChange != 0){
-			loanEvent.getLoanTransaction().setFeesChange(feesChange);
-			loanEvent.getLoanTransaction().setEndingFees(endingFees + feesChange);
-		}
-		if(interestChange.compareTo(BigDecimal.ZERO) != 0){
-			loanEvent.getLoanTransaction().setInterestChange(interestChange);
-			loanEvent.getLoanTransaction().setEndingInterest(endingInterest.add(loanEvent.getLoanTransaction().getInterestAccrued()).add(interestChange));
-		}
-		if(principalChange != 0){
-			loanEvent.getLoanTransaction().setPrincipalChange(principalChange);
-			loanEvent.getLoanTransaction().setEndingPrincipal(endingPrincipal + principalChange);
-		}
+		
+		loanEvent.getLoanTransaction().setFeesChange(feesChange);
+		loanEvent.getLoanTransaction().setEndingFees(endingFees + feesChange);
+		
+		loanEvent.getLoanTransaction().setInterestChange(interestChange);
+		loanEvent.getLoanTransaction().setEndingInterest(endingInterest.add(loanEvent.getLoanTransaction().getInterestAccrued()).add(interestChange));
+		
+		loanEvent.getLoanTransaction().setPrincipalChange(principalChange);
+		loanEvent.getLoanTransaction().setEndingPrincipal(endingPrincipal + principalChange);
+		
 		return this.loanEventRepository.save(loanEvent);
 	}
 	

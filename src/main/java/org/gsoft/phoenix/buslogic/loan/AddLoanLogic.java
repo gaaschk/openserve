@@ -31,7 +31,10 @@ public class AddLoanLogic {
 		LoanEvent lastDisbEvent = null;
 		for(Disbursement disbursement:loan.getDisbursements()){
 			Date disbEffectiveDate = disbursement.getDisbursementEffectiveDate().after(effectiveDate)?disbursement.getDisbursementEffectiveDate():effectiveDate;
-			lastDisbEvent = loanEventLogic.createLoanEvent(loan, LoanEventType.DISBURSEMENT_ADDED, disbEffectiveDate, disbursement.getDisbursementAmount(), BigDecimal.ZERO, 0);
+			LoanEvent disbEvent = loanEventLogic.createLoanEvent(loan, LoanEventType.DISBURSEMENT_ADDED, disbEffectiveDate, disbursement.getDisbursementAmount(), BigDecimal.ZERO, 0);
+			if(!disbEvent.getEffectiveDate().after(effectiveDate)){
+				lastDisbEvent = disbEvent;
+			}
 		}
 		if(!loan.getStartingPrincipal().equals(lastDisbEvent.getLoanTransaction().getEndingPrincipal()) ||
 				loan.getStartingInterest().compareTo(lastDisbEvent.getLoanTransaction().getEndingInterest()) != 0 ||

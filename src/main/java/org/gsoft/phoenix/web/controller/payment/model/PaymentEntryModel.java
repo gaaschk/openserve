@@ -4,12 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.gsoft.phoenix.web.controller.addloan.model.PersonModel;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class PaymentEntryModel implements Serializable{
 	private static final long serialVersionUID = -2289069982845305280L;
 	private PersonModel theBorrower;
 	private Integer paymentAmount;
-	private Date paymentEffectiveDate;
+	private Date paymentEffectiveDate = new Date();
 	private Date paymentPostDate;
 	
 	public PersonModel getTheBorrower() {
@@ -24,6 +25,7 @@ public class PaymentEntryModel implements Serializable{
 	public void setPaymentAmount(Integer paymentAmount) {
 		this.paymentAmount = paymentAmount;
 	}
+	@DateTimeFormat(pattern="MM/dd/yyyy")
 	public Date getPaymentEffectiveDate() {
 		return paymentEffectiveDate;
 	}
