@@ -272,6 +272,7 @@
 					<scriptLocations>src/main/dbscripts</scriptLocations>
 					<autoCreateDbMaintainScriptsTable>true</autoCreateDbMaintainScriptsTable>
 					<qualifier>scripts</qualifier>
+					<fromScratchEnabled>true</fromScratchEnabled>
 				</configuration>
 				<executions>
 					<execution>
