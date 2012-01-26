@@ -299,7 +299,6 @@
 						<id>clean</id>
 						<phase>clean</phase>
 						<goals>
-							<goal>clearDatabase</goal>
 							<goal>updateDatabase</goal>
 						</goals>
 					</execution>
