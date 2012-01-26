@@ -276,6 +276,13 @@
 				</configuration>
 				<executions>
 					<execution>
+						<id>pre-test</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>updateDatabase</goal>
+						</goals>
+					</execution>
+					<execution>
 						<id>test</id>
 						<phase>test</phase>
 						<goals>
