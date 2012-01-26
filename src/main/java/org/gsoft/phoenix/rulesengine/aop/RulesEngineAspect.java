@@ -33,7 +33,7 @@ public class RulesEngineAspect {
 	@AfterReturning(pointcut="execution(* org.gsoft.phoenix.repositories.*.*(..))",
 			returning="retVal")
 	public void addObjectToRulesEngine(PhoenixDomainObject retVal){
-		if(rulesEngine.isOpen() && retVal.getClass().isAnnotationPresent(RulesEngineEntity.class)){
+		if(retVal != null && rulesEngine.isOpen() && retVal.getClass().isAnnotationPresent(RulesEngineEntity.class)){
 			rulesEngine.addContext(retVal);
 		}
 	}

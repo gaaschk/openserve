@@ -2,9 +2,11 @@ package org.gsoft.phoenix.web.controller.accountsummary.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import org.gsoft.phoenix.domain.loan.LoanType;
 import org.gsoft.phoenix.util.formatter.CurrencyInPenniesFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class LoanFinancialDataModel implements Serializable{
 	private static final long serialVersionUID = 2799991603651710288L;
@@ -14,7 +16,10 @@ public class LoanFinancialDataModel implements Serializable{
 	private Integer currentPrincipal;
 	private BigDecimal currentInterest;
 	private Integer currentFees;
-	private Integer minimumPaymentAmount; 
+	private Integer minimumPaymentAmount;
+	private Date nextDueDate;
+	private Date lastPaidDate;
+	private Date repaymentStartDate;
 	private boolean selected;
 	
 	public Long getLoanID(){
@@ -56,6 +61,27 @@ public class LoanFinancialDataModel implements Serializable{
 	}
 	public void setMinimumPaymentAmount(Integer minimumPaymentAmount) {
 		this.minimumPaymentAmount = minimumPaymentAmount;
+	}
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	public Date getNextDueDate() {
+		return nextDueDate;
+	}
+	public void setNextDueDate(Date nextDueDate) {
+		this.nextDueDate = nextDueDate;
+	}
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	public Date getLastPaidDate() {
+		return lastPaidDate;
+	}
+	public void setLastPaidDate(Date lastPaidDate) {
+		this.lastPaidDate = lastPaidDate;
+	}
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	public Date getRepaymentStartDate() {
+		return repaymentStartDate;
+	}
+	public void setRepaymentStartDate(Date repaymentStartDate) {
+		this.repaymentStartDate = repaymentStartDate;
 	}
 	public boolean isSelected() {
 		return selected;

@@ -26,13 +26,13 @@ public class AmortizationLogic {
 	@Resource
 	private LoanRepository loanRepository;
 	
-	public AmortizationSchedule createAmortizationSchedule(List<Long> loanIDs){
+	public AmortizationSchedule createAmortizationSchedule(List<Long> loanIDs, Date effectiveDate){
 		AmortizationSchedule amortizationSchedule = new AmortizationSchedule();
 		for(Long loanID:loanIDs){
 			amortizationSchedule.addLoanAmortizationSchedule(this.createLoanAmortizationSchedule(loanRepository.findOne(loanID)));
 		}
 		amortizationSchedule.setCreationDate(new Date());
-		amortizationSchedule.setEffectiveDate(new Date());
+		amortizationSchedule.setEffectiveDate(effectiveDate);
 		amortizationScheduleRepository.save(amortizationSchedule);
 		return amortizationSchedule;
 	}

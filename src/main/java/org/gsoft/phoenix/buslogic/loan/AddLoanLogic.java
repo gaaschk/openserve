@@ -10,7 +10,6 @@ import org.gsoft.phoenix.domain.loan.Disbursement;
 import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.loan.LoanEvent;
 import org.gsoft.phoenix.domain.loan.LoanEventType;
-import org.gsoft.phoenix.domain.loan.LoanTypeProfile;
 import org.gsoft.phoenix.repositories.loan.LoanRepository;
 import org.springframework.stereotype.Component;
 
@@ -20,13 +19,9 @@ public class AddLoanLogic {
 	private LoanRepository loanRepository;
 	@Resource
 	private LoanEventLogic loanEventLogic;
-	@Resource
-	private LoanTypeLogic loanTypeLogic;
 	
 	public Loan addNewLoan(Loan loan, Date effectiveDate){
 		loan = this.loanRepository.save(loan);
-		LoanTypeProfile loanTypeProfile = loanTypeLogic.getLoanTypeProfileForLoan(loan);
-		loan.setRemainingLoanTerm(loanTypeProfile.getMaximumLoanTerm());
 		loanEventLogic.createLoanEvent(loan, LoanEventType.LOAN_ADDED, effectiveDate, 0, BigDecimal.ZERO, 0);
 		LoanEvent lastDisbEvent = null;
 		for(Disbursement disbursement:loan.getDisbursements()){

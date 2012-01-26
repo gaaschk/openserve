@@ -2,6 +2,7 @@ package org.gsoft.phoenix.scheduled;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.gsoft.phoenix.domain.loan.Loan;
@@ -17,6 +18,7 @@ public class ScheduledTasks {
 	
 	//Run every day at midnight
 	@Scheduled(cron="0 0 0 * * ?")
+	@PostConstruct
 	public void updateLoans(){
 		BatchProcessingService batchService = this.getBatchService();
 		List<Loan> loans = batchService.getAllActiveLoans();

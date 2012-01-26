@@ -14,7 +14,9 @@ public class LoanTypeLogic {
 	@Resource
 	private LoanTypeProfileRepository loanTypeProfileRepository;
 	
-	public LoanTypeProfile getLoanTypeProfileForLoan(Loan loan){
-		return loanTypeProfileRepository.findLoanTypeProfileByLoanTypeAndEffectiveDate(loan.getLoanType(), new Date());
+	public LoanTypeProfile updateLoanTypeProfileForLoan(Loan loan){
+		LoanTypeProfile ltp = loanTypeProfileRepository.findLoanTypeProfileByLoanTypeAndEffectiveDate(loan.getLoanType(), new Date());
+		loan.setEffectiveLoanTypeProfileID(ltp.getID());
+		return ltp;
 	}
 }

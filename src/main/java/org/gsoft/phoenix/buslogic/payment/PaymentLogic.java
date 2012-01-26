@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import org.gsoft.phoenix.buslogic.loan.LoanLookupLogic;
 import org.gsoft.phoenix.buslogic.loanevent.LoanEventLogic;
 import org.gsoft.phoenix.buslogic.payment.allocation.DefaultPaymentAllocationLogic;
+import org.gsoft.phoenix.buslogic.repayment.NextDueDateCalculator;
 import org.gsoft.phoenix.buslogic.system.SystemSettingsLogic;
 import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.loan.LoanEventType;
@@ -32,6 +33,8 @@ public class PaymentLogic {
 	private LoanEventLogic loanEventLogic;
 	@Resource
 	private LoanLookupLogic loanLookupLogic;
+	@Resource
+	private NextDueDateCalculator nextDueCalculator;
 	
 	public void applyPayment(long borrowerPersonID, int amount, Date effectiveDate){
 		Payment payment = new Payment();
@@ -51,6 +54,9 @@ public class PaymentLogic {
 		for(LoanPayment loanPayment:payment.getLoanPayments()){
 			Loan theLoan = loanRepository.findOne(loanPayment.getLoanID());
 			loanEventLogic.createLoanEvent(theLoan, LoanEventType.PAYMENT_APPLIED, payment.getEffectiveDate(), new BigDecimal(loanPayment.getAppliedAmount()).negate(), true, true, true);
+			nextDueCalculator.updateNextDueDate(theLoan);
+			if(theLoan.getLastPaidDate() == null || theLoan.getLastPaidDate().before(payment.getEffectiveDate()))
+				theLoan.setLastPaidDate(payment.getEffectiveDate());
 		}
 	}
 }

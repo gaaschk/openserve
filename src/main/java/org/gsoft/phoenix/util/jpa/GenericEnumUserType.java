@@ -9,6 +9,7 @@ import java.sql.Types;
 import java.util.Properties;
 
 import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
 
@@ -25,7 +26,7 @@ public class GenericEnumUserType implements UserType, ParameterizedType {
 		return clazz;
 	}
 
-	public Object nullSafeGet(ResultSet resultSet, String[] names, Object owner)
+	public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor sessionImpl, Object owner)
 			throws HibernateException, SQLException {
 		Long id = resultSet.getLong(names[0]);
 		if (!resultSet.wasNull()) {
@@ -40,8 +41,9 @@ public class GenericEnumUserType implements UserType, ParameterizedType {
 		return null;
 	}
 
+	@Override
 	public void nullSafeSet(PreparedStatement preparedStatement, Object value,
-			int index) throws HibernateException, SQLException {
+			int index, SessionImplementor sessionImpl) throws HibernateException, SQLException {
 		if (null == value) {
 			preparedStatement.setNull(index, Types.BIGINT);
 		} else {

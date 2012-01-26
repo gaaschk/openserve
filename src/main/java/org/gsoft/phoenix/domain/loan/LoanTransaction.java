@@ -77,4 +77,9 @@ public class LoanTransaction extends PhoenixDomainObject{
 	public Long getID() {
 		return this.getLoanTransactionID();
 	}
+	
+	@Transient
+	public BigDecimal getTransactionNetAmount(){
+		return this.getInterestChange().add(new BigDecimal(this.getPrincipalChange() + this.getFeesChange()));
+	}
 }

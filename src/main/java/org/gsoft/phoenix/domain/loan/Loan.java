@@ -38,8 +38,12 @@ public class Loan extends PhoenixDomainObject{
 	private BigDecimal margin;
 	private LoanEvent lastLoanEvent;
 	private Integer remainingLoanTerm;
-	private Date repaymentStartDate;
 	private Integer minimumPaymentAmount;
+	private Date repaymentStartDate;
+	private Date firstDueDate;
+	private Date initialDueDate;
+	private Date lastPaidDate;
+	private Date nextDueDate;
 	//Enumerations
 	private LoanType loanType;
 	//Relationships
@@ -128,17 +132,41 @@ public class Loan extends PhoenixDomainObject{
 	public void setRemainingLoanTerm(Integer remainingLoanTerm) {
 		this.remainingLoanTerm = remainingLoanTerm;
 	}
+	public Integer getMinimumPaymentAmount() {
+		return minimumPaymentAmount;
+	}
+	public void setMinimumPaymentAmount(Integer minimumPaymentAmount) {
+		this.minimumPaymentAmount = minimumPaymentAmount;
+	}
 	public Date getRepaymentStartDate() {
 		return repaymentStartDate;
 	}
 	public void setRepaymentStartDate(Date repaymentStartDate) {
 		this.repaymentStartDate = repaymentStartDate;
 	}
-	public Integer getMinimumPaymentAmount() {
-		return minimumPaymentAmount;
+	public Date getFirstDueDate() {
+		return firstDueDate;
 	}
-	public void setMinimumPaymentAmount(Integer minimumPaymentAmount) {
-		this.minimumPaymentAmount = minimumPaymentAmount;
+	public void setFirstDueDate(Date firstDueDate) {
+		this.firstDueDate = firstDueDate;
+	}
+	public Date getInitialDueDate() {
+		return initialDueDate;
+	}
+	public void setInitialDueDate(Date initialDueDate) {
+		this.initialDueDate = initialDueDate;
+	}
+	public Date getLastPaidDate() {
+		return lastPaidDate;
+	}
+	public void setLastPaidDate(Date lastPaidDate) {
+		this.lastPaidDate = lastPaidDate;
+	}
+	public Date getNextDueDate() {
+		return nextDueDate;
+	}
+	public void setNextDueDate(Date nextDueDate) {
+		this.nextDueDate = nextDueDate;
 	}
 	@OneToMany(mappedBy="loan")
 	public List<Disbursement> getDisbursements() {

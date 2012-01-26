@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.gsoft.phoenix.domain.loan.LoanEvent;
+import org.gsoft.phoenix.domain.loan.LoanEventType;
 import org.gsoft.phoenix.repositories.BaseRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,4 +30,7 @@ public interface LoanEventRepository extends BaseRepository<LoanEvent, Long>{
 	
 	@Query("select le from LoanEvent le where le.loanID = :loanID and le.effectiveDate > :fromDate order by le.effectiveDate desc, le.sequence desc")
 	public List<LoanEvent> findAllLoanEventsAfterDate(@Param("loanID") Long loanID, @Param("fromDate") Date fromDate);
+	
+	@Query("select le from LoanEvent le where le.loanID = :loanID and le.loanEventType = :loanEventType order by le.effectiveDate desc, le.sequence desc")
+	public List<LoanEvent> findAllLoanEventsOfTypeForLoan(@Param("loanID") Long loanID, @Param("loanEventType") LoanEventType loanEventType);
 }

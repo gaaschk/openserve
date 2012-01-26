@@ -23,7 +23,6 @@
 			class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
 		<property name="location" value="#{systemEnvironment['IS_CI']=='true'?'classpath:phoenix/ci.application.properties':'classpath:phoenix/application.properties'}" />
 	</bean>
-	
 	<context:annotation-config />
 	<context:component-scan base-package="org.gsoft.phoenix" />
 	<data:repositories base-package="org.gsoft.phoenix.repositories" />
