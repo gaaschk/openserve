@@ -20,6 +20,8 @@ public class LoanFinancialDataModel implements Serializable{
 	private Date nextDueDate;
 	private Date lastPaidDate;
 	private Date repaymentStartDate;
+	private Date firstDueDate;
+	private Date initialDueDate;
 	private boolean selected;
 	
 	public Long getLoanID(){
@@ -82,6 +84,20 @@ public class LoanFinancialDataModel implements Serializable{
 	}
 	public void setRepaymentStartDate(Date repaymentStartDate) {
 		this.repaymentStartDate = repaymentStartDate;
+	}
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	public Date getFirstDueDate() {
+		return firstDueDate;
+	}
+	public void setFirstDueDate(Date firstDueDate) {
+		this.firstDueDate = firstDueDate;
+	}
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	public Date getInitialDueDate() {
+		return initialDueDate;
+	}
+	public void setInitialDueDate(Date initialDueDate) {
+		this.initialDueDate = initialDueDate;
 	}
 	public boolean isSelected() {
 		return selected;

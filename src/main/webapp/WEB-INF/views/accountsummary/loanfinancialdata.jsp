@@ -42,6 +42,18 @@
 					<form:input disabled="true" path="nextDueDate"/>
 				</fieldset>
 			</td>
+			<td>
+				<fieldset>
+					<label class="nobr">First Due Date:</label>
+					<form:input disabled="true" path="firstDueDate"/>
+				</fieldset>
+			</td>
+			<td>
+				<fieldset>
+					<label class="nobr">Initial Due Date:</label>
+					<form:input disabled="true" path="initialDueDate"/>
+				</fieldset>
+			</td>
 		</tr>
 		<tr>
 			<td>

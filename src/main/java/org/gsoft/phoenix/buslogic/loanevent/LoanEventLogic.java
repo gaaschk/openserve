@@ -120,7 +120,7 @@ public class LoanEventLogic {
 		loanEvent.getLoanTransaction().setEndingFees(endingFees + feesChange);
 		
 		loanEvent.getLoanTransaction().setInterestChange(interestChange);
-		loanEvent.getLoanTransaction().setEndingInterest(endingInterest.add(loanEvent.getLoanTransaction().getInterestAccrued()).add(interestChange));
+		loanEvent.getLoanTransaction().setEndingInterest(endingInterest.add(interestChange));
 		
 		loanEvent.getLoanTransaction().setPrincipalChange(principalChange);
 		loanEvent.getLoanTransaction().setEndingPrincipal(endingPrincipal + principalChange);

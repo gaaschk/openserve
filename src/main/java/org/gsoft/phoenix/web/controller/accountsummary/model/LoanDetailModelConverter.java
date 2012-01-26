@@ -29,6 +29,8 @@ public class LoanDetailModelConverter {
 		finModel.setNextDueDate(loan.getNextDueDate());
 		finModel.setLastPaidDate(loan.getLastPaidDate());
 		finModel.setRepaymentStartDate(loan.getRepaymentStartDate());
+		finModel.setFirstDueDate(loan.getFirstDueDate());
+		finModel.setInitialDueDate(loan.getInitialDueDate());
 		List<LoanEvent> loanEvents = accountSummaryService.getAllLoanEventsForLoan(loan.getLoanID());
 		ArrayList<LoanEventModel> loanHistory = new ArrayList<LoanEventModel>();
 		for(LoanEvent loanEvent:loanEvents){
