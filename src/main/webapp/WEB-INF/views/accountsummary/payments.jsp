@@ -21,7 +21,6 @@ window.addEvent('domready', function() {
 	});
 });
 </script>
-<form:form commandName="paymenthistorymodel">
   <table>
 	<caption><label>Payment History</label></caption>
 	<tr>
@@ -30,15 +29,14 @@ window.addEvent('domready', function() {
 		<th><label>Posted Date</label></th>
 		<th><label>Payment Amount</label></th>
 	</tr>
-	<c:forEach var="payment" items="${paymenthistorymodel.payments}" varStatus="pmtindex">
+	<c:forEach var="payment" items="${accountSummaryModel.paymentHistory.payments}" varStatus="pmtindex">
 		<tr class="paymentrow" >
 			<td><input type="radio" class="paymentrowrb" id="paymentrowrb-${payment.paymentID}"/></td>
-			<td><form:input disabled="true" path="payments[${pmtindex.count-1}].paymentEffectiveDate"/></td>
-			<td><form:input disabled="true" path="payments[${pmtindex.count-1}].paymentPostDate"/></td>
-			<td><form:input disabled="true" path="payments[${pmtindex.count-1}].paymentAmount"/></td>
+			<td><form:input disabled="true" path="paymentHistory.payments[${pmtindex.count-1}].paymentEffectiveDate"/></td>
+			<td><form:input disabled="true" path="paymentHistory.payments[${pmtindex.count-1}].paymentPostDate"/></td>
+			<td><form:input disabled="true" path="paymentHistory.payments[${pmtindex.count-1}].paymentAmount"/></td>
 		</tr>
 	 </c:forEach>
   </table>
   <div class="panel" id="paymentdetail">
   </div>
-</form:form>

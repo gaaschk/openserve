@@ -1,11 +1,14 @@
 package org.gsoft.phoenix.web.models;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public class AccountSummaryModel {
+public class AccountSummaryModel implements Serializable{
+	private static final long serialVersionUID = -2998909125562406952L;
 	private PersonModel borrower;
 	private List<LoanSummaryModel> loans;
+	private PaymentHistoryModel paymentHistory;
 	private Long selectedLoanID;
 	
 	public PersonModel getBorrower() {
@@ -19,6 +22,12 @@ public class AccountSummaryModel {
 	}
 	public void setLoans(List<LoanSummaryModel> loans) {
 		this.loans = loans;
+	}
+	public PaymentHistoryModel getPaymentHistory() {
+		return paymentHistory;
+	}
+	public void setPaymentHistory(PaymentHistoryModel paymentHistory) {
+		this.paymentHistory = paymentHistory;
 	}
 	public Long getSelectedLoanID() {
 		return selectedLoanID;

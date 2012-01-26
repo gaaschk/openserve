@@ -1,11 +1,13 @@
 package org.gsoft.phoenix.web.models;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import org.gsoft.phoenix.util.formatter.CurrencyInPenniesFormat;
 
-public class PaymentModel {
+public class PaymentModel implements Serializable{
+	private static final long serialVersionUID = -3946500836466970L;
 	private Long paymentID;
 	private Integer paymentAmount;
 	private Date paymentEffectiveDate;

@@ -23,7 +23,7 @@
 	</bean>
 	
 
-	<webflow:flow-builder-services id="flowBuilderServices" conversion-service="defaultConversionService" view-factory-creator="mvcViewFactoryCreator"/>
+	<webflow:flow-builder-services id="flowBuilderServices" conversion-service="defaultConversionService" view-factory-creator="mvcViewFactoryCreator" validator="validator"/>
     
     <bean id="defaultConversionService" class="org.springframework.binding.convert.service.DefaultConversionService">
     	<constructor-arg ref="conversionService"/>

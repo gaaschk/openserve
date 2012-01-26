@@ -30,7 +30,7 @@ window.addEvent('domready', function() {
 					selectedloans[idx].checked = false;
 			}
 			var documenturl = new URI(document.location.href);
-			var url = documenturl.get('scheme')+'://'+documenturl.get('host')+':'+documenturl.get('port')+documenturl.get('directory')+'loandetail.do?loandetailid='+this.id;
+			var url = documenturl.get('scheme')+'://'+documenturl.get('host')+':'+documenturl.get('port')+documenturl.get('directory')+'accountsummary/loandetail.do?loandetailid='+this.id;
 			new Request.HTML({
 				url: url,
 				method: 'get',
@@ -73,13 +73,13 @@ function tabState(ael) {
 
 </script>
 <div class="panel">
-<form:form commandName="accountmodel">
+<form:form commandName="accountSummaryModel">
 <table>
 	<tr>
 		<td colspan="2">
 			<fieldset>
 				<label>SSN:</label>
-				<c:out value="${accountmodel.borrower.ssn}"/>
+				<c:out value="${accountSummaryModel.borrower.ssn}"/>
 			</fieldset>
 		</td>
 	</tr>
@@ -87,13 +87,13 @@ function tabState(ael) {
 		<td>
 			<fieldset>
 				<label>First Name:</label>
-				<c:out value="${accountmodel.borrower.firstName}"/>
+				<c:out value="${accountSummaryModel.borrower.firstName}"/>
 			</fieldset>
 		</td>
 		<td>
 			<fieldset>
 				<label>Last Name:</label>
-				<c:out value="${accountmodel.borrower.lastName}"/>
+				<c:out value="${accountSummaryModel.borrower.lastName}"/>
 			</fieldset>
 		</td>
 	</tr>
@@ -115,7 +115,7 @@ function tabState(ael) {
 		<th><label>Current Interest</label></th>
 		<th><label>Current Fees</label></th>
 	</tr>
-	<c:forEach var="loan" items="${accountmodel.loans}" varStatus="index">
+	<c:forEach var="loan" items="${accountSummaryModel.loans}" varStatus="index">
 		<tr class="loanrow" >
 			<td><input type="radio" class="loanrowrb" id="${loan.loanID}"/></td>
 			<td><form:input class="loancell" disabled="true" path="loans[${index.count-1}].loanType"/></td>
@@ -128,8 +128,8 @@ function tabState(ael) {
   <div id="loanDetail">
   </div>
 </div>
-</form:form>
 <div class="panel" id="paymentHistoryPane">
   <jsp:include page="payments.jsp"/>
 </div>
+</form:form>
 </div>

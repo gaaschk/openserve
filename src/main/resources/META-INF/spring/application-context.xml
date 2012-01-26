@@ -52,6 +52,9 @@
     	</property>
 	</bean>
 	
+	<bean id="validator"
+      class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+      
 	<bean id="modelConversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
  	</bean>
 
