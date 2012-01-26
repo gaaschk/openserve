@@ -11,9 +11,11 @@
 	  	</tr>
 	</c:forEach>
 </table>
+<form:errors path="addedDisbursements"/>
 	<fieldset>
 		<label>Effective Date:</label>
 		<form:input class="masked" path="effectiveDate" type="text" data-meiomask="fixed.date-us"/>
+		<form:errors path="effectiveDate"/>
 	</fieldset>
 	<fieldset>
 		<label>Loan Type:</label>

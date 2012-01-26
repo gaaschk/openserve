@@ -15,6 +15,7 @@
 <fieldset>
 	<label>Date:</label>
 	<form:input class="masked" path="newDisbursement.disbursementDate" data-meiomask="fixed.date-us"/>
+	<form:errors path="newDisbursement.disbursementDate"/>
 </fieldset>
 <fieldset>
 	<label>Amount:</label>
