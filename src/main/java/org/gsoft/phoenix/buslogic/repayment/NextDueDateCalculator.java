@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.gsoft.phoenix.buslogic.system.SystemSettingsLogic;
 import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.loan.LoanEvent;
 import org.gsoft.phoenix.domain.loan.LoanEventType;
@@ -13,6 +14,7 @@ import org.gsoft.phoenix.domain.loan.LoanTypeProfile;
 import org.gsoft.phoenix.repositories.loan.LoanEventRepository;
 import org.gsoft.phoenix.repositories.loan.LoanTypeProfileRepository;
 import org.joda.time.DateTime;
+import org.joda.time.Months;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,6 +23,8 @@ public class NextDueDateCalculator {
 	private LoanEventRepository loanEventRepository;
 	@Resource
 	private LoanTypeProfileRepository loanTypeProfileRepository;
+	@Resource
+	private SystemSettingsLogic systemSettings;
 	
 	public void updateNextDueDate(Loan loan){
 		loan.setNextDueDate(loan.getInitialDueDate());
@@ -29,11 +33,16 @@ public class NextDueDateCalculator {
 		Collections.reverse(paymentsForLoan);
 		BigDecimal accumulatedPaymentAmount = BigDecimal.ZERO;
 		for(LoanEvent paymentEvent:paymentsForLoan){
+			if(!new DateTime(loan.getNextDueDate()).minusDays(ltp.getPrepaymentDays()).toDate().before(systemSettings.getCurrentSystemDate()))
+				break;
 			if(!paymentEvent.getEffectiveDate().before(new DateTime(loan.getNextDueDate()).minusDays(ltp.getPrepaymentDays()).toDate())){
 				accumulatedPaymentAmount = accumulatedPaymentAmount.add(paymentEvent.getLoanTransaction().getTransactionNetAmount().negate());
 				if(accumulatedPaymentAmount.compareTo(new BigDecimal(loan.getMinimumPaymentAmount())) >= 0){
-					loan.setNextDueDate(new DateTime(loan.getInitialDueDate()).plusMonths(accumulatedPaymentAmount.divideToIntegralValue(new BigDecimal(loan.getMinimumPaymentAmount())).intValue()).toDate());
-					accumulatedPaymentAmount = accumulatedPaymentAmount.remainder(new BigDecimal(loan.getMinimumPaymentAmount()));
+					int monthsToAdvance = accumulatedPaymentAmount.divideToIntegralValue(new BigDecimal(loan.getMinimumPaymentAmount())).intValue();
+					int monthsToCurrent = Months.monthsBetween(new DateTime(loan.getNextDueDate()), new DateTime(systemSettings.getCurrentSystemDate()).plusDays(ltp.getPrepaymentDays())).getMonths();
+					monthsToAdvance = (monthsToAdvance <= monthsToCurrent)?monthsToAdvance:monthsToCurrent;
+					loan.setNextDueDate(new DateTime(loan.getInitialDueDate()).plusMonths(monthsToAdvance).toDate());
+					accumulatedPaymentAmount = accumulatedPaymentAmount.subtract(new BigDecimal(monthsToAdvance*loan.getMinimumPaymentAmount()));
 				}
 			}
 		}
