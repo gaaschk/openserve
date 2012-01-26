@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.gsoft.phoenix.common.util.ReversibleMultiMap;
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
+import org.gsoft.phoenix.util.ReversibleMultiMap;
 
 public class FactFinder {
     

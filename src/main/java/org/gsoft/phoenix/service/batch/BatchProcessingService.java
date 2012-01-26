@@ -5,10 +5,10 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.gsoft.phoenix.common.util.ListUtility;
 import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.repositories.loan.LoanRepository;
 import org.gsoft.phoenix.rulesengine.annotation.RunRulesEngine;
+import org.gsoft.phoenix.util.ListUtility;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

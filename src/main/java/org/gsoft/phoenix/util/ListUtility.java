@@ -1,4 +1,4 @@
-package org.gsoft.phoenix.common.util;
+package org.gsoft.phoenix.util;
 
 import java.util.Iterator;
 import java.util.List;
