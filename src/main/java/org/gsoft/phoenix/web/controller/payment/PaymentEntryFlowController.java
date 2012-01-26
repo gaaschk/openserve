@@ -5,10 +5,10 @@ import javax.annotation.Resource;
 import org.gsoft.phoenix.domain.Person;
 import org.gsoft.phoenix.service.PersonService;
 import org.gsoft.phoenix.service.payment.PaymentService;
-import org.gsoft.phoenix.web.controller.addloan.model.PersonModel;
-import org.gsoft.phoenix.web.controller.addloan.model.PersonModelConverter;
-import org.gsoft.phoenix.web.controller.payment.model.PaymentEntryModel;
+import org.gsoft.phoenix.web.models.PaymentEntryModel;
+import org.gsoft.phoenix.web.models.PersonModel;
 import org.gsoft.phoenix.web.person.PersonSearchCriteria;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,13 +16,13 @@ public class PaymentEntryFlowController {
 	@Resource
 	private PersonService personService;
 	@Resource
-	private PersonModelConverter personModelConverter;
+	private ConversionService conversionService;
 	@Resource
 	private PaymentService paymentService;
 	
 	public PaymentEntryModel findBorrowerAndCreatePaymentEntryModel(PersonSearchCriteria searchCriteria){
 		Person person = personService.findPersonBySSN(searchCriteria.getSsn());
-		PersonModel newPersonModel = personModelConverter.convertToModel(person);
+		PersonModel newPersonModel = conversionService.convert(person, PersonModel.class);
 		newPersonModel.setSsn(searchCriteria.getSsn());
 		PaymentEntryModel paymentModel = new PaymentEntryModel();
 		paymentModel.setTheBorrower(newPersonModel);

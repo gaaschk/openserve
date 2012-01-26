@@ -1,4 +1,4 @@
-package org.gsoft.phoenix.web.controller.accountsummary.model;
+package org.gsoft.phoenix.web.converters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,16 +8,21 @@ import javax.annotation.Resource;
 import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.loan.LoanEvent;
 import org.gsoft.phoenix.service.AccountSummaryService;
+import org.gsoft.phoenix.web.models.LoanDetailModel;
+import org.gsoft.phoenix.web.models.LoanEventModel;
+import org.gsoft.phoenix.web.models.LoanFinancialDataModel;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LoanDetailModelConverter {
+public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetailModel>{
 	@Resource
 	private AccountSummaryService accountSummaryService;
 	@Resource
-	private LoanEventModelConverter loanEventModelConverter;
+	private ConversionService conversionService;
 	
-	public LoanDetailModel convertToModel(Loan loan){
+	public LoanDetailModel convert(Loan loan){
 		LoanDetailModel model = new LoanDetailModel();
 		LoanFinancialDataModel finModel = new LoanFinancialDataModel();
 		finModel.setLoanID(loan.getLoanID());
@@ -34,7 +39,7 @@ public class LoanDetailModelConverter {
 		List<LoanEvent> loanEvents = accountSummaryService.getAllLoanEventsForLoan(loan.getLoanID());
 		ArrayList<LoanEventModel> loanHistory = new ArrayList<LoanEventModel>();
 		for(LoanEvent loanEvent:loanEvents){
-			loanHistory.add(loanEventModelConverter.convertToModel(loanEvent));
+			loanHistory.add(conversionService.convert(loanEvent, LoanEventModel.class));
 		}
 		model.setLoanFinancialData(finModel);
 		model.setLoanHistory(loanHistory);

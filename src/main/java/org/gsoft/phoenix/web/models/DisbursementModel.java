@@ -1,4 +1,4 @@
-package org.gsoft.phoenix.web.controller.addloan.model;
+package org.gsoft.phoenix.web.models;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package org.gsoft.phoenix.web.controller.accountsummary.model;
+package org.gsoft.phoenix.web.models;
 
 import java.util.Date;
 import java.util.List;

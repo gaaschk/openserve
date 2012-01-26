@@ -38,6 +38,7 @@
           </map>
       </property>
   	</bean>
+
 	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
     	<property name="formatters">
     		<list>
@@ -50,6 +51,9 @@
         	</list>
     	</property>
 	</bean>
+	
+	<bean id="modelConversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+ 	</bean>
 
 	<!-- DataSource configuration -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"

@@ -1,24 +1,18 @@
-package org.gsoft.phoenix.web.controller.accountsummary.model;
+package org.gsoft.phoenix.web.converters;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.gsoft.phoenix.domain.payment.LoanPayment;
 import org.gsoft.phoenix.domain.payment.Payment;
+import org.gsoft.phoenix.web.models.LoanPaymentModel;
+import org.gsoft.phoenix.web.models.PaymentModel;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PaymentHistoryModelConverter {
-	public PaymentHistoryModel convertToModel(List<Payment> payments){
-		PaymentHistoryModel paymentHistoryModel = new PaymentHistoryModel();
-		paymentHistoryModel.setPayments(new ArrayList<PaymentModel>());
-		for(Payment payment: payments){
-			paymentHistoryModel.getPayments().add(this.convertToModel(payment));
-		}
-		return paymentHistoryModel;
-	}
-	
-	public PaymentModel convertToModel(Payment payment){
+public class PaymentToPaymentModelConverter implements Converter<Payment, PaymentModel> {
+	public PaymentModel convert(Payment payment){
 		PaymentModel paymentModel = new PaymentModel();
 		paymentModel.setPaymentID(payment.getPaymentID());
 		paymentModel.setPaymentEffectiveDate(payment.getEffectiveDate());
@@ -27,15 +21,16 @@ public class PaymentHistoryModelConverter {
 		List<LoanPayment> loanPayments = payment.getLoanPayments();
 		paymentModel.setLoanPayments(new ArrayList<LoanPaymentModel>());
 		for(LoanPayment loanPayment:loanPayments){
-			paymentModel.getLoanPayments().add(this.convertToModel(loanPayment));
+			paymentModel.getLoanPayments().add(this.convert(loanPayment));
 		}
 		return paymentModel;
 	}
 	
-	public LoanPaymentModel convertToModel(LoanPayment loanPayment){
+	private LoanPaymentModel convert(LoanPayment loanPayment){
 		LoanPaymentModel loanPaymentModel = new LoanPaymentModel();
 		loanPaymentModel.setAppliedAmount(loanPayment.getAppliedAmount());
 		loanPaymentModel.setLoanID(loanPayment.getLoanID());
 		return loanPaymentModel;
 	}
+
 }

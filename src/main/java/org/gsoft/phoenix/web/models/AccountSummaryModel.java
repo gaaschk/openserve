@@ -1,8 +1,7 @@
-package org.gsoft.phoenix.web.controller.accountsummary.model;
+package org.gsoft.phoenix.web.models;
 
 import java.util.List;
 
-import org.gsoft.phoenix.web.controller.addloan.model.PersonModel;
 
 public class AccountSummaryModel {
 	private PersonModel borrower;

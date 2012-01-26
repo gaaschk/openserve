@@ -7,10 +7,10 @@ import javax.annotation.Resource;
 import org.gsoft.phoenix.domain.Person;
 import org.gsoft.phoenix.service.PersonService;
 import org.gsoft.phoenix.service.payment.PaymentService;
-import org.gsoft.phoenix.web.controller.addloan.model.PersonModel;
-import org.gsoft.phoenix.web.controller.addloan.model.PersonModelConverter;
-import org.gsoft.phoenix.web.controller.payment.model.PaymentEntryModel;
+import org.gsoft.phoenix.web.models.PaymentEntryModel;
+import org.gsoft.phoenix.web.models.PersonModel;
 import org.gsoft.phoenix.web.person.PersonSearchCriteria;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,7 +25,7 @@ public class PaymentController {
 	@Resource
 	private PersonService personService;
 	@Resource
-	private PersonModelConverter personModelConverter;
+	private ConversionService conversionService;
 	@Resource
 	private PaymentService paymentService;
 	
@@ -39,7 +39,7 @@ public class PaymentController {
 	@RequestMapping(value="payment/search.do", method=RequestMethod.POST)
 	public ModelAndView findBorrowerAndLoadPaymentPage(@ModelAttribute("personSearchCriteria") PersonSearchCriteria personSearchCriteria, ModelAndView model){
 		Person person = personService.findPersonBySSN(personSearchCriteria.getSsn());
-		PersonModel newPersonModel = personModelConverter.convertToModel(person);
+		PersonModel newPersonModel = conversionService.convert(person, PersonModel.class);
 		newPersonModel.setSsn(personSearchCriteria.getSsn());
 		PaymentEntryModel paymentModel = new PaymentEntryModel();
 		paymentModel.setTheBorrower(newPersonModel);

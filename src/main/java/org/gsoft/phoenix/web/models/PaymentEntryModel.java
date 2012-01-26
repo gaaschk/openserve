@@ -1,9 +1,8 @@
-package org.gsoft.phoenix.web.controller.payment.model;
+package org.gsoft.phoenix.web.models;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import org.gsoft.phoenix.web.controller.addloan.model.PersonModel;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class PaymentEntryModel implements Serializable{

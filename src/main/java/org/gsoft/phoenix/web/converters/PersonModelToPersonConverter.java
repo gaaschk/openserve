@@ -1,17 +1,19 @@
-package org.gsoft.phoenix.web.controller.addloan.model;
+package org.gsoft.phoenix.web.converters;
 
 import javax.annotation.Resource;
 
 import org.gsoft.phoenix.domain.Person;
 import org.gsoft.phoenix.service.PersonService;
+import org.gsoft.phoenix.web.models.PersonModel;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PersonModelConverter {
+public class PersonModelToPersonConverter implements Converter<PersonModel, Person>{
 	@Resource
 	private PersonService personService;
 	
-	public Person convertFromModel(PersonModel model){
+	public Person convert(PersonModel model){
 		Person person = personService.findPersonBySSN(model.getSsn());
 		if(person==null)person=new Person();
 		person.setSsn(model.getSsn());
@@ -20,14 +22,4 @@ public class PersonModelConverter {
 		return person;
 	}
 	
-	public PersonModel convertToModel(Person person){
-		PersonModel model = new PersonModel();
-		if(person!=null){
-			model.setPersonID(person.getPersonID());
-			model.setSsn(person.getSsn());
-			model.setFirstName(person.getFirstName());
-			model.setLastName(person.getLastName());
-		}
-		return model;
-	}
 }

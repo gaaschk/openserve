@@ -8,12 +8,11 @@ import org.gsoft.phoenix.domain.Person;
 import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.service.PersonService;
 import org.gsoft.phoenix.service.loanentry.LoanEntryService;
-import org.gsoft.phoenix.web.controller.addloan.model.DisbursementModel;
-import org.gsoft.phoenix.web.controller.addloan.model.LoanEntryModel;
-import org.gsoft.phoenix.web.controller.addloan.model.LoanEntryModelConverter;
-import org.gsoft.phoenix.web.controller.addloan.model.PersonModel;
-import org.gsoft.phoenix.web.controller.addloan.model.PersonModelConverter;
+import org.gsoft.phoenix.web.models.DisbursementModel;
+import org.gsoft.phoenix.web.models.LoanEntryModel;
+import org.gsoft.phoenix.web.models.PersonModel;
 import org.gsoft.phoenix.web.person.PersonSearchCriteria;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,15 +20,13 @@ public class AddLoanFlowController {
 	@Resource
 	private PersonService personService;
 	@Resource
-	private PersonModelConverter personModelConverter;
-	@Resource
-	private LoanEntryModelConverter loanModelConverter;
+	private ConversionService conversionService;
 	@Resource
 	private LoanEntryService loanEntryService;
 	
 	public LoanEntryModel findPerson(PersonSearchCriteria personSearchCriteria){
 		Person person = personService.findPersonBySSN(personSearchCriteria.getSsn());
-		PersonModel newPersonModel = personModelConverter.convertToModel(person);
+		PersonModel newPersonModel = conversionService.convert(person, PersonModel.class);
 		newPersonModel.setSsn(personSearchCriteria.getSsn());
 		LoanEntryModel loanModel = new LoanEntryModel();
 		loanModel.setNewDisbursement(new DisbursementModel());
@@ -45,7 +42,7 @@ public class AddLoanFlowController {
 	}
 	
 	public Long saveLoan(LoanEntryModel loanModel){
-		Loan newLoanDoc = loanModelConverter.convertFromModel(loanModel);
+		Loan newLoanDoc = conversionService.convert(loanModel, Loan.class);
 		Loan loan = loanEntryService.addNewLoan(newLoanDoc,loanModel.getEffectiveDate());
 		return loan.getLoanID();
 	}

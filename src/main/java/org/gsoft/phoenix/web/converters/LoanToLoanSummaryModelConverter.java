@@ -1,11 +1,13 @@
-package org.gsoft.phoenix.web.controller.accountsummary.model;
+package org.gsoft.phoenix.web.converters;
 
 import org.gsoft.phoenix.domain.loan.Loan;
+import org.gsoft.phoenix.web.models.LoanSummaryModel;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LoanSummaryModelConverter {
-	public LoanSummaryModel convertToModel(Loan loan){
+public class LoanToLoanSummaryModelConverter implements Converter<Loan, LoanSummaryModel>{
+	public LoanSummaryModel convert(Loan loan){
 		LoanSummaryModel model = new LoanSummaryModel();
 		model.setLoanID(loan.getLoanID());
 		model.setLoanType(loan.getLoanType());
