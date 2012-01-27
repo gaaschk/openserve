@@ -1,5 +1,6 @@
 package org.gsoft.phoenix.config;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
@@ -10,10 +11,8 @@ import org.gsoft.phoenix.web.controller.social.CustomConnectController;
 import org.gsoft.phoenix.web.controller.social.CustomProviderSignInController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.encrypt.Encryptors;
@@ -34,24 +33,27 @@ import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 @Configuration
-@PropertySource({"classpath:/phoenix/ci.application.properties","classpath:/phoenix/application.properties"})
 public class SocialConfig {
 
 	@Inject
-	private Environment environment;
-
-	@Inject
 	private DataSource dataSource;
-	
+	@Resource(name="twitter.consumerKey")
+	private String twitterConsumerKey;
+	@Resource(name="twitter.consumerSecret")
+	private String twitterConsumerSecret;
+	@Resource(name="facebook.clientId")
+	private String facebookClientId;
+	@Resource(name="facebook.clientSecret")
+	private String facebookClientSecret;
+	@Resource(name="facebook.redirectUrl")
+	private String facebookRedirectUrl;
 
 	@Bean
 	@Scope(value="singleton", proxyMode=ScopedProxyMode.INTERFACES) 
 	public ConnectionFactoryLocator connectionFactoryLocator() {
 		ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();
-		registry.addConnectionFactory(new TwitterConnectionFactory(environment.getProperty("twitter.consumerKey"),
-				environment.getProperty("twitter.consumerSecret")));
-		registry.addConnectionFactory(new FacebookConnectionFactory(environment.getProperty("facebook.clientId"),
-				environment.getProperty("facebook.clientSecret")));
+		registry.addConnectionFactory(new TwitterConnectionFactory(twitterConsumerKey,twitterConsumerSecret));
+		registry.addConnectionFactory(new FacebookConnectionFactory(facebookClientId,facebookClientSecret));
 		return registry;
 	}
 
@@ -96,7 +98,7 @@ public class SocialConfig {
 	@Bean
 	public ProviderSignInController providerSignInController(RequestCache requestCache) {
 		ProviderSignInController controller = new CustomProviderSignInController(connectionFactoryLocator(), usersConnectionRepository(), new SocialSignInAdapter(requestCache));
-		controller.setApplicationUrl(environment.getProperty("facebook.redirectUrl"));
+		controller.setApplicationUrl(facebookRedirectUrl);
 		return controller;
 	}
 
