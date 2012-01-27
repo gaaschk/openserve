@@ -11,6 +11,7 @@ import org.gsoft.phoenix.service.AccountSummaryService;
 import org.gsoft.phoenix.web.models.LoanDetailModel;
 import org.gsoft.phoenix.web.models.LoanEventModel;
 import org.gsoft.phoenix.web.models.LoanFinancialDataModel;
+import org.joda.time.DateTime;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetai
 		finModel.setCurrentInterest(loan.getCurrentInterest());
 		finModel.setCurrentFees(loan.getCurrentFees());
 		finModel.setMinimumPaymentAmount(loan.getMinimumPaymentAmount());
-		finModel.setNextDueDate(loan.getNextDueDate());
+		finModel.setNextDueDate(new DateTime(loan.getInitialDueDate()).plusMonths(loan.getUsedLoanTerm()).toDate());
 		finModel.setLastPaidDate(loan.getLastPaidDate());
 		finModel.setRepaymentStartDate(loan.getRepaymentStartDate());
 		finModel.setFirstDueDate(loan.getFirstDueDate());

@@ -27,6 +27,7 @@ public class AddLoanFlowController {
 	public LoanEntryModel findPerson(PersonSearchCriteria personSearchCriteria){
 		Person person = personService.findPersonBySSN(personSearchCriteria.getSsn());
 		PersonModel newPersonModel = conversionService.convert(person, PersonModel.class);
+		if(newPersonModel == null)newPersonModel = new PersonModel();
 		newPersonModel.setSsn(personSearchCriteria.getSsn());
 		LoanEntryModel loanModel = new LoanEntryModel();
 		loanModel.setNewDisbursement(new DisbursementModel());

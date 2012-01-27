@@ -14,6 +14,6 @@ public class RemainingTermCalculator {
 	
 	public void updateRemainingLoanTerm(Loan loan){
 		LoanTypeProfile ltp = loanTypeProfileRepository.findOne(loan.getEffectiveLoanTypeProfileID());
-		loan.setRemainingLoanTerm(ltp.getMaximumLoanTerm());
+		loan.setStartingLoanTerm(ltp.getMaximumLoanTerm());
 	}
 }

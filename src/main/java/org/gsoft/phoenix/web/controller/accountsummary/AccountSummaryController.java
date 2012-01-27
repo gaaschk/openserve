@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequestMapping("accountsummary")
 public class AccountSummaryController {
 	@Resource
 	private PersonService personService;
@@ -32,7 +33,7 @@ public class AccountSummaryController {
 		return conversionService.convert(borrower, AccountSummaryModel.class);
 	}
 	
-	@RequestMapping(value="accountsummary/loandetail.do", method=RequestMethod.GET)
+	@RequestMapping(value="/loandetail.do", method=RequestMethod.GET)
 	public ModelAndView showLoanDetail(@RequestParam("loandetailid") String loanid, ModelAndView model){
 		Loan theLoan = accountSummaryService.getLoanByID(new Long(loanid));
 		LoanDetailModel loanDetailModel = conversionService.convert(theLoan, LoanDetailModel.class);
@@ -40,7 +41,7 @@ public class AccountSummaryController {
 		return model;
 	}
 
-	@RequestMapping(value="accountsummary/paymentdetail.do", method=RequestMethod.GET)
+	@RequestMapping(value="/paymentdetail.do", method=RequestMethod.GET)
 	public ModelAndView showPaymentDetail(@RequestParam("paymentdetailid") String paymentid, ModelAndView model){
 		Payment thePayment = accountSummaryService.getPaymentByPaymentID(new Long(paymentid));
 		PaymentModel paymentModel = conversionService.convert(thePayment, PaymentModel.class);

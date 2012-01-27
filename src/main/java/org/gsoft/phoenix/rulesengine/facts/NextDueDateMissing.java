@@ -31,7 +31,7 @@ public class NextDueDateMissing extends AbstractFact{
 
 	@Override
 	protected boolean evaluate() {
-		return this.getLoan().getNextDueDate() == null;
+		return this.getLoan().getCurrentUnpaidDueDate() == null;
 	}
 	
 }

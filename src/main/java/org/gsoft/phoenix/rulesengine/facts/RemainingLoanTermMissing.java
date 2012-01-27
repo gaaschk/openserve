@@ -31,7 +31,7 @@ public class RemainingLoanTermMissing extends AbstractFact{
 
 	@Override
 	protected boolean evaluate() {
-		return this.getLoan().getRemainingLoanTerm() == null;
+		return this.getLoan().getStartingLoanTerm() == null;
 	}
 	
 }

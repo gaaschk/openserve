@@ -30,10 +30,10 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 	
 	class DueDateComparator implements Comparator<Loan>{
 		public int compare(Loan arg0, Loan arg1) {
-			if(arg0.getNextDueDate() == null && arg1.getNextDueDate() == null)
+			if(arg0.getCurrentUnpaidDueDate() == null && arg1.getCurrentUnpaidDueDate() == null)
 				return 0;
-			if(arg0.getNextDueDate()!=null)return arg0.getNextDueDate().compareTo(arg1.getNextDueDate());
-			return arg1.getNextDueDate().compareTo(arg0.getNextDueDate())*-1;
+			if(arg0.getCurrentUnpaidDueDate()!=null)return arg0.getCurrentUnpaidDueDate().compareTo(arg1.getCurrentUnpaidDueDate());
+			return arg1.getCurrentUnpaidDueDate().compareTo(arg0.getCurrentUnpaidDueDate())*-1;
 		}
 	}
 }

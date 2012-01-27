@@ -27,21 +27,21 @@ public class NextDueDateCalculator {
 	private SystemSettingsLogic systemSettings;
 	
 	public void updateNextDueDate(Loan loan){
-		loan.setNextDueDate(loan.getInitialDueDate());
+		loan.setCurrentUnpaidDueDate(loan.getInitialDueDate());
 		LoanTypeProfile ltp = loanTypeProfileRepository.findOne(loan.getEffectiveLoanTypeProfileID());
 		List<LoanEvent> paymentsForLoan = loanEventRepository.findAllLoanEventsOfTypeForLoan(loan.getLoanID(), LoanEventType.PAYMENT_APPLIED);
 		Collections.reverse(paymentsForLoan);
 		BigDecimal accumulatedPaymentAmount = BigDecimal.ZERO;
 		for(LoanEvent paymentEvent:paymentsForLoan){
-			if(!new DateTime(loan.getNextDueDate()).minusDays(ltp.getPrepaymentDays()).toDate().before(systemSettings.getCurrentSystemDate()))
+			if(!new DateTime(loan.getCurrentUnpaidDueDate()).minusDays(ltp.getPrepaymentDays()).toDate().before(systemSettings.getCurrentSystemDate()))
 				break;
-			if(!paymentEvent.getEffectiveDate().before(new DateTime(loan.getNextDueDate()).minusDays(ltp.getPrepaymentDays()).toDate())){
+			if(!paymentEvent.getEffectiveDate().before(new DateTime(loan.getCurrentUnpaidDueDate()).minusDays(ltp.getPrepaymentDays()).toDate())){
 				accumulatedPaymentAmount = accumulatedPaymentAmount.add(paymentEvent.getLoanTransaction().getTransactionNetAmount().negate());
 				if(accumulatedPaymentAmount.compareTo(new BigDecimal(loan.getMinimumPaymentAmount())) >= 0){
 					int monthsToAdvance = accumulatedPaymentAmount.divideToIntegralValue(new BigDecimal(loan.getMinimumPaymentAmount())).intValue();
-					int monthsToCurrent = Months.monthsBetween(new DateTime(loan.getNextDueDate()), new DateTime(systemSettings.getCurrentSystemDate()).plusDays(ltp.getPrepaymentDays())).getMonths();
+					int monthsToCurrent = Months.monthsBetween(new DateTime(loan.getCurrentUnpaidDueDate()), new DateTime(systemSettings.getCurrentSystemDate()).plusDays(ltp.getPrepaymentDays())).getMonths();
 					monthsToAdvance = (monthsToAdvance <= monthsToCurrent)?monthsToAdvance:monthsToCurrent;
-					loan.setNextDueDate(new DateTime(loan.getInitialDueDate()).plusMonths(monthsToAdvance).toDate());
+					loan.setCurrentUnpaidDueDate(new DateTime(loan.getInitialDueDate()).plusMonths(monthsToAdvance).toDate());
 					accumulatedPaymentAmount = accumulatedPaymentAmount.subtract(new BigDecimal(monthsToAdvance*loan.getMinimumPaymentAmount()));
 				}
 			}

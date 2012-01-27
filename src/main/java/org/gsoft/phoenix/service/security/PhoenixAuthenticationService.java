@@ -28,11 +28,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class PhoenixAuthenticationService extends AbstractUserDetailsAuthenticationProvider{
 	@Resource
 	private SystemUserRepository systemUserRepository;
-	
+
 	@Override
 	protected void additionalAuthenticationChecks(UserDetails userDetails,
 			UsernamePasswordAuthenticationToken authentication)
 			throws AuthenticationException {
+		if(authentication instanceof SkipCheckUsernamePasswordAuthenticationToken)
+			return;
 		String clearPass = (String)authentication.getCredentials();
 		MessageDigest passwordHasher;
 		try {
@@ -49,6 +51,10 @@ public class PhoenixAuthenticationService extends AbstractUserDetailsAuthenticat
 	protected UserDetails retrieveUser(String username,
 			UsernamePasswordAuthenticationToken authentication)
 			throws AuthenticationException {
+		return this.getUserDetails(username);
+	}
+
+	public UserDetails getUserDetails(String username){
 		SystemUser systemUser = systemUserRepository.findByUsername(username);
 		if(systemUser == null)throw new UsernameNotFoundException("User not found.");
 		List<Permission> permissions = systemUserRepository.findAllPermissionsForUser(username);

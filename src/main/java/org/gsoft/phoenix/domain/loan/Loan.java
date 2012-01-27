@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import org.gsoft.phoenix.buslogic.system.SystemSettingsLogic;
 import org.gsoft.phoenix.domain.Person;
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
 import org.gsoft.phoenix.repositories.loan.LoanEventRepository;
@@ -22,6 +23,8 @@ import org.gsoft.phoenix.rulesengine.annotation.RulesEngineEntity;
 import org.gsoft.phoenix.util.ApplicationContextLocator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+import org.joda.time.Months;
 
 @Entity
 @RulesEngineEntity
@@ -37,13 +40,13 @@ public class Loan extends PhoenixDomainObject{
 	private Integer currentFees;
 	private BigDecimal margin;
 	private LoanEvent lastLoanEvent;
-	private Integer remainingLoanTerm;
+	private Integer startingLoanTerm;
 	private Integer minimumPaymentAmount;
 	private Date repaymentStartDate;
 	private Date firstDueDate;
 	private Date initialDueDate;
 	private Date lastPaidDate;
-	private Date nextDueDate;
+	private Date currentUnpaidDueDate;
 	//Enumerations
 	private LoanType loanType;
 	//Relationships
@@ -126,11 +129,11 @@ public class Loan extends PhoenixDomainObject{
 		}
 		return lastLoanEvent;
 	}
-	public Integer getRemainingLoanTerm() {
-		return remainingLoanTerm;
+	public Integer getStartingLoanTerm() {
+		return startingLoanTerm;
 	}
-	public void setRemainingLoanTerm(Integer remainingLoanTerm) {
-		this.remainingLoanTerm = remainingLoanTerm;
+	public void setStartingLoanTerm(Integer startingLoanTerm) {
+		this.startingLoanTerm = startingLoanTerm;
 	}
 	public Integer getMinimumPaymentAmount() {
 		return minimumPaymentAmount;
@@ -162,11 +165,11 @@ public class Loan extends PhoenixDomainObject{
 	public void setLastPaidDate(Date lastPaidDate) {
 		this.lastPaidDate = lastPaidDate;
 	}
-	public Date getNextDueDate() {
-		return nextDueDate;
+	public Date getCurrentUnpaidDueDate() {
+		return currentUnpaidDueDate;
 	}
-	public void setNextDueDate(Date nextDueDate) {
-		this.nextDueDate = nextDueDate;
+	public void setCurrentUnpaidDueDate(Date currentUnpaidDueDate) {
+		this.currentUnpaidDueDate = currentUnpaidDueDate;
 	}
 	@OneToMany(mappedBy="loan")
 	public List<Disbursement> getDisbursements() {
@@ -184,6 +187,22 @@ public class Loan extends PhoenixDomainObject{
 		this.borrower = borrower;
 	}
 
+	@Transient
+	public Integer getUsedLoanTerm(){
+		int termPassed = 0;
+		if(this.getInitialDueDate() != null){
+			SystemSettingsLogic systemSettings = ApplicationContextLocator.getApplicationContext().getBean(SystemSettingsLogic.class);
+			termPassed = Months.monthsBetween(new DateTime(this.getInitialDueDate()), new DateTime(systemSettings.getCurrentSystemDate())).getMonths();
+		}
+		return termPassed;
+	}
+	
+	@Transient
+	public Integer getRemainingLoanTerm(){
+		if(this.getStartingLoanTerm() == null)return 0;
+		return this.getStartingLoanTerm() - this.getUsedLoanTerm();
+	}
+	
 	@Override
 	@Transient
 	public Long getID() {
