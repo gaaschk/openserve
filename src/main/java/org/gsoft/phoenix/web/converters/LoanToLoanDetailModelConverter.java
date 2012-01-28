@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.loan.LoanEvent;
 import org.gsoft.phoenix.service.AccountSummaryService;
+import org.gsoft.phoenix.web.models.LoanAmortizationModel;
 import org.gsoft.phoenix.web.models.LoanDetailModel;
 import org.gsoft.phoenix.web.models.LoanEventModel;
 import org.gsoft.phoenix.web.models.LoanFinancialDataModel;
@@ -37,6 +38,7 @@ public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetai
 		finModel.setRepaymentStartDate(loan.getRepaymentStartDate());
 		finModel.setFirstDueDate(loan.getFirstDueDate());
 		finModel.setInitialDueDate(loan.getInitialDueDate());
+		model.setCurrentAmortization(conversionService.convert(accountSummaryService.getAmortizationScheduleForLoan(loan.getLoanID()), LoanAmortizationModel.class));
 		List<LoanEvent> loanEvents = accountSummaryService.getAllLoanEventsForLoan(loan.getLoanID());
 		ArrayList<LoanEventModel> loanHistory = new ArrayList<LoanEventModel>();
 		for(LoanEvent loanEvent:loanEvents){

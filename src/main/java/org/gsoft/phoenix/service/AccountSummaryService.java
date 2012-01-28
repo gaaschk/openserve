@@ -5,9 +5,11 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.gsoft.phoenix.buslogic.loan.LoanLookupLogic;
+import org.gsoft.phoenix.domain.amortization.LoanAmortizationSchedule;
 import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.loan.LoanEvent;
 import org.gsoft.phoenix.domain.payment.Payment;
+import org.gsoft.phoenix.repositories.amortization.AmortizationScheduleRepository;
 import org.gsoft.phoenix.repositories.loan.LoanEventRepository;
 import org.gsoft.phoenix.repositories.payment.PaymentRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +25,8 @@ public class AccountSummaryService {
 	private LoanEventRepository loanEventRepository;
 	@Resource
 	private PaymentRepository paymentRepository;
+	@Resource
+	private AmortizationScheduleRepository amortizationRepository;
 	
 	@PreAuthorize("hasRole('PERM_ViewAccountSummary')")
 	public List<Loan> getAllLoansForBorrower(Long borrowerID){
@@ -48,5 +52,10 @@ public class AccountSummaryService {
 	public Payment getPaymentByPaymentID(Long paymentID){
 		Payment payment = paymentRepository.findOne(paymentID);
 		return payment;
+	}
+	
+	@PreAuthorize("hasRole('PERM_ViewAccountSummary')")
+	public LoanAmortizationSchedule getAmortizationScheduleForLoan(Long loanID){
+		return amortizationRepository.findScheduleForLoan(loanID);
 	}
 }

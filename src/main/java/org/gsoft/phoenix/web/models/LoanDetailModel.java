@@ -4,6 +4,7 @@ import java.util.List;
 
 public class LoanDetailModel {
 	private LoanFinancialDataModel loanFinancialData;
+	private LoanAmortizationModel currentAmortization;
 	private List<LoanEventModel> loanHistory;
 	
 	public LoanFinancialDataModel getLoanFinancialData() {
@@ -11,6 +12,12 @@ public class LoanDetailModel {
 	}
 	public void setLoanFinancialData(LoanFinancialDataModel loanFinancialData) {
 		this.loanFinancialData = loanFinancialData;
+	}
+	public LoanAmortizationModel getCurrentAmortization() {
+		return currentAmortization;
+	}
+	public void setCurrentAmortization(LoanAmortizationModel currentAmortization) {
+		this.currentAmortization = currentAmortization;
 	}
 	public List<LoanEventModel> getLoanHistory() {
 		return loanHistory;

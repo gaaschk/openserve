@@ -17,15 +17,23 @@ function initTabs() { $$('.tab-menu a').each(function(el) {
       /*load appropriate pane here*/ 
       if(this == $('loanfintab')){
       	$('transactionHistoryPane').fancyHide();
+      	$('amortizationSchedulePane').fancyHide();
       	$('loanFinancialPane').fancyShow();
       }
       else if(this == $('loanhisttab')){
       	$('loanFinancialPane').fancyHide();
+      	$('amortizationSchedulePane').fancyHide();
       	$('transactionHistoryPane').fancyShow();
+      }
+      else if(this == $('amortizationtab')){
+      	$('loanFinancialPane').fancyHide();
+      	$('transactionHistoryPane').fancyHide();
+      	$('amortizationSchedulePane').fancyShow();
       }
     });
   });
   $('transactionHistoryPane').fancyHide();
+  $('amortizationSchedulePane').fancyHide();
   $('loanFinancialPane').fancyShow();
 } 
 
@@ -43,6 +51,7 @@ function tabState(ael) {
 	<ul class="tab-menu" id="detailTabs">
   	  <li><a href="#" class="active" id="loanfintab"><span>Loan Detail</span></a></li>
       <li><a href="#" id="loanhisttab"><span>Transaction History</span></a></li>
+      <li><a href="#" id="amortizationtab"><span>Amortization Schedule</span></a></li>
     </ul>
 </div>
 <div class="panel" id="loanFinancialPane">
@@ -50,4 +59,7 @@ function tabState(ael) {
 </div>
 <div class="panel" id="transactionHistoryPane">
   <jsp:include page="transactionhistory.jsp"/>
+</div>
+<div class="panel" id="amortizationSchedulePane">
+  <jsp:include page="amortizationschedule.jsp"/>
 </div>
