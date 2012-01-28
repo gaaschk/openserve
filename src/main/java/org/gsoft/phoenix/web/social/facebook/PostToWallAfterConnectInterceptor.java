@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gsoft.phoenix.social.facebook;
+package org.gsoft.phoenix.web.social.facebook;
 
 import org.springframework.social.ApiException;
 import org.springframework.social.connect.Connection;

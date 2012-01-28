@@ -1,20 +1,19 @@
 package org.gsoft.phoenix.service.security;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.codec.binary.Hex;
 import org.gsoft.phoenix.domain.security.Permission;
+import org.gsoft.phoenix.domain.security.SystemRole;
 import org.gsoft.phoenix.domain.security.SystemUser;
+import org.gsoft.phoenix.repositories.security.SystemRoleRepository;
 import org.gsoft.phoenix.repositories.security.SystemUserRepository;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -23,11 +22,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Service("systemUserManagementService")
 @Transactional(readOnly=true)
-public class PhoenixAuthenticationService extends AbstractUserDetailsAuthenticationProvider{
+public class UserManagementService extends AbstractUserDetailsAuthenticationProvider implements SystemUserManagementService{
 	@Resource
 	private SystemUserRepository systemUserRepository;
+	@Resource
+	private SystemRoleRepository systemRoleRepository;
+	
 
 	@Override
 	protected void additionalAuthenticationChecks(UserDetails userDetails,
@@ -35,14 +37,9 @@ public class PhoenixAuthenticationService extends AbstractUserDetailsAuthenticat
 			throws AuthenticationException {
 		if(authentication instanceof SkipCheckUsernamePasswordAuthenticationToken)
 			return;
+		SystemUser theUser = systemUserRepository.findByUsername(userDetails.getUsername());
 		String clearPass = (String)authentication.getCredentials();
-		MessageDigest passwordHasher;
-		try {
-			passwordHasher = MessageDigest.getInstance("MD5");
-		} catch (NoSuchAlgorithmException e) {
-			throw new AuthenticationServiceException("Unable to initial password hasher. ", e);
-		}
-		String hashedPass = Hex.encodeHexString(passwordHasher.digest(clearPass.getBytes()));
+		String hashedPass = new Md5PasswordEncoder().encodePassword(clearPass, theUser.getPasswordSalt());
 		if(!userDetails.getPassword().equals(hashedPass))
 			throw new BadCredentialsException("Invalid Password");
 	}
@@ -64,5 +61,18 @@ public class PhoenixAuthenticationService extends AbstractUserDetailsAuthenticat
 		}
 		User user = new User(systemUser.getUsername().trim(),systemUser.getPassword().trim(),authorities);
 		return user;
+	}
+	
+	@Transactional
+	public SystemUser registerNewUser(SystemUser newUser){
+		if("admin".equalsIgnoreCase(newUser.getUsername())){
+			List<SystemRole> roles = newUser.getAssignedRoles();
+			if(roles == null){
+				roles = new ArrayList<SystemRole>();
+				newUser.setAssignedRoles(roles);
+			}
+			roles.add(systemRoleRepository.findRoleByRoleName("admin"));
+		}
+		return this.systemUserRepository.save(newUser);
 	}
 }

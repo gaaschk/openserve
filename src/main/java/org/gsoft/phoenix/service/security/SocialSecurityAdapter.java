@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.gsoft.phoenix.domain.security.SystemUser;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
 
 @Service
-public class SocialSignInAdapter implements SignInAdapter{
+public class SocialSecurityAdapter implements SignInAdapter{
 	@Resource
 	private ApplicationContext applicationContext;
 	
@@ -26,18 +27,27 @@ public class SocialSignInAdapter implements SignInAdapter{
 	
 	
 	@Inject
-	public SocialSignInAdapter(RequestCache requestCache) {
+	public SocialSecurityAdapter(RequestCache requestCache) {
 		this.requestCache = requestCache;
 	}
 
 	@Override
 	public String signIn(final String localUserId, Connection<?> connection, NativeWebRequest request) {
+		this.signIn(localUserId);
+		return extractOriginalUrl(request);
+	}
+	
+	public void signIn(final String localUserId){
 		Object objAuthServ = applicationContext.getBean("authenticationManager");
 		final AuthenticationManager authServ = (AuthenticationManager)objAuthServ;
 		SecurityContextHolder.getContext().setAuthentication(authServ.authenticate(new SkipCheckUsernamePasswordAuthenticationToken(localUserId)));
-		return extractOriginalUrl(request);
 	}
 
+	public SystemUser registerNewUser(SystemUser newUser){
+		SystemUserManagementService userService = (SystemUserManagementService)applicationContext.getBean("systemUserManagementService");
+		return userService.registerNewUser(newUser);
+	}
+	
 	private String extractOriginalUrl(NativeWebRequest request) {
 		HttpServletRequest nativeReq = request.getNativeRequest(HttpServletRequest.class);
 		HttpServletResponse nativeRes = request.getNativeResponse(HttpServletResponse.class);

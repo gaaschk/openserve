@@ -14,6 +14,6 @@
 	</security:http>
 
 	<security:authentication-manager alias="authenticationManager">
-		<security:authentication-provider ref="phoenixAuthenticationService"/>
+		<security:authentication-provider ref="systemUserManagementService"/>
 	</security:authentication-manager>
 </beans:beans>

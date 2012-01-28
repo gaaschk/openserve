@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="SecSystemUser")
@@ -41,5 +42,10 @@ public class SystemUser extends Principal{
 	}
 	public void setAssignedRoles(List<SystemRole> assignedRoles) {
 		this.assignedRoles = assignedRoles;
+	}
+	
+	@Transient
+	public String getPasswordSalt(){
+		return this.getUsername();
 	}
 }

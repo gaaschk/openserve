@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gsoft.phoenix.social.twitter;
+package org.gsoft.phoenix.web.social.twitter;
 
 import org.springframework.social.DuplicateStatusException;
 import org.springframework.social.connect.Connection;

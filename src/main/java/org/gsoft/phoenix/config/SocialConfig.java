@@ -4,11 +4,11 @@ import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
-import org.gsoft.phoenix.service.security.SocialSignInAdapter;
-import org.gsoft.phoenix.social.facebook.PostToWallAfterConnectInterceptor;
-import org.gsoft.phoenix.social.twitter.TweetAfterConnectInterceptor;
+import org.gsoft.phoenix.service.security.SocialSecurityAdapter;
 import org.gsoft.phoenix.web.controller.social.CustomConnectController;
 import org.gsoft.phoenix.web.controller.social.CustomProviderSignInController;
+import org.gsoft.phoenix.web.social.facebook.PostToWallAfterConnectInterceptor;
+import org.gsoft.phoenix.web.social.twitter.TweetAfterConnectInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -97,7 +97,7 @@ public class SocialConfig {
 
 	@Bean
 	public ProviderSignInController providerSignInController(RequestCache requestCache) {
-		ProviderSignInController controller = new CustomProviderSignInController(connectionFactoryLocator(), usersConnectionRepository(), new SocialSignInAdapter(requestCache));
+		ProviderSignInController controller = new CustomProviderSignInController(connectionFactoryLocator(), usersConnectionRepository(), new SocialSecurityAdapter(requestCache));
 		controller.setApplicationUrl(facebookRedirectUrl);
 		return controller;
 	}
