@@ -36,7 +36,7 @@ public class CustomProviderSignInController extends ProviderSignInController {
 	@RequestMapping(value="/{providerId}", method=RequestMethod.POST)
 	public RedirectView signIn(@PathVariable String providerId, NativeWebRequest request) {
 		return super.signIn(providerId, request);
-	}
+ 	}
 
 	@Override
 	@RequestMapping(value="/{providerId}", method=RequestMethod.GET, params="oauth_token")

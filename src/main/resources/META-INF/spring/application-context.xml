@@ -28,7 +28,7 @@
 		<constructor-arg value="${facebook.clientId}"></constructor-arg>
 	</bean>
 	<bean id="facebook.clientSecret" class="java.lang.String">
-		<constructor-arg value="{facebook.clientSecret}"></constructor-arg>
+		<constructor-arg value="${facebook.clientSecret}"></constructor-arg>
 	</bean>
 	<bean id="twitter.consumerKey" class="java.lang.String">
 		<constructor-arg value="${twitter.consumerKey}"></constructor-arg>

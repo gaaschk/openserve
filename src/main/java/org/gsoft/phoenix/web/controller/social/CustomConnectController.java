@@ -2,6 +2,8 @@ package org.gsoft.phoenix.web.controller.social;
 
 import javax.inject.Inject;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.web.ConnectController;
@@ -16,7 +18,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 @RequestMapping("connect")
 public class CustomConnectController extends ConnectController {
-
+	
 	@Inject
 	public CustomConnectController(
 			ConnectionFactoryLocator connectionFactoryLocator,
@@ -33,6 +35,9 @@ public class CustomConnectController extends ConnectController {
 	@Override
 	@RequestMapping(value="/{providerId}", method=RequestMethod.GET)
 	public String connectionStatus(@PathVariable String providerId, NativeWebRequest request, Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if(auth==null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser"))
+			return "redirect:/web/signin";
 		return super.connectionStatus(providerId, request, model);
 	}
 
