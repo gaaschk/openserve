@@ -55,7 +55,7 @@ insert into SecPrincipal(Name, Active) values ('Admin User', 1);
 
 select (@userid:=PrincipalID) from SecPrincipal where Name = 'Admin User';
 
-insert into SecSystemUser (PrincipalID, Username, Password, LockedOut, LastSuccessfullLogin) values (@userid, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99', 0, curdate());
+insert into SecSystemUser (PrincipalID, Username, Password, LockedOut, LastSuccessfullLogin) values (@userid, 'admin', '1b771698e9d4723bfd35818165db49b7', 0, curdate());
 
 insert into SecPrincipal(Name, Active) values ('Admin Role', 1);
 
