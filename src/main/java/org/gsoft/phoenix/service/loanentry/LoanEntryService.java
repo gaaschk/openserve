@@ -33,7 +33,7 @@ public class LoanEntryService {
 	@RunRulesEngine
 	public Loan addNewLoan(Loan newLoan, Date effectiveDate){
 		newLoan.setMargin(new BigDecimal(0));
-		newLoan = maintainLoanLogic.addNewLoan(newLoan, effectiveDate);
+		newLoan = maintainLoanLogic.addNewLoan(newLoan);
 		return newLoan;
 	}
 }

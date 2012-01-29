@@ -24,7 +24,7 @@ public class BatchProcessingService {
 	
 	@RunRulesEngine
 	@Transactional
-	public Loan runBatchProcesses(Loan loan){
-		return loan;
+	public void runBatchProcesses(Long loanID){
+		loanRepository.findOne(loanID);
 	}
 }

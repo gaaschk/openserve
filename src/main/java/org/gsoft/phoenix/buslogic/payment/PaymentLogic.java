@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.gsoft.phoenix.buslogic.loan.LoanLookupLogic;
 import org.gsoft.phoenix.buslogic.loanevent.LoanEventLogic;
 import org.gsoft.phoenix.buslogic.payment.allocation.DefaultPaymentAllocationLogic;
 import org.gsoft.phoenix.buslogic.repayment.NextDueDateCalculator;
@@ -32,8 +31,6 @@ public class PaymentLogic {
 	@Resource
 	private LoanEventLogic loanEventLogic;
 	@Resource
-	private LoanLookupLogic loanLookupLogic;
-	@Resource
 	private NextDueDateCalculator nextDueCalculator;
 	
 	public void applyPayment(long borrowerPersonID, int amount, Date effectiveDate){
@@ -43,7 +40,7 @@ public class PaymentLogic {
 		payment.setPaymentAmount(amount);
 		payment.setBorrowerPersonID(borrowerPersonID);
 		
-		List<Loan> loans = loanLookupLogic.getAllLoansForBorrower(borrowerPersonID);
+		List<Loan> loans = loanRepository.findAllLoansByBorrowerPersonIDActiveOnOrBeforeDate(borrowerPersonID, effectiveDate);
 		paymentAllocationLogic.allocatePayment(payment, loans);
 		payment = paymentRepository.save(payment);
 		

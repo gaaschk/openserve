@@ -4,13 +4,13 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.gsoft.phoenix.buslogic.loan.LoanLookupLogic;
 import org.gsoft.phoenix.domain.amortization.LoanAmortizationSchedule;
 import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.loan.LoanEvent;
 import org.gsoft.phoenix.domain.payment.Payment;
 import org.gsoft.phoenix.repositories.amortization.AmortizationScheduleRepository;
 import org.gsoft.phoenix.repositories.loan.LoanEventRepository;
+import org.gsoft.phoenix.repositories.loan.LoanRepository;
 import org.gsoft.phoenix.repositories.payment.PaymentRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly=true)
 public class AccountSummaryService {
 	@Resource
-	private LoanLookupLogic loanLookupLogic;
+	private LoanRepository loanRepository;
 	@Resource
 	private LoanEventRepository loanEventRepository;
 	@Resource
@@ -30,12 +30,12 @@ public class AccountSummaryService {
 	
 	@PreAuthorize("hasRole('PERM_ViewAccountSummary')")
 	public List<Loan> getAllLoansForBorrower(Long borrowerID){
-		return loanLookupLogic.getAllLoansForBorrower(borrowerID);
+		return loanRepository.findAllLoansByBorrowerPersonID(borrowerID);
 	}
 	
 	@PreAuthorize("hasRole('PERM_ViewAccountSummary')")
 	public Loan getLoanByID(Long loanID){
-		return loanLookupLogic.getLoanByID(loanID);
+		return loanRepository.findOne(loanID);
 	}
 	
 	@PreAuthorize("hasRole('PERM_ViewAccountSummary')")

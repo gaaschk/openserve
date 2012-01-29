@@ -20,6 +20,7 @@ public class LoanEntryModelToLoanConverter implements Converter<LoanEntryModel, 
 	
 	public Loan convert(LoanEntryModel loanModel){
 		Loan newLoan = new Loan();
+		newLoan.setServicingStartDate(loanModel.getEffectiveDate());
 		newLoan.setLoanType(loanModel.getLoanType());
 		Person person = conversionService.convert(loanModel.getPerson(), Person.class);
 		newLoan.setBorrower(person);

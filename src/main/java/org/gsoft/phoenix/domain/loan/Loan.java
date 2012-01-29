@@ -31,6 +31,7 @@ import org.joda.time.Months;
 public class Loan extends PhoenixDomainObject{
 	private static final long serialVersionUID = 7541874847320220624L;
 	private Long loanID;
+	private Date servicingStartDate;
 	private Long effectiveLoanTypeProfileID;
 	private Integer startingPrincipal;
 	private BigDecimal startingInterest;
@@ -60,6 +61,12 @@ public class Loan extends PhoenixDomainObject{
 	}
 	public void setLoanID(Long loanID) {
 		this.loanID = loanID;
+	}
+	public Date getServicingStartDate() {
+		return servicingStartDate;
+	}
+	public void setServicingStartDate(Date servicingStartDate) {
+		this.servicingStartDate = servicingStartDate;
 	}
 	@Type( type = "org.gsoft.phoenix.util.jpa.GenericEnumUserType", parameters={
 			@Parameter(name = "enumClass", value = "org.gsoft.phoenix.domain.loan.LoanType")
@@ -201,6 +208,11 @@ public class Loan extends PhoenixDomainObject{
 	public Integer getRemainingLoanTerm(){
 		if(this.getStartingLoanTerm() == null)return 0;
 		return this.getStartingLoanTerm() - this.getUsedLoanTerm();
+	}
+	
+	@Transient
+	public Integer getTotalBalance(){
+		return this.getCurrentPrincipal() + this.getCurrentFees() + this.getCurrentInterest().intValue();
 	}
 	
 	@Override
