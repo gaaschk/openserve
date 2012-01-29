@@ -48,6 +48,7 @@ public class Loan extends PhoenixDomainObject{
 	private Date initialDueDate;
 	private Date lastPaidDate;
 	private Date currentUnpaidDueDate;
+	private Date nextDueDate;
 	//Enumerations
 	private LoanType loanType;
 	//Relationships
@@ -178,6 +179,21 @@ public class Loan extends PhoenixDomainObject{
 	public void setCurrentUnpaidDueDate(Date currentUnpaidDueDate) {
 		this.currentUnpaidDueDate = currentUnpaidDueDate;
 	}
+	@Transient
+	public Date getNextDueDate() {
+		if(this.nextDueDate == null){
+			this.nextDueDate = this.getCurrentUnpaidDueDate();
+			SystemSettingsLogic systemSettings = ApplicationContextLocator.getApplicationContext().getBean(SystemSettingsLogic.class);
+			DateTime systemDate = new DateTime(systemSettings.getCurrentSystemDate());
+			if(this.getCurrentUnpaidDueDate().before(systemDate.toDate())){
+				nextDueDate = new DateTime(nextDueDate).plusMonths(this.getUsedLoanTerm()).toDate();
+			}
+		}
+		return nextDueDate;
+	}
+	public void setNextDueDate(Date nextDueDate) {
+		this.nextDueDate = nextDueDate;
+	}
 	@OneToMany(mappedBy="loan")
 	public List<Disbursement> getDisbursements() {
 		return disbursements;
@@ -199,7 +215,8 @@ public class Loan extends PhoenixDomainObject{
 		int termPassed = 0;
 		if(this.getInitialDueDate() != null){
 			SystemSettingsLogic systemSettings = ApplicationContextLocator.getApplicationContext().getBean(SystemSettingsLogic.class);
-			termPassed = Months.monthsBetween(new DateTime(this.getInitialDueDate()), new DateTime(systemSettings.getCurrentSystemDate())).getMonths();
+			if(this.getInitialDueDate().before(systemSettings.getCurrentSystemDate()))
+				termPassed = Months.monthsBetween(new DateTime(this.getInitialDueDate()), new DateTime(systemSettings.getCurrentSystemDate())).getMonths();
 		}
 		return termPassed;
 	}
