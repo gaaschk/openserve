@@ -19,6 +19,7 @@ public class LoanFactory {
 	
 	public Loan getLoanByID(int testLoanID){
 		Loan newLoan = new Loan();
+		newLoan.setServicingStartDate(new Date());
 		newLoan.setLoanType(LoanType.MORTGAGE);
 		newLoan.setDisbursements(new ArrayList<Disbursement>());
 		Disbursement disb = new Disbursement();
