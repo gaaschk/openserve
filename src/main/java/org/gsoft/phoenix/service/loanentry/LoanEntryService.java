@@ -1,12 +1,11 @@
 package org.gsoft.phoenix.service.loanentry;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import javax.annotation.Resource;
 
+import org.gsoft.phoenix.buslogic.interest.LoanInterestRateFactory;
 import org.gsoft.phoenix.buslogic.loan.AddLoanLogic;
-import org.gsoft.phoenix.buslogic.system.SystemSettingsLogic;
 import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.rulesengine.annotation.RunRulesEngine;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,20 +18,15 @@ public class LoanEntryService {
 	@Resource
 	private AddLoanLogic maintainLoanLogic;
 	@Resource
-	private SystemSettingsLogic systemSettingsLogic;
+	private LoanInterestRateFactory interestFactory;
+
 	
 	@PreAuthorize("hasRole('PERM_AddLoan')")
 	@Transactional
 	@RunRulesEngine
 	public Loan addNewLoan(Loan newLoan){
-		return this.addNewLoan(newLoan, systemSettingsLogic.getCurrentSystemDate());
-	}
-
-	@PreAuthorize("hasRole('PERM_AddLoan')")
-	@Transactional
-	@RunRulesEngine
-	public Loan addNewLoan(Loan newLoan, Date effectiveDate){
 		newLoan.setMargin(new BigDecimal(0));
+		newLoan.setBaseRate(interestFactory.getBaseRateForLoan(newLoan));
 		newLoan = maintainLoanLogic.addNewLoan(newLoan);
 		return newLoan;
 	}

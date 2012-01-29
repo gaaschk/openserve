@@ -1,6 +1,7 @@
 package org.gsoft.phoenix.domain.loan;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import org.gsoft.phoenix.util.ApplicationContextLocator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.Months;
 
 @Entity
@@ -40,6 +42,8 @@ public class Loan extends PhoenixDomainObject{
 	private BigDecimal currentInterest;
 	private Integer currentFees;
 	private BigDecimal margin;
+	private BigDecimal baseRate;
+	
 	private LoanEvent lastLoanEvent;
 	private Integer startingLoanTerm;
 	private Integer minimumPaymentAmount;
@@ -114,6 +118,10 @@ public class Loan extends PhoenixDomainObject{
 	public BigDecimal getCurrentInterest() {
 		if(currentInterest == null && this.getLastLoanEvent() != null){
 			this.currentInterest = this.getLastLoanEvent().getLoanTransaction().getEndingInterest();
+			SystemSettingsLogic systemSettings = ApplicationContextLocator.getApplicationContext().getBean(SystemSettingsLogic.class);
+			DateTime systemDate = new DateTime(systemSettings.getCurrentSystemDate());
+			int days = Days.daysBetween(new DateTime(this.getLastLoanEvent().getEffectiveDate()), systemDate).getDays();
+			this.currentInterest = this.currentInterest.add(this.getDailyInterestAmount().multiply(new BigDecimal(days)));
 		}
 		return currentInterest;
 	}
@@ -129,6 +137,12 @@ public class Loan extends PhoenixDomainObject{
 	}
 	public void setMargin(BigDecimal margin) {
 		this.margin = margin;
+	}
+	public BigDecimal getBaseRate() {
+		return baseRate;
+	}
+	public void setBaseRate(BigDecimal baseRate) {
+		this.baseRate = baseRate;
 	}
 	@Transient
 	public LoanEvent getLastLoanEvent() {
@@ -230,6 +244,11 @@ public class Loan extends PhoenixDomainObject{
 	@Transient
 	public Integer getTotalBalance(){
 		return this.getCurrentPrincipal() + this.getCurrentFees() + this.getCurrentInterest().intValue();
+	}
+	
+	@Transient
+	public BigDecimal getDailyInterestAmount(){
+		return this.getBaseRate().add(this.getMargin()).divide(new BigDecimal(365.25),6, RoundingMode.HALF_EVEN).multiply(new BigDecimal(this.getCurrentPrincipal()));
 	}
 	
 	@Override
