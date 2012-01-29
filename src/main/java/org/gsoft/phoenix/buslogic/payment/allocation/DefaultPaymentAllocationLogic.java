@@ -45,9 +45,10 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 		public void resort();
 		public List<LoanPayment> getLoanPayments();
 		public int size();
+		public String getID();
 	}
 	
-	private class LoanAllocation implements SyncedAllocation{
+	private class LoanAllocation implements SyncedAllocation, Comparable<SyncedAllocation>{
 		private Loan loan;
 		private int amountAllocated = 0;
 		private LoanTypeProfile loanTypeProfile;
@@ -92,6 +93,30 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 			return loanPayments;
 		}
 		public int size(){return 1;}
+
+		@Override
+		public int compareTo(SyncedAllocation arg1) {
+			if(this.getCurrentDueDate() == null && arg1.getCurrentDueDate() == null)
+				return 0;
+			if(this.getCurrentDueDate()==null)return 1;
+			if(arg1.getCurrentDueDate()==null)return -1;
+			int dateCompVal = this.getCurrentDueDate().compareTo(arg1.getCurrentDueDate());
+			if(dateCompVal == 0){
+				return this.getID().compareTo(arg1.getID());
+			}
+			return dateCompVal;
+		}
+		
+		@Override
+		public boolean equals(Object obj){
+			if(!(obj instanceof LoanAllocation))return false;
+			return this.getID().equals(((LoanAllocation)obj).getID());
+		}
+		
+		@Override
+		public String getID(){
+			return ""+this.loan.getLoanID();
+		}
 	}
 	
 	private class LoanAllocationGroup implements SyncedAllocation, Comparable<SyncedAllocation>{
@@ -166,7 +191,9 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 			else{
 				int allocatedAmount = 0;
 				for(SyncedAllocation allocation:this.getAllocations()){
-					int amountToAllocatHere = (int)((allocation.getAmountNeededToAdvance()/this.getAmountNeededToAdvance())*amountToAllocate);
+					long allocationAmtToAdv = allocation.getAmountNeededToAdvance();
+					long totalAmtToAdv = this.getAmountNeededToAdvance();
+					int amountToAllocatHere = (int)((allocationAmtToAdv*(long)amountToAllocate)/totalAmtToAdv);
 					allocation.allocateAmount(amountToAllocatHere);
 					allocatedAmount += amountToAllocatHere;
 				}
@@ -202,14 +229,32 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 				return 0;
 			if(this.getCurrentDueDate()==null)return 1;
 			if(arg1.getCurrentDueDate()==null)return -1;
-			return this.getCurrentDueDate().compareTo(arg1.getCurrentDueDate());
+			int dateCompVal = this.getCurrentDueDate().compareTo(arg1.getCurrentDueDate());
+			if(dateCompVal == 0){
+				return this.getID().compareTo(arg1.getID());
+			}
+			return dateCompVal;
 		}
+		@Override
 		public int size(){
 			int size = 0;
 			for(SyncedAllocation allocation:this.getAllocations()){
 				size+=allocation.size();
 			}
 			return size;
+		}
+		@Override
+		public boolean equals(Object obj){
+			if(!(obj instanceof LoanAllocation))return false;
+			return this.getID().equals(((LoanAllocation)obj).getID());
+		}
+		
+		@Override
+		public String getID(){
+			String id = "";
+			for(SyncedAllocation allocation:this.getAllocations())
+				id += allocation.getID()+":";
+			return id;
 		}
 	}
 	
@@ -224,12 +269,18 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 		}
 		
 		public void addLoan(Loan loan){
+			boolean added = false;
 			for(LoanAllocationGroup allocation:this.getAllocations()){
-				if(allocation.addLoan(loan))return;
+				if(allocation.addLoan(loan)){
+					added = true;
+					break;
+				}
 			}
-			LoanAllocationGroup group = new LoanAllocationGroup();
-			group.addLoan(loan);
-			this.getAllocations().add(group);
+			if(!added){
+				LoanAllocationGroup group = new LoanAllocationGroup();
+				group.addLoan(loan);
+				this.getAllocations().add(group);
+			}
 			this.resort();
 		}
 		

@@ -41,7 +41,7 @@ public class SignupController {
 		}
 		SystemUser account = createAccount(form, formBinding);
 		if (account != null) {
-			securityAdapter.signIn(account.getUsername());
+			securityAdapter.signIn(account.getUsername(), account.getPassword());
 			ProviderSignInUtils.handlePostSignUp(account.getUsername(), request);
 			return "redirect:/";
 		}

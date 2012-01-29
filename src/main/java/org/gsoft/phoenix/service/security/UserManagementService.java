@@ -75,4 +75,8 @@ public class UserManagementService extends AbstractUserDetailsAuthenticationProv
 		}
 		return this.systemUserRepository.save(newUser);
 	}
+	
+	public SystemUser findExistingUser(String username){
+		return systemUserRepository.findByUsername(username);
+	}
 }

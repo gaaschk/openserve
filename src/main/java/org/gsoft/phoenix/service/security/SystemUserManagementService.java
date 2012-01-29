@@ -4,4 +4,5 @@ import org.gsoft.phoenix.domain.security.SystemUser;
 
 public interface SystemUserManagementService {
 	public SystemUser registerNewUser(SystemUser newUser);
+	public SystemUser findExistingUser(String username);
 }

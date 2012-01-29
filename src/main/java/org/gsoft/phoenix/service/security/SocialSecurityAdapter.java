@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.gsoft.phoenix.domain.security.SystemUser;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.savedrequest.RequestCache;
@@ -37,6 +38,12 @@ public class SocialSecurityAdapter implements SignInAdapter{
 		return extractOriginalUrl(request);
 	}
 	
+	public void signIn(final String username, final String password){
+		Object objAuthServ = applicationContext.getBean("authenticationManager");
+		final AuthenticationManager authServ = (AuthenticationManager)objAuthServ;
+		SecurityContextHolder.getContext().setAuthentication(authServ.authenticate(new UsernamePasswordAuthenticationToken(username,password)));
+	}
+	
 	public void signIn(final String localUserId){
 		Object objAuthServ = applicationContext.getBean("authenticationManager");
 		final AuthenticationManager authServ = (AuthenticationManager)objAuthServ;
@@ -45,7 +52,9 @@ public class SocialSecurityAdapter implements SignInAdapter{
 
 	public SystemUser registerNewUser(SystemUser newUser){
 		SystemUserManagementService userService = (SystemUserManagementService)applicationContext.getBean("systemUserManagementService");
-		return userService.registerNewUser(newUser);
+		SystemUser existingUser = userService.findExistingUser(newUser.getUsername());
+		if(existingUser==null)existingUser=userService.registerNewUser(newUser);
+		return existingUser;
 	}
 	
 	private String extractOriginalUrl(NativeWebRequest request) {
