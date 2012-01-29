@@ -33,13 +33,13 @@ public class NextDueDateCalculator {
 			DateTime currentDue = new DateTime(loan.getCurrentUnpaidDueDate()).minusDays(ltp.getPrepaymentDays());
 			//if payment was made prior to the due date's window, don't advance
 			if(paymentDate.isBefore(currentDue))
-				break;
+				continue;
 			accumulatedPaymentAmount += paymentEvent.getLoanTransaction().getTransactionNetAmount().negate().intValue();
 			if(accumulatedPaymentAmount > loan.getMinimumPaymentAmount()){
 				int monthsToAdvance = accumulatedPaymentAmount/loan.getMinimumPaymentAmount();
-				int monthsToCurrent = Months.monthsBetween(paymentDate, currentDue).getMonths();
+				int monthsToCurrent = Months.monthsBetween(currentDue,paymentDate).getMonths()+1;
 				monthsToAdvance = (monthsToAdvance <= monthsToCurrent)?monthsToAdvance:monthsToCurrent;
-				loan.setCurrentUnpaidDueDate(currentDue.plusMonths(monthsToAdvance).toDate());
+				loan.setCurrentUnpaidDueDate(currentDue.plusMonths(monthsToAdvance).plusDays(ltp.getPrepaymentDays()).toDate());
 				accumulatedPaymentAmount = monthsToAdvance*loan.getMinimumPaymentAmount();
 			}
 		}
