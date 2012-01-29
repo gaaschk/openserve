@@ -31,6 +31,10 @@ public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetai
 		finModel.setCurrentPrincipal(loan.getCurrentPrincipal());
 		finModel.setCurrentInterest(loan.getCurrentInterest());
 		finModel.setCurrentFees(loan.getCurrentFees());
+		finModel.setBaseRate(loan.getBaseRate());
+		finModel.setMargin(loan.getMargin());
+		finModel.setEffectiveIntRate(finModel.getBaseRate().add(finModel.getMargin()));
+		finModel.setDailyInterestAmount(loan.getDailyInterestAmount());
 		finModel.setMinimumPaymentAmount(loan.getMinimumPaymentAmount());
 		finModel.setNextDueDate(loan.getNextDueDate());
 		finModel.setLastPaidDate(loan.getLastPaidDate());
@@ -38,6 +42,7 @@ public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetai
 		finModel.setFirstDueDate(loan.getFirstDueDate());
 		finModel.setInitialDueDate(loan.getInitialDueDate());
 		finModel.setUsedTerm(loan.getUsedLoanTerm());
+		finModel.setRemainingTerm(loan.getRemainingLoanTerm());
 		finModel.setCurrentUnpaidDueDate(loan.getCurrentUnpaidDueDate());
 		model.setCurrentAmortization(conversionService.convert(accountSummaryService.getAmortizationScheduleForLoan(loan.getLoanID()), LoanAmortizationModel.class));
 		List<LoanEvent> loanEvents = accountSummaryService.getAllLoanEventsForLoan(loan.getLoanID());

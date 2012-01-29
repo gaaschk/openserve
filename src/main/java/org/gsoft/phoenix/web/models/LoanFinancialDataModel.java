@@ -16,6 +16,10 @@ public class LoanFinancialDataModel implements Serializable{
 	private Integer currentPrincipal;
 	private BigDecimal currentInterest;
 	private Integer currentFees;
+	private BigDecimal margin;
+	private BigDecimal baseRate;
+	private BigDecimal effectiveIntRate;
+	private BigDecimal dailyInterestAmount;
 	private Integer minimumPaymentAmount;
 	private Date nextDueDate;
 	private Date lastPaidDate;
@@ -23,6 +27,7 @@ public class LoanFinancialDataModel implements Serializable{
 	private Date firstDueDate;
 	private Date initialDueDate;
 	private Integer usedTerm;
+	private Integer remainingTerm;
 	private Date currentUnpaidDueDate;
 	private boolean selected;
 	
@@ -58,6 +63,30 @@ public class LoanFinancialDataModel implements Serializable{
 	}
 	public void setCurrentFees(Integer currentFees) {
 		this.currentFees = currentFees;
+	}
+	public BigDecimal getMargin() {
+		return margin;
+	}
+	public void setMargin(BigDecimal margin) {
+		this.margin = margin;
+	}
+	public BigDecimal getBaseRate() {
+		return baseRate;
+	}
+	public void setBaseRate(BigDecimal baseRate) {
+		this.baseRate = baseRate;
+	}
+	public BigDecimal getEffectiveIntRate() {
+		return effectiveIntRate;
+	}
+	public void setEffectiveIntRate(BigDecimal effectiveIntRate) {
+		this.effectiveIntRate = effectiveIntRate;
+	}
+	public BigDecimal getDailyInterestAmount() {
+		return dailyInterestAmount;
+	}
+	public void setDailyInterestAmount(BigDecimal dailyInterestAmount) {
+		this.dailyInterestAmount = dailyInterestAmount;
 	}
 	@CurrencyInPenniesFormat
 	public Integer getMinimumPaymentAmount() {
@@ -106,6 +135,12 @@ public class LoanFinancialDataModel implements Serializable{
 	}
 	public void setUsedTerm(Integer usedTerm) {
 		this.usedTerm = usedTerm;
+	}
+	public Integer getRemainingTerm() {
+		return remainingTerm;
+	}
+	public void setRemainingTerm(Integer remainingTerm) {
+		this.remainingTerm = remainingTerm;
 	}
 	public Date getCurrentUnpaidDueDate() {
 		return currentUnpaidDueDate;
