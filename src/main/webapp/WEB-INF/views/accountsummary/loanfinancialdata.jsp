@@ -28,6 +28,12 @@
 					<form:input disabled="true" path="repaymentStartDate"/>
 				</fieldset>
 			</td>
+			<td>
+				<fieldset>
+					<label class="nobr">Used Term:</label>
+					<form:input disabled="true" path="usedTerm"/>
+				</fieldset>
+			</td>
 		</tr>
 		<tr>
 			<td>
@@ -50,8 +56,8 @@
 			</td>
 			<td>
 				<fieldset>
-					<label class="nobr">Initial Due Date:</label>
-					<form:input disabled="true" path="initialDueDate"/>
+					<label class="nobr">Current Unpaid Due Date:</label>
+					<form:input disabled="true" path="currentUnpaidDueDate"/>
 				</fieldset>
 			</td>
 		</tr>
@@ -66,6 +72,12 @@
 				<fieldset>
 					<label class="nobr">Last Paid Date:</label>
 					<form:input disabled="true" path="lastPaidDate"/>
+				</fieldset>
+			</td>
+			<td>
+				<fieldset>
+					<label class="nobr">Initial Due Date:</label>
+					<form:input disabled="true" path="initialDueDate"/>
 				</fieldset>
 			</td>
 		</tr>

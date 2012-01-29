@@ -185,8 +185,8 @@ public class Loan extends PhoenixDomainObject{
 			this.nextDueDate = this.getCurrentUnpaidDueDate();
 			SystemSettingsLogic systemSettings = ApplicationContextLocator.getApplicationContext().getBean(SystemSettingsLogic.class);
 			DateTime systemDate = new DateTime(systemSettings.getCurrentSystemDate());
-			if(this.getCurrentUnpaidDueDate().before(systemDate.toDate())){
-				nextDueDate = new DateTime(nextDueDate).plusMonths(this.getUsedLoanTerm()).toDate();
+			if(this.nextDueDate.before(systemDate.toDate())){
+				nextDueDate = new DateTime(this.getInitialDueDate()).plusMonths(this.getUsedLoanTerm()).toDate();
 			}
 		}
 		return nextDueDate;

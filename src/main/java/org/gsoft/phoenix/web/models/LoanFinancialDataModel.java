@@ -22,6 +22,8 @@ public class LoanFinancialDataModel implements Serializable{
 	private Date repaymentStartDate;
 	private Date firstDueDate;
 	private Date initialDueDate;
+	private Integer usedTerm;
+	private Date currentUnpaidDueDate;
 	private boolean selected;
 	
 	public Long getLoanID(){
@@ -98,6 +100,18 @@ public class LoanFinancialDataModel implements Serializable{
 	}
 	public void setInitialDueDate(Date initialDueDate) {
 		this.initialDueDate = initialDueDate;
+	}
+	public Integer getUsedTerm() {
+		return usedTerm;
+	}
+	public void setUsedTerm(Integer usedTerm) {
+		this.usedTerm = usedTerm;
+	}
+	public Date getCurrentUnpaidDueDate() {
+		return currentUnpaidDueDate;
+	}
+	public void setCurrentUnpaidDueDate(Date currentUnpaidDueDate) {
+		this.currentUnpaidDueDate = currentUnpaidDueDate;
 	}
 	public boolean isSelected() {
 		return selected;
