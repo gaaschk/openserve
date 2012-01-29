@@ -10,7 +10,7 @@ window.addEvent('domready', function() {
 					selectablerbs[idx].checked = false;
 			}
 			var documenturl = new URI(document.location.href);
-			var url = documenturl.get('scheme')+'://'+documenturl.get('host')+':'+documenturl.get('port')+documenturl.get('directory')+'paymentdetail.do?paymentdetailid='+this.id.split('-')[1];
+			var url = documenturl.get('scheme')+'://'+documenturl.get('host')+':'+documenturl.get('port')+documenturl.get('directory')+'accountsummary/paymentdetail.do?paymentdetailid='+this.id.split('-')[1];
 			new Request.HTML({
 				url: url,
 				method: 'get',
