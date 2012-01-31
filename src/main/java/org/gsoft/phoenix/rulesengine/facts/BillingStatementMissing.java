@@ -33,7 +33,7 @@ public class BillingStatementMissing extends AbstractFact{
 	
 	@Override
 	public boolean isFast() {
-		return true;
+		return false;
 	}
 
 	@Override
