@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
@@ -14,6 +16,8 @@ public class LoanPayment extends PhoenixDomainObject{
 	private Long loanPaymentID;
 	private Long loanID;
 	private Integer appliedAmount;
+	//Relationships
+	private Payment payment;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -34,6 +38,14 @@ public class LoanPayment extends PhoenixDomainObject{
 	}
 	public void setAppliedAmount(Integer appliedAmount) {
 		this.appliedAmount = appliedAmount;
+	}
+	@ManyToOne
+	@JoinColumn(name="LoanID", insertable=false, updatable=false)
+	public Payment getPayment() {
+		return payment;
+	}
+	public void setPayment(Payment payment) {
+		this.payment = payment;
 	}
 	@Override
 	@Transient

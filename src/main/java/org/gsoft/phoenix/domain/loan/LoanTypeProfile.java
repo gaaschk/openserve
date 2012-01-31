@@ -23,6 +23,7 @@ public class LoanTypeProfile extends PhoenixDomainObject{
 	private Integer graceMonths;
 	private Integer minDaysToFirstDue;
 	private Integer prepaymentDays;
+	private Integer daysBeforeDueToBill;
 	//Enumerations
 	private LoanType loanType;
 	private RepaymentStartType repaymentStartType;
@@ -80,6 +81,12 @@ public class LoanTypeProfile extends PhoenixDomainObject{
 	}
 	public void setPrepaymentDays(Integer prepaymentDays) {
 		this.prepaymentDays = prepaymentDays;
+	}
+	public Integer getDaysBeforeDueToBill() {
+		return daysBeforeDueToBill;
+	}
+	public void setDaysBeforeDueToBill(Integer daysBeforeDueToBill) {
+		this.daysBeforeDueToBill = daysBeforeDueToBill;
 	}
 	@Override
 	@Transient

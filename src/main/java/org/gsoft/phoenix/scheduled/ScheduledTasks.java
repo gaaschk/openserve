@@ -6,6 +6,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.gsoft.phoenix.domain.loan.Loan;
+import org.gsoft.phoenix.service.SystemSettingsService;
 import org.gsoft.phoenix.service.batch.BatchProcessingService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,11 +21,20 @@ public class ScheduledTasks {
 	@Scheduled(cron="0 0 0 * * ?")
 	//@Scheduled(fixedRate=120000)
 	@PostConstruct
-	public void updateLoans(){
+	public void runBatchProcessing(){
 		BatchProcessingService batchService = this.getBatchService();
 		List<Loan> loans = batchService.getAllActiveLoans();
 		for(Loan loan:loans){
 			batchService.runBatchProcesses(loan.getLoanID());
+		}
+	}
+	
+	@Scheduled(fixedRate=60000)
+	public void checkForOnDemandTrigger(){
+		SystemSettingsService settingsService = this.getSystemSettingsService();
+		if(settingsService.isBatchTriggered() == null || settingsService.isBatchTriggered()){
+			this.runBatchProcessing();
+			settingsService.clearBatchTrigger();
 		}
 	}
 	
@@ -36,5 +46,9 @@ public class ScheduledTasks {
 	 */
 	private BatchProcessingService getBatchService(){
 		return applicationContext.getBean(BatchProcessingService.class);
+	}
+
+	private SystemSettingsService getSystemSettingsService(){
+		return applicationContext.getBean(SystemSettingsService.class);
 	}
 }

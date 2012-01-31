@@ -18,6 +18,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.gsoft.phoenix.buslogic.system.SystemSettingsLogic;
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
+import org.gsoft.phoenix.util.ApplicationContextLocator;
 import org.gsoft.phoenix.util.ReversibleMultiMap;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -32,6 +33,10 @@ public class RulesEngine {
     private SystemSettingsLogic systemSettingsLogic;
     @Resource
     private ApplicationContext applicationContext;
+    //Put this in here to guarantee that the ApplicationContextLocator is
+    //initialized before any rules/facts get executed.
+    @Resource
+    private ApplicationContextLocator applicationContextLocator;
     
     /**
      * A mapping of classes to objects in the context. This allows us to collect all the context objects that are of a

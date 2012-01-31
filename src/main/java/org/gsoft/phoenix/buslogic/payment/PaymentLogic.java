@@ -32,6 +32,8 @@ public class PaymentLogic {
 	private LoanEventLogic loanEventLogic;
 	@Resource
 	private NextDueDateCalculator nextDueCalculator;
+	@Resource
+	private BillingStatementLogic statementLogic;
 	
 	public void applyPayment(long borrowerPersonID, int amount, Date effectiveDate){
 		Payment payment = new Payment();
@@ -43,7 +45,6 @@ public class PaymentLogic {
 		List<Loan> loans = loanRepository.findAllLoansByBorrowerPersonIDActiveOnOrBeforeDate(borrowerPersonID, effectiveDate);
 		paymentAllocationLogic.allocatePayment(payment, loans);
 		payment = paymentRepository.save(payment);
-		
 		this.applyPaymentToLoans(payment);
 	}
 	
@@ -52,6 +53,7 @@ public class PaymentLogic {
 			Loan theLoan = loanRepository.findOne(loanPayment.getLoanID());
 			loanEventLogic.createLoanEvent(theLoan, LoanEventType.PAYMENT_APPLIED, payment.getEffectiveDate(), new BigDecimal(loanPayment.getAppliedAmount()).negate(), true, true, true);
 			nextDueCalculator.updateNextDueDate(theLoan);
+			statementLogic.applyPayment(loanPayment);
 			if(theLoan.getLastPaidDate() == null || theLoan.getLastPaidDate().before(payment.getEffectiveDate()))
 				theLoan.setLastPaidDate(payment.getEffectiveDate());
 		}

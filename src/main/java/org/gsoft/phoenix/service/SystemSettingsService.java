@@ -27,4 +27,18 @@ public class SystemSettingsService {
 	public Date adjustSystemDateByCalendarUnit(int unit, int amount){
 		return this.systemSettingsLogic.adjustSystemDateByCalendarUnit(unit, amount);
 	}
+	
+	public Boolean isBatchTriggered(){
+		return this.systemSettingsLogic.getCurrentSystemSettings().getTriggerBatch();
+	}
+	
+	@Transactional
+	public void clearBatchTrigger(){
+		this.systemSettingsLogic.getCurrentSystemSettings().setTriggerBatch(false);
+	}
+
+	@Transactional
+	public void setBatchTrigger(){
+		this.systemSettingsLogic.getCurrentSystemSettings().setTriggerBatch(true);
+	}
 }
