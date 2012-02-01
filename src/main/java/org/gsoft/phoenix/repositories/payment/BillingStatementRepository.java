@@ -16,12 +16,22 @@ public interface BillingStatementRepository extends BaseRepository<BillingStatem
 			"(select max(bs2.dueDate) from BillingStatement bs2 where bs2.loanID = :loanID)")
 	public BillingStatement findMostRecentBillingStatementForLoan(@Param("loanID") Long loanID);
 
-	@Query("select bs from BillingStatement bs where bs.loanID = :loanID and " + 
-			"bs.dueDate <= :checkDate and (bs.paidAmount is null or bs.paidAmount < bs.minimumRequiredPayment) order by bs.dueDate asc")
-	public List<BillingStatement> findAllUnpaidBillsForLoanWithDueDateOnOrBefore(@Param("loanID") Long loanID, @Param("checkDate") Date checkDate);
+	@Query("select distinct bs from BillingStatement bs " +
+			"where bs.loanID = :loanID and " + 
+			"(bs.satisfiedDate is null or " +
+			"bs.satisfiedDate >= :satisfiedDate or " +
+			"bs.dueDate >= :dueDate or " +
+			"bs.billingStatementID in (" +
+			"select bp.billingStatement.billingStatementID from BillPayment bp where " +
+			"bp.loanPayment.payment.effectiveDate >= :effectiveDate " +
+			")) order by bs.dueDate desc")
+	public List<BillingStatement> findAllBillsForLoanWithPaymentsMadeOnOrAfterOrUnpaidByOrDueAfter(@Param("loanID") Long loanID, @Param("effectiveDate") Date effectiveDate, @Param("satisfiedDate") Date satisfiedDate, @Param("dueDate") Date dueDate);
 
 	@Query("select bs from BillingStatement bs where bs.loanID = :loanID and bs.dueDate = " +
 			"(select max(bs2.dueDate) from BillingStatement bs2 where bs2.loanID = :loanID and " +
 			"dueDate <= :checkDate)")
 	public BillingStatement findMostRecentBillForLoanWithDueDateOnOrBefore(@Param("loanID") Long loanID, @Param("checkDate") Date checkDate);
+	
+	@Query("select bs from BillingStatement bs where bs.loanID = :loanID")
+	public List<BillingStatement> findAllBillsForLoan(@Param("loanID") Long loanID);
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.gsoft.phoenix.util.formatter.CurrencyInPenniesFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class PaymentModel implements Serializable{
 	private static final long serialVersionUID = -3946500836466970L;
@@ -27,6 +28,7 @@ public class PaymentModel implements Serializable{
 	public void setPaymentAmount(Integer paymentAmount) {
 		this.paymentAmount = paymentAmount;
 	}
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	public Date getPaymentEffectiveDate() {
 		return paymentEffectiveDate;
 	}

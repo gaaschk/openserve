@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
 
 @Entity
@@ -52,14 +53,19 @@ public class BillPayment extends PhoenixDomainObject{
 	
 	@Override
 	public boolean equals(Object arg1){
-		if(arg1 != null && arg1 instanceof BillPayment && ((BillPayment)arg1).getLoanPayment() == null){
+		if(arg1 != null && arg1 instanceof BillPayment){
 			BillPayment other = (BillPayment)arg1;
-			if(this.getLoanPayment().getPayment().getEffectiveDate().equals(other.getLoanPayment().getPayment().getEffectiveDate())){
-				return this.getLoanPayment().getLoanPaymentID().equals(this.getLoanPayment().getLoanPaymentID());
-			}
-			return this.getLoanPayment().getPayment().getEffectiveDate().equals(other.getLoanPayment().getPayment().getEffectiveDate());
+			if(this.getBillingStatement() == null)return other.getBillingStatement() == null;
+			if(this.getLoanPayment() == null)return other.getLoanPayment() == null;
+			return (this.getBillingStatement().getBillingStatementID().equals(other.getBillingStatement().getBillingStatementID())) && 
+				(this.getLoanPayment().getLoanPaymentID().equals(other.getLoanPayment().getLoanPaymentID()));
 		}
 		return false;
+	}
+	
+	@Override
+	public int hashCode(){
+		return new HashCodeBuilder().append(this.getBillingStatement().getBillingStatementID()).append(this.getLoanPayment().getLoanPaymentID()).toHashCode();
 	}
 	
 	@Override

@@ -7,7 +7,10 @@ import javax.annotation.Resource;
 
 import org.gsoft.phoenix.domain.loan.Loan;
 import org.gsoft.phoenix.domain.loan.LoanEvent;
+import org.gsoft.phoenix.domain.payment.BillingStatement;
+import org.gsoft.phoenix.repositories.payment.BillingStatementRepository;
 import org.gsoft.phoenix.service.AccountSummaryService;
+import org.gsoft.phoenix.web.models.BillingStatementModel;
 import org.gsoft.phoenix.web.models.LoanAmortizationModel;
 import org.gsoft.phoenix.web.models.LoanDetailModel;
 import org.gsoft.phoenix.web.models.LoanEventModel;
@@ -20,6 +23,8 @@ import org.springframework.stereotype.Component;
 public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetailModel>{
 	@Resource
 	private AccountSummaryService accountSummaryService;
+	@Resource
+	private BillingStatementRepository billingStatementRepository;
 	@Resource
 	private ConversionService conversionService;
 	
@@ -49,6 +54,10 @@ public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetai
 		ArrayList<LoanEventModel> loanHistory = new ArrayList<LoanEventModel>();
 		for(LoanEvent loanEvent:loanEvents){
 			loanHistory.add(conversionService.convert(loanEvent, LoanEventModel.class));
+		}
+		List<BillingStatement> billingStatments = billingStatementRepository.findAllBillsForLoan(loan.getLoanID());
+		for(BillingStatement statement:billingStatments){
+			model.getBillingStatements().add(conversionService.convert(statement, BillingStatementModel.class));
 		}
 		model.setLoanFinancialData(finModel);
 		model.setLoanHistory(loanHistory);

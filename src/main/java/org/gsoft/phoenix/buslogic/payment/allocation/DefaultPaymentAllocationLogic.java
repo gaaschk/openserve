@@ -14,7 +14,6 @@ import org.gsoft.phoenix.domain.loan.LoanTypeProfile;
 import org.gsoft.phoenix.domain.payment.LoanPayment;
 import org.gsoft.phoenix.domain.payment.Payment;
 import org.gsoft.phoenix.repositories.loan.LoanTypeProfileRepository;
-import org.gsoft.phoenix.repositories.payment.LoanPaymentRepository;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 
@@ -22,8 +21,6 @@ import org.springframework.stereotype.Component;
 public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 	@Resource
 	private LoanTypeProfileRepository loanTypeProfileRepository;
-	@Resource
-	private LoanPaymentRepository loanPaymentRepository;
 	
 	private DateTime paymentEffectiveDate;
 	
@@ -94,7 +91,6 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 				LoanPayment loanPayment = new LoanPayment();
 				loanPayment.setAppliedAmount(this.getAllocatedAmount());
 				loanPayment.setLoanID(this.loan.getLoanID());
-				loanPayment = loanPaymentRepository.save(loanPayment);
 				loanPayments.add(loanPayment);
 			}
 			return loanPayments;

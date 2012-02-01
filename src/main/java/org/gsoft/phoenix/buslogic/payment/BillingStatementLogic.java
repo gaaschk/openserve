@@ -1,9 +1,9 @@
 package org.gsoft.phoenix.buslogic.payment;
 
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Stack;
 
 import javax.annotation.Resource;
 
@@ -17,6 +17,7 @@ import org.gsoft.phoenix.repositories.loan.LoanRepository;
 import org.gsoft.phoenix.repositories.loan.LoanTypeProfileRepository;
 import org.gsoft.phoenix.repositories.payment.BillPaymentRepository;
 import org.gsoft.phoenix.repositories.payment.BillingStatementRepository;
+import org.gsoft.phoenix.repositories.payment.LoanPaymentRepository;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,8 @@ public class BillingStatementLogic {
 	private SystemSettingsLogic systemSettings;
 	@Resource
 	private BillPaymentRepository billPaymentRepository;
+	@Resource
+	private LoanPaymentRepository loanPaymentRepository;
 	
 	public BillingStatement createBillingStatement(Loan loan){
 		LoanTypeProfile ltp = loanTypeProfileRepository.findOne(loan.getEffectiveLoanTypeProfileID());
@@ -55,80 +58,67 @@ public class BillingStatementLogic {
 		return lastStatement;
 	}
 	
+	/**
+	 * In order to ensure that all of the statements are properly re-balanced, 
+	 * 
+	 * @param the new LoanPayment to be applied
+	 */
 	public void applyPayment(LoanPayment payment){
-		Loan loan = loanRepository.findOne(payment.getLoanID());
-		LoanTypeProfile ltp = loanTypeProfileRepository.findOne(loan.getEffectiveLoanTypeProfileID());
-		DateTime checkDate = new DateTime(payment.getPayment().getEffectiveDate()).plusDays(ltp.getPrepaymentDays());
-		List<BillingStatement> unpaidStatements = billingStatementRepository.findAllUnpaidBillsForLoanWithDueDateOnOrBefore(payment.getLoanID(), checkDate.toDate());
-		int amountRemainingToApply = payment.getAppliedAmount();
-		BillPayment lastUpdatedPayment = null;
-		for(BillingStatement statement:unpaidStatements){
-			List<BillPayment> billPayments = statement.getBillPayments();
-			int unpaidAmount = statement.getMinimumRequiredPayment() - statement.getPaidAmount();
-			int amountToApply = 0;
-			//this should always be > 0 because it's built into the query
-			//but checking here any for posterity
-			if(unpaidAmount > 0){
-				amountToApply = (unpaidAmount > amountRemainingToApply)?amountRemainingToApply:unpaidAmount;
-				BillPayment billPayment = new BillPayment();
-				billPayments.add(billPayment);
-				billPayment.setBillingStatement(statement);
-				billPayment.setLoanPayment(payment);
-				billPayment.setBillingStatement(statement);
-				billPayment = billPaymentRepository.save(billPayment);
-				billPayment.setAmountAppliedToBill(amountToApply);
-				lastUpdatedPayment = billPayment;
-				statement.setPaidAmount(statement.getPaidAmount()+amountToApply);
-				if(statement.getPaidAmount() >= statement.getMinimumRequiredPayment())
-					statement.setSatisfiedDate(payment.getPayment().getEffectiveDate());
-			}	
-			amountRemainingToApply -= amountToApply;
-			if(amountRemainingToApply<=0)break;
+		Loan theLoan = loanRepository.findOne(payment.getLoanID());
+		LoanTypeProfile ltp = this.loanTypeProfileRepository.findOne(theLoan.getEffectiveLoanTypeProfileID());
+		Date effDatePrevMonth = new DateTime(payment.getPayment().getEffectiveDate()).minusMonths(1).toDate();
+		List<BillingStatement> dirtyStatements = billingStatementRepository.findAllBillsForLoanWithPaymentsMadeOnOrAfterOrUnpaidByOrDueAfter(payment.getLoanID(), payment.getPayment().getEffectiveDate(), payment.getPayment().getEffectiveDate(), effDatePrevMonth);
+		List<LoanPayment> dirtyPayments = loanPaymentRepository.findAllLoanPaymentsEffectiveOnOrAfter(payment.getPayment().getEffectiveDate());
+		Stack<BillingStatement> billStack = new Stack<BillingStatement>();
+		for(BillingStatement statement:dirtyStatements){
+			ArrayList<BillPayment> paymentsToRemove = new ArrayList<BillPayment>();
+			for(BillPayment billPayment:statement.getBillPayments()){
+				if(!billPayment.getLoanPayment().getPayment().getEffectiveDate().before(payment.getPayment().getEffectiveDate())){
+					paymentsToRemove.add(billPayment);
+				}
+			}
+			for(BillPayment paymentToRemove:paymentsToRemove){
+				statement.removePayment(paymentToRemove);
+				billPaymentRepository.delete(paymentToRemove);
+			}
+			billStack.push(statement);
 		}
-		if(lastUpdatedPayment != null && amountRemainingToApply > 0){
-			lastUpdatedPayment.setAmountAppliedToBill(lastUpdatedPayment.getAmountAppliedToBill()+amountRemainingToApply);
-			lastUpdatedPayment.getBillingStatement().setPaidAmount(lastUpdatedPayment.getBillingStatement().getPaidAmount() + amountRemainingToApply);
+		Stack<LoanPayment> paymentStack = new Stack<LoanPayment>();
+		for(LoanPayment dirtyPayment:dirtyPayments){
+			paymentStack.push(dirtyPayment);
 		}
-		else{
-			//apply anything remaining to the most recent bill
-			//need to recheck the satisfied date to ensure that it
-			//is updated to the earliest payment that meets the minimum
-			//amount.
-			BillingStatement statement = billingStatementRepository.findMostRecentBillForLoanWithDueDateOnOrBefore(payment.getLoanID(), checkDate.toDate());
-			if(statement != null && amountRemainingToApply > 0){
-				List<BillPayment> billPayments = statement.getBillPayments();
-				BillPayment newPayment = new BillPayment();
-				billPayments.add(newPayment);
-				newPayment.setBillingStatement(statement);
-				newPayment.setLoanPayment(payment);
-				newPayment = billPaymentRepository.save(newPayment);
-				newPayment.setAmountAppliedToBill(amountRemainingToApply);
-				statement.setPaidAmount(statement.getPaidAmount() + amountRemainingToApply);
-				Collections.sort(billPayments, new BillPaymentComparator());
-				int paidAmount = 0;
-				for(BillPayment billPayment:billPayments){
-					paidAmount += billPayment.getAmountAppliedToBill();
-					if(paidAmount >= statement.getMinimumRequiredPayment()){
-						statement.setSatisfiedDate(billPayment.getLoanPayment().getPayment().getEffectiveDate());
-						break;
+		int remainingPaymentAmountToApply = 0;
+		while(!billStack.empty()&&!paymentStack.empty()){
+			BillingStatement currentStatement = billStack.pop();
+			Date nextStatementPrepaymentWindow = (billStack.empty())?null:new DateTime(billStack.peek().getDueDate()).minusDays(ltp.getPrepaymentDays()).toDate();
+			Date currentStatementPrepaymentWindow = new DateTime(currentStatement.getDueDate()).minusDays(ltp.getPrepaymentDays()).toDate();
+			while(!paymentStack.empty()){
+				LoanPayment currentPayment = paymentStack.peek();
+				if(currentStatement.getUnpaidBalance() <= 0 && 
+						!currentPayment.getPayment().getEffectiveDate().before(nextStatementPrepaymentWindow)){
+					break;
+				}
+				if(remainingPaymentAmountToApply <= 0){
+					remainingPaymentAmountToApply = currentPayment.getAppliedAmount();
+				}
+				if(!currentPayment.getPayment().getEffectiveDate().before(currentStatementPrepaymentWindow)){
+					int amountToApply = 0;
+					if(currentStatement.getUnpaidBalance()>remainingPaymentAmountToApply||
+							nextStatementPrepaymentWindow==null||
+							nextStatementPrepaymentWindow.after(currentPayment.getPayment().getEffectiveDate())){
+						amountToApply += remainingPaymentAmountToApply;
+					}
+					else{
+						amountToApply += currentStatement.getUnpaidBalance();
+					}
+					BillPayment newPayment = currentStatement.addPayment(currentPayment, amountToApply);
+					billPaymentRepository.save(newPayment);
+					remainingPaymentAmountToApply -= amountToApply;
+					if(remainingPaymentAmountToApply <= 0){
+						paymentStack.pop();
 					}
 				}
 			}
 		}
-	}
-	
-	private class BillPaymentComparator implements Comparator<BillPayment>{
-
-		@Override
-		public int compare(BillPayment arg0, BillPayment arg1) {
-			if(arg0 == arg1 || arg0.getLoanPayment() == arg1.getLoanPayment())return 0;
-			if(arg0 == null || arg0.getLoanPayment() == null)return -1;
-			if(arg1 == null || arg1.getLoanPayment() == null)return 1;
-			if(arg0.getLoanPayment().getPayment().getEffectiveDate().equals(arg1.getLoanPayment().getPayment().getEffectiveDate())){
-				return arg0.getLoanPayment().getLoanPaymentID().compareTo(arg1.getLoanPayment().getLoanPaymentID());
-			}
-			return arg0.getLoanPayment().getPayment().getEffectiveDate().compareTo(arg1.getLoanPayment().getPayment().getEffectiveDate());
-		}
-		
 	}
 }

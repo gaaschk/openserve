@@ -87,17 +87,6 @@ public class BillingStatement extends PhoenixDomainObject{
 	public void setSatisfiedDate(Date satisfiedDate){
 		this.satisfiedDate = satisfiedDate;
 	}
-	public void recalulcatePaidDateAndAmount(){
-		this.paidAmount = 0;
-		boolean paidDateSet = false;
-		for(BillPayment payment:this.getBillPayments()){
-			paidAmount += payment.getAmountAppliedToBill();
-			if(!paidDateSet && paidAmount >= this.getMinimumRequiredPayment()){
-				this.setSatisfiedDate(payment.getLoanPayment().getPayment().getEffectiveDate());
-				paidDateSet = true;
-			}
-		}
-	}
 	@Transient
 	public Integer getUnpaidBalance(){
 		int unpaidAmount = this.getMinimumRequiredPayment() - this.getPaidAmount(); 
@@ -107,5 +96,27 @@ public class BillingStatement extends PhoenixDomainObject{
 	@Transient
 	public Long getID(){
 		return this.getLoanID();
+	}
+	
+	public boolean removePayment(BillPayment payment){
+		boolean success = this.getBillPayments().remove(payment);
+		if(success){
+			this.setPaidAmount(this.getPaidAmount() - payment.getAmountAppliedToBill());
+			if(this.getPaidAmount()<this.getMinimumRequiredPayment())
+				this.setSatisfiedDate(null);
+		}
+		return success;
+	}
+	
+	public BillPayment addPayment(LoanPayment payment, int amount){
+		BillPayment newPayment = new BillPayment();
+		this.getBillPayments().add(newPayment);
+		newPayment.setBillingStatement(this);
+		newPayment.setLoanPayment(payment);
+		newPayment.setAmountAppliedToBill(amount);
+		this.setPaidAmount(this.getPaidAmount()+amount);
+		if(this.getSatisfiedDate() == null && this.getUnpaidBalance()<=0)
+			this.setSatisfiedDate(payment.getPayment().getEffectiveDate());
+		return newPayment;
 	}
 }

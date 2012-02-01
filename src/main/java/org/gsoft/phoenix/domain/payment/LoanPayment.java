@@ -40,7 +40,7 @@ public class LoanPayment extends PhoenixDomainObject{
 		this.appliedAmount = appliedAmount;
 	}
 	@ManyToOne
-	@JoinColumn(name="LoanID", insertable=false, updatable=false)
+	@JoinColumn(name="PaymentID")
 	public Payment getPayment() {
 		return payment;
 	}
