@@ -7,6 +7,8 @@ import java.util.Date;
 import org.gsoft.phoenix.domain.loan.LoanType;
 import org.gsoft.phoenix.util.formatter.CurrencyInPenniesFormat;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
 
 public class LoanFinancialDataModel implements Serializable{
 	private static final long serialVersionUID = 2799991603651710288L;
@@ -64,24 +66,28 @@ public class LoanFinancialDataModel implements Serializable{
 	public void setCurrentFees(Integer currentFees) {
 		this.currentFees = currentFees;
 	}
+	@NumberFormat(style=Style.PERCENT)
 	public BigDecimal getMargin() {
 		return margin;
 	}
 	public void setMargin(BigDecimal margin) {
 		this.margin = margin;
 	}
+	@NumberFormat(style=Style.PERCENT)
 	public BigDecimal getBaseRate() {
 		return baseRate;
 	}
 	public void setBaseRate(BigDecimal baseRate) {
 		this.baseRate = baseRate;
 	}
+	@NumberFormat(style=Style.PERCENT)
 	public BigDecimal getEffectiveIntRate() {
 		return effectiveIntRate;
 	}
 	public void setEffectiveIntRate(BigDecimal effectiveIntRate) {
 		this.effectiveIntRate = effectiveIntRate;
 	}
+	@CurrencyInPenniesFormat
 	public BigDecimal getDailyInterestAmount() {
 		return dailyInterestAmount;
 	}
@@ -142,6 +148,7 @@ public class LoanFinancialDataModel implements Serializable{
 	public void setRemainingTerm(Integer remainingTerm) {
 		this.remainingTerm = remainingTerm;
 	}
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	public Date getCurrentUnpaidDueDate() {
 		return currentUnpaidDueDate;
 	}
