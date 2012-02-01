@@ -8,7 +8,6 @@ import org.gsoft.phoenix.domain.loan.LoanType;
 import org.gsoft.phoenix.util.formatter.CurrencyInPenniesFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
-import org.springframework.format.annotation.NumberFormat.Style;
 
 public class LoanFinancialDataModel implements Serializable{
 	private static final long serialVersionUID = 2799991603651710288L;
@@ -66,21 +65,21 @@ public class LoanFinancialDataModel implements Serializable{
 	public void setCurrentFees(Integer currentFees) {
 		this.currentFees = currentFees;
 	}
-	@NumberFormat(style=Style.PERCENT)
+	@NumberFormat(pattern="#,###.###%")
 	public BigDecimal getMargin() {
 		return margin;
 	}
 	public void setMargin(BigDecimal margin) {
 		this.margin = margin;
 	}
-	@NumberFormat(style=Style.PERCENT)
+	@NumberFormat(pattern="#,###.###%")
 	public BigDecimal getBaseRate() {
 		return baseRate;
 	}
 	public void setBaseRate(BigDecimal baseRate) {
 		this.baseRate = baseRate;
 	}
-	@NumberFormat(style=Style.PERCENT)
+	@NumberFormat(pattern="#,###.###%")
 	public BigDecimal getEffectiveIntRate() {
 		return effectiveIntRate;
 	}
