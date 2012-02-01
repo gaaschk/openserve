@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import org.gsoft.phoenix.domain.PhoenixDomainObject;
@@ -28,6 +29,7 @@ public class BillingStatement extends PhoenixDomainObject{
 	private Date satisfiedDate;
 	//Relationships
 	private List<BillPayment> billPayments;
+	private LateFee lateFee;
 
 	@Id
 	@GeneratedValue( strategy=GenerationType.AUTO)
@@ -86,6 +88,13 @@ public class BillingStatement extends PhoenixDomainObject{
 	}
 	public void setSatisfiedDate(Date satisfiedDate){
 		this.satisfiedDate = satisfiedDate;
+	}
+	@OneToOne(mappedBy="billingStatement")
+	public LateFee getLateFee(){
+		return this.lateFee;
+	}
+	public void setLateFee(LateFee lateFee){
+		this.lateFee = lateFee;
 	}
 	@Transient
 	public Integer getUnpaidBalance(){

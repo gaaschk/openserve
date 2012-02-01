@@ -35,6 +35,8 @@ public class BillingStatementLogic {
 	private BillPaymentRepository billPaymentRepository;
 	@Resource
 	private LoanPaymentRepository loanPaymentRepository;
+	@Resource
+	private LateFeeLogic lateFeeLogic;
 	
 	public BillingStatement createBillingStatement(Loan loan){
 		LoanTypeProfile ltp = loanTypeProfileRepository.findOne(loan.getEffectiveLoanTypeProfileID());
@@ -55,6 +57,7 @@ public class BillingStatementLogic {
 			statement = billingStatementRepository.save(statement);
 			lastStatement = statement;
 		}
+		lateFeeLogic.updateLateFees(loan);
 		return lastStatement;
 	}
 	
@@ -63,17 +66,17 @@ public class BillingStatementLogic {
 	 * 
 	 * @param the new LoanPayment to be applied
 	 */
-	public void applyPayment(LoanPayment payment){
-		Loan theLoan = loanRepository.findOne(payment.getLoanID());
+	public void updateBillingStatementsForLoan(Long loanID, Date startDate){
+		Loan theLoan = loanRepository.findOne(loanID);
 		LoanTypeProfile ltp = this.loanTypeProfileRepository.findOne(theLoan.getEffectiveLoanTypeProfileID());
-		Date effDatePrevMonth = new DateTime(payment.getPayment().getEffectiveDate()).minusMonths(1).toDate();
-		List<BillingStatement> dirtyStatements = billingStatementRepository.findAllBillsForLoanWithPaymentsMadeOnOrAfterOrUnpaidByOrDueAfter(payment.getLoanID(), payment.getPayment().getEffectiveDate(), payment.getPayment().getEffectiveDate(), effDatePrevMonth);
-		List<LoanPayment> dirtyPayments = loanPaymentRepository.findAllLoanPaymentsEffectiveOnOrAfter(payment.getPayment().getEffectiveDate());
+		Date effDatePrevMonth = new DateTime(startDate).minusMonths(1).toDate();
+		List<BillingStatement> dirtyStatements = billingStatementRepository.findAllBillsForLoanWithPaymentsMadeOnOrAfterOrUnpaidByOrDueAfter(loanID, startDate, startDate, effDatePrevMonth);
+		List<LoanPayment> dirtyPayments = loanPaymentRepository.findAllLoanPaymentsEffectiveOnOrAfter(startDate);
 		Stack<BillingStatement> billStack = new Stack<BillingStatement>();
 		for(BillingStatement statement:dirtyStatements){
 			ArrayList<BillPayment> paymentsToRemove = new ArrayList<BillPayment>();
 			for(BillPayment billPayment:statement.getBillPayments()){
-				if(!billPayment.getLoanPayment().getPayment().getEffectiveDate().before(payment.getPayment().getEffectiveDate())){
+				if(!billPayment.getLoanPayment().getPayment().getEffectiveDate().before(startDate)){
 					paymentsToRemove.add(billPayment);
 				}
 			}
@@ -120,5 +123,6 @@ public class BillingStatementLogic {
 				}
 			}
 		}
+		lateFeeLogic.updateLateFees(theLoan);
 	}
 }

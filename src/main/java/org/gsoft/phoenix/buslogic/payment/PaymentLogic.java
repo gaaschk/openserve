@@ -53,7 +53,7 @@ public class PaymentLogic {
 			Loan theLoan = loanRepository.findOne(loanPayment.getLoanID());
 			loanEventLogic.createLoanEvent(theLoan, LoanEventType.PAYMENT_APPLIED, payment.getEffectiveDate(), new BigDecimal(loanPayment.getAppliedAmount()).negate(), true, true, true);
 			nextDueCalculator.updateNextDueDate(theLoan);
-			statementLogic.applyPayment(loanPayment);
+			statementLogic.updateBillingStatementsForLoan(loanPayment.getLoanID(), loanPayment.getPayment().getEffectiveDate());
 			if(theLoan.getLastPaidDate() == null || theLoan.getLastPaidDate().before(payment.getEffectiveDate()))
 				theLoan.setLastPaidDate(payment.getEffectiveDate());
 		}

@@ -13,6 +13,7 @@ public class BillingStatementModel implements Serializable{
 	private Integer minimumRequiredPayment;
 	private Integer paidAmount;
 	private Date satisfiedDate;
+	private Integer lateFeeAmount;
 	
 	public Date getCreatedDate() {
 		return createdDate;
@@ -47,5 +48,12 @@ public class BillingStatementModel implements Serializable{
 	}
 	public void setSatisfiedDate(Date satisfiedDate) {
 		this.satisfiedDate = satisfiedDate;
+	}
+	public Integer getLateFeeAmount() {
+		return lateFeeAmount;
+	}
+	@CurrencyInPenniesFormat
+	public void setLateFeeAmount(Integer lateFeeAmount) {
+		this.lateFeeAmount = lateFeeAmount;
 	}
 }

@@ -7,6 +7,7 @@
     	<th><label>Minimum Required Payment</label></th>
     	<th><label>Amount Paid</label></th>
     	<th><label>Satisfied Date</label></th>
+    	<th><label>Late Fee</label></th>
     </tr>
     <c:forEach var="statement" items="${loandetailmodel.billingStatements}" varStatus="bsindex">
       <tr>
@@ -15,6 +16,7 @@
         <td><form:input disabled="true" path="billingStatements[${bsindex.count-1}].minimumRequiredPayment"/></td>
         <td><form:input disabled="true" path="billingStatements[${bsindex.count-1}].paidAmount"/></td>
         <td><form:input disabled="true" path="billingStatements[${bsindex.count-1}].satisfiedDate"/></td>
+        <td><form:input disabled="true" path="billingStatements[${bsindex.count-1}].lateFeeAmount"/></td>
       </tr>
     </c:forEach>
   </table>

@@ -7,7 +7,9 @@ public enum LoanEventType implements PhoenixEnum<LoanEventType> {
 	PAYMENT_APPLIED(20L, "PAYMENT_APPLIED", "Payment Applied to Loan", false),
 	DISBURSEMENT_ADDED(30L, "DISBURSMENT_ADDED", "Disbursement Added to Loan", true),
 	//this is used if the starting balances don't equal the sum of the disbursement amounts
-	LOAN_ADD_ADJUSTMENT(40L, "LOAN_ADD_ADJUSTMENT", "Initial adjustment made to balances at loan add.", true);
+	LOAN_ADD_ADJUSTMENT(40L, "LOAN_ADD_ADJUSTMENT", "Initial adjustment made to balances at loan add.", true),
+	LATE_FEE_ASSESSED(50L, "LATE_FEE_ASSESSED", "Assessed a late fee on a loan.", true),
+	LATE_FEE_CANCELLED(60L, "LATE_FEE_CANCELLED", "Cancelled a late fee on a loan.", true);
 	
 
 	private Long loanEventTypeID;

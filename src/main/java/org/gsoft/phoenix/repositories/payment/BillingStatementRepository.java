@@ -27,11 +27,6 @@ public interface BillingStatementRepository extends BaseRepository<BillingStatem
 			")) order by bs.dueDate desc")
 	public List<BillingStatement> findAllBillsForLoanWithPaymentsMadeOnOrAfterOrUnpaidByOrDueAfter(@Param("loanID") Long loanID, @Param("effectiveDate") Date effectiveDate, @Param("satisfiedDate") Date satisfiedDate, @Param("dueDate") Date dueDate);
 
-	@Query("select bs from BillingStatement bs where bs.loanID = :loanID and bs.dueDate = " +
-			"(select max(bs2.dueDate) from BillingStatement bs2 where bs2.loanID = :loanID and " +
-			"dueDate <= :checkDate)")
-	public BillingStatement findMostRecentBillForLoanWithDueDateOnOrBefore(@Param("loanID") Long loanID, @Param("checkDate") Date checkDate);
-	
-	@Query("select bs from BillingStatement bs where bs.loanID = :loanID")
+	@Query("select bs from BillingStatement bs where bs.loanID = :loanID order by bs.dueDate desc")
 	public List<BillingStatement> findAllBillsForLoan(@Param("loanID") Long loanID);
 }

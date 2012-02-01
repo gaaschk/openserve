@@ -24,6 +24,8 @@ public class LoanTypeProfile extends PhoenixDomainObject{
 	private Integer minDaysToFirstDue;
 	private Integer prepaymentDays;
 	private Integer daysBeforeDueToBill;
+	private Integer daysLateForFee;
+	private Integer lateFeeAmount;
 	//Enumerations
 	private LoanType loanType;
 	private RepaymentStartType repaymentStartType;
@@ -88,6 +90,18 @@ public class LoanTypeProfile extends PhoenixDomainObject{
 	public void setDaysBeforeDueToBill(Integer daysBeforeDueToBill) {
 		this.daysBeforeDueToBill = daysBeforeDueToBill;
 	}
+	public Integer getDaysLateForFee(){
+		return this.daysLateForFee;
+	}
+	public void setDaysLateForFee(Integer daysLateForFee){
+		this.daysLateForFee = daysLateForFee;
+	}
+	public Integer getLateFeeAmount(){
+		return this.lateFeeAmount;
+	}
+	public void setLateFeeAmount(Integer lateFeeAmount){
+		this.lateFeeAmount = lateFeeAmount;
+	} 
 	@Override
 	@Transient
 	public Long getID() {
