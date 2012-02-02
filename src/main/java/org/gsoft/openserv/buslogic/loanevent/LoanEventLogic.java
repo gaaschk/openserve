@@ -65,6 +65,9 @@ public class LoanEventLogic {
 		loanEvent.setPostDate(systemSettingsLogic.getCurrentSystemDate());
 		BigDecimal accruedInterest = new BigDecimal(0);
 		if(lastEvent != null){
+			//need to go ahead and resequence later events here to make a place for the new one.
+			List<LoanEvent> laterEvents = loanEventRepository.findAllLoanEventsForLoanAfterSequence(loan.getLoanID(), lastEvent.getSequence());
+			for(LoanEvent laterEvent:laterEvents)laterEvent.setSequence(laterEvent.getSequence()+1);
 			loanEvent.setSequence(lastEvent.getSequence()+1);
 			accruedInterest = interestAccrualLogic.calculateLoanInterestAmountForPeriod(loan, lastEvent.getEffectiveDate(), effectiveDate);
 		}
@@ -83,7 +86,6 @@ public class LoanEventLogic {
 		Collections.reverse(dirtyEvents);
 		LoanEvent lastDirty = loanEvent;
 		for(LoanEvent dirtyEvent:dirtyEvents){
-			dirtyEvent.setSequence(lastDirty.getSequence()+1);
 			BigDecimal accruedInterest = interestAccrualLogic.calculateLoanInterestAmountForPeriod(loan, lastDirty.getEffectiveDate(), dirtyEvent.getEffectiveDate());
 			dirtyEvent.getLoanTransaction().setInterestAccrued(accruedInterest);
 			if(dirtyEvent.getLoanEventType().isFixedAllocation()){
