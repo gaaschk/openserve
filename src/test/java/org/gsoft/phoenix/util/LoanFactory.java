@@ -6,9 +6,9 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
-import org.gsoft.phoenix.domain.loan.Disbursement;
-import org.gsoft.phoenix.domain.loan.Loan;
-import org.gsoft.phoenix.domain.loan.LoanType;
+import org.gsoft.openserv.domain.loan.Disbursement;
+import org.gsoft.openserv.domain.loan.Loan;
+import org.gsoft.openserv.domain.loan.LoanType;
 import org.springframework.stereotype.Repository;
 
 

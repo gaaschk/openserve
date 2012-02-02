@@ -1,6 +1,6 @@
 package org.gsoft.phoenix.util;
 
-import org.gsoft.phoenix.domain.Person;
+import org.gsoft.openserv.domain.Person;
 import org.springframework.stereotype.Repository;
 
 @Repository

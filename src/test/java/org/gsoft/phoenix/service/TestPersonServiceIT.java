@@ -4,9 +4,10 @@ import java.io.IOException;
 
 import javax.annotation.Resource;
 
+import org.gsoft.openserv.domain.Person;
+import org.gsoft.openserv.service.PersonService;
 import org.gsoft.phoenix.Authenticator;
 import org.gsoft.phoenix.data.DatabaseUtility;
-import org.gsoft.phoenix.domain.Person;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
