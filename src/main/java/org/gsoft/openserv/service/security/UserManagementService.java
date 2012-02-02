@@ -57,7 +57,7 @@ public class UserManagementService extends AbstractUserDetailsAuthenticationProv
 		List<Permission> permissions = systemUserRepository.findAllPermissionsForUser(username);
 		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		for(Permission permission:permissions){
-			authorities.add(new PhoenixGrantedAuthority(permission));
+			authorities.add(new OpenServGrantedAuthority(permission));
 		}
 		User user = new User(systemUser.getUsername().trim(),systemUser.getPassword().trim(),authorities);
 		return user;

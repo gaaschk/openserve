@@ -49,8 +49,8 @@ public class LoanEvent extends OpenServDomainObject{
 	}
 
 
-	@Type( type = "org.gsoft.phoenix.util.jpa.GenericEnumUserType", parameters={
-			@Parameter(name = "enumClass", value = "org.gsoft.phoenix.domain.loan.LoanEventType")
+	@Type( type = "org.gsoft.openserv.util.jpa.GenericEnumUserType", parameters={
+			@Parameter(name = "enumClass", value = "org.gsoft.openserv.domain.loan.LoanEventType")
 	})
     @Column( name = "LoanEventTypeID" )
 	public LoanEventType getLoanEventType() {

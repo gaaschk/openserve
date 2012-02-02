@@ -10,7 +10,7 @@
       http://www.springframework.org/schema/mvc 
       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 	
-	<context:component-scan base-package="org.gsoft.phoenix.web"></context:component-scan>
+	<context:component-scan base-package="org.gsoft.openserv.web"></context:component-scan>
 
 	<mvc:annotation-driven conversion-service="conversionService" validator="validator"/>
 
@@ -32,5 +32,5 @@
 		<property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView" />
 	</bean>
 	
-	<import resource="phoenixweb-webflow.xml"/>
+	<import resource="openservweb-webflow.xml"/>
 </beans>

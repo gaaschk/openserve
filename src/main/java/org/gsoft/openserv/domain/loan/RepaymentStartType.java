@@ -1,8 +1,8 @@
 package org.gsoft.openserv.domain.loan;
 
-import org.gsoft.openserv.util.jpa.PhoenixEnum;
+import org.gsoft.openserv.util.jpa.OpenServEnum;
 
-public enum RepaymentStartType implements PhoenixEnum<RepaymentStartType> {
+public enum RepaymentStartType implements OpenServEnum<RepaymentStartType> {
 	FIRST_DISBUREMENT(10L, "FIRST_DISBURSEMENT", "Repayment begins after first disbursement."),
 	LAST_DISBURSEMENT(20L, "LAST_DISBURSEMENT", "Repayment begins after last disbursement.");
 	

@@ -21,7 +21,7 @@ public class FactUtil {
             }
             catch (final ClassCastException castException) {
                 throw new RulesEngineException(
-                        "Fact constructors must only take parameters that are PhoenixDomainObject subclasses.");
+                        "Fact constructors must only take parameters that are OpenServDomainObject subclasses.");
             }
         }
     }

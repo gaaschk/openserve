@@ -38,8 +38,8 @@ public class LoanTypeProfile extends OpenServDomainObject{
 	public void setLoanTypeProfileID(Long loanTypeProfileID) {
 		this.loanTypeProfileID = loanTypeProfileID;
 	}
-	@Type( type = "org.gsoft.phoenix.util.jpa.GenericEnumUserType", parameters={
-			@Parameter(name = "enumClass", value = "org.gsoft.phoenix.domain.loan.LoanType")
+	@Type( type = "org.gsoft.openserv.util.jpa.GenericEnumUserType", parameters={
+			@Parameter(name = "enumClass", value = "org.gsoft.openserv.domain.loan.LoanType")
 	})
     @Column( name = "LoanTypeID" )
 	public LoanType getLoanType() {
@@ -107,8 +107,8 @@ public class LoanTypeProfile extends OpenServDomainObject{
 	public Long getID() {
 		return this.getLoanTypeProfileID();
 	}
-	@Type( type = "org.gsoft.phoenix.util.jpa.GenericEnumUserType", parameters={
-			@Parameter(name = "enumClass", value = "org.gsoft.phoenix.domain.loan.RepaymentStartType")
+	@Type( type = "org.gsoft.openserv.util.jpa.GenericEnumUserType", parameters={
+			@Parameter(name = "enumClass", value = "org.gsoft.openserv.domain.loan.RepaymentStartType")
 	})
     @Column( name = "RepaymentStartTypeID" )
 	public RepaymentStartType getRepaymentStartType() {

@@ -1,8 +1,8 @@
 package org.gsoft.openserv.domain.loan;
 
-import org.gsoft.openserv.util.jpa.PhoenixEnum;
+import org.gsoft.openserv.util.jpa.OpenServEnum;
 
-public enum LoanEventType implements PhoenixEnum<LoanEventType> {
+public enum LoanEventType implements OpenServEnum<LoanEventType> {
 	LOAN_ADDED(10L, "LOAN_ADDED", "Loan Added", true),
 	PAYMENT_APPLIED(20L, "PAYMENT_APPLIED", "Payment Applied to Loan", false),
 	DISBURSEMENT_ADDED(30L, "DISBURSMENT_ADDED", "Disbursement Added to Loan", true),

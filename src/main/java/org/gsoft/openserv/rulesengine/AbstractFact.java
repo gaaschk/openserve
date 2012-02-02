@@ -79,8 +79,8 @@ public abstract class AbstractFact implements Fact {
         
     }
     
-    protected void addToContext( final OpenServDomainObject... PhoenixDomainObjects ) {
-        this.rulesEngine.addContext( PhoenixDomainObjects );
+    protected void addToContext( final OpenServDomainObject... openServDomainObjects ) {
+        this.rulesEngine.addContext( openServDomainObjects );
     }
     
     protected abstract boolean evaluate();

@@ -21,7 +21,7 @@
 	<!-- Load in application properties reference -->
 	<bean id="applicationProperties"
 			class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="#{systemEnvironment['IS_CI']=='true'?'classpath:phoenix/ci.application.properties':'classpath:phoenix/application.properties'}" />
+		<property name="location" value="#{systemEnvironment['IS_CI']=='true'?'classpath:openserv/ci.application.properties':'classpath:openserv/application.properties'}" />
 	</bean>
 	
 	<bean id="facebook.clientId" class="java.lang.String">
@@ -44,8 +44,8 @@
 		<property name="basename" value="messages"/>
 	</bean>
 	<context:annotation-config />
-	<context:component-scan base-package="org.gsoft.phoenix" />
-	<data:repositories base-package="org.gsoft.phoenix.repositories" />
+	<context:component-scan base-package="org.gsoft.openserv" />
+	<data:repositories base-package="org.gsoft.openserv.repositories" />
 	<task:annotation-driven/>
 	<aop:aspectj-autoproxy/>
   	<!-- thread scope is needed by spring-aop -->
@@ -62,12 +62,12 @@
 	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
     	<property name="formatters">
     		<list>
-    			<bean class="org.gsoft.phoenix.util.formatter.CurrencyInPenniesFormatAnnotationFormatterFactory"/>
+    			<bean class="org.gsoft.openserv.util.formatter.CurrencyInPenniesFormatAnnotationFormatterFactory"/>
     		</list>
     	</property>
     	<property name="converters">
         	<list>
-        		<bean class="org.gsoft.phoenix.util.CurrencyInPenniesConverterFactory"/>
+        		<bean class="org.gsoft.openserv.util.CurrencyInPenniesConverterFactory"/>
         	</list>
     	</property>
 	</bean>
@@ -81,10 +81,10 @@
 	<!-- DataSource configuration -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
-		<property name="driverClassName" value="${phoenix.db.driver}" />
-		<property name="url" value="${phoenix.db.url}" />
-		<property name="username" value="${phoenix.db.username}" />
-		<property name="password" value="${phoenix.db.password}" />
+		<property name="driverClassName" value="${openserv.db.driver}" />
+		<property name="url" value="${openserv.db.url}" />
+		<property name="username" value="${openserv.db.username}" />
+		<property name="password" value="${openserv.db.password}" />
 	</bean>
 
 	<!-- JPA EntityFactory configuration -->

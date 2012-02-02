@@ -19,18 +19,18 @@ public class RulesEngineAspect {
 	@Resource
 	private RulesEngine rulesEngine;
 	
-	@AfterReturning(pointcut="@annotation(org.gsoft.phoenix.rulesengine.annotation.RunRulesEngine)")
+	@AfterReturning(pointcut="@annotation(org.gsoft.openserv.rulesengine.annotation.RunRulesEngine)")
 	public void runRulesEngine(){
 		rulesEngine.evaluateRules();
 		rulesEngine.close();
 	}
 	
-	@Before(value="@annotation(org.gsoft.phoenix.rulesengine.annotation.RunRulesEngine)")
+	@Before(value="@annotation(org.gsoft.openserv.rulesengine.annotation.RunRulesEngine)")
 	public void openRulesEngine(){
 		rulesEngine.open();
 	}
 
-	@AfterReturning(pointcut="execution(* org.gsoft.phoenix.repositories.*.*(..))",
+	@AfterReturning(pointcut="execution(* org.gsoft.openserv.repositories.*.*(..))",
 			returning="retVal")
 	public void addObjectToRulesEngine(OpenServDomainObject retVal){
 		if(retVal != null && rulesEngine.isOpen() && retVal.getClass().isAnnotationPresent(RulesEngineEntity.class)){
@@ -38,7 +38,7 @@ public class RulesEngineAspect {
 		}
 	}
 
-	@AfterReturning(pointcut="execution(* org.gsoft.phoenix.repositories.*.*(..))",
+	@AfterReturning(pointcut="execution(* org.gsoft.openserv.repositories.*.*(..))",
 			returning="retVal")
 	public void addObjectsToRulesEngine(Iterable<?> retVal){
 		if(rulesEngine.isOpen()){

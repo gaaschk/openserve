@@ -1,5 +1,5 @@
 package org.gsoft.openserv.util.jpa;
 
-public interface PhoenixEnum<T extends Enum<T>> {
+public interface OpenServEnum<T extends Enum<T>> {
 	public Long getID();
 }

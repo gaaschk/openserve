@@ -1,8 +1,8 @@
 package org.gsoft.openserv.domain.loan;
 
-import org.gsoft.openserv.util.jpa.PhoenixEnum;
+import org.gsoft.openserv.util.jpa.OpenServEnum;
 
-public enum LoanType implements PhoenixEnum<LoanType>{
+public enum LoanType implements OpenServEnum<LoanType>{
 	PRIVATE_STUDENT(10L, "PRIVATE_STUDENT", "Private Student Loan"), 
 	MORTGAGE(20L, "MORTGAGE", "Mortgage Loan");
 

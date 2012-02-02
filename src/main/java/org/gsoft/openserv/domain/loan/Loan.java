@@ -73,8 +73,8 @@ public class Loan extends OpenServDomainObject{
 	public void setServicingStartDate(Date servicingStartDate) {
 		this.servicingStartDate = servicingStartDate;
 	}
-	@Type( type = "org.gsoft.phoenix.util.jpa.GenericEnumUserType", parameters={
-			@Parameter(name = "enumClass", value = "org.gsoft.phoenix.domain.loan.LoanType")
+	@Type( type = "org.gsoft.openserv.util.jpa.GenericEnumUserType", parameters={
+			@Parameter(name = "enumClass", value = "org.gsoft.openserv.domain.loan.LoanType")
 	})
     @Column( name = "LoanTypeID" )
 	public LoanType getLoanType() {

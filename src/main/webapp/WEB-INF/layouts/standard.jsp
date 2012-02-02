@@ -2,15 +2,15 @@
 <%@ include file="/WEB-INF/layouts/includes.jsp" %>
 <html>
 	<head>
-		<title>PhoenixWeb :: Home</title>
+		<title>OpenServWeb :: Home</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-		<link rel="stylesheet" type="text/css" href="/phoenixweb/content/mocha/themes/default/css/Content.css" />
-		<link rel="stylesheet" type="text/css" href="/phoenixweb/content/mocha/themes/default/css/Core.css" />
-		<link rel="stylesheet" type="text/css" href="/phoenixweb/content/mocha/themes/default/css/Layout.css" />
-		<link rel="stylesheet" type="text/css" href="/phoenixweb/content/mocha/themes/default/css/Dock.css" />
-		<link rel="stylesheet" type="text/css" href="/phoenixweb/content/mocha/themes/default/css/Window.css" />
-		<link rel="stylesheet" type="text/css" href="/phoenixweb/content/mocha/themes/default/css/Tabs.css" />
+		<link rel="stylesheet" type="text/css" href="/openservweb/content/mocha/themes/default/css/Content.css" />
+		<link rel="stylesheet" type="text/css" href="/openservweb/content/mocha/themes/default/css/Core.css" />
+		<link rel="stylesheet" type="text/css" href="/openservweb/content/mocha/themes/default/css/Layout.css" />
+		<link rel="stylesheet" type="text/css" href="/openservweb/content/mocha/themes/default/css/Dock.css" />
+		<link rel="stylesheet" type="text/css" href="/openservweb/content/mocha/themes/default/css/Window.css" />
+		<link rel="stylesheet" type="text/css" href="/openservweb/content/mocha/themes/default/css/Tabs.css" />
 		
 		<script src="${jsUrl}/mootools-core-1.4.1-full-compat.js" type="text/javascript" charset="utf-8"></script>
 		<script src="${jsUrl}/mootools-more-1.4.0.1.js" type="text/javascript" charset="utf-8"></script>
@@ -55,7 +55,7 @@
 		<div id="dektopHeader">
 		  <div id="desktopTitlebarWrapper">
 		    <div id="desktopTitlebar">
-			  <h1 class="applicationTitle">Phoenix</h1>
+			  <h1 class="applicationTitle">OpenServ</h1>
 			  <h2 class="tagline">A <span class="taglineEm">Loan Servicing</span> Application</h2>
 			  <div id="topNav">
 			    <tiles:insertAttribute name="menu" />
@@ -64,9 +64,9 @@
 		  </div>
 		  <div id="desktopNavbar">	
 			<ul>
-				<li class="menu-item"><a href="/phoenixweb/web/addloan">Add a new Loan</a></li>
-				<li class="menu-item"><a href="/phoenixweb/web/payment">Payment</a></li>
-				<li class="menu-item"><a href="/phoenixweb/web/accountsummary">Account Summary</a></li>
+				<li class="menu-item"><a href="/openservweb/web/addloan">Add a new Loan</a></li>
+				<li class="menu-item"><a href="/openservweb/web/payment">Payment</a></li>
+				<li class="menu-item"><a href="/openservweb/web/accountsummary">Account Summary</a></li>
 			</ul>
 		  </div>
 		</div><!-- desktop header end -->
@@ -75,7 +75,7 @@
 		    <tiles:insertAttribute name="content" />
 		  </div>
 		</div>
-		<a href="/phoenixweb/OpenService-AddLoan.mov">Add Loan Screencast</a>
+		<a href="/openservweb/OpenService-AddLoan.mov">Add Loan Screencast</a>
 		<div id="desktopFooterWrapper">
 			<div id="desktopFooter">
 				<span>1.877.MYNUMBER</span>
