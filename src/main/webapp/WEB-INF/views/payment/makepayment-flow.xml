@@ -5,7 +5,7 @@
                           http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
 	<on-start>
-		<evaluate expression="new org.gsoft.phoenix.web.person.PersonSearchCriteria()" result="flowScope.personSearchCriteria"/>
+		<evaluate expression="new org.gsoft.openserv.web.person.PersonSearchCriteria()" result="flowScope.personSearchCriteria"/>
 	</on-start>
 
 	<view-state id="borrowerSearch" view="payment/search" model="personSearchCriteria" >

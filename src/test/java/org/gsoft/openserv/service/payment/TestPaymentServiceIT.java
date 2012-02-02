@@ -1,18 +1,18 @@
-package org.gsoft.phoenix.service.payment;
+package org.gsoft.openserv.service.payment;
 
 import java.util.Calendar;
 
 import javax.annotation.Resource;
 
+import org.gsoft.openserv.Authenticator;
+import org.gsoft.openserv.data.DatabaseUtility;
 import org.gsoft.openserv.domain.Person;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.service.PersonService;
 import org.gsoft.openserv.service.SystemSettingsService;
 import org.gsoft.openserv.service.loanentry.LoanEntryService;
 import org.gsoft.openserv.service.payment.PaymentService;
-import org.gsoft.phoenix.Authenticator;
-import org.gsoft.phoenix.data.DatabaseUtility;
-import org.gsoft.phoenix.util.LoanFactory;
+import org.gsoft.openserv.util.LoanFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

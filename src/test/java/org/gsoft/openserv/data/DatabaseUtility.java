@@ -1,4 +1,4 @@
-package org.gsoft.phoenix.data;
+package org.gsoft.openserv.data;
 
 import java.io.IOException;
 import java.util.Properties;

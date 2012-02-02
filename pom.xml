@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.gsoft.openservice</groupId>
-	<artifactId>openserviceweb</artifactId>
+	<groupId>org.gsoft.openserv</groupId>
+	<artifactId>openservweb</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<name>openserviceweb Maven Webapp</name>
+	<name>openservweb Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<dbmaintain.version>2.4</dbmaintain.version>
@@ -282,7 +282,7 @@
 		
 	</dependencies>
 	<build>
-		<finalName>openserviceweb</finalName>
+		<finalName>openservweb</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -297,7 +297,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
-					<warName>openserviceweb</warName>
+					<warName>openservweb</warName>
 				</configuration>
 			</plugin>
 			<plugin>

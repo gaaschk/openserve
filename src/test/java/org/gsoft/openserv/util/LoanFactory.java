@@ -1,4 +1,4 @@
-package org.gsoft.phoenix.util;
+package org.gsoft.openserv.util;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
