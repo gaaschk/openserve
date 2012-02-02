@@ -40,11 +40,12 @@ public class LateFeeLogic {
 			Date dueDateWithLateGrace = new DateTime(bill.getDueDate()).plusDays(ltp.getDaysLateForFee()).toDate();
 			if(((bill.getSatisfiedDate() == null && dueDateWithLateGrace.before(systemSettings.getCurrentSystemDate())) ||
 					(bill.getSatisfiedDate() != null && dueDateWithLateGrace.before(bill.getSatisfiedDate()))) && 
-					bill.getLateFee() == null){
+					(bill.getLateFee() == null || bill.getLateFee().isCancelled())){
 				//assess late fee
 				this.assessLateFee(bill, ltp, loan);
 			}
-			else if(bill.getLateFee() != null && (dueDateWithLateGrace.after(systemSettings.getCurrentSystemDate()) || 
+			else if(bill.getLateFee() != null && !bill.getLateFee().isCancelled() && 
+					(dueDateWithLateGrace.after(systemSettings.getCurrentSystemDate()) || 
 					(bill.getSatisfiedDate() != null && dueDateWithLateGrace.after(bill.getSatisfiedDate())))){
 				//cancel late fee
 				this.cancelLateFee(bill, loan);
