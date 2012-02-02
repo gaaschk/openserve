@@ -11,12 +11,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 @Entity
-public class LoanEvent extends PhoenixDomainObject{
+public class LoanEvent extends OpenServDomainObject{
 	private static final long serialVersionUID = 3330293203610183990L;
 	private Long loanEventID;
 	private Long loanID;

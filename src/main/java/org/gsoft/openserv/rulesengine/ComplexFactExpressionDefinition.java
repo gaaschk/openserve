@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 
 /**
  * Instances of this class are lists of "simple" FactExpressionDefinitions. As this is a definition,
@@ -164,8 +164,8 @@ public class ComplexFactExpressionDefinition {
      * Returns a set containing all of the domain object classes for which facts in this expression
      * definition have a need.
      */
-    public Set<Class<? extends PhoenixDomainObject>> getAllContextTypeNeeds() {
-        Set<Class<? extends PhoenixDomainObject>> contextTypes = new HashSet<Class<? extends PhoenixDomainObject>>();
+    public Set<Class<? extends OpenServDomainObject>> getAllContextTypeNeeds() {
+        Set<Class<? extends OpenServDomainObject>> contextTypes = new HashSet<Class<? extends OpenServDomainObject>>();
         
         for (FactExpressionDefinition definition : this.definitions) {
             contextTypes.addAll(definition.getAllContextTypeNeeds());

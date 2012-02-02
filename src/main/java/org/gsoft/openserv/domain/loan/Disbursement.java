@@ -10,10 +10,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 
 @Entity
-public class Disbursement extends PhoenixDomainObject{
+public class Disbursement extends OpenServDomainObject{
 	private static final long serialVersionUID = -8488460178826929454L;
 	private Long disbursementID;
 	private Loan loan;

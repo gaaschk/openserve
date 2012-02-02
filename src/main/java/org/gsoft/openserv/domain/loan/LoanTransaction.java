@@ -8,10 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 
 @Entity
-public class LoanTransaction extends PhoenixDomainObject{
+public class LoanTransaction extends OpenServDomainObject{
 	private static final long serialVersionUID = 5151555488279150572L;
 	private Long loanTransactionID;
 	private BigDecimal interestAccrued = new BigDecimal(0);

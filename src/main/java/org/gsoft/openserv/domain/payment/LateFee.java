@@ -8,11 +8,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 import org.gsoft.openserv.domain.loan.LoanEvent;
 
 @Entity
-public class LateFee extends PhoenixDomainObject{
+public class LateFee extends OpenServDomainObject{
 	private static final long serialVersionUID = 8734376381093496118L;
 	private Long lateFeeID;
 	private Integer feeAmount;

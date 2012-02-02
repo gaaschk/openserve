@@ -9,12 +9,12 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 
 @Entity
 @Table(name="SecPrincipal")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Principal extends PhoenixDomainObject{
+public class Principal extends OpenServDomainObject{
 	private static final long serialVersionUID = -4382980089519074792L;
 	private Long principalID;
 	private String name;

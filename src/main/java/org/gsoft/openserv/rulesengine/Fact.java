@@ -2,7 +2,7 @@ package org.gsoft.openserv.rulesengine;
 
 import java.util.Set;
 
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 
 public interface Fact {
     /**
@@ -29,7 +29,7 @@ public interface Fact {
     /**
      * Return the list of context objects this fact uses in its evaluation.
      */
-    public PhoenixDomainObject[] getContextObjects();
+    public OpenServDomainObject[] getContextObjects();
     
     /**
      * Return the set of expressions that use this fact.

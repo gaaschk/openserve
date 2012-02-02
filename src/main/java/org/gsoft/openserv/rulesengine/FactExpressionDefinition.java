@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 
 /**
  * Instances of this class are lists of Fact classes paired with expected truth values. An expression definition,
@@ -17,13 +17,13 @@ import org.gsoft.openserv.domain.PhoenixDomainObject;
  */
 public class FactExpressionDefinition {
     private final Map<Class<? extends Fact>, Boolean> expressionStore;
-    private final Set<Class<? extends PhoenixDomainObject>> contextTypeNeeds;
+    private final Set<Class<? extends OpenServDomainObject>> contextTypeNeeds;
     private final Rule rule;
     
     public FactExpressionDefinition(Rule rule) {
         this.rule = rule;
         this.expressionStore = new HashMap<Class<? extends Fact>, Boolean>();
-        this.contextTypeNeeds = new HashSet<Class<? extends PhoenixDomainObject>>();
+        this.contextTypeNeeds = new HashSet<Class<? extends OpenServDomainObject>>();
     }
     
     public Rule getRule() {
@@ -48,7 +48,7 @@ public class FactExpressionDefinition {
      * Returns an unmodifiable set containing all of the domain object classes for which facts in this expression
      * definition have a need.
      */
-    public Set<Class<? extends PhoenixDomainObject>> getAllContextTypeNeeds() {
+    public Set<Class<? extends OpenServDomainObject>> getAllContextTypeNeeds() {
         return Collections.unmodifiableSet(this.contextTypeNeeds);
     }
     
@@ -111,8 +111,8 @@ public class FactExpressionDefinition {
      * Adds each domain type to the set of context types this expression definition's facts need.
      * If there was already a need for that type, this method effectively does nothing.
      */
-    private void addContextTypeNeeds(final Class<? extends PhoenixDomainObject>[] domainTypes) {
-        for (final Class<? extends PhoenixDomainObject> domainType : domainTypes) {
+    private void addContextTypeNeeds(final Class<? extends OpenServDomainObject>[] domainTypes) {
+        for (final Class<? extends OpenServDomainObject> domainType : domainTypes) {
             this.contextTypeNeeds.add(domainType);
         }
     }

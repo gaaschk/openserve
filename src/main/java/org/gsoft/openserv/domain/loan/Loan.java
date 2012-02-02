@@ -18,7 +18,7 @@ import javax.persistence.Transient;
 
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.Person;
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 import org.gsoft.openserv.repositories.loan.LoanEventRepository;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
 import org.gsoft.openserv.util.ApplicationContextLocator;
@@ -30,7 +30,7 @@ import org.joda.time.Months;
 
 @Entity
 @RulesEngineEntity
-public class Loan extends PhoenixDomainObject{
+public class Loan extends OpenServDomainObject{
 	private static final long serialVersionUID = 7541874847320220624L;
 	private Long loanID;
 	private Date servicingStartDate;

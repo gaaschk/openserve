@@ -9,7 +9,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.NaturalId;
 
 @Entity
-public class Person extends PhoenixDomainObject{
+public class Person extends OpenServDomainObject{
 	private static final long serialVersionUID = 7097467900225137835L;
 	private Long personID;
 	private String ssn;

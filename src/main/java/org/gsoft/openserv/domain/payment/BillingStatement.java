@@ -13,12 +13,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
 
 @Entity
 @RulesEngineEntity
-public class BillingStatement extends PhoenixDomainObject{
+public class BillingStatement extends OpenServDomainObject{
 	private static final long serialVersionUID = -7042442632267944606L;
 	private Long billingStatementID;
 	private Long loanID;

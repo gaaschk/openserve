@@ -7,7 +7,7 @@ import java.util.Set;
 import org.apache.commons.collections.Predicate;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 
 public abstract class AbstractFact implements Fact {
     protected static final Logger LOG = LogManager.getLogger( "ruleTrace" );
@@ -15,11 +15,11 @@ public abstract class AbstractFact implements Fact {
     // fact truth values are intentionally nullable to indicate unevaluated facts
     Boolean isTrue = null;
     private final Set<ComplexFactExpression> complexExpressions;
-    private final PhoenixDomainObject[] contextObjects;
+    private final OpenServDomainObject[] contextObjects;
     private final Set<FactExpression> factExpressions;
     private RulesEngine rulesEngine;
     
-    protected AbstractFact( final PhoenixDomainObject... contextObjects ) {
+    protected AbstractFact( final OpenServDomainObject... contextObjects ) {
         this.complexExpressions = new HashSet<ComplexFactExpression>();
         this.factExpressions = new HashSet<FactExpression>();
         this.contextObjects = contextObjects;
@@ -33,7 +33,7 @@ public abstract class AbstractFact implements Fact {
         this.factExpressions.add( expression );
     }
     
-    public <T extends PhoenixDomainObject> T findInContext( final T potentialMatch ) {
+    public <T extends OpenServDomainObject> T findInContext( final T potentialMatch ) {
         return this.rulesEngine.findInContext( potentialMatch );
     }
     
@@ -41,7 +41,7 @@ public abstract class AbstractFact implements Fact {
         return this.complexExpressions;
     }
     
-    public PhoenixDomainObject[] getContextObjects() {
+    public OpenServDomainObject[] getContextObjects() {
         return this.contextObjects;
     }
     
@@ -79,7 +79,7 @@ public abstract class AbstractFact implements Fact {
         
     }
     
-    protected void addToContext( final PhoenixDomainObject... PhoenixDomainObjects ) {
+    protected void addToContext( final OpenServDomainObject... PhoenixDomainObjects ) {
         this.rulesEngine.addContext( PhoenixDomainObjects );
     }
     
@@ -87,7 +87,7 @@ public abstract class AbstractFact implements Fact {
     
     protected abstract void refreshFromContext();
     
-    protected <T extends PhoenixDomainObject> T findInContext( final Class<T> contextClass, final Predicate predicate ) {
+    protected <T extends OpenServDomainObject> T findInContext( final Class<T> contextClass, final Predicate predicate ) {
         return this.rulesEngine.findInContext( contextClass, predicate );
     }
     

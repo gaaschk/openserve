@@ -13,10 +13,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 
 @Entity
-public class LoanAmortizationSchedule extends PhoenixDomainObject {
+public class LoanAmortizationSchedule extends OpenServDomainObject {
 	private static final long serialVersionUID = -248336175803533637L;
 
 	private Long loanAmortizationScheduleID;

@@ -12,10 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 
 @Entity
-public class AmortizationSchedule extends PhoenixDomainObject {
+public class AmortizationSchedule extends OpenServDomainObject {
 	private static final long serialVersionUID = -591660710764385964L;
 	private Long amortizationScheduleID;
 	private Date creationDate;

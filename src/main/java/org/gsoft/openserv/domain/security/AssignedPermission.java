@@ -7,11 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 
 @Entity
 @Table(name="SecAssignedPermission")
-public class AssignedPermission extends PhoenixDomainObject{
+public class AssignedPermission extends OpenServDomainObject{
 	private static final long serialVersionUID = -6565031937412516537L;
 	private Long assignedPermissionID;
 	private Long principalID;

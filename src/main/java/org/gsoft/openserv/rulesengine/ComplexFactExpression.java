@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 
 
 public class ComplexFactExpression {
@@ -128,7 +128,7 @@ public class ComplexFactExpression {
         return facts;
     }
 
-    public void gatherFacts(List<PhoenixDomainObject> contextList, RulesEngine rulesEngine) {
+    public void gatherFacts(List<OpenServDomainObject> contextList, RulesEngine rulesEngine) {
         FactFinder finder = new FactFinder(contextList, this.definition.getFactClasses(), rulesEngine.getFactsByContext());
         
         Set<Fact> existingFacts = finder.getExistingNeededFacts();

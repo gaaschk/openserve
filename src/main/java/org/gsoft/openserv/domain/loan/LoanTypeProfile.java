@@ -9,12 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 @Entity
-public class LoanTypeProfile extends PhoenixDomainObject{
+public class LoanTypeProfile extends OpenServDomainObject{
 	private static final long serialVersionUID = 6245557328161056820L;
 	private Long loanTypeProfileID;
 	private Date effectiveDate;

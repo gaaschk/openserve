@@ -17,7 +17,7 @@ import org.apache.commons.collections.Predicate;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
-import org.gsoft.openserv.domain.PhoenixDomainObject;
+import org.gsoft.openserv.domain.OpenServDomainObject;
 import org.gsoft.openserv.util.ApplicationContextLocator;
 import org.gsoft.openserv.util.ReversibleMultiMap;
 import org.springframework.context.ApplicationContext;
@@ -42,7 +42,7 @@ public class RulesEngine {
      * A mapping of classes to objects in the context. This allows us to collect all the context objects that are of a
      * given type.
      */
-    final ReversibleMultiMap<Class<? extends PhoenixDomainObject>, PhoenixDomainObject> contextObjectByType;
+    final ReversibleMultiMap<Class<? extends OpenServDomainObject>, OpenServDomainObject> contextObjectByType;
     
     /**
      * A mapping of context object classes to the fact expression definitions that need them. For example, if the
@@ -50,14 +50,14 @@ public class RulesEngine {
      * the fact requires a Loan, the mapping would be from the Loan.class to the expression definition object. This
      * allows us to find all fact expression definitions a context object can impact.
      */
-    final ReversibleMultiMap<Class<? extends PhoenixDomainObject>, ComplexFactExpressionDefinition> expressionDefinitionsByContextType;
+    final ReversibleMultiMap<Class<? extends OpenServDomainObject>, ComplexFactExpressionDefinition> expressionDefinitionsByContextType;
     
     /**
      * A mapping of context object instances to the fact instances that use them. This allows us to find all the facts
      * that are using a given context object and (since it is reversible) find all the context objects that a fact is
      * using.
      */
-    final ReversibleMultiMap<PhoenixDomainObject, Fact> factsByContext;
+    final ReversibleMultiMap<OpenServDomainObject, Fact> factsByContext;
     
     /**
      * A prioritized queue of facts we're planning to evaluate, priority sorts them into the order we expect to evaluate
@@ -71,7 +71,7 @@ public class RulesEngine {
      * allows us to find all facts a context object can impact and (since it is reversible) find what context objects a
      * fact requires.
      */
-    final ReversibleMultiMap<Class<? extends PhoenixDomainObject>, Class<? extends Fact>> factTypesByContextType;
+    final ReversibleMultiMap<Class<? extends OpenServDomainObject>, Class<? extends Fact>> factTypesByContextType;
     
     /**
      * A collection of all the rules in the system. Note that rules are found through the BeanFactory. Any class marked
@@ -91,7 +91,7 @@ public class RulesEngine {
     /**
      * A map of old context objects to their current version.
      */
-    private final Map<PhoenixDomainObject, PhoenixDomainObject> contextObjectVersionMap;
+    private final Map<OpenServDomainObject, OpenServDomainObject> contextObjectVersionMap;
     
     /**
      * A map of expression definitions to "instances" of the definition. Although implemented as a ReversibleMultiMap,
@@ -110,18 +110,18 @@ public class RulesEngine {
      * Creates a new rules engine instance with no context.
      */
     public RulesEngine() {
-        this.contextObjectByType = new ReversibleMultiMap<Class<? extends PhoenixDomainObject>, PhoenixDomainObject>();
+        this.contextObjectByType = new ReversibleMultiMap<Class<? extends OpenServDomainObject>, OpenServDomainObject>();
         this.factTypesByContextType =
-                new ReversibleMultiMap<Class<? extends PhoenixDomainObject>, Class<? extends Fact>>();
+                new ReversibleMultiMap<Class<? extends OpenServDomainObject>, Class<? extends Fact>>();
         this.rulesByFactType = new ReversibleMultiMap<Class<? extends Fact>, Rule>();
-        this.factsByContext = new ReversibleMultiMap<PhoenixDomainObject, Fact>();
+        this.factsByContext = new ReversibleMultiMap<OpenServDomainObject, Fact>();
         this.factsToEval = new PriorityQueue<Fact>( 11, new FactPriorityComparator() );
-        this.contextObjectVersionMap = new HashMap<PhoenixDomainObject, PhoenixDomainObject>();
+        this.contextObjectVersionMap = new HashMap<OpenServDomainObject, OpenServDomainObject>();
         this.factExpressionByDefinition =
                 new ReversibleMultiMap<ComplexFactExpressionDefinition, ComplexFactExpression>();
         this.rules = new ArrayList<Rule>();
         this.expressionDefinitionsByContextType =
-                new ReversibleMultiMap<Class<? extends PhoenixDomainObject>, ComplexFactExpressionDefinition>();
+                new ReversibleMultiMap<Class<? extends OpenServDomainObject>, ComplexFactExpressionDefinition>();
     }
     
     /**
@@ -131,14 +131,14 @@ public class RulesEngine {
      * additional context to be added. That additional context will be noted and additional facts/rules will be
      * evaluated/fired accordingly. <b>IMPORTANT:</b> This should be used only for adding <i>new</i> context objects, if
      * this is a new version of an object that is already in the context, the
-     * {@link #replaceContext(PhoenixDomainObject, PhoenixDomainObject)} method should be used. This method will ignore
+     * {@link #replaceContext(OpenServDomainObject, OpenServDomainObject)} method should be used. This method will ignore
      * objects that are already in the context, but it is not capable of determining that in certain cases (if {Object
      * {@link #equals(Object)} is not implemented properly).
      * 
      * @param addedContext
      *            One or more domain objects to be added to the context.
      */
-    public void addContext( final PhoenixDomainObject... addedContext ) {
+    public void addContext( final OpenServDomainObject... addedContext ) {
         if(!this.isOpen){
         	RulesEngine.LOG.trace("call to addContext made while rules engine is closed.  objects ignored.");
         	return;
@@ -197,7 +197,7 @@ public class RulesEngine {
      * @param old
      * @param replacement
      */
-    public void addOrReplaceContext( final PhoenixDomainObject old, final PhoenixDomainObject replacement ) {
+    public void addOrReplaceContext( final OpenServDomainObject old, final OpenServDomainObject replacement ) {
         if ( !this.replaceContext( old, replacement ) ) {
             this.addContext( replacement );
         }
@@ -230,7 +230,7 @@ public class RulesEngine {
      *            A method to evaluate against objects of the right type in the context.
      * @return A single match or null if none can be found.
      */
-    public <T extends PhoenixDomainObject> T findInContext( final Class<T> contextClass, final Predicate predicate ) {
+    public <T extends OpenServDomainObject> T findInContext( final Class<T> contextClass, final Predicate predicate ) {
         final Collection<T> objectsWithSameType = this.getContextObjectsOfType( contextClass );
         if ( objectsWithSameType != null ) {
             for ( final T potentialMatch : objectsWithSameType ) {
@@ -250,7 +250,7 @@ public class RulesEngine {
      * @return The most recent version of the context object or <code>null</code> if the object is not in the context.
      */
     @SuppressWarnings("unchecked")
-	public <T extends PhoenixDomainObject> T findInContext( final T potentialMatch ) {
+	public <T extends OpenServDomainObject> T findInContext( final T potentialMatch ) {
         // If what was passed in is the latest of the new versions, just return it.
         if ( this.contextObjectVersionMap.containsValue( potentialMatch ) ) {
             return (T)this.contextObjectVersionMap.get( potentialMatch );
@@ -276,18 +276,18 @@ public class RulesEngine {
      * Finds all of the context objects of the provided type.
      */
     @SuppressWarnings( "unchecked" )
-    public <T extends PhoenixDomainObject> Collection<T> getContextObjectsOfType( final Class<T> type ) {
+    public <T extends OpenServDomainObject> Collection<T> getContextObjectsOfType( final Class<T> type ) {
         final Collection<T> objectsWithSameType = (Collection<T>)this.contextObjectByType.get( type );
         final List<T> returnList = new ArrayList<T>();
         if ( ( objectsWithSameType != null ) && !objectsWithSameType.isEmpty() ) {
-            for ( final PhoenixDomainObject obj : objectsWithSameType ) {
+            for ( final OpenServDomainObject obj : objectsWithSameType ) {
                 returnList.add( (T)this.findInContext( obj ) );
             }
         }
         return returnList;
     }
     
-    public ReversibleMultiMap<PhoenixDomainObject, Fact> getFactsByContext() {
+    public ReversibleMultiMap<OpenServDomainObject, Fact> getFactsByContext() {
         return this.factsByContext;
     }
     
@@ -298,7 +298,7 @@ public class RulesEngine {
      * required because in the system as designed, it is possible (likely) that a call to a DAO's save method will
      * result in the creation of a new instance. To make things worse, the old instance may be still around somewhere.
      * By calling this method from the save (should be via AOP), this RulesEngine will always return the most current
-     * copy of the object when asked. (E.G. {@link #findInContext(PhoenixDomainObject)}) Note that to make this certain
+     * copy of the object when asked. (E.G. {@link #findInContext(OpenServDomainObject)}) Note that to make this certain
      * to work (given current equals() implementations), all of the old versions are kept around.
      * 
      * @param old
@@ -306,7 +306,7 @@ public class RulesEngine {
      * @param replacement
      *            The new version of the object.
      */
-    public boolean replaceContext( final PhoenixDomainObject old, final PhoenixDomainObject replacement ) {
+    public boolean replaceContext( final OpenServDomainObject old, final OpenServDomainObject replacement ) {
         // null objects should never be passed to addContext()
         if ( old == null ) {
             throw new IllegalArgumentException( "Null object passed into context." );
@@ -336,7 +336,7 @@ public class RulesEngine {
             replaced = true;
         }
         else if ( oldWasPreviousVersion ) {
-            final PhoenixDomainObject currentValue = this.contextObjectVersionMap.get( old );
+            final OpenServDomainObject currentValue = this.contextObjectVersionMap.get( old );
             this.replaceContextObjectVersionValue( currentValue, replacement );
             // we need to maintain our fact/context mapping with the most current context
             this.updateFactsByContext( old, replacement );
@@ -360,9 +360,9 @@ public class RulesEngine {
      * it will never be evaluated.
      */
     void addFactType( final Class<? extends Fact> factClass ) {
-        final Class<? extends PhoenixDomainObject>[] params = FactUtil.determineConstructorTypesForFactType( factClass );
+        final Class<? extends OpenServDomainObject>[] params = FactUtil.determineConstructorTypesForFactType( factClass );
         if ( !this.factTypesByContextType.containsValue( factClass ) ) {
-            for ( final Class<? extends PhoenixDomainObject> contextNeed : params ) {
+            for ( final Class<? extends OpenServDomainObject> contextNeed : params ) {
                 this.factTypesByContextType.put( contextNeed, factClass );
             }
         }
@@ -373,7 +373,7 @@ public class RulesEngine {
      * the new information. It also tries to ignore duplicates. (It "tries" as this implementation is only as good as
      * the equals/hashcode implementation for the domain object.)
      */
-    void incorporateNewContextObject( final PhoenixDomainObject addedObject ) {
+    void incorporateNewContextObject( final OpenServDomainObject addedObject ) {
         RulesEngine.LOG.trace( "RulesEngine incorporating context object: " + addedObject.getClass().getSimpleName() +
                 "[" + addedObject.getID() + "]" );
         
@@ -392,11 +392,11 @@ public class RulesEngine {
             // for each one, determine if an expression or expressions can be
             // created -- if so, create them
             for ( final ComplexFactExpressionDefinition expressionDefinition : expressionDefinitions ) {
-                final Set<Class<? extends PhoenixDomainObject>> contextTypes =
+                final Set<Class<? extends OpenServDomainObject>> contextTypes =
                         expressionDefinition.getAllContextTypeNeeds();
-                final List<List<PhoenixDomainObject>> contextCombinations =
+                final List<List<OpenServDomainObject>> contextCombinations =
                         this.calculateContextCombinations( addedObject, contextTypes );
-                for ( final List<PhoenixDomainObject> contextList : contextCombinations ) {
+                for ( final List<OpenServDomainObject> contextList : contextCombinations ) {
                     final ComplexFactExpression expression = new ComplexFactExpression( expressionDefinition );
                     expression.gatherFacts( contextList, this );
                     this.factExpressionByDefinition.put( expressionDefinition, expression );
@@ -411,9 +411,9 @@ public class RulesEngine {
      * Intended for internal use (also used by unit tests), this method causes the passed-in domain objects to be added
      * to the context of the rules engine.
      */
-    void incorporateNewContextObjects( final PhoenixDomainObject[] addedContext ) {
+    void incorporateNewContextObjects( final OpenServDomainObject[] addedContext ) {
         // iterate over context objects
-        for ( final PhoenixDomainObject addedObject : addedContext ) {
+        for ( final OpenServDomainObject addedObject : addedContext ) {
             this.incorporateNewContextObject( addedObject );
         }
     }
@@ -423,8 +423,8 @@ public class RulesEngine {
      * provided. The context objects should be the parameters used to construct the fact. Used by
      * {@link FactExpression#createNeededFacts(List, RulesEngine)}.
      */
-    void indexNewFact( final Fact newFact, final PhoenixDomainObject[] constructorParams ) {
-        for ( final PhoenixDomainObject contextObj : constructorParams ) {
+    void indexNewFact( final Fact newFact, final OpenServDomainObject[] constructorParams ) {
+        for ( final OpenServDomainObject contextObj : constructorParams ) {
             this.factsByContext.put( contextObj, newFact );
         }
     }
@@ -472,14 +472,14 @@ public class RulesEngine {
      * Finds all combinations of the provided domain object and objects in the context that match the types in the
      * provided array.
      */
-    private List<List<PhoenixDomainObject>> calculateContextCombinations( final PhoenixDomainObject domainObject,
-            final Set<Class<? extends PhoenixDomainObject>> constructorParamTypes ) {
-        List<List<PhoenixDomainObject>> constructorParamCombos = new ArrayList<List<PhoenixDomainObject>>();
+    private List<List<OpenServDomainObject>> calculateContextCombinations( final OpenServDomainObject domainObject,
+            final Set<Class<? extends OpenServDomainObject>> constructorParamTypes ) {
+        List<List<OpenServDomainObject>> constructorParamCombos = new ArrayList<List<OpenServDomainObject>>();
         
         // for each type needed by the constructor
-        for ( final Class<? extends PhoenixDomainObject> paramType : constructorParamTypes ) {
+        for ( final Class<? extends OpenServDomainObject> paramType : constructorParamTypes ) {
             // create a list of context objects that matches the parameter type
-            final ArrayList<PhoenixDomainObject> contextParamCombo =
+            final ArrayList<OpenServDomainObject> contextParamCombo =
                     this.matchProvidedOrContextObjectsToType( domainObject, paramType );
             
             if ( contextParamCombo.isEmpty() ) {
@@ -551,20 +551,20 @@ public class RulesEngine {
      *                     | A1 | B2 | C3 |
      * </pre>
      */
-    private List<List<PhoenixDomainObject>> growOptionsMatrix( final List<PhoenixDomainObject> optionList,
-            final List<List<PhoenixDomainObject>> optionsMatrix ) {
-        final List<List<PhoenixDomainObject>> largerMatrix = new ArrayList<List<PhoenixDomainObject>>();
+    private List<List<OpenServDomainObject>> growOptionsMatrix( final List<OpenServDomainObject> optionList,
+            final List<List<OpenServDomainObject>> optionsMatrix ) {
+        final List<List<OpenServDomainObject>> largerMatrix = new ArrayList<List<OpenServDomainObject>>();
         if ( optionsMatrix.isEmpty() ) {
-            for ( final PhoenixDomainObject obj : optionList ) {
-                final List<PhoenixDomainObject> newMatrixLine = new ArrayList<PhoenixDomainObject>();
+            for ( final OpenServDomainObject obj : optionList ) {
+                final List<OpenServDomainObject> newMatrixLine = new ArrayList<OpenServDomainObject>();
                 newMatrixLine.add( obj );
                 largerMatrix.add( newMatrixLine );
             }
         }
         else {
-            for ( final PhoenixDomainObject obj : optionList ) {
-                for ( final List<PhoenixDomainObject> matrixLine : optionsMatrix ) {
-                    final List<PhoenixDomainObject> newMatrixLine = new ArrayList<PhoenixDomainObject>( matrixLine );
+            for ( final OpenServDomainObject obj : optionList ) {
+                for ( final List<OpenServDomainObject> matrixLine : optionsMatrix ) {
+                    final List<OpenServDomainObject> newMatrixLine = new ArrayList<OpenServDomainObject>( matrixLine );
                     newMatrixLine.add( obj );
                     largerMatrix.add( newMatrixLine );
                 }
@@ -590,8 +590,8 @@ public class RulesEngine {
      */
     private void mapRule( final Rule rule ) {
         final ComplexFactExpressionDefinition expression = rule.getExpressionDefinition();
-        final Set<Class<? extends PhoenixDomainObject>> contextTypes = expression.getAllContextTypeNeeds();
-        for ( final Class<? extends PhoenixDomainObject> contextType : contextTypes ) {
+        final Set<Class<? extends OpenServDomainObject>> contextTypes = expression.getAllContextTypeNeeds();
+        for ( final Class<? extends OpenServDomainObject> contextType : contextTypes ) {
             this.expressionDefinitionsByContextType.put( contextType, expression );
         }
         final Set<Class<? extends Fact>> factNeeds = expression.getFactClasses();
@@ -622,9 +622,9 @@ public class RulesEngine {
      * Returns a list containing the single domain object provided if that object is of the specified type; otherwise
      * returns a list of all context objects that match that type.
      */
-    private <T extends PhoenixDomainObject> ArrayList<PhoenixDomainObject> matchProvidedOrContextObjectsToType(
-            final PhoenixDomainObject domainObject, final Class<T> type ) {
-        final ArrayList<PhoenixDomainObject> contextParamCombo = new ArrayList<PhoenixDomainObject>();
+    private <T extends OpenServDomainObject> ArrayList<OpenServDomainObject> matchProvidedOrContextObjectsToType(
+            final OpenServDomainObject domainObject, final Class<T> type ) {
+        final ArrayList<OpenServDomainObject> contextParamCombo = new ArrayList<OpenServDomainObject>();
         if ( domainObject.getClass() == type ) {
             contextParamCombo.add( domainObject );
         }
@@ -662,9 +662,9 @@ public class RulesEngine {
     /**
      * Finds all mappings to this old version in the version map and updates them with the replacement.
      */
-    private void replaceContextObjectVersionValue( final PhoenixDomainObject old, final PhoenixDomainObject replacement ) {
-        final Set<Entry<PhoenixDomainObject, PhoenixDomainObject>> entries = this.contextObjectVersionMap.entrySet();
-        for ( final Entry<PhoenixDomainObject, PhoenixDomainObject> entry : entries ) {
+    private void replaceContextObjectVersionValue( final OpenServDomainObject old, final OpenServDomainObject replacement ) {
+        final Set<Entry<OpenServDomainObject, OpenServDomainObject>> entries = this.contextObjectVersionMap.entrySet();
+        for ( final Entry<OpenServDomainObject, OpenServDomainObject> entry : entries ) {
             if ( entry.getValue().equals( old ) ) {
                 entry.setValue( replacement );
             }
@@ -689,10 +689,10 @@ public class RulesEngine {
     }
     
     /**
-     * Called by {@link #replaceContext(PhoenixDomainObject, PhoenixDomainObject)} to maintain the fact/context mapping
+     * Called by {@link #replaceContext(OpenServDomainObject, OpenServDomainObject)} to maintain the fact/context mapping
      * with the most current context.
      */
-    private void updateFactsByContext( final PhoenixDomainObject old, final PhoenixDomainObject replacement ) {
+    private void updateFactsByContext( final OpenServDomainObject old, final OpenServDomainObject replacement ) {
         final Collection<Fact> facts = this.factsByContext.get( old );
         this.factsByContext.removeKey( old );
         if ( facts != null ) {

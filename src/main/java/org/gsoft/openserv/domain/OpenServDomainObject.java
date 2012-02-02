@@ -2,7 +2,7 @@ package org.gsoft.openserv.domain;
 
 import java.io.Serializable;
 
-public abstract class PhoenixDomainObject implements Serializable {
+public abstract class OpenServDomainObject implements Serializable {
 	private static final long serialVersionUID = -3050035343078844357L;
 
 	@Override
@@ -22,7 +22,7 @@ public abstract class PhoenixDomainObject implements Serializable {
         }
         
         if ( this.getClass().equals( obj.getClass() ) ) {
-            final PhoenixDomainObject other = (PhoenixDomainObject)obj;
+            final OpenServDomainObject other = (OpenServDomainObject)obj;
             if ( this.equalsByID( other )) {
                 return true;
             }
@@ -30,7 +30,7 @@ public abstract class PhoenixDomainObject implements Serializable {
         return false;
     }
 
-    protected boolean equalsByID( final PhoenixDomainObject other ) {
+    protected boolean equalsByID( final OpenServDomainObject other ) {
         if ( this.getID() == null ) {
             return other.getID() == null;
         }
