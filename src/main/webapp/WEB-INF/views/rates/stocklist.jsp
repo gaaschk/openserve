@@ -22,4 +22,13 @@
 			</tr>
 		</c:forEach>
 	</table>
+	<fieldset>
+		<label>Symbol:</label>
+		<form:input path="editingStock.symbol"/>
+	</fieldset>
+	<fieldset>
+		<label>Name:</label>
+		<form:input path="editingStock.name"/>
+	</fieldset>
+	<input type="submit" value="Save"/>
 </form:form>
