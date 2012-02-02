@@ -75,7 +75,7 @@
 		    <tiles:insertAttribute name="content" />
 		  </div>
 		</div>
-		
+		<a href="/phoenixweb/OpenService-AddLoan.mov">Add Loan Screencast</a>
 		<div id="desktopFooterWrapper">
 			<div id="desktopFooter">
 				<span>1.877.MYNUMBER</span>
