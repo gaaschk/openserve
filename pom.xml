@@ -386,7 +386,7 @@
 				<activeByDefault>false</activeByDefault>
 				<property>
 					<name>system.teamcity.projectName</name>
-					<value>Phoenix</value>
+					<value>OpenServ</value>
 				</property>
 			</activation>
 			<properties>

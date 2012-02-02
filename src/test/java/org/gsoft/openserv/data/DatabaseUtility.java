@@ -11,15 +11,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DatabaseUtility {
-	@Value("${phoenix.db.driver}")
+	@Value("${openserv.db.driver}")
 	private String dbDriver;
-	@Value("${phoenix.db.username}")
+	@Value("${openserv.db.username}")
 	private String dbUsername;
-	@Value("${phoenix.db.password}")
+	@Value("${openserv.db.password}")
 	private String dbPassword;
-	@Value("${phoenix.db.url}")
+	@Value("${openserv.db.url}")
 	private String dbURL;
-	@Value("${phoenix.db.schemas}")
+	@Value("${openserv.db.schemas}")
 	private String dbSchemas;
 	
 	public void refreshDatabase() throws IOException{
