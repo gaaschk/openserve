@@ -391,31 +391,22 @@
 			</activation>
 			<properties>
 				<database.driver>com.mysql.jdbc.Driver</database.driver>
-				<database.url>jdbc:mysql://localhost:3306/phoenixci</database.url>
+				<database.url>jdbc:mysql://localhost:3306/openservci</database.url>
 				<database.username>root</database.username>
 				<database.password>5eqUxet7</database.password>
-				<database.schema>phoenixci</database.schema>
+				<database.schema>openservci</database.schema>
 			</properties>
 		</profile>
 		<profile>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
-			<!-- 
 			<properties>
 				<database.driver>com.mysql.jdbc.Driver</database.driver>
-				<database.url>jdbc:mysql://192.168.10.9:3306/phoenix</database.url>
-				<database.username>root</database.username>
-				<database.password>5eqUxet7</database.password>
-				<database.schema>phoenix</database.schema>
-			</properties>
-			-->
-			<properties>
-				<database.driver>com.mysql.jdbc.Driver</database.driver>
-				<database.url>jdbc:mysql://localhost:3306/phoenix</database.url>
+				<database.url>jdbc:mysql://localhost:3306/openserv</database.url>
 				<database.username>root</database.username>
 				<database.password></database.password>
-				<database.schema>phoenix</database.schema>
+				<database.schema>openserv</database.schema>
 			</properties>
 		</profile>
 	</profiles>
