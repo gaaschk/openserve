@@ -67,6 +67,7 @@
 				<li class="menu-item"><a href="/openservweb/web/addloan">Add a new Loan</a></li>
 				<li class="menu-item"><a href="/openservweb/web/payment">Payment</a></li>
 				<li class="menu-item"><a href="/openservweb/web/accountsummary">Account Summary</a></li>
+				<li class="menu-item"><a href="/openservweb/web/rates/stocks">Stocks</a></li>
 			</ul>
 		  </div>
 		</div><!-- desktop header end -->
