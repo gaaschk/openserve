@@ -3,7 +3,7 @@ package org.gsoft.openserv.web.models;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.gsoft.openserv.util.formatter.CurrencyInPenniesFormat;
+import org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class BillingStatementModel implements Serializable{

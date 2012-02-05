@@ -75,5 +75,6 @@ Meio.Mask.Regexp = new Class({
 Meio.Mask.createMasks('Regexp', {
 	'Ip'		: {regex: /^(\d{0,3}\.){0,3}(\d{0,3})?$/},
 	'Email'		: {regex: /^[\w.!#$%&'*+=?~^_`{|}\/-]*@?[.\w-]*$/},
-	'Currency'  : {regex: /^\$(\d{1,3}(\,\d{3})*|(\d+))(\.\d{2})?$/}
+	'Currency'  : {regex: /^\$(\d{1,3}(\,\d{3})*|(\d+))(\.\d{2})?$/},
+    'Percent'   : {regex: /^([0-9])*(\.)?([0-9])*%?$/}
 });

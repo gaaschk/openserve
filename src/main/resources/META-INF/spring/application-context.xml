@@ -62,12 +62,13 @@
 	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
     	<property name="formatters">
     		<list>
-    			<bean class="org.gsoft.openserv.util.formatter.CurrencyInPenniesFormatAnnotationFormatterFactory"/>
+    			<bean class="org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormatAnnotationFormatterFactory"/>
+    			<bean class="org.gsoft.openserv.web.formatter.percent.PercentFormatAnnotationFormatterFactory"/>
     		</list>
     	</property>
     	<property name="converters">
         	<list>
-        		<bean class="org.gsoft.openserv.util.CurrencyInPenniesConverterFactory"/>
+        		<bean class="org.gsoft.openserv.web.converters.CurrencyInPenniesConverterFactory"/>
         	</list>
     	</property>
 	</bean>

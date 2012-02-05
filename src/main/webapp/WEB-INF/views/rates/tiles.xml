@@ -6,4 +6,8 @@
     <definition name="rates/stocklist" extends="standardLayout">
         <put-attribute name="content" value="/WEB-INF/views/rates/stocklist.jsp" />
     </definition>
+
+    <definition name="rates/ratelist" extends="standardLayout">
+        <put-attribute name="content" value="/WEB-INF/views/rates/ratelist.jsp" />
+    </definition>
 </tiles-definitions>

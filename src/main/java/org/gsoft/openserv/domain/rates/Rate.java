@@ -9,21 +9,20 @@ import javax.persistence.Transient;
 import org.gsoft.openserv.domain.OpenServDomainObject;
 
 @Entity
-public class Stock extends OpenServDomainObject {
+public class Rate extends OpenServDomainObject {
 	private static final long serialVersionUID = -7125016712126176480L;
-	private Long stockID;
+	private Long rateID;
 	private String symbol;
 	private String name;
-	private Boolean autoUpdate;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	public Long getStockID() {
-		return stockID;
+	public Long getRateID() {
+		return rateID;
 	}
 
-	public void setStockID(Long stockID) {
-		this.stockID = stockID;
+	public void setRateID(Long rateID) {
+		this.rateID = rateID;
 	}
 
 	public String getSymbol() {
@@ -42,17 +41,9 @@ public class Stock extends OpenServDomainObject {
 		this.name = name;
 	}
 
-	public Boolean getAutoUpdate() {
-		return autoUpdate;
-	}
-
-	public void setAutoUpdate(Boolean autoUpdate) {
-		this.autoUpdate = autoUpdate;
-	}
-
 	@Override
 	@Transient
 	public Long getID() {
-		return this.getStockID();
+		return this.getRateID();
 	}
 }

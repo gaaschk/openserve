@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                          http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<on-start>
+		<evaluate expression="ratesFlowController.findAllQuotesForCurrentDate()" result="flowScope.rateList"/>
+	</on-start>
+
+	<view-state id="viewRates" view="rates/ratelist" model="rateList" >
+		<transition on="changeDate">
+			<evaluate expression="ratesFlowController.findAllQuotesForDate(rateList.quoteDate)" result="flowScope.rateList"/>		
+		</transition>
+		<transition on="addRate">
+			<evaluate expression="ratesFlowController.addRate(rateList)" result="flowScope.rateList"/>		
+		</transition>
+		<transition on="saveRates">
+			<evaluate expression="ratesFlowController.saveRates(rateList)" result="flowScope.rateList"/>		
+		</transition>
+	</view-state>
+</flow>

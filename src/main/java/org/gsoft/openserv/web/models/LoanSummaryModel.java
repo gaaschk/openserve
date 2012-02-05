@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 import org.gsoft.openserv.domain.loan.LoanType;
-import org.gsoft.openserv.util.formatter.CurrencyInPenniesFormat;
+import org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormat;
 
 public class LoanSummaryModel implements Serializable{
 	private static final long serialVersionUID = -6256763851983742148L;

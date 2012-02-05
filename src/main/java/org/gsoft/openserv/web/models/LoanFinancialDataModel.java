@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import org.gsoft.openserv.domain.loan.LoanType;
-import org.gsoft.openserv.util.formatter.CurrencyInPenniesFormat;
+import org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 

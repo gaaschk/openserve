@@ -2,7 +2,7 @@ package org.gsoft.openserv.web.models;
 
 import java.io.Serializable;
 
-import org.gsoft.openserv.util.formatter.CurrencyInPenniesFormat;
+import org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormat;
 
 public class LoanPaymentModel implements Serializable{
 	private static final long serialVersionUID = -1204648670821261004L;
