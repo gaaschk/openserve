@@ -43,11 +43,11 @@ insert into Rate (Symbol, name) values ('LIBOR.USD6M', '6 Month LIBOR US Dollars
 insert into Rate (Symbol, name) values ('LIBOR.USD12M', '12 Month LIBOR US Dollars');
 
 alter table LoanTypeProfile 
-add column variableRate SMALLINT,
+add column variableRate SMALLINT;
 
 create table FrequencyType(
 	FrequencyTypeID BIGINT PRIMARY KEY AUTO_INCREMENT,
-	Name VARCHAR(20)
+	Name VARCHAR(50)
 );
 
 insert into FrequencyType (FrequencyTypeID, Name) value (10, "MONTHLY");
