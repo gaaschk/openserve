@@ -1,6 +1,5 @@
 package org.gsoft.openserv.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,12 +8,10 @@ import org.gsoft.openserv.domain.amortization.LoanAmortizationSchedule;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanEvent;
 import org.gsoft.openserv.domain.payment.Payment;
-import org.gsoft.openserv.predicates.LoanPredicates;
 import org.gsoft.openserv.repositories.amortization.AmortizationScheduleRepository;
 import org.gsoft.openserv.repositories.loan.LoanEventRepository;
 import org.gsoft.openserv.repositories.loan.LoanRepository;
 import org.gsoft.openserv.repositories.payment.PaymentRepository;
-import org.gsoft.openserv.util.ListUtility;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +30,7 @@ public class AccountSummaryService {
 	
 	@PreAuthorize("hasRole('PERM_ViewAccountSummary')")
 	public List<Loan> getAllLoansForBorrower(Long borrowerID){
-		return ListUtility.addAll(new ArrayList<Loan>(), loanRepository.findAll(LoanPredicates.borrowerIdIs(borrowerID)));
+		return loanRepository.findAllForBorrower(borrowerID);
 	}
 	
 	@PreAuthorize("hasRole('PERM_ViewAccountSummary')")

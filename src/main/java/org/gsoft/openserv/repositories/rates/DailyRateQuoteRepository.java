@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.gsoft.openserv.domain.rates.DailyRateQuote;
 import org.gsoft.openserv.domain.rates.Rate;
-import org.gsoft.openserv.repositories.BaseRepository;
+import org.gsoft.openserv.repositories.BaseSpringRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DailyRateQuoteRepository extends BaseRepository<DailyRateQuote, Long>{
+public interface DailyRateQuoteRepository extends BaseSpringRepository<DailyRateQuote, Long>{
 	
 	@Query("select quote from DailyRateQuote quote where quote.rate = :rate and quote.quoteDate = :quoteDate")
 	public DailyRateQuote findDailyRateQuote(@Param("rate") Rate rate, @Param("quoteDate") Date date);

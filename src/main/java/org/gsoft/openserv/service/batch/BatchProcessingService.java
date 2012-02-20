@@ -1,6 +1,5 @@
 package org.gsoft.openserv.service.batch;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -8,7 +7,6 @@ import javax.annotation.Resource;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.repositories.loan.LoanRepository;
 import org.gsoft.openserv.rulesengine.annotation.RunRulesEngine;
-import org.gsoft.openserv.util.ListUtility;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +17,7 @@ public class BatchProcessingService {
 	private LoanRepository loanRepository;
 	
 	public List<Loan> getAllActiveLoans(){
-		return ListUtility.addAll(new ArrayList<Loan>(), loanRepository.findAll());
+		return loanRepository.findAll();
 	}
 	
 	@RunRulesEngine

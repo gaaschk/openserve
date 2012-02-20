@@ -9,7 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
-public interface BaseRepository<T extends OpenServDomainObject, ID extends Serializable> extends CrudRepository<T,ID>, QueryDslPredicateExecutor<T>{
+public interface BaseSpringRepository<T extends OpenServDomainObject, ID extends Serializable> extends CrudRepository<T,ID>, QueryDslPredicateExecutor<T>{
 	T findOne(ID id);
 	T save(T entity);
 }

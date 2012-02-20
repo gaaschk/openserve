@@ -4,6 +4,6 @@ import org.gsoft.openserv.domain.Person;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PersonRepository extends BaseRepository<Person, Long> {
+public interface PersonRepository extends BaseSpringRepository<Person, Long> {
 	public Person findPersonBySsn(String ssn);
 }
