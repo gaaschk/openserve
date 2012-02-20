@@ -25,4 +25,8 @@ public interface DailyRateQuoteRepository extends BaseRepository<DailyRateQuote,
 	
 	@Query("select rate,quote from DailyRateQuote quote right outer join quote.rate rate where quote is null or quote.quoteDate = :quoteDate")
 	public List<Object[]> findAllQuotesForDate(@Param("quoteDate") Date date);
+	
+	@Query("select quote from DailyRateQuote quote where quote.rate = :rate and quote.quoteDate = ( " +
+			"select max(q2.quoteDate) from DailyRateQuote q2 where q2.rate = :rate and q2.quoteDate <= :date)")
+	public DailyRateQuote findCurrentRateAsOf(@Param("rate") Rate rate, @Param("date")Date date);
 }

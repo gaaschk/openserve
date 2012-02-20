@@ -1,6 +1,7 @@
 package org.gsoft.openserv.buslogic.payment;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,8 +15,10 @@ import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanEventType;
 import org.gsoft.openserv.domain.payment.LoanPayment;
 import org.gsoft.openserv.domain.payment.Payment;
+import org.gsoft.openserv.predicates.LoanPredicates;
 import org.gsoft.openserv.repositories.loan.LoanRepository;
 import org.gsoft.openserv.repositories.payment.PaymentRepository;
+import org.gsoft.openserv.util.ListUtility;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -42,7 +45,7 @@ public class PaymentLogic {
 		payment.setPaymentAmount(amount);
 		payment.setBorrowerPersonID(borrowerPersonID);
 		
-		List<Loan> loans = loanRepository.findAllLoansByBorrowerPersonIDActiveOnOrBeforeDate(borrowerPersonID, effectiveDate);
+		List<Loan> loans = ListUtility.addAll(new ArrayList<Loan>(), loanRepository.findAll(LoanPredicates.borrowerIdIsAndActiveOnOrBefore(borrowerPersonID, effectiveDate)));
 		paymentAllocationLogic.allocatePayment(payment, loans);
 		payment = paymentRepository.save(payment);
 		this.applyPaymentToLoans(payment);

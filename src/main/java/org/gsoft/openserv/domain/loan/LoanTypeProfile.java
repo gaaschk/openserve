@@ -7,9 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.domain.interest.FrequencyType;
+import org.gsoft.openserv.domain.rates.Rate;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
@@ -26,9 +30,13 @@ public class LoanTypeProfile extends OpenServDomainObject{
 	private Integer daysBeforeDueToBill;
 	private Integer daysLateForFee;
 	private Integer lateFeeAmount;
+	private Boolean variableRate;
 	//Enumerations
 	private LoanType loanType;
 	private RepaymentStartType repaymentStartType;
+	private FrequencyType baseRateUpdateFrequency;
+	//Relationships
+	private Rate baseRate;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -116,5 +124,29 @@ public class LoanTypeProfile extends OpenServDomainObject{
 	}
 	public void setRepaymentStartType(RepaymentStartType repaymentStartType) {
 		this.repaymentStartType = repaymentStartType;
+	}
+	public Boolean getVariableRate() {
+		return variableRate;
+	}
+	public void setVariableRate(Boolean variableRate) {
+		this.variableRate = variableRate;
+	}
+	@Type( type = "org.gsoft.openserv.util.jpa.GenericEnumUserType", parameters={
+			@Parameter(name = "enumClass", value = "org.gsoft.openserv.domain.interest.FrequencyType")
+	})
+    @Column( name = "BaseRateUpdateFrequencyID" )
+	public FrequencyType getBaseRateUpdateFrequency() {
+		return baseRateUpdateFrequency;
+	}
+	public void setBaseRateUpdateFrequency(FrequencyType baseRateUpdateFrequency) {
+		this.baseRateUpdateFrequency = baseRateUpdateFrequency;
+	}
+	@ManyToOne
+	@JoinColumn(name="BaseRateID")
+	public Rate getBaseRate() {
+		return baseRate;
+	}
+	public void setBaseRate(Rate baseRate) {
+		this.baseRate = baseRate;
 	}
 }

@@ -52,7 +52,7 @@ create table FrequencyType(
 
 insert into FrequencyType (FrequencyTypeID, Name) value (10, "MONTHLY");
 insert into FrequencyType (FrequencyTypeID, Name) value (20, "QUARTERLY");
-insert into FrequencyType (FrequencyTypeID, Name) value (30, "SEMI-ANNUALLY");
+insert into FrequencyType (FrequencyTypeID, Name) value (30, "SEMI_ANNUALLY");
 insert into FrequencyType (FrequencyTypeID, Name) value (40, "ANNUALLY");
 
 alter table LoanTypeProfile 
