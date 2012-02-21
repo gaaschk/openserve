@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.gsoft.openserv.buslogic.interest.LoanInterestRateFactory;
 import org.gsoft.openserv.buslogic.loan.AddLoanLogic;
+import org.gsoft.openserv.buslogic.loan.LoanTypeLogic;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.rulesengine.annotation.RunRulesEngine;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,12 +20,15 @@ public class LoanEntryService {
 	private AddLoanLogic maintainLoanLogic;
 	@Resource
 	private LoanInterestRateFactory interestFactory;
+	@Resource
+	private LoanTypeLogic loanTypeLogic;
 
 	
 	@PreAuthorize("hasRole('PERM_AddLoan')")
 	@Transactional
 	@RunRulesEngine
 	public Loan addNewLoan(Loan newLoan){
+		loanTypeLogic.updateLoanTypeProfileForLoan(newLoan);
 		newLoan.setMargin(new BigDecimal(0));
 		newLoan.setBaseRate(interestFactory.getBaseRateForLoan(newLoan));
 		newLoan = maintainLoanLogic.addNewLoan(newLoan);

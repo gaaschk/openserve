@@ -12,12 +12,16 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.gsoft.openserv.domain.rates.DailyStockQuote;
 import org.gsoft.openserv.domain.rates.Stock;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class CurrentDailyStockQuoteRepository {
+	private static final Logger LOG = LogManager.getLogger(CurrentDailyStockQuoteRepository.class);
+	
 	@Resource
 	private DailyStockQuoteRepository quoteRepository;
 	
@@ -38,11 +42,16 @@ public class CurrentDailyStockQuoteRepository {
             	 quote.setQuoteDate(quoteDate);
             	 quoteRepository.save(quote);
              }
-             quote.setOpenValue(new BigDecimal(yahooStockInfo[2]));
-             quote.setLowValue(new BigDecimal(yahooStockInfo[3]));
-             quote.setHighValue(new BigDecimal(yahooStockInfo[4]));
-             quote.setLastValue(new BigDecimal(yahooStockInfo[5]));
-             return quote;
+             try{
+            	 quote.setOpenValue(new BigDecimal(yahooStockInfo[2]));
+            	 quote.setLowValue(new BigDecimal(yahooStockInfo[3]));
+            	 quote.setHighValue(new BigDecimal(yahooStockInfo[4]));
+            	 quote.setLastValue(new BigDecimal(yahooStockInfo[5]));
+            	 return quote;
+             }
+             catch(NumberFormatException nfe){
+            	 LOG.warn("Unable to parse quote. [" + yahooStockInfo + "]");
+             }
         }
          return null;
 	}

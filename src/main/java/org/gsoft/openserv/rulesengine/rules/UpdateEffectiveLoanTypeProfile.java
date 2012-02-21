@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UpdateEffectiveLoanTypeProfile extends AbstractRule{
 	@Resource
-	private LoanTypeLogic laonTypeLogic;
+	private LoanTypeLogic loanTypeLogic;
 	@Resource
 	private RulesEngine theRulesEngine;
 	@Resource
@@ -27,7 +27,7 @@ public class UpdateEffectiveLoanTypeProfile extends AbstractRule{
 	@Override
 	public void execute(FactExpression factExpression) {
 		Loan theOldLoan = factExpression.getFactForClass(EffectiveLoanTypeProfileMissing.class).getLoan();
-		laonTypeLogic.updateLoanTypeProfileForLoan(theOldLoan);
+		loanTypeLogic.updateLoanTypeProfileForLoan(theOldLoan);
 		Loan theNewLoan = loanRepository.findOne(theOldLoan.getID());
 		theRulesEngine.addOrReplaceContext(theOldLoan, theNewLoan);
 	}

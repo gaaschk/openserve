@@ -1,4 +1,4 @@
-package org.gsoft.openserv.predicates;
+package org.gsoft.openserv.repositories.predicates;
 
 import java.util.Date;
 

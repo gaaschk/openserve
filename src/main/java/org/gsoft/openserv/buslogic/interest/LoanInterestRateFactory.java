@@ -21,6 +21,8 @@ public class LoanInterestRateFactory {
 	public BigDecimal getBaseRateForLoan(Loan loan){
 		LoanTypeProfile ltp = loanTypeProfileLogic.findOne(loan.getEffectiveLoanTypeProfileID());
 		DailyRateQuote quote = dailyRateQuoteRepository.findCurrentRateAsOf(ltp.getBaseRate(), loan.getServicingStartDate());
-		return quote.getValue();
+		if(quote != null)
+			return quote.getValue();
+		return BigDecimal.ZERO;
 	}
 }
