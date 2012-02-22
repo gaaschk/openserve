@@ -18,6 +18,12 @@
       http://www.springframework.org/schema/task
       http://www.springframework.org/schema/task/spring-task.xsd">
 
+	<context:annotation-config />
+	<context:component-scan base-package="org.gsoft.openserv" />
+	<data:repositories base-package="org.gsoft.openserv.repositories" />
+	<task:annotation-driven/>
+	<aop:aspectj-autoproxy/>
+
 	<!-- Load in application properties reference -->
 	<bean id="applicationProperties"
 			class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -43,11 +49,6 @@
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basename" value="messages"/>
 	</bean>
-	<context:annotation-config />
-	<context:component-scan base-package="org.gsoft.openserv" />
-	<data:repositories base-package="org.gsoft.openserv.repositories" />
-	<task:annotation-driven/>
-	<aop:aspectj-autoproxy/>
   	<!-- thread scope is needed by spring-aop -->
   	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
       <property name="scopes">

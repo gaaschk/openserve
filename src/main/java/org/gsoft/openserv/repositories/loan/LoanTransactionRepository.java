@@ -7,6 +7,7 @@ import org.gsoft.openserv.repositories.BaseRepository;
 import org.gsoft.openserv.repositories.BaseSpringRepository;
 import org.springframework.stereotype.Repository;
 
+@Repository
 public class LoanTransactionRepository extends BaseRepository<LoanTransaction, Long>{
 	@Resource
 	private LoanTransactionSpringRepository loanTransactionSpringRepository;

@@ -20,11 +20,15 @@ public abstract class BaseRepository<T extends OpenServDomainObject, ID extends 
 		return ListUtility.addAll(new ArrayList<T>(), this.getSpringRepository().findAll());
 	}
 	
+	protected List<T> findAll(Predicate predicate){
+		return ListUtility.addAll(new ArrayList<T>(), this.getSpringRepository().findAll(predicate));
+	}
+
 	public T save(T t){
 		return this.getSpringRepository().save(t);
 	}
 	
-	protected List<T> findAll(Predicate predicate){
-		return ListUtility.addAll(new ArrayList<T>(), this.getSpringRepository().findAll(predicate));
+	public void delete(T t){
+		this.getSpringRepository().delete(t);
 	}
 }

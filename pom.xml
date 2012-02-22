@@ -331,6 +331,7 @@
 				<executions>
 					<execution>
 						<id>qdsl-process</id>
+						<phase>compile</phase>
 						<goals>
 							<goal>process</goal>
 						</goals>

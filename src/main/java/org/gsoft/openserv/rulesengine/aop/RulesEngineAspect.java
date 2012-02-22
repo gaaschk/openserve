@@ -1,6 +1,6 @@
 package org.gsoft.openserv.rulesengine.aop;
 
-import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Iterator;
 
 import javax.annotation.Resource;
@@ -49,7 +49,7 @@ public class RulesEngineAspect {
 	public void addObjectsToRulesEngine(Iterable<?> retVal){
 		if(rulesEngine.isOpen()){
 			if(retVal != null){
-				ParameterizedType[] types = (ParameterizedType[])retVal.getClass().getGenericInterfaces();
+				Type[] types = retVal.getClass().getGenericInterfaces();
 				if(types != null && types.length > 0 && types[0].getClass().isAnnotationPresent(RulesEngineEntity.class)){
 					Iterator<?> iterator = retVal.iterator();
 					while(iterator.hasNext()){
