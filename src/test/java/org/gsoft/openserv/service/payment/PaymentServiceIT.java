@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/META-INF/spring/application-context.xml")
-public class TestPaymentServiceIT{
+public class PaymentServiceIT{
 	@Resource
 	private DatabaseUtility dbutility;
 	@Resource
