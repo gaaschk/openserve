@@ -12,11 +12,13 @@ import org.gsoft.openserv.repositories.amortization.AmortizationScheduleReposito
 import org.gsoft.openserv.repositories.loan.LoanEventRepository;
 import org.gsoft.openserv.repositories.loan.LoanRepository;
 import org.gsoft.openserv.repositories.payment.PaymentRepository;
+import org.springframework.flex.remoting.RemotingDestination;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RemotingDestination
 @Transactional(readOnly=true)
 public class AccountSummaryService {
 	@Resource
