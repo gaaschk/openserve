@@ -1,4 +1,4 @@
-package org.gsoft.openserv.buslogic;
+package org.gsoft.openserv.buslogic.person;
 
 import javax.annotation.Resource;
 

@@ -93,13 +93,6 @@
 			<version>${spring.security.version}</version>
 		</dependency>
 		
-		<!-- Spring BlazeDS -->
-		<dependency>
- 			<groupId>org.springframework.flex</groupId>
- 			<artifactId>spring-flex-core</artifactId>
- 			<version>1.5.2.RELEASE</version>
-		</dependency>
-		
 		<!-- Spring Web Flow -->
 		<dependency>
 			<groupId>org.springframework.webflow</groupId>

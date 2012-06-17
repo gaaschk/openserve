@@ -2,7 +2,7 @@ package org.gsoft.openserv.service;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.buslogic.MaintainPersonLogic;
+import org.gsoft.openserv.buslogic.person.MaintainPersonLogic;
 import org.gsoft.openserv.domain.Person;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
