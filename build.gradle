@@ -63,6 +63,7 @@ configureEnv()
 
 def configureEnv(){
 	ext.environment = hasProperty('teamcity')?'ci':hasProperty('environment')?environment:'local'
+	println "Building environment: $environment"
 	def config = new ConfigSlurper().parse(file('env/'+environment+'.gradle').toURI().toURL())
 	ext.config = config	
 }
