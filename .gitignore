@@ -3,3 +3,5 @@ bin
 .settings
 .gradle
 src/querydsl
+openserv-scripts
+openserv-scripts.zip

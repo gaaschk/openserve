@@ -59,6 +59,14 @@ dependencies{
 	runtime ("org.aspectj:aspectjweaver:${aspectjVersion}")
 }
 
+configureEnv()
+
+def configureEnv(){
+	ext.environment = hasProperty('env')?env:hasProperty('teamcity')?'ci':'local'
+	def config = new ConfigSlurper().parse(file('env/'+environment+'.gradle').toURI().toURL())
+	ext.config = config	
+}
+
 task generateQueryDSL (type: JavaCompile) {
 		source = 'src/main/java'
 		classpath = configurations.compile
@@ -72,17 +80,24 @@ task generateQueryDSL (type: JavaCompile) {
 task updateDatabase{
 	ant.taskdef(resource: "dbmaintain-anttasks.xml", classpath: configurations.runtime.asPath)
 	ant.updateDatabase(scriptLocations: "src/main/dbscripts", autoCreateDbMaintainScriptsTable: true, qualifiers: 'scripts', fromScratchEnabled: true){
-		database(driverClassName: "com.mysql.jdbc.Driver", url: "jdbc:mysql://localhost:3306/openserv", userName: "root", schemaNames: "openserv")	
+		database(driverClassName: config.openserv.db.driver, 
+				url: config.openserv.db.url, 
+				userName: config.openserv.db.username, 
+				password: config.openserv.db.password,
+				schemaNames: config.openserv.db.schemas)	
 	}
 }
 
 task packageScripts{
 	ant.taskdef(resource: "dbmaintain-anttasks.xml", classpath: configurations.runtime.asPath)
-	ant.createScriptArchive(scriptLocations: "src/main/dbscripts", qualifiers: 'scripts', archiveFileName: "openserv-scripts")
+	ant.createScriptArchive(scriptLocations: "src/main/dbscripts", 
+							qualifiers: 'scripts', 
+							archiveFileName: "openserv-scripts.zip")
 }
 
 compileJava.dependsOn generateQueryDSL
 test.dependsOn updateDatabase
+assemble.dependsOn packageScripts
 
 task wrapper(type: Wrapper){
 	gradleVersion = '1.3'
