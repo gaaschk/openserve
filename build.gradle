@@ -57,6 +57,7 @@ dependencies{
 	runtime ("commons-dbcp:commons-dbcp:1.4")
 	runtime ("mysql:mysql-connector-java:5.1.18")
 	runtime ("org.aspectj:aspectjweaver:${aspectjVersion}")
+	runtime ("org.drools:drools-compiler:5.4.0.Final")
 }
 
 configureEnv()
