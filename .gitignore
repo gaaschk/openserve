@@ -5,3 +5,4 @@ bin
 src/querydsl
 openserv-scripts
 openserv-scripts.zip
+/target
