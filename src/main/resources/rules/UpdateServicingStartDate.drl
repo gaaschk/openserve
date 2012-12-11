@@ -1,0 +1,10 @@
+import org.gsoft.openserv.domain.loan.Loan
+import java.util.Date
+rule "Update Servicing Start Date" 
+when
+	$l : Loan(servicingStartDate == null)
+	$d : Date();
+then
+	System.out.println("set the servicing start date");
+	$l.setServicingStartDate($d);
+end

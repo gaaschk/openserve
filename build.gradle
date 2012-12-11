@@ -57,7 +57,8 @@ dependencies{
 	runtime ("commons-dbcp:commons-dbcp:1.4")
 	runtime ("mysql:mysql-connector-java:5.1.18")
 	runtime ("org.aspectj:aspectjweaver:${aspectjVersion}")
-	runtime ("org.drools:drools-compiler:5.4.0.Final")
+	compile ("org.drools:drools-core:5.4.0.Final")
+	compile ("org.drools:drools-compiler:5.4.0.Final")
 }
 
 configureEnv()
@@ -81,7 +82,8 @@ task generateQueryDSL (type: JavaCompile) {
 
 task updateDatabase{
 	ant.taskdef(resource: "dbmaintain-anttasks.xml", classpath: configurations.runtime.asPath)
-	ant.updateDatabase(scriptLocations: "src/main/dbscripts", autoCreateDbMaintainScriptsTable: true, qualifiers: 'scripts', fromScratchEnabled: true){
+	ant.projectDir = projectDir
+	ant.updateDatabase(scriptLocations: '${projectDir}/src/main/dbscripts', autoCreateDbMaintainScriptsTable: true, qualifiers: 'scripts', fromScratchEnabled: true){
 		database(driverClassName: config.openserv.db.driver, 
 				url: config.openserv.db.url, 
 				userName: config.openserv.db.username, 
@@ -92,7 +94,8 @@ task updateDatabase{
 
 task packageScripts{
 	ant.taskdef(resource: "dbmaintain-anttasks.xml", classpath: configurations.runtime.asPath)
-	ant.createScriptArchive(scriptLocations: "src/main/dbscripts", 
+	ant.projectDir = projectDir
+	ant.createScriptArchive(scriptLocations: '${projectDir}/src/main/dbscripts', 
 							qualifiers: 'scripts', 
 							archiveFileName: "openserv-scripts.zip")
 }
