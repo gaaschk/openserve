@@ -1,9 +1,9 @@
-package rules;
+package org.gsoft.openserv.rules;
 
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -21,10 +21,13 @@ import org.springframework.util.ResourceUtils;
 public class UpdateServicingStartDateTest {
 
 	@Test
-	public void test() throws FileNotFoundException {
+	public void test() throws IOException {
 		KnowledgeBuilder builder = KnowledgeBuilderFactory.newKnowledgeBuilder();
 		File ruleDir = ResourceUtils.getFile("classpath:rules");
+		System.out.println("Rule directory " + (ruleDir.exists()?"":"not ") + "found.");
+		System.out.println(ruleDir.getCanonicalPath());
 		for(File ruleFile:ruleDir.listFiles()){
+			System.out.println("Trying file " + ruleFile.getName());
 			if(ruleFile.getName().endsWith(".drl"))
 				builder.add(ResourceFactory.newFileResource(ruleFile), ResourceType.DRL);
 		}
@@ -38,7 +41,7 @@ public class UpdateServicingStartDateTest {
 		long serviceStartDateMillis = loan.getServicingStartDate().getTime();
 		sysDate = new Date();
 		session.execute(Arrays.asList(new Object[]{loan, sysDate}));
-		assertTrue("Expected servicingStartDate value to be unchaged on second run.", loan.getServicingStartDate().getTime() == serviceStartDateMillis);
+		assertTrue("Expected servicingStartDate value to be unchanged on second run.", loan.getServicingStartDate().getTime() == serviceStartDateMillis);
 	}
 
 }

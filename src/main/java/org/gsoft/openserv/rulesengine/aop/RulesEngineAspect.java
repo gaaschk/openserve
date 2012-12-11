@@ -83,7 +83,7 @@ public class RulesEngineAspect {
 					while(iterator.hasNext()){
 						OpenServDomainObject obj = (OpenServDomainObject)iterator.next();
 						rulesEngine.addContext(obj);
-						knowledge.add(obj);you
+						knowledge.add(obj);
 					}
 				}
 			}
