@@ -22,6 +22,7 @@ import org.drools.runtime.StatelessKnowledgeSession;
 import org.gsoft.openserv.domain.OpenServDomainObject;
 import org.gsoft.openserv.rulesengine.RulesEngine;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
@@ -30,7 +31,9 @@ import org.springframework.util.ResourceUtils;
 public class RulesEngineAspect {
 	@Resource
 	private RulesEngine rulesEngine;
-	private ArrayList<OpenServDomainObject> knowledge = new ArrayList<OpenServDomainObject>(); 
+	@Resource
+	private ApplicationContext springContext;
+	private ArrayList<Object> knowledge = new ArrayList<Object>(); 
 	
 	
 	
@@ -48,6 +51,7 @@ public class RulesEngineAspect {
 		KnowledgeBase base = KnowledgeBaseFactory.newKnowledgeBase();
 		base.addKnowledgePackages(builder.getKnowledgePackages());
 		StatelessKnowledgeSession session = base.newStatelessKnowledgeSession();
+		knowledge.add(springContext);
 		session.execute(knowledge);
 		knowledge.clear();
 	}

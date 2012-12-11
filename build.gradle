@@ -59,6 +59,7 @@ dependencies{
 	runtime ("org.aspectj:aspectjweaver:${aspectjVersion}")
 	compile ("org.drools:drools-core:5.4.0.Final")
 	compile ("org.drools:drools-compiler:5.4.0.Final")
+	compile ("org.mockito:mockito-all:1.9.0")
 }
 
 configureEnv()
