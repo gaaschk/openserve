@@ -1,0 +1,84 @@
+package loan
+
+import org.gsoft.openserv.domain.loan.Loan
+import org.gsoft.openserv.domain.loan.LoanTypeProfile
+import org.gsoft.openserv.domain.payment.BillingStatement
+import org.springframework.context.ApplicationContext
+import org.gsoft.openserv.buslogic.repayment.ServicingStartDateCalculator
+import org.gsoft.openserv.buslogic.repayment.RepaymentStartDateCalculator
+import org.gsoft.openserv.buslogic.repayment.NextDueDateCalculator
+import org.gsoft.openserv.buslogic.repayment.InitialDueDateCalculator
+import org.gsoft.openserv.buslogic.repayment.FirstDueDateCalculator
+import org.gsoft.openserv.buslogic.loan.LoanTypeLogic
+import org.gsoft.openserv.buslogic.amortization.RemainingTermCalculator
+import java.util.Date
+import java.util.Calendar
+
+global ApplicationContext springContext
+
+rule "Update Servicing Start Date" 
+when
+	$l : Loan(servicingStartDate == null)
+then
+	System.out.println("set the servicing start date");
+	springContext.getBean(ServicingStartDateCalculator.class).updateServicingStartDate($l);
+	update($l);
+end
+
+rule "Update Repayment Start Date"
+
+    when
+        $l : Loan(repaymentStartDate  == null, effectiveLoanTypeProfileID != null)
+    then
+		System.out.println("set the repayment start date");
+		springContext.getBean(RepaymentStartDateCalculator.class).updateRepaymentStartDate($l);
+		update($l);
+end
+
+rule "Update Next Due Date"
+	when
+		$l : Loan(currentUnpaidDueDate != null, nextDueDate == null, effectiveLoanTypeProfileID != null, initialDueDate != null)
+	then
+		System.out.println("set the next due date");
+		springContext.getBean(NextDueDateCalculator.class).updateNextDueDate($l);
+		update($l);
+end
+
+rule "Update Initial Due Date"
+	when
+		$l : Loan(initialDueDate == null, effectiveLoanTypeProfileID != null, firstDueDate != null)
+	then
+		System.out.println("set the initial due date");
+		InitialDueDateCalculator calculator = springContext.getBean(InitialDueDateCalculator.class);
+		System.out.println("InitialDueDateCalculator: " + calculator);
+		calculator.updateInitialDueDate($l);
+		update($l);
+end
+
+rule "Update First Due Date"
+	when
+		$l : Loan(firstDueDate == null, effectiveLoanTypeProfileID != null, repaymentStartDate != null)
+	then
+		System.out.println("set the first due date");
+		springContext.getBean(FirstDueDateCalculator.class).updateFirstDueDate($l);
+		update($l);
+end
+
+rule "Update Effective Loan Type Profile"
+	when
+		$l : Loan(effectiveLoanTypeProfileID == null)
+	then
+		System.out.println("set the effective loan type profile");
+		springContext.getBean(LoanTypeLogic.class).updateLoanTypeProfileForLoan($l);
+		update($l);
+end
+
+rule "Set Remaining Loan Term"
+	when
+		$l : Loan(remainingLoanTerm == null, effectiveLoanTypeProfileID != null)
+	then
+		System.out.println("set the remaining loan term");
+		springContext.getBean(RemainingTermCalculator.class).updateRemainingLoanTerm($l);
+		update($l);
+end
+

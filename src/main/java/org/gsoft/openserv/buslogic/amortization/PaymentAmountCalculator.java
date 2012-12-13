@@ -13,8 +13,12 @@ public class PaymentAmountCalculator {
 		Integer paymentAmount =
                 (int)Math.ceil( ( periodicRate.floatValue() * principalBalance ) /
                         ( 1 - Math.pow( ( 1 + periodicRate.floatValue() ), remainingTerm * ( -1 ) ) ) );
-		if(paymentAmount <= 0)
-			paymentAmount = principalBalance/remainingTerm;
+		if(paymentAmount <= 0){
+			if(remainingTerm > 0)
+				paymentAmount = principalBalance/remainingTerm;
+			else
+				paymentAmount = principalBalance;
+		}
 		return paymentAmount;
 	}
 }
