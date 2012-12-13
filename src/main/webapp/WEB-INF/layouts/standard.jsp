@@ -2,15 +2,15 @@
 <%@ include file="/WEB-INF/layouts/includes.jsp" %>
 <html>
 	<head>
-		<title>OpenServWeb :: Home</title>
+		<title>OpenServ :: Home</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-		<link rel="stylesheet" type="text/css" href="/openservweb/content/mocha/themes/default/css/Content.css" />
-		<link rel="stylesheet" type="text/css" href="/openservweb/content/mocha/themes/default/css/Core.css" />
-		<link rel="stylesheet" type="text/css" href="/openservweb/content/mocha/themes/default/css/Layout.css" />
-		<link rel="stylesheet" type="text/css" href="/openservweb/content/mocha/themes/default/css/Dock.css" />
-		<link rel="stylesheet" type="text/css" href="/openservweb/content/mocha/themes/default/css/Window.css" />
-		<link rel="stylesheet" type="text/css" href="/openservweb/content/mocha/themes/default/css/Tabs.css" />
+		<link rel="stylesheet" type="text/css" href="/openserv/content/mocha/themes/default/css/Content.css" />
+		<link rel="stylesheet" type="text/css" href="/openserv/content/mocha/themes/default/css/Core.css" />
+		<link rel="stylesheet" type="text/css" href="/openserv/content/mocha/themes/default/css/Layout.css" />
+		<link rel="stylesheet" type="text/css" href="/openserv/content/mocha/themes/default/css/Dock.css" />
+		<link rel="stylesheet" type="text/css" href="/openserv/content/mocha/themes/default/css/Window.css" />
+		<link rel="stylesheet" type="text/css" href="/openserv/content/mocha/themes/default/css/Tabs.css" />
 		
 		<script src="${jsUrl}/mootools-core-1.4.1-full-compat.js" type="text/javascript" charset="utf-8"></script>
 		<script src="${jsUrl}/mootools-more-1.4.0.1.js" type="text/javascript" charset="utf-8"></script>
@@ -64,10 +64,10 @@
 		  </div>
 		  <div id="desktopNavbar">	
 			<ul>
-				<li class="menu-item"><a href="/openservweb/web/addloan">Add a new Loan</a></li>
-				<li class="menu-item"><a href="/openservweb/web/payment">Payment</a></li>
-				<li class="menu-item"><a href="/openservweb/web/accountsummary">Account Summary</a></li>
-				<li class="menu-item"><a href="/openservweb/web/rates/stocks">Stocks</a></li>
+				<li class="menu-item"><a href="/openserv/web/addloan">Add a new Loan</a></li>
+				<li class="menu-item"><a href="/openserv/web/payment">Payment</a></li>
+				<li class="menu-item"><a href="/openserv/web/accountsummary">Account Summary</a></li>
+				<li class="menu-item"><a href="/openserv/web/rates/stocks">Stocks</a></li>
 			</ul>
 		  </div>
 		</div><!-- desktop header end -->
@@ -76,7 +76,7 @@
 		    <tiles:insertAttribute name="content" />
 		  </div>
 		</div>
-		<a href="/openservweb/OpenService-AddLoan.mov">Add Loan Screencast</a>
+		<a href="/openserv/OpenService-AddLoan.mov">Add Loan Screencast</a>
 		<div id="desktopFooterWrapper">
 			<div id="desktopFooter">
 				<span>1.877.MYNUMBER</span>
