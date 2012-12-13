@@ -41,6 +41,7 @@ dependencies{
 	compile ("log4j:log4j:${log4jVersion}")
 	compile ("org.springframework.social:spring-social-web:${springSocialVersion}")
 	compile ("org.springframework.social:spring-social-facebook:${springSocialVersion}")
+	compile ("org.springframework.social:spring-social-facebook-web:${springSocialVersion}")
 	compile ("org.springframework.social:spring-social-twitter:${springSocialVersion}")
 	providedCompile ("javax.servlet:servlet-api:2.5")
 	providedCompile ("javax.servlet.jsp:jsp-api:2.1")
