@@ -30,6 +30,7 @@ repositories{
 dependencies{
 	compile ("junit:junit:${junitVersion}")
 	compile ("org.springframework.security:spring-security-web:${springVersion}")
+	runtime ("org.springframework.security:spring-security-taglibs:${springVersion}")
 	compile ("org.springframework:spring-context:${springVersion}")
 	compile ("joda-time:joda-time:${jodaTimeVersion}")
 	compile ("org.springframework.data:spring-data-jpa:${springDataVersion}")
