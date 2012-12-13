@@ -1,0 +1,17 @@
+package payment
+
+import org.gsoft.openserv.domain.loan.Loan
+import org.gsoft.openserv.buslogic.amortization.AmortizationLogic
+import org.springframework.context.ApplicationContext
+import java.util.Arrays
+
+global ApplicationContext springContext
+
+rule "Generate Amortization Schedule"
+	when
+		$l : Loan(minimumPaymentAmount == null, effectiveLoanTypeProfileID != null, remainingLoanTerm != null, repaymentStartDate != null)
+	then
+		System.out.println("Generating the Amortization Schedule");
+		springContext.getBean(AmortizationLogic.class).createAmortizationSchedule(Arrays.asList($l.getLoanID()), $l.getRepaymentStartDate());
+		update($l);
+end

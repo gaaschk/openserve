@@ -1,0 +1,57 @@
+package billing
+
+import org.gsoft.openserv.domain.loan.Loan
+import org.gsoft.openserv.domain.loan.LoanTypeProfile
+import org.gsoft.openserv.domain.payment.BillingStatement
+import org.gsoft.openserv.buslogic.payment.BillingStatementLogic
+import org.gsoft.openserv.repositories.payment.BillingStatementRepository
+import java.util.Date
+import java.util.Calendar
+import java.util.HashMap
+import org.springframework.context.ApplicationContext
+
+global ApplicationContext springContext
+
+function Date adjustDateByDays(Date incomingDate, int numberOfDays){
+	Calendar cal = Calendar.getInstance();
+	cal.setTime(incomingDate);
+	cal.add(Calendar.DATE, numberOfDays);
+	return cal.getTime();
+}
+
+declare LoanWrapper
+	loan : Loan
+	ltProfile : LoanTypeProfile
+	dueDateMinusWindow : Date
+end
+
+rule "Build Loan Wrapper"
+	when
+		$l : Loan(currentUnpaidDueDate != null, nextDueDate != null, $loanId : loanID, $ltpId : effectiveLoanTypeProfileID)
+		$ltp : LoanTypeProfile(loanTypeProfileID == $ltpId)
+	then
+		System.out.println("Creating loan wrapper");
+		LoanWrapper lw = new LoanWrapper();
+		lw.setLoan($l);
+		lw.setLtProfile($ltp);
+		lw.setDueDateMinusWindow(adjustDateByDays($l.getCurrentUnpaidDueDate(), ((-1) * $ltp.getDaysBeforeDueToBill()))); 
+		insert(lw);
+end
+	
+rule "Generate Billing Statement"
+	when
+		HashMap($sysDate : this["systemDate"])
+		$lw : LoanWrapper(dueDateMinusWindow <= $sysDate)
+		$l : Loan($loanId : ID, $nextDue : nextDueDate) from $lw.loan
+		not BillingStatement(loanID == $loanId, dueDate >= $nextDue)
+	then
+		System.out.println("Generating a billing statement");
+		BillingStatementLogic logic = springContext.getBean(BillingStatementLogic.class);
+		System.out.println("Logic is: " + logic);
+		logic.createBillingStatement($l);
+		BillingStatementRepository billingStatementRepository = springContext.getBean(BillingStatementRepository.class);
+		BillingStatement lastStatement = billingStatementRepository.findMostRecentBillingStatementForLoan($l.getLoanID());
+		update($l);
+		insert(lastStatement);
+end
+
