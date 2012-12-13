@@ -61,6 +61,7 @@ dependencies{
 	compile ("org.drools:drools-compiler:5.4.0.Final")
 	compile ("org.mockito:mockito-all:1.9.0")
 	runtime ("org.apache.tiles:tiles-core:2.2.2")
+	runtime ("org.apache.tiles:tiles-jsp:2.2.2")
 	runtime ("org.springframework:spring-webmvc:${springVersion}")
 }
 
