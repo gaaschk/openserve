@@ -17,7 +17,7 @@ public class PercentFormatter extends AbstractNumberFormatter{
 		text = text.replaceAll("%", "");
 		Number value = super.parse(text, locale);
 		BigDecimal bdAmount = new BigDecimal(value.toString());
-		bdAmount.divide(new BigDecimal(100));
+		bdAmount = bdAmount.divide(new BigDecimal(100));
 		return bdAmount;
 	}
 
