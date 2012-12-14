@@ -37,7 +37,7 @@ end
 
 rule "Update Next Due Date"
 	when
-		$l : Loan(currentUnpaidDueDate != null, nextDueDate == null, effectiveLoanTypeProfileID != null, initialDueDate != null)
+		$l : Loan(initialDueDate != null, currentUnpaidDueDate == null, effectiveLoanTypeProfileID != null)
 	then
 		System.out.println("set the next due date");
 		springContext.getBean(NextDueDateCalculator.class).updateNextDueDate($l);

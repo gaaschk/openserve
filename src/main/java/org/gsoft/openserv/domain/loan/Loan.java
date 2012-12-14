@@ -197,10 +197,12 @@ public class Loan extends OpenServDomainObject{
 	public Date getNextDueDate() {
 		if(this.nextDueDate == null){
 			this.nextDueDate = this.getCurrentUnpaidDueDate();
-			SystemSettingsLogic systemSettings = ApplicationContextLocator.getApplicationContext().getBean(SystemSettingsLogic.class);
-			DateTime systemDate = new DateTime(systemSettings.getCurrentSystemDate());
-			if(this.nextDueDate.before(systemDate.toDate())){
-				nextDueDate = new DateTime(this.getInitialDueDate()).plusMonths(this.getUsedLoanTerm()).toDate();
+			if(ApplicationContextLocator.getApplicationContext() != null){
+				SystemSettingsLogic systemSettings = ApplicationContextLocator.getApplicationContext().getBean(SystemSettingsLogic.class);
+				DateTime systemDate = new DateTime(systemSettings.getCurrentSystemDate());
+				if(this.nextDueDate.before(systemDate.toDate())){
+					nextDueDate = new DateTime(this.getInitialDueDate()).plusMonths(this.getUsedLoanTerm()).toDate();
+				}
 			}
 		}
 		return nextDueDate;

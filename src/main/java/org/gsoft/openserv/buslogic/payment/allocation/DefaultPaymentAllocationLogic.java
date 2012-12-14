@@ -308,7 +308,7 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 			TreeSet<LoanAllocationGroup> oldSet = this.getAllocations();
 			this.allocations = new TreeSet<LoanAllocationGroup>();
 			this.getAllocations().addAll(oldSet);
-			System.out.println("***Order after resort:");
+			System.out.println("***Order of payment allocations after resort:");
 			for(SyncedAllocation syncedAllocation:this.getAllocations()){
 				System.out.println("***"+syncedAllocation.size()+" due on "+syncedAllocation.getCurrentDueDate());
 			}
