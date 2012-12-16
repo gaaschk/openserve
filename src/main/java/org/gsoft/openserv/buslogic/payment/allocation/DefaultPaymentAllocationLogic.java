@@ -111,14 +111,40 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 		}
 		
 		@Override
-		public boolean equals(Object obj){
-			if(!(obj instanceof LoanAllocation))return false;
-			return this.getID().equals(((LoanAllocation)obj).getID());
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + getOuterType().hashCode();
+			result = prime * result + ((loan == null) ? 0 : loan.hashCode());
+			return result;
 		}
-		
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			LoanAllocation other = (LoanAllocation) obj;
+			if (!getOuterType().equals(other.getOuterType()))
+				return false;
+			if (loan == null) {
+				if (other.loan != null)
+					return false;
+			} else if (!loan.equals(other.loan))
+				return false;
+			return true;
+		}
+
 		@Override
 		public String getID(){
 			return ""+this.loan.getLoanID();
+		}
+
+		private DefaultPaymentAllocationLogic getOuterType() {
+			return DefaultPaymentAllocationLogic.this;
 		}
 	}
 	

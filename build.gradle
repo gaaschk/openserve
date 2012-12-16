@@ -8,17 +8,22 @@ apply plugin: 'sonar'
 sourceCompatibility=1.5
 targetCompatibility=1.5
 
-ext.springVersion = '3.1.3.RELEASE'
+ext.springVersion = '3.2.0.RELEASE'
+ext.springSecurityVersion = '3.1.3.RELEASE'
 ext.springDataVersion = '1.2.0.RELEASE'
+ext.springWebFlowVersion = '2.3.1.RELEASE'
+ext.springSocialVersion = '1.0.2.RELEASE' 
 ext.querydslVersion = '2.9.0'
-ext.hibernateVersion = '4.1.8.Final'
+ext.hibernateVersion = '4.1.9.Final'
+ext.hibernateValidatorVersion = '4.3.0.Final'
+ext.droolsVersion = '5.4.0.Final'
 ext.junitVersion = '4.11'
 ext.jodaTimeVersion = '2.1'
 ext.apacheCommonsCodecVersion = '1.7'
 ext.log4jVersion = '1.2.17'
-ext.springSocialVersion = '1.0.2.RELEASE' 
 ext.dbmaintainVersion = '2.4'
-ext.aspectjVersion = '1.6.12'
+ext.aspectjVersion = '1.7.1'
+ext.tilesVersion = '3.0.1'
 
 sourceSets.main.java.srcDir 'src/querydsl/java'
 
@@ -29,43 +34,51 @@ repositories{
 }
 
 dependencies{
-	compile ("junit:junit:${junitVersion}")
-	compile ("org.springframework.security:spring-security-web:${springVersion}")
-	runtime ("org.springframework.security:spring-security-taglibs:${springVersion}")
+	compile ("org.springframework.security:spring-security-web:${springSecurityVersion}")
+	runtime ("org.springframework.security:spring-security-taglibs:${springSecurityVersion}")
+	runtime ("org.springframework.security:spring-security-config:${springSecurityVersion}")
 	compile ("org.springframework:spring-context:${springVersion}")
-	compile ("joda-time:joda-time:${jodaTimeVersion}")
+	compile ("org.springframework:spring-test:${springVersion}")
+	runtime ("org.springframework:spring-webmvc:${springVersion}")
 	compile ("org.springframework.data:spring-data-jpa:${springDataVersion}")
-	compile ("com.mysema.querydsl:querydsl-jpa:${querydslVersion}")
-	compile ("com.mysema.querydsl:querydsl-apt:${querydslVersion}")
-	compile ("org.hibernate:hibernate-entitymanager:${hibernateVersion}")
-	compile ("commons-codec:commons-codec:${apacheCommonsCodecVersion}")
-	compile ("log4j:log4j:${log4jVersion}")
 	compile ("org.springframework.social:spring-social-web:${springSocialVersion}")
 	compile ("org.springframework.social:spring-social-facebook:${springSocialVersion}")
 	compile ("org.springframework.social:spring-social-facebook-web:${springSocialVersion}")
 	compile ("org.springframework.social:spring-social-twitter:${springSocialVersion}")
+	compile ("org.springframework.webflow:spring-webflow:${springWebFlowVersion}")
+
+	compile ("commons-codec:commons-codec:${apacheCommonsCodecVersion}")
+	compile ("commons-lang:commons-lang:2.6")
+	compile ("commons-collections:commons-collections:3.2.1")
+	runtime ("commons-dbcp:commons-dbcp:1.4")
+
+	compile ("org.hibernate:hibernate-entitymanager:${hibernateVersion}")
+	compile ("org.hibernate:hibernate-validator-annotation-processor:${hibernateValidatorVersion}")
+	compile ("org.hibernate:hibernate-validator:${hibernateValidatorVersion}")
+
 	providedCompile ("javax.servlet:servlet-api:2.5")
 	providedCompile ("javax.servlet.jsp:jsp-api:2.1")
 	compile ("javax.servlet:jstl:1.2")
-	compile ("org.hibernate:hibernate-validator-annotation-processor:4.3.0.Final")
-	compile ("org.hibernate:hibernate-validator:4.3.0.Final")
+
+	compile ("com.mysema.querydsl:querydsl-jpa:${querydslVersion}")
+	compile ("com.mysema.querydsl:querydsl-apt:${querydslVersion}")
+
+	compile ("org.drools:drools-core:${droolsVersion}")
+	compile ("org.drools:drools-compiler:${droolsVersion}")
+
+	runtime ("org.apache.tiles:tiles-core:${tilesVersion}")
+	runtime ("org.apache.tiles:tiles-jsp:${tilesVersion}")
+	
+	compile ("junit:junit:${junitVersion}")
+	compile ("joda-time:joda-time:${jodaTimeVersion}")
+	compile ("log4j:log4j:${log4jVersion}")
 	compile ("org.javassist:javassist:3.15.0-GA")
-	compile ("commons-lang:commons-lang:1.0")
-	compile ("commons-collections:commons-collections:3.2.1")
-	compile ("org.springframework.webflow:spring-webflow:2.3.0.RELEASE")
 	compile ("javax.validation:validation-api:1.0.0.GA")
 	compile ("org.dbmaintain:dbmaintain:${dbmaintainVersion}")
-	compile ("org.springframework:spring-test:${springVersion}")
-	runtime ("org.springframework.security:spring-security-config:${springVersion}")
-	runtime ("commons-dbcp:commons-dbcp:1.4")
-	runtime ("mysql:mysql-connector-java:5.1.18")
+	runtime ("mysql:mysql-connector-java:5.1.22")
 	runtime ("org.aspectj:aspectjweaver:${aspectjVersion}")
-	compile ("org.drools:drools-core:5.4.0.Final")
-	compile ("org.drools:drools-compiler:5.4.0.Final")
-	compile ("org.mockito:mockito-all:1.9.0")
-	runtime ("org.apache.tiles:tiles-core:2.2.2")
-	runtime ("org.apache.tiles:tiles-jsp:2.2.2")
-	runtime ("org.springframework:spring-webmvc:${springVersion}")
+	compile ("org.mockito:mockito-all:1.9.5")
+	
 }
 
 sonar{
