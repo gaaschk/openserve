@@ -91,6 +91,9 @@ sonar{
 		username = "sonar"
 		password = "sonar"
 	}
+	project{
+		key="openserv:openserv"
+	}
 }
 
 configureEnv()
