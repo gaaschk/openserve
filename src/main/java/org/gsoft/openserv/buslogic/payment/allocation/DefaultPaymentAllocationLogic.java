@@ -42,13 +42,13 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 	}
 	
 	private interface SyncedAllocation{
-		public int getAmountNeededToAdvance();
-		public DateTime getCurrentDueDate();
-		public void allocateAmount(int amountToAllocate);
-		public void resort();
-		public List<LoanPayment> getLoanPayments();
-		public int size();
-		public String getID();
+		int getAmountNeededToAdvance();
+		DateTime getCurrentDueDate();
+		void allocateAmount(int amountToAllocate);
+		void resort();
+		List<LoanPayment> getLoanPayments();
+		int size();
+		String getID();
 	}
 	
 	private class LoanAllocation implements SyncedAllocation, Comparable<SyncedAllocation>{
@@ -279,11 +279,24 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 		}
 		
 		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + getOuterType().hashCode();
+			result = prime * result + ((this.getID() == null) ? 0 : this.getID().hashCode());
+			return result;
+		}
+
+		@Override
 		public String getID(){
 			String id = "";
 			for(SyncedAllocation allocation:this.getAllocations())
 				id += allocation.getID()+":";
 			return id;
+		}
+
+		private DefaultPaymentAllocationLogic getOuterType() {
+			return DefaultPaymentAllocationLogic.this;
 		}
 	}
 	
