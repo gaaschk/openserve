@@ -43,7 +43,7 @@ public class GenericEnumUserType implements UserType, ParameterizedType {
 
 	@Override
 	public void nullSafeSet(PreparedStatement preparedStatement, Object value,
-			int index, SessionImplementor sessionImpl) throws HibernateException, SQLException {
+			int index, SessionImplementor sessionImpl) throws SQLException {
 		if (null == value) {
 			preparedStatement.setNull(index, Types.BIGINT);
 		} else {
@@ -57,7 +57,7 @@ public class GenericEnumUserType implements UserType, ParameterizedType {
 		}
 	}
 
-	public Object deepCopy(Object value) throws HibernateException {
+	public Object deepCopy(Object value){
 		return value;
 	}
 
@@ -65,29 +65,29 @@ public class GenericEnumUserType implements UserType, ParameterizedType {
 		return false;
 	}
 
-	public Object assemble(Serializable cached, Object owner)
-			throws HibernateException {
+	public Object assemble(Serializable cached, Object owner){
 		return cached;
 	}
 
-	public Serializable disassemble(Object value) throws HibernateException {
+	public Serializable disassemble(Object value){
 		return (Serializable) value;
 	}
 
-	public Object replace(Object original, Object target, Object owner)
-			throws HibernateException {
+	public Object replace(Object original, Object target, Object owner){
 		return original;
 	}
 
-	public int hashCode(Object x) throws HibernateException {
+	public int hashCode(Object x){
 		return x.hashCode();
 	}
 
-	public boolean equals(Object x, Object y) throws HibernateException {
-		if (x == y)
+	public boolean equals(Object x, Object y){
+		if (x == y){
 			return true;
-		if (null == x || null == y)
+		}
+		if (null == x || null == y){
 			return false;
+		}
 		return x.equals(y);
 	}
 
