@@ -65,13 +65,15 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 		
 		private void updateCurrentDueDate(){
 			currentDueDate = (loan.getCurrentUnpaidDueDate() == null)?null:new DateTime(loan.getCurrentUnpaidDueDate()).minus(loanTypeProfile.getPrepaymentDays());
-			if(currentDueDate != null)
+			if(currentDueDate != null){
 				currentDueDate = currentDueDate.plusMonths(amountAllocated/loan.getMinimumPaymentAmount());
+			}
 		}
 
 		public int getAmountNeededToAdvance(){
-			if(this.getCurrentDueDate() == null || this.getCurrentDueDate().isAfter(paymentEffectiveDate))
+			if(this.getCurrentDueDate() == null || this.getCurrentDueDate().isAfter(paymentEffectiveDate)){
 				return loan.getTotalBalance();
+			}
 			return loan.getMinimumPaymentAmount();
 		}
 		public int getAllocatedAmount(){
@@ -99,10 +101,11 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 
 		@Override
 		public int compareTo(SyncedAllocation arg1) {
-			if(this.getCurrentDueDate() == null && arg1.getCurrentDueDate() == null)
+			if(this.getCurrentDueDate() == null && arg1.getCurrentDueDate() == null){
 				return 0;
-			if(this.getCurrentDueDate()==null)return 1;
-			if(arg1.getCurrentDueDate()==null)return -1;
+			}
+			if(this.getCurrentDueDate()==null){return 1;}
+			if(arg1.getCurrentDueDate()==null){return -1;}
 			int dateCompVal = this.getCurrentDueDate().compareTo(arg1.getCurrentDueDate());
 			if(dateCompVal == 0){
 				return this.getID().compareTo(arg1.getID());
@@ -121,20 +124,25 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 
 		@Override
 		public boolean equals(Object obj) {
-			if (this == obj)
+			if (this == obj){
 				return true;
-			if (obj == null)
+			}
+			if (obj == null){
 				return false;
-			if (getClass() != obj.getClass())
+			}
+			if (getClass() != obj.getClass()){
 				return false;
+			}
 			LoanAllocation other = (LoanAllocation) obj;
-			if (!getOuterType().equals(other.getOuterType()))
+			if (!getOuterType().equals(other.getOuterType())){
 				return false;
+			}
 			if (loan == null) {
 				if (other.loan != null)
 					return false;
-			} else if (!loan.equals(other.loan))
+			} else if (!loan.equals(other.loan)){
 				return false;
+			}
 			return true;
 		}
 
@@ -196,8 +204,9 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 		}
 		
 		public DateTime getCurrentDueDate() {
-			if(this.getAllocations().size() > 0)
+			if(this.getAllocations().size() > 0){
 				return this.getAllocations().first().getCurrentDueDate();
+			}
 			return null;
 		}
 		public int getAmountNeededToAdvance(){
@@ -227,8 +236,9 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 					allocatedAmount += amountToAllocatHere;
 				}
 				for(SyncedAllocation allocation:this.getAllocations()){
-					if(allocatedAmount == amountToAllocate)
+					if(allocatedAmount == amountToAllocate){
 						return;
+					}
 					allocation.allocateAmount(1);
 					allocatedAmount++;
 				}
@@ -245,19 +255,22 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 		public List<LoanPayment> getLoanPayments(){
 			List<LoanPayment> loanPayments = null;
 			for(SyncedAllocation allocation:this.getAllocations()){
-				if(loanPayments == null)
+				if(loanPayments == null){
 					loanPayments = allocation.getLoanPayments();
-				else
+				}
+				else{
 					loanPayments.addAll(allocation.getLoanPayments());
+				}
 			}
 			return loanPayments;
 		}
 		@Override
 		public int compareTo(SyncedAllocation arg1) {
-			if(this.getCurrentDueDate() == null && arg1.getCurrentDueDate() == null)
+			if(this.getCurrentDueDate() == null && arg1.getCurrentDueDate() == null){
 				return 0;
-			if(this.getCurrentDueDate()==null)return 1;
-			if(arg1.getCurrentDueDate()==null)return -1;
+			}
+			if(this.getCurrentDueDate()==null){return 1;}
+			if(arg1.getCurrentDueDate()==null){return -1;}
 			int dateCompVal = this.getCurrentDueDate().compareTo(arg1.getCurrentDueDate());
 			if(dateCompVal == 0){
 				return this.getID().compareTo(arg1.getID());
@@ -274,7 +287,7 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 		}
 		@Override
 		public boolean equals(Object obj){
-			if(!(obj instanceof LoanAllocation))return false;
+			if(!(obj instanceof LoanAllocation)){return false;}
 			return this.getID().equals(((LoanAllocation)obj).getID());
 		}
 		
@@ -290,8 +303,9 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 		@Override
 		public String getID(){
 			String id = "";
-			for(SyncedAllocation allocation:this.getAllocations())
+			for(SyncedAllocation allocation:this.getAllocations()){
 				id += allocation.getID()+":";
+			}
 			return id;
 		}
 
@@ -356,10 +370,12 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 		public List<LoanPayment> getLoanPayments(){
 			List<LoanPayment> loanPayments = null;
 			for(SyncedAllocation allocation:this.getAllocations()){
-				if(loanPayments == null)
+				if(loanPayments == null){
 					loanPayments = allocation.getLoanPayments();
-				else
+				}
+				else{
 					loanPayments.addAll(allocation.getLoanPayments());
+				}
 			}
 			return loanPayments;
 		}
@@ -367,10 +383,11 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 
 	private class LoanDueDateComparator implements Comparator<Loan>{
 		public int compare(Loan arg0, Loan arg1) {
-			if(arg0.getCurrentUnpaidDueDate() == null && arg1.getCurrentUnpaidDueDate() == null)
+			if(arg0.getCurrentUnpaidDueDate() == null && arg1.getCurrentUnpaidDueDate() == null){
 				return 0;
-			if(arg0.getCurrentUnpaidDueDate() == null)return 1;
-			if(arg1.getCurrentUnpaidDueDate() == null)return 0;
+			}
+			if(arg0.getCurrentUnpaidDueDate() == null){return 1;}
+			if(arg1.getCurrentUnpaidDueDate() == null){return 0;}
 			return arg0.getCurrentUnpaidDueDate().compareTo(arg1.getCurrentUnpaidDueDate());
 		}
 	}

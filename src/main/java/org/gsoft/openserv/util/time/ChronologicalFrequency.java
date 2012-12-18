@@ -4,6 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 public interface ChronologicalFrequency {
-	public Date findNextDateAfter(Date theDate);
-	public List<Date> findAllDatesBetween(Date fromDate, Date toDate);
+	Date findNextDateAfter(Date theDate);
+	List<Date> findAllDatesBetween(Date fromDate, Date toDate);
 }

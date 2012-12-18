@@ -18,14 +18,14 @@ public class CurrencyInPenniesConverterFactory implements ConverterFactory<Strin
         }
 
         public T convert(String source) {
-        	source = source.replace("$", "");
-        	source = source.replace("US", "");
-        	source = source.replaceAll(",", "");
-        	BigDecimal value = new BigDecimal(source.trim());
-        	value = value.multiply(new BigDecimal(100));
+        	String noUnits = source.replace("$", "");
+        	String noDenom = noUnits.replace("US", "");
+        	String noSeparator = noDenom.replaceAll(",", "");
+        	BigDecimal value = new BigDecimal(noSeparator.trim());
+        	BigDecimal penniesVal = value.multiply(new BigDecimal(100));
         	if(currencyType == Integer.class)
-        		return (T)new Integer(value.intValue());
-        	return (T)value;
+        		return (T)new Integer(penniesVal.intValue());
+        	return (T)penniesVal;
         }
 	} 
 }

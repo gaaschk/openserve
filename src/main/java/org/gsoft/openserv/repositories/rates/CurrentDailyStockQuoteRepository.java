@@ -31,8 +31,8 @@ public class CurrentDailyStockQuoteRepository {
 		 URL yahoofin = new URL("http://finance.yahoo.com/d/quotes.csv?s=" + stock.getSymbol() + "&f=sd1oghl1&e=.csv");
          URLConnection yc = yahoofin.openConnection();
          BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-         String inputLine;
-         if((inputLine = in.readLine()) != null) {
+         String inputLine = in.readLine();
+         if(inputLine != null) {
         	 String[] yahooStockInfo = inputLine.split(",");
              Date quoteDate = sdf.parse(yahooStockInfo[1].replace("\"", ""));
              DailyStockQuote quote = quoteRepository.findDailyStockQuote(stock, quoteDate);
