@@ -17,11 +17,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
-import org.gsoft.openserv.domain.Person;
 import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.domain.Person;
 import org.gsoft.openserv.repositories.loan.LoanEventRepository;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
 import org.gsoft.openserv.util.ApplicationContextLocator;
+import org.gsoft.openserv.util.Constants;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -231,15 +232,16 @@ public class Loan extends OpenServDomainObject{
 		int termPassed = 0;
 		if(this.getInitialDueDate() != null){
 			SystemSettingsLogic systemSettings = ApplicationContextLocator.getApplicationContext().getBean(SystemSettingsLogic.class);
-			if(this.getInitialDueDate().before(systemSettings.getCurrentSystemDate()))
+			if(this.getInitialDueDate().before(systemSettings.getCurrentSystemDate())){
 				termPassed = Months.monthsBetween(new DateTime(this.getInitialDueDate()), new DateTime(systemSettings.getCurrentSystemDate())).getMonths();
+			}
 		}
 		return termPassed;
 	}
 	
 	@Transient
 	public Integer getRemainingLoanTerm(){
-		if(this.getStartingLoanTerm() == null)return 0;
+		if(this.getStartingLoanTerm() == null){return 0;}
 		return this.getStartingLoanTerm() - this.getUsedLoanTerm();
 	}
 	
@@ -250,7 +252,7 @@ public class Loan extends OpenServDomainObject{
 	
 	@Transient
 	public BigDecimal getDailyInterestAmount(){
-		return this.getBaseRate().add(this.getMargin()).divide(new BigDecimal(365.25),6, RoundingMode.HALF_EVEN).multiply(new BigDecimal(this.getCurrentPrincipal()));
+		return this.getBaseRate().add(this.getMargin()).divide(new BigDecimal(Constants.DAYS_IN_YEAR),Constants.INTEREST_ROUNDING_SCALE_6, RoundingMode.HALF_EVEN).multiply(new BigDecimal(this.getCurrentPrincipal()));
 	}
 	
 	@Override
