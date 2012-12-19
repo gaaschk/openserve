@@ -19,7 +19,7 @@ public class AmortizationSchedule extends OpenServDomainObject {
 	private static final long serialVersionUID = -591660710764385964L;
 	private Long amortizationScheduleID;
 	private Date creationDate;
-	private Date EffectiveDate;
+	private Date effectiveDate;
 	private List<LoanAmortizationSchedule> loanAmortizations;
 
 	public void addLoanAmortizationSchedule(LoanAmortizationSchedule loanAmortization){
@@ -41,19 +41,19 @@ public class AmortizationSchedule extends OpenServDomainObject {
 	}
 
 	public Date getCreationDate() {
-		return creationDate;
+		return (creationDate==null)?null:(Date)creationDate.clone();
 	}
 	
 	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
+		this.creationDate = (creationDate==null)?null:(Date)creationDate.clone();
 	}
 	
 	public Date getEffectiveDate() {
-		return EffectiveDate;
+		return (effectiveDate==null)?null:(Date)effectiveDate.clone();
 	}
 	
 	public void setEffectiveDate(Date effectiveDate) {
-		EffectiveDate = effectiveDate;
+		this.effectiveDate = (effectiveDate==null)?null:(Date)effectiveDate.clone();
 	}
 	
 	@OneToMany(mappedBy="amortizationSchedule", cascade=CascadeType.ALL)
