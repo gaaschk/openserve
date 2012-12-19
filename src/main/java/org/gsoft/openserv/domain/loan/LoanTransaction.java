@@ -14,12 +14,12 @@ import org.gsoft.openserv.domain.OpenServDomainObject;
 public class LoanTransaction extends OpenServDomainObject{
 	private static final long serialVersionUID = 5151555488279150572L;
 	private Long loanTransactionID;
-	private BigDecimal interestAccrued = new BigDecimal(0);
+	private BigDecimal interestAccrued = BigDecimal.ZERO;
 	private Integer principalChange = 0;
-	private BigDecimal interestChange = new BigDecimal(0);
+	private BigDecimal interestChange = BigDecimal.ZERO;
 	private Integer feesChange = 0;
 	private Integer endingPrincipal = 0;
-	private BigDecimal endingInterest = new BigDecimal(0);
+	private BigDecimal endingInterest = BigDecimal.ZERO;
 	private Integer endingFees = 0;
 	
 	@Id

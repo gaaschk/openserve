@@ -64,12 +64,12 @@ public class LoanEvent extends OpenServDomainObject{
 
 
 	public Date getEffectiveDate() {
-		return effectiveDate;
+		return (effectiveDate==null)?null:(Date)effectiveDate.clone();
 	}
 
 
 	public void setEffectiveDate(Date effectiveDate) {
-		this.effectiveDate = effectiveDate;
+		this.effectiveDate = (effectiveDate==null)?null:(Date)effectiveDate.clone();
 	}
 
 
@@ -84,12 +84,12 @@ public class LoanEvent extends OpenServDomainObject{
 
 
 	public Date getPostDate() {
-		return postDate;
+		return (postDate==null)?null:(Date)postDate.clone();
 	}
 
 
 	public void setPostDate(Date postDate) {
-		this.postDate = postDate;
+		this.postDate = (postDate==null)?null:(Date)postDate.clone();
 	}
 
 	@OneToOne

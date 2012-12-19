@@ -57,16 +57,16 @@ public class LoanTypeProfile extends OpenServDomainObject{
 		this.loanType = loanType;
 	}
 	public Date getEffectiveDate() {
-		return effectiveDate;
+		return (effectiveDate==null)?null:(Date)effectiveDate.clone();
 	}
 	public void setEffectiveDate(Date effectiveDate) {
-		this.effectiveDate = effectiveDate;
+		this.effectiveDate = (effectiveDate==null)?null:(Date)effectiveDate.clone();
 	}
 	public Date getEndDate() {
-		return endDate;
+		return (endDate==null)?null:(Date)endDate.clone();
 	}
 	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+		this.endDate = (endDate==null)?null:(Date)endDate.clone();
 	}
 	public Integer getMaximumLoanTerm() {
 		return maximumLoanTerm;

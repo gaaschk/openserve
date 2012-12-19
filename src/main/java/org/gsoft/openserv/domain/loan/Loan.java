@@ -69,10 +69,10 @@ public class Loan extends OpenServDomainObject{
 		this.loanID = loanID;
 	}
 	public Date getServicingStartDate() {
-		return servicingStartDate;
+		return (servicingStartDate==null)?null:(Date)servicingStartDate.clone();
 	}
 	public void setServicingStartDate(Date servicingStartDate) {
-		this.servicingStartDate = servicingStartDate;
+		this.servicingStartDate = (servicingStartDate==null)?null:(Date)servicingStartDate.clone();
 	}
 	@Type( type = "org.gsoft.openserv.util.jpa.GenericEnumUserType", parameters={
 			@Parameter(name = "enumClass", value = "org.gsoft.openserv.domain.loan.LoanType")
@@ -165,34 +165,34 @@ public class Loan extends OpenServDomainObject{
 		this.minimumPaymentAmount = minimumPaymentAmount;
 	}
 	public Date getRepaymentStartDate() {
-		return repaymentStartDate;
+		return (repaymentStartDate==null)?null:(Date)repaymentStartDate.clone();
 	}
 	public void setRepaymentStartDate(Date repaymentStartDate) {
-		this.repaymentStartDate = repaymentStartDate;
+		this.repaymentStartDate = (repaymentStartDate==null)?null:(Date)repaymentStartDate.clone();
 	}
 	public Date getFirstDueDate() {
-		return firstDueDate;
+		return (firstDueDate==null)?null:(Date)firstDueDate.clone();
 	}
 	public void setFirstDueDate(Date firstDueDate) {
-		this.firstDueDate = firstDueDate;
+		this.firstDueDate = (firstDueDate==null)?null:(Date)firstDueDate.clone();;
 	}
 	public Date getInitialDueDate() {
-		return initialDueDate;
+		return (initialDueDate==null)?null:(Date)initialDueDate.clone();
 	}
 	public void setInitialDueDate(Date initialDueDate) {
-		this.initialDueDate = initialDueDate;
+		this.initialDueDate = (initialDueDate==null)?null:(Date)initialDueDate.clone();
 	}
 	public Date getLastPaidDate() {
-		return lastPaidDate;
+		return (lastPaidDate==null)?null:(Date)lastPaidDate.clone();
 	}
 	public void setLastPaidDate(Date lastPaidDate) {
-		this.lastPaidDate = lastPaidDate;
+		this.lastPaidDate = (lastPaidDate==null)?null:(Date)lastPaidDate.clone();
 	}
 	public Date getCurrentUnpaidDueDate() {
-		return currentUnpaidDueDate;
+		return (currentUnpaidDueDate==null)?null:(Date)currentUnpaidDueDate.clone();
 	}
 	public void setCurrentUnpaidDueDate(Date currentUnpaidDueDate) {
-		this.currentUnpaidDueDate = currentUnpaidDueDate;
+		this.currentUnpaidDueDate = (currentUnpaidDueDate==null)?null:(Date)currentUnpaidDueDate.clone();
 	}
 	@Transient
 	public Date getNextDueDate() {
@@ -206,10 +206,10 @@ public class Loan extends OpenServDomainObject{
 				}
 			}
 		}
-		return nextDueDate;
+		return (nextDueDate == null)?null:(Date)nextDueDate.clone();
 	}
 	public void setNextDueDate(Date nextDueDate) {
-		this.nextDueDate = nextDueDate;
+		this.nextDueDate = (nextDueDate==null)?null:(Date)nextDueDate.clone();
 	}
 	@OneToMany(mappedBy="loan")
 	public List<Disbursement> getDisbursements() {

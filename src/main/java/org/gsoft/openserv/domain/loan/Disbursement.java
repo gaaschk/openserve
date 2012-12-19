@@ -37,10 +37,10 @@ public class Disbursement extends OpenServDomainObject{
 		this.loan = theLoan;
 	}
 	public Date getDisbursementEffectiveDate() {
-		return disbursementEffectiveDate;
+		return (disbursementEffectiveDate==null)?null:(Date)disbursementEffectiveDate.clone();
 	}
 	public void setDisbursementEffectiveDate(Date disbursementEffectiveDate) {
-		this.disbursementEffectiveDate = disbursementEffectiveDate;
+		this.disbursementEffectiveDate = (disbursementEffectiveDate==null)?null:(Date)disbursementEffectiveDate.clone();
 	}
 	public Integer getDisbursementAmount() {
 		return disbursementAmount;

@@ -39,18 +39,15 @@ public class SignupController {
 		if (formBinding.hasErrors()) {
 			return null;
 		}
-		SystemUser account = createAccount(form, formBinding);
-		if (account != null) {
-			securityAdapter.signIn(account.getUsername(), account.getPassword());
-			ProviderSignInUtils.handlePostSignUp(account.getUsername(), request);
-			return "redirect:/";
-		}
-		return null;
+		SystemUser account = createAccount(form);
+		securityAdapter.signIn(account.getUsername(), account.getPassword());
+		ProviderSignInUtils.handlePostSignUp(account.getUsername(), request);
+		return "redirect:/";
 	}
 
 	// internal helpers
 	
-	private SystemUser createAccount(SignupForm form, BindingResult formBinding) {
+	private SystemUser createAccount(SignupForm form) {
 		SystemUser account = new SystemUser();
 		account.setActive(true);
 		account.setName(form.getFirstName() + " " + form.getLastName());
