@@ -63,11 +63,11 @@ public class LoanEventLogic {
 		loanEvent.setEffectiveDate(effectiveDate);
 		loanEvent.setLoanEventType(loanEventType);
 		loanEvent.setPostDate(systemSettingsLogic.getCurrentSystemDate());
-		BigDecimal accruedInterest = new BigDecimal(0);
+		BigDecimal accruedInterest = BigDecimal.ZERO;
 		if(lastEvent != null){
 			//need to go ahead and resequence later events here to make a place for the new one.
 			List<LoanEvent> laterEvents = loanEventRepository.findAllLoanEventsForLoanAfterSequence(loan.getLoanID(), lastEvent.getSequence());
-			for(LoanEvent laterEvent:laterEvents)laterEvent.setSequence(laterEvent.getSequence()+1);
+			for(LoanEvent laterEvent:laterEvents){laterEvent.setSequence(laterEvent.getSequence()+1);}
 			loanEvent.setSequence(lastEvent.getSequence()+1);
 			accruedInterest = interestAccrualLogic.calculateLoanInterestAmountForPeriod(loan, lastEvent.getEffectiveDate(), effectiveDate);
 		}

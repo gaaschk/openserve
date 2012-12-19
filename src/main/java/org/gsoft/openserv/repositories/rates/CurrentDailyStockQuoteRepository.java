@@ -30,8 +30,14 @@ public class CurrentDailyStockQuoteRepository {
 	public DailyStockQuote findCurrentQuoteForStock(Stock stock) throws IOException, ParseException{
 		 URL yahoofin = new URL("http://finance.yahoo.com/d/quotes.csv?s=" + stock.getSymbol() + "&f=sd1oghl1&e=.csv");
          URLConnection yc = yahoofin.openConnection();
+         String inputLine = null;
          BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-         String inputLine = in.readLine();
+         try{
+        	 inputLine = in.readLine();
+         }
+         finally{
+        	 in.close();
+         }
          if(inputLine != null) {
         	 String[] yahooStockInfo = inputLine.split(",");
              Date quoteDate = sdf.parse(yahooStockInfo[1].replace("\"", ""));
@@ -53,6 +59,6 @@ public class CurrentDailyStockQuoteRepository {
             	 LOG.warn("Unable to parse quote. [" + yahooStockInfo + "]");
              }
         }
-         return null;
+        return null;
 	}
 }
