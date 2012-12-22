@@ -23,8 +23,8 @@ public class RateModelToRateConverter implements Converter<RateModel, Rate>{
 			rate = new Rate();
 			rateRepository.save(rate);
 		}
-		rate.setSymbol(source.getSymbol());
-		rate.setName(source.getName());
+		rate.setTickerSymbol(source.getSymbol());
+		rate.setRateName(source.getName());
 		return rate;
 	}
 

@@ -7,11 +7,11 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
-import org.gsoft.openserv.domain.rates.DailyRateQuote;
 import org.gsoft.openserv.domain.rates.Rate;
-import org.gsoft.openserv.repositories.rates.DailyRateQuoteRepository;
+import org.gsoft.openserv.domain.rates.RateValue;
 import org.gsoft.openserv.repositories.rates.RateRepository;
-import org.gsoft.openserv.service.rates.QuoteService;
+import org.gsoft.openserv.repositories.rates.RateValueRepository;
+import org.gsoft.openserv.service.rates.RateService;
 import org.gsoft.openserv.web.models.RateListModel;
 import org.gsoft.openserv.web.models.RateModel;
 import org.joda.time.DateTime;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RatesFlowController {
 	@Resource
-	private DailyRateQuoteRepository dailyRateQuoteRepository;
+	private RateValueRepository rateValueRepository;
 	@Resource
 	private RateRepository rateRepository;
 	@Resource
@@ -29,50 +29,50 @@ public class RatesFlowController {
 	@Resource
 	private SystemSettingsLogic systemSettings;
 	@Resource
-	private QuoteService quoteService;
+	private RateService rateService;
 	
-	public RateListModel findAllQuotesForCurrentDate(){
-		return this.findAllQuotesForDate(systemSettings.getCurrentSystemDate());
+	public RateListModel findAllRateValueForCurrentDate(){
+		return this.findAllRateValuesForDate(systemSettings.getCurrentSystemDate());
 	}
 	
-	public RateListModel findAllQuotesForDate(Date day){
+	public RateListModel findAllRateValuesForDate(Date day){
 		Date dayNoTime = new DateTime(day).toDateMidnight().toDate();
-		List<Rate> rates = quoteService.getAllRates();
-		ArrayList<DailyRateQuote> quotes = new ArrayList<DailyRateQuote>();
+		List<Rate> rates = rateService.getAllRates();
+		ArrayList<RateValue> rateValues = new ArrayList<RateValue>();
 		for(Rate rate:rates){
-			DailyRateQuote quote = null;
-			quote = dailyRateQuoteRepository.findDailyRateQuote(rate, dayNoTime);
-			if(quote == null){
-				quote = new DailyRateQuote();
-				quote.setRate(rate);
-				quotes.add(quote);
+			RateValue rateValue = null;
+			rateValue = rateValueRepository.findRateValue(rate, dayNoTime);
+			if(rateValue == null){
+				rateValue = new RateValue();
+				rateValue.setRate(rate);
+				rateValues.add(rateValue);
 			}
 			else{
-				quotes.add(quote);
+				rateValues.add(rateValue);
 			}
-			quote.setQuoteDate(dayNoTime);
+			rateValue.setRateValueDate(dayNoTime);
 		}
-		RateListModel ratesModel = conversionService.convert(quotes, RateListModel.class);
+		RateListModel ratesModel = conversionService.convert(rateValues, RateListModel.class);
 		ratesModel.setQuoteDate(dayNoTime);
 		return ratesModel;
 	}
 	
 	public RateListModel addRate(RateListModel rates){
 		Rate newRate = new Rate();
-		newRate.setSymbol(rates.getNewRateSymbol());
-		newRate.setName(rates.getNewRateName());
+		newRate.setTickerSymbol(rates.getNewRateSymbol());
+		newRate.setRateName(rates.getNewRateName());
 		rateRepository.save(newRate);
-		return this.findAllQuotesForDate(rates.getQuoteDate());
+		return this.findAllRateValuesForDate(rates.getQuoteDate());
 	}
 	
 	public RateListModel saveRates(RateListModel rateList){
 		List<RateModel> rateModels = rateList.getRates();
 		for(RateModel rateModel:rateModels){
 			rateModel.setQuoteDate(rateList.getQuoteDate());
-			DailyRateQuote quote = conversionService.convert(rateModel, DailyRateQuote.class);
-			quote.getRate().setName(rateModel.getName());
-			quoteService.saveRate(quote);
+			RateValue rateValue = conversionService.convert(rateModel, RateValue.class);
+			rateValue.getRate().setRateName(rateModel.getName());
+			rateService.saveRateValue(rateValue);
 		}
-		return this.findAllQuotesForDate(rateList.getQuoteDate());
+		return this.findAllRateValuesForDate(rateList.getQuoteDate());
 	}
 }

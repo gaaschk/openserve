@@ -14,21 +14,21 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.gsoft.openserv.domain.rates.DailyStockQuote;
-import org.gsoft.openserv.domain.rates.Stock;
+import org.gsoft.openserv.domain.rates.RateValue;
+import org.gsoft.openserv.domain.rates.Rate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CurrentDailyStockQuoteRepository {
-	private static final Logger LOG = LogManager.getLogger(CurrentDailyStockQuoteRepository.class);
+public class CurrentRateValueRepository {
+	private static final Logger LOG = LogManager.getLogger(CurrentRateValueRepository.class);
 	
 	@Resource
-	private DailyStockQuoteRepository quoteRepository;
+	private RateValueRepository quoteRepository;
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 	
-	public DailyStockQuote findCurrentQuoteForStock(Stock stock) throws IOException, ParseException{
-		 URL yahoofin = new URL("http://finance.yahoo.com/d/quotes.csv?s=" + stock.getSymbol() + "&f=sd1oghl1&e=.csv");
+	public RateValue findCurrentValueForRate(Rate rate) throws IOException, ParseException{
+		 URL yahoofin = new URL("http://finance.yahoo.com/d/quotes.csv?s=" + rate.getTickerSymbol() + "&f=sd1oghl1&e=.csv");
          URLConnection yc = yahoofin.openConnection();
          String inputLine = null;
          BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
@@ -41,19 +41,16 @@ public class CurrentDailyStockQuoteRepository {
          if(inputLine != null) {
         	 String[] yahooStockInfo = inputLine.split(",");
              Date quoteDate = sdf.parse(yahooStockInfo[1].replace("\"", ""));
-             DailyStockQuote quote = quoteRepository.findDailyStockQuote(stock, quoteDate);
-             if(quote == null){
-            	 quote = new DailyStockQuote();
-            	 quote.setStock(stock);
-            	 quote.setQuoteDate(quoteDate);
-            	 quoteRepository.save(quote);
+             RateValue rateValue = quoteRepository.findRateValue(rate, quoteDate);
+             if(rateValue == null){
+            	 rateValue = new RateValue();
+            	 rateValue.setRate(rate);
+            	 rateValue.setRateValueDate(quoteDate);
+            	 quoteRepository.save(rateValue);
              }
              try{
-            	 quote.setOpenValue(new BigDecimal(yahooStockInfo[2]));
-            	 quote.setLowValue(new BigDecimal(yahooStockInfo[3]));
-            	 quote.setHighValue(new BigDecimal(yahooStockInfo[4]));
-            	 quote.setLastValue(new BigDecimal(yahooStockInfo[5]));
-            	 return quote;
+            	 rateValue.setRateValue(new BigDecimal(yahooStockInfo[5]));
+            	 return rateValue;
              }
              catch(NumberFormatException nfe){
             	 LOG.warn("Unable to parse quote. [" + yahooStockInfo + "]");

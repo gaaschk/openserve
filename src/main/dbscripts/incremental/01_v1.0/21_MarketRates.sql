@@ -1,46 +1,24 @@
-create table Stock(
-	StockID BIGINT PRIMARY KEY AUTO_INCREMENT,
-	Symbol VARCHAR(20),
-	Name VARCHAR(50),
+create table Rate(
+	RateID BIGINT PRIMARY KEY AUTO_INCREMENT,
+	RateName VARCHAR(50),
+	TickerSymbol VARCHAR(20),
 	AutoUpdate SMALLINT
 );
 
-create table DailyStockQuote(
-	DailyStockQuoteID BIGINT PRIMARY KEY AUTO_INCREMENT,
-	StockID BIGINT,
-	QuoteDate DATE,
-	OpenValue DECIMAL(20,6),
-	LastValue DECIMAL(20,6),
-	LowValue DECIMAL(20,6),
-	HighValue DECIMAL(20,6)
-);
-
-alter table DailyStockQuote
-add foreign key DailyStockQuote_Stock_FK (StockID) references Stock(StockID);
-
-insert into stock (Symbol, name, AutoUpdate) values ('GOOG', 'Google', 1);
-insert into stock (Symbol, name, AutoUpdate) values ('VMW', 'VMWare', 1);
-insert into stock (Symbol, name, AutoUpdate) values ('%5EGSPC', 'S&P 500 Index', 1);
-
-create table Rate(
-	RateID BIGINT PRIMARY KEY AUTO_INCREMENT,
-	Symbol VARCHAR(20),
-	Name VARCHAR(50)
-);
-
-create table DailyRateQuote(
-	DailyRateQuoteID BIGINT PRIMARY KEY AUTO_INCREMENT,
+create table RateValue(
+	RateValueID BIGINT PRIMARY KEY AUTO_INCREMENT,
 	RateID BIGINT,
-	QuoteDate DATE,
-	Value DECIMAL(20,6)
+	RateValueDate DATE,
+	RateValue DECIMAL(20,6),
+	IsValid SMALLINT
 );
 
-alter table DailyRateQuote
-add foreign key DailyRateQuote_Rate_FK (RateID) references Rate(RateID);
+alter table RateValue
+add foreign key RateValue_Rate_FK (RateID) references Rate(RateID);
 
-insert into Rate (Symbol, name) values ('LIBOR.USD1M', '1 Month LIBOR US Dollars');
-insert into Rate (Symbol, name) values ('LIBOR.USD6M', '6 Month LIBOR US Dollars');
-insert into Rate (Symbol, name) values ('LIBOR.USD12M', '12 Month LIBOR US Dollars');
+insert into Rate (TickerSymbol, RateName) values ('LIBOR.USD1M', '1 Month LIBOR US Dollars');
+insert into Rate (TickerSymbol, RateName) values ('LIBOR.USD6M', '6 Month LIBOR US Dollars');
+insert into Rate (TickerSymbol, RateName) values ('LIBOR.USD12M', '12 Month LIBOR US Dollars');
 
 alter table LoanTypeProfile 
 add column variableRate SMALLINT;
@@ -69,4 +47,4 @@ add column BaseRateID BIGINT;
 alter table LoanTypeProfile 
 add foreign key LoanTypeProfile_Rate (BaseRateID) references Rate(RateID);
 
-update LoanTypeProfile set BaseRateID = (select RateID from Rate where Symbol = 'LIBOR.USD1M');
+update LoanTypeProfile set BaseRateID = (select RateID from Rate where TickerSymbol = 'LIBOR.USD1M');

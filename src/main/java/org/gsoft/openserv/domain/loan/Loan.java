@@ -39,6 +39,14 @@ public class Loan extends OpenServDomainObject{
 	private Integer startingPrincipal;
 	private BigDecimal startingInterest;
 	private Integer startingFees;
+	private Integer startingLoanTerm;
+	//Enumerations
+	private LoanType loanType;
+	//Relationships
+	private Person borrower;
+	private List<Disbursement> disbursements;
+
+	//Billing Period
 	private Integer currentPrincipal;
 	private BigDecimal currentInterest;
 	private Integer currentFees;
@@ -46,7 +54,6 @@ public class Loan extends OpenServDomainObject{
 	private BigDecimal baseRate;
 	
 	private LoanEvent lastLoanEvent;
-	private Integer startingLoanTerm;
 	private Integer minimumPaymentAmount;
 	private Date repaymentStartDate;
 	private Date firstDueDate;
@@ -54,11 +61,6 @@ public class Loan extends OpenServDomainObject{
 	private Date lastPaidDate;
 	private Date currentUnpaidDueDate;
 	private Date nextDueDate;
-	//Enumerations
-	private LoanType loanType;
-	//Relationships
-	private Person borrower;
-	private List<Disbursement> disbursements;
 	
 	@Id
 	@GeneratedValue( strategy=GenerationType.AUTO)

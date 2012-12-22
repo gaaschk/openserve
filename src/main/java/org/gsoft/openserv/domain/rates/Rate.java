@@ -7,43 +7,59 @@ import javax.persistence.Id;
 import javax.persistence.Transient;
 
 import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
 
 @Entity
-public class Rate extends OpenServDomainObject {
-	private static final long serialVersionUID = -7125016712126176480L;
-	private Long rateID;
-	private String symbol;
-	private String name;
+@RulesEngineEntity
+public class Rate extends OpenServDomainObject{
+	
+	private static final long serialVersionUID = 9018072728872806482L;
+
+	private Long rateId;
+	private String rateName;
+	private Boolean autoUpdate = false;
+	private String tickerSymbol; 
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	public Long getRateID() {
-		return rateID;
+	@GeneratedValue( strategy=GenerationType.AUTO)
+	public Long getRateId() {
+		return rateId;
 	}
 
-	public void setRateID(Long rateID) {
-		this.rateID = rateID;
+	//Needed for Hibernate
+	@SuppressWarnings("unused")
+	private void setRateId(Long rateId) {
+		this.rateId = rateId;
 	}
 
-	public String getSymbol() {
-		return symbol;
+	public String getRateName() {
+		return rateName;
 	}
 
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
+	public void setRateName(String rateName) {
+		this.rateName = rateName;
 	}
 
-	public String getName() {
-		return name;
+	public Boolean getAutoUpdate() {
+		return autoUpdate;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setAutoUpdate(Boolean autoUpdate) {
+		this.autoUpdate = autoUpdate;
+	}
+
+	public String getTickerSymbol() {
+		return tickerSymbol;
+	}
+
+	public void setTickerSymbol(String tickerSymbol) {
+		this.tickerSymbol = tickerSymbol;
 	}
 
 	@Override
 	@Transient
 	public Long getID() {
-		return this.getRateID();
+		return this.getRateId();
 	}
+
 }

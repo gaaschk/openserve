@@ -19,14 +19,14 @@ public class RateRepository extends BaseRepository<Rate, Long>{
 		return rateSpringRepository;
 	}
 
-	public Rate findRateBySymbol(String symbol){
-		return this.rateSpringRepository.findRateBySymbol(symbol);
+	public Rate findRateByTickerSymbol(String tickerSymbol){
+		return this.rateSpringRepository.findRateByTickerSymbol(tickerSymbol);
 	}
 }
 
 @Repository
 interface RateSpringRepository extends BaseSpringRepository<Rate, Long>{
 	
-	@Query("select rate from Rate rate where rate.symbol = :symbol")
-	public Rate findRateBySymbol(@Param("symbol") String symbol);
+	@Query("select rate from Rate rate where rate.tickerSymbol = :tickerSymbol")
+	Rate findRateByTickerSymbol(@Param("tickerSymbol") String tickerSymbol);
 }

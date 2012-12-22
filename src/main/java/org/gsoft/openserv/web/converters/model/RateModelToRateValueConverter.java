@@ -4,33 +4,33 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.domain.rates.DailyRateQuote;
 import org.gsoft.openserv.domain.rates.Rate;
-import org.gsoft.openserv.repositories.rates.DailyRateQuoteRepository;
+import org.gsoft.openserv.domain.rates.RateValue;
 import org.gsoft.openserv.repositories.rates.RateRepository;
+import org.gsoft.openserv.repositories.rates.RateValueRepository;
 import org.gsoft.openserv.web.models.RateModel;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RateModelToDailyRateQuoteConverter implements Converter<RateModel, DailyRateQuote>{
+public class RateModelToRateValueConverter implements Converter<RateModel, RateValue>{
 	@Resource
-	private DailyRateQuoteRepository rateQuoteRepository;
+	private RateValueRepository rateValueRepository;
 	@Resource
 	private RateRepository rateRepository;
 	
 	@Override
-	public DailyRateQuote convert(RateModel source){
+	public RateValue convert(RateModel source){
 		String symbol = source.getSymbol();
 		Date quoteDate = source.getQuoteDate();
-		DailyRateQuote quote = rateQuoteRepository.findDailyRateQuoteBySymbol(symbol, quoteDate);
+		RateValue quote = rateValueRepository.findRateValueByTickerSymbol(symbol, quoteDate);
 		if(quote == null){
-			quote = new DailyRateQuote();
-			Rate rate = rateRepository.findRateBySymbol(symbol);
+			quote = new RateValue();
+			Rate rate = rateRepository.findRateByTickerSymbol(symbol);
 			quote.setRate(rate);
-			quote.setQuoteDate(source.getQuoteDate());
+			quote.setRateValueDate(source.getQuoteDate());
 		}
-		quote.setValue(source.getValue());
+		quote.setRateValue(source.getValue());
 		return quote;
 	}
 }

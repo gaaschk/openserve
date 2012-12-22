@@ -4,24 +4,24 @@ import java.util.Iterator;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.domain.rates.Stock;
-import org.gsoft.openserv.repositories.rates.CurrentDailyStockQuoteRepository;
-import org.gsoft.openserv.repositories.rates.StockRepository;
+import org.gsoft.openserv.domain.rates.Rate;
+import org.gsoft.openserv.repositories.rates.CurrentRateValueRepository;
+import org.gsoft.openserv.repositories.rates.RateRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public class QuoteUpdater {
 	@Resource
-	private StockRepository stockRepository;
+	private RateRepository rateRepository;
 	@Resource
-	private CurrentDailyStockQuoteRepository quoteFinder;
+	private CurrentRateValueRepository rateFinder;
 	
 	public void updateQuotes(){
-		Iterable<Stock> stocks = stockRepository.findAll();
-		Iterator<Stock> stockIter = stocks.iterator();
-		while(stockIter.hasNext()){
+		Iterable<Rate> rates = rateRepository.findAll();
+		Iterator<Rate> rateIter = rates.iterator();
+		while(rateIter.hasNext()){
 			try {
-				quoteFinder.findCurrentQuoteForStock(stockIter.next());
+				rateFinder.findCurrentValueForRate(rateIter.next());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
