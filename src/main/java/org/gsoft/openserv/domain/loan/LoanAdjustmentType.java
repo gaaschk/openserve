@@ -2,7 +2,7 @@ package org.gsoft.openserv.domain.loan;
 
 import org.gsoft.openserv.util.jpa.OpenServEnum;
 
-public enum LoanAdjustmentType implements OpenServEnum<LoanType>{
+public enum LoanAdjustmentType implements OpenServEnum<LoanAdjustmentType>{
 	DISBURSEMENT(10L, "Disbursement", "Disbursement Made"),
 	MANUAL_FIXED_ADJ(20L, "Manual Fixed Adjustment", "Fixed Adjusement applied manually"),
 	PAYMENT(30L, "Payment", "Payment Applied");

@@ -27,12 +27,20 @@ public class LoanBalanceAdjustmentRepository extends BaseRepository<LoanBalanceA
 		return this.getSpringRepository().findAllByLoanID(loanID);
 	}
 	
-	public Integer findNetPrincipalChangeForPeriod(Long loanID, Date fromDate, Date toDate){
+	public Long findNetPrincipalChangeForPeriod(Long loanID, Date fromDate, Date toDate){
 		return this.getSpringRepository().findNetPrincipalChangeForPeriod(loanID, fromDate, toDate);
 	}
 	
 	public Integer findNetPrincipalChangeThruDate(Long loanID, Date toDate){
 		return this.getSpringRepository().findNetPrincipalChangeThruDate(loanID, toDate);
+	}
+	
+	public List<Map<String,Integer>> findAllPrincipalChangesFromDateToDate(Long loanID, Date fromDate, Date toDate){
+		return this.getSpringRepository().findAllPrincipalChangesFromDateToDate(loanID, fromDate, toDate);
+	}
+
+	public List<Map<String,Integer>> findAllPrincipalChangesThruDate(Long loanID, Date toDate){
+		return this.getSpringRepository().findAllPrincipalChangesThruDate(loanID, toDate);
 	}
 }
 
@@ -43,7 +51,7 @@ interface LoanBalanceAdjustmentRepoIF extends BaseSpringRepository<LoanBalanceAd
 	
 	@Query("SELECT SUM(lba.principalChange) FROM LoanBalanceAdjustment lba " +
 			"WHERE lba.loanID = :loanID AND lba.effectiveDate >= :fromDate AND lba.effectiveDate <= :toDate")
-	Integer findNetPrincipalChangeForPeriod(@Param("loanID") Long loanID, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+	Long findNetPrincipalChangeForPeriod(@Param("loanID") Long loanID, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
 
 	@Query("SELECT SUM(lba.principalChange) FROM LoanBalanceAdjustment lba " +
 			"WHERE lba.loanID = :loanID AND lba.effectiveDate <= :toDate")

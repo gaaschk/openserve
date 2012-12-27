@@ -16,7 +16,7 @@ public class BillingStatementToBillingStatementModelConverter implements Convert
 		model.setPaidAmount(source.getPaidAmount());
 		model.setMinimumRequiredPayment(source.getMinimumRequiredPayment());
 		model.setSatisfiedDate(source.getSatisfiedDate());
-		model.setLateFeeAmount((source.getLateFee() == null)?0:source.getLateFee().getFeeAmount());
+		//model.setLateFeeAmount((source.getLateFee() == null)?0:source.getLateFee().getFeeAmount());
 		return model;
 	}
 

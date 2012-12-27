@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import org.gsoft.openserv.domain.OpenServDomainObject;
@@ -29,7 +28,6 @@ public class BillingStatement extends OpenServDomainObject{
 	private Date satisfiedDate;
 	//Relationships
 	private List<BillPayment> billPayments;
-	private LateFee lateFee;
 
 	@Id
 	@GeneratedValue( strategy=GenerationType.AUTO)
@@ -88,13 +86,6 @@ public class BillingStatement extends OpenServDomainObject{
 	}
 	public void setSatisfiedDate(Date satisfiedDate){
 		this.satisfiedDate = satisfiedDate;
-	}
-	@OneToOne(mappedBy="billingStatement")
-	public LateFee getLateFee(){
-		return this.lateFee;
-	}
-	public void setLateFee(LateFee lateFee){
-		this.lateFee = lateFee;
 	}
 	@Transient
 	public Integer getUnpaidBalance(){

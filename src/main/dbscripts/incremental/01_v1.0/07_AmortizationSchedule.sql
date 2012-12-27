@@ -26,4 +26,4 @@ ADD FOREIGN KEY LoanAmortizationSchedule_Loan_FK(LoanID) REFERENCES Loan(LoanID)
 ALTER TABLE AmortizationLoanPayment
 ADD FOREIGN KEY AmortizationLoanPayment_LoanAmortizationSchedule_FK(LoanAmortizationScheduleID) REFERENCES LoanAmortizationSchedule(LoanAmortizationScheduleID);
 
-alter table Loan add column RemainingLoanTerm INTEGER after Margin;
+alter table Loan add column RemainingLoanTerm INTEGER after StartingFees;
