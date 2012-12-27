@@ -38,21 +38,22 @@ public class AmortizationLogic {
 	}
 	
 	private LoanAmortizationSchedule createLoanAmortizationSchedule(Loan loan){
-		BigDecimal annualInterestRate = interestLogic.getInterestRateForLoan(loan);
-		Integer paymentAmount = paymentCalculator.calculatePaymentAmount(loan.getCurrentPrincipal(), annualInterestRate, loan.getRemainingLoanTerm());
-		int regularPaymentCount = loan.getCurrentPrincipal()/paymentAmount;
-		int lastPaymentAmount = loan.getCurrentPrincipal() - (paymentAmount*regularPaymentCount);
-		LoanAmortizationSchedule loanAmortizationSchedule = new LoanAmortizationSchedule();
-		loanAmortizationSchedule.setLoanID(loan.getLoanID());
-		AmortizationLoanPayment regularPayment = new AmortizationLoanPayment();
-		regularPayment.setPaymentAmount(paymentAmount);
-		regularPayment.setPaymentCount(regularPaymentCount);
-		loanAmortizationSchedule.addAmortizationLoanPayment(regularPayment);
-		AmortizationLoanPayment lastPayment = new AmortizationLoanPayment();
-		lastPayment.setPaymentAmount(lastPaymentAmount);
-		lastPayment.setPaymentCount(1);
-		loanAmortizationSchedule.addAmortizationLoanPayment(lastPayment);
-		loan.setMinimumPaymentAmount(paymentAmount);
-		return loanAmortizationSchedule;
+//		BigDecimal annualInterestRate = interestLogic.getInterestRateForLoan(loan);
+//		Integer paymentAmount = paymentCalculator.calculatePaymentAmount(loan.getCurrentPrincipal(), annualInterestRate, loan.getRemainingLoanTerm());
+//		int regularPaymentCount = loan.getCurrentPrincipal()/paymentAmount;
+//		int lastPaymentAmount = loan.getCurrentPrincipal() - (paymentAmount*regularPaymentCount);
+//		LoanAmortizationSchedule loanAmortizationSchedule = new LoanAmortizationSchedule();
+//		loanAmortizationSchedule.setLoanID(loan.getLoanID());
+//		AmortizationLoanPayment regularPayment = new AmortizationLoanPayment();
+//		regularPayment.setPaymentAmount(paymentAmount);
+//		regularPayment.setPaymentCount(regularPaymentCount);
+//		loanAmortizationSchedule.addAmortizationLoanPayment(regularPayment);
+//		AmortizationLoanPayment lastPayment = new AmortizationLoanPayment();
+//		lastPayment.setPaymentAmount(lastPaymentAmount);
+//		lastPayment.setPaymentCount(1);
+//		loanAmortizationSchedule.addAmortizationLoanPayment(lastPayment);
+//		loan.setMinimumPaymentAmount(paymentAmount);
+//		return loanAmortizationSchedule;
+		return null;
 	}
 }

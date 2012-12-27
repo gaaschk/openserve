@@ -11,9 +11,6 @@ public class LoanToLoanSummaryModelConverter implements Converter<Loan, LoanSumm
 		LoanSummaryModel model = new LoanSummaryModel();
 		model.setLoanID(loan.getLoanID());
 		model.setLoanType(loan.getLoanType());
-		model.setCurrentPrincipal(loan.getCurrentPrincipal());
-		model.setCurrentInterest(loan.getCurrentInterest());
-		model.setCurrentFees(loan.getCurrentFees());
 		return model;
 	}
 }

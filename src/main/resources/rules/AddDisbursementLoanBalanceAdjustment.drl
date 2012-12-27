@@ -1,0 +1,42 @@
+package loan
+
+import org.gsoft.openserv.domain.loan.Loan
+import org.gsoft.openserv.domain.loan.Disbursement
+import org.gsoft.openserv.domain.loan.LoanBalanceAdjustment
+import org.gsoft.openserv.domain.loan.LoanAdjustmentType
+import org.gsoft.openserv.repositories.loan.LoanBalanceAdjustmentRepository
+import org.gsoft.openserv.domain.loan.LoanTypeProfile
+import org.gsoft.openserv.domain.payment.BillingStatement
+import org.springframework.context.ApplicationContext
+import org.gsoft.openserv.buslogic.repayment.ServicingStartDateCalculator
+import org.gsoft.openserv.buslogic.repayment.RepaymentStartDateCalculator
+import org.gsoft.openserv.buslogic.repayment.NextDueDateCalculator
+import org.gsoft.openserv.buslogic.repayment.InitialDueDateCalculator
+import org.gsoft.openserv.buslogic.repayment.FirstDueDateCalculator
+import org.gsoft.openserv.buslogic.loan.LoanTypeLogic
+import org.gsoft.openserv.buslogic.amortization.RemainingTermCalculator
+import java.util.Date
+import java.util.Calendar
+import java.util.HashMap
+
+global ApplicationContext springContext
+
+rule "Add Disbursement Adjustment"
+when
+	$d: Disbursement(loanBalanceAdjustmentID == null, $disbDt:disbursementEffectiveDate )
+	$l: Loan(servicingStartDate <= $disbDt) from $d.loan
+	HashMap($sysDate : this["systemDate"])
+then
+	LoanBalanceAdjustment lba = new LoanBalanceAdjustment();
+	lba = springContext.getBean(LoanBalanceAdjustmentRepository.class).save(lba);
+	lba.setLoanAdjustmentType(LoanAdjustmentType.DISBURSEMENT);
+	lba.setLoanID($l.getLoanID());
+	lba.setPrincipalChange($d.getDisbursementAmount());
+	lba.setInterestChange(0);
+	lba.setFeesChange(0);
+	lba.setEffectiveDate($d.getDisbursementEffectiveDate());
+	lba.setPostDate((Date)$sysDate);
+	$d.setLoanBalanceAdjustmentID(lba.getLoanBalanceAdjustmentID());
+	update($d);
+	insert(lba);
+end

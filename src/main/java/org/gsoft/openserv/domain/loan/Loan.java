@@ -1,7 +1,6 @@
 package org.gsoft.openserv.domain.loan;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -19,14 +18,11 @@ import javax.persistence.Transient;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.OpenServDomainObject;
 import org.gsoft.openserv.domain.Person;
-import org.gsoft.openserv.repositories.loan.LoanEventRepository;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
 import org.gsoft.openserv.util.ApplicationContextLocator;
-import org.gsoft.openserv.util.Constants;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.joda.time.Months;
 
 @Entity
@@ -46,14 +42,6 @@ public class Loan extends OpenServDomainObject{
 	private Person borrower;
 	private List<Disbursement> disbursements;
 
-	//Billing Period
-	private Integer currentPrincipal;
-	private BigDecimal currentInterest;
-	private Integer currentFees;
-	private BigDecimal margin;
-	private BigDecimal baseRate;
-	
-	private LoanEvent lastLoanEvent;
 	private Integer minimumPaymentAmount;
 	private Date repaymentStartDate;
 	private Date firstDueDate;
@@ -109,50 +97,6 @@ public class Loan extends OpenServDomainObject{
 	}
 	public void setStartingFees(Integer startingFees) {
 		this.startingFees = startingFees;
-	}
-	@Transient
-	public Integer getCurrentPrincipal() {
-		if(currentPrincipal == null && this.getLastLoanEvent() != null){
-			this.currentPrincipal = this.getLastLoanEvent().getLoanTransaction().getEndingPrincipal();
-		}
-		return currentPrincipal;
-	}
-	@Transient
-	public BigDecimal getCurrentInterest() {
-		if(currentInterest == null && this.getLastLoanEvent() != null){
-			this.currentInterest = this.getLastLoanEvent().getLoanTransaction().getEndingInterest();
-			SystemSettingsLogic systemSettings = ApplicationContextLocator.getApplicationContext().getBean(SystemSettingsLogic.class);
-			DateTime systemDate = new DateTime(systemSettings.getCurrentSystemDate());
-			int days = Days.daysBetween(new DateTime(this.getLastLoanEvent().getEffectiveDate()), systemDate).getDays();
-			this.currentInterest = this.currentInterest.add(this.getDailyInterestAmount().multiply(new BigDecimal(days)));
-		}
-		return currentInterest;
-	}
-	@Transient
-	public Integer getCurrentFees() {
-		if(currentFees == null && this.getLastLoanEvent() != null){
-			this.currentFees = this.getLastLoanEvent().getLoanTransaction().getEndingFees();
-		}
-		return currentFees;
-	}
-	public BigDecimal getMargin() {
-		return margin;
-	}
-	public void setMargin(BigDecimal margin) {
-		this.margin = margin;
-	}
-	public BigDecimal getBaseRate() {
-		return baseRate;
-	}
-	public void setBaseRate(BigDecimal baseRate) {
-		this.baseRate = baseRate;
-	}
-	@Transient
-	public LoanEvent getLastLoanEvent() {
-		if(lastLoanEvent == null){
-			lastLoanEvent = ApplicationContextLocator.getApplicationContext().getBean(LoanEventRepository.class).findMostRecentLoanEventWithTransaction(this.getLoanID());
-		}
-		return lastLoanEvent;
 	}
 	public Integer getStartingLoanTerm() {
 		return startingLoanTerm;
@@ -245,16 +189,6 @@ public class Loan extends OpenServDomainObject{
 	public Integer getRemainingLoanTerm(){
 		if(this.getStartingLoanTerm() == null){return 0;}
 		return this.getStartingLoanTerm() - this.getUsedLoanTerm();
-	}
-	
-	@Transient
-	public Integer getTotalBalance(){
-		return this.getCurrentPrincipal() + this.getCurrentFees() + this.getCurrentInterest().intValue();
-	}
-	
-	@Transient
-	public BigDecimal getDailyInterestAmount(){
-		return this.getBaseRate().add(this.getMargin()).divide(new BigDecimal(Constants.DAYS_IN_YEAR),Constants.INTEREST_ROUNDING_SCALE_6, RoundingMode.HALF_EVEN).multiply(new BigDecimal(this.getCurrentPrincipal()));
 	}
 	
 	@Override

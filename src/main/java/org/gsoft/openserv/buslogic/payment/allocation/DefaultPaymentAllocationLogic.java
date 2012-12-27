@@ -72,7 +72,8 @@ public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 
 		public int getAmountNeededToAdvance(){
 			if(this.getCurrentDueDate() == null || this.getCurrentDueDate().isAfter(paymentEffectiveDate)){
-				return loan.getTotalBalance();
+				//return loan.getTotalBalance();
+				return 0;
 			}
 			return loan.getMinimumPaymentAmount();
 		}
