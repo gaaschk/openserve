@@ -16,32 +16,32 @@ import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
 
 @Entity
 @RulesEngineEntity
-public class LockedLoanRateValue extends OpenServDomainObject {
+public class LoanRateValue extends OpenServDomainObject {
 	private static final long serialVersionUID = -6846403423957356884L;
 
-	private Long lockedLoanRateValueID;
-	private Long loanId;
+	private Long loanRateValueID;
+	private Long loanID;
 	private RateValue rateValue;
 	private Date lockedDate;
 	
 	@Id
 	@GeneratedValue( strategy=GenerationType.AUTO)
-	public Long getLockedLoanRateValueID() {
-		return lockedLoanRateValueID;
+	public Long getLoanRateValueID() {
+		return loanRateValueID;
 	}
 
 	//Used by Hibernate
 	@SuppressWarnings("unused")
-	private void setLockedLoanRateValueID(Long lockedLoanRateValueID) {
-		this.lockedLoanRateValueID = lockedLoanRateValueID;
+	private void setLoanRateValueID(Long lockedLoanRateValueID) {
+		this.loanRateValueID = lockedLoanRateValueID;
 	}
 
-	public Long getLoanId() {
-		return loanId;
+	public Long getLoanID() {
+		return loanID;
 	}
 
-	public void setLoanId(Long loanId) {
-		this.loanId = loanId;
+	public void setLoanID(Long loanID) {
+		this.loanID = loanID;
 	}
 
 	@ManyToOne
@@ -65,7 +65,7 @@ public class LockedLoanRateValue extends OpenServDomainObject {
 	@Override
 	@Transient
 	public Long getID() {
- 		return this.getLockedLoanRateValueID();
+ 		return this.getLoanRateValueID();
 	}
 
 }

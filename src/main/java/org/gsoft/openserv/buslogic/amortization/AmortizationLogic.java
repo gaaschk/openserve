@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.buslogic.interest.InterestAccrualLogic;
+import org.gsoft.openserv.buslogic.interest.InterestCalculator;
 import org.gsoft.openserv.domain.amortization.AmortizationLoanPayment;
 import org.gsoft.openserv.domain.amortization.AmortizationSchedule;
 import org.gsoft.openserv.domain.amortization.LoanAmortizationSchedule;
@@ -20,7 +20,7 @@ public class AmortizationLogic {
 	@Resource
 	private PaymentAmountCalculator paymentCalculator;
 	@Resource
-	private InterestAccrualLogic interestLogic;
+	private InterestCalculator interestLogic;
 	@Resource
 	private AmortizationScheduleRepository amortizationScheduleRepository;
 	@Resource

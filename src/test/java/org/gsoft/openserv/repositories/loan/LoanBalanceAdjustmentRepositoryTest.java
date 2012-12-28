@@ -1,11 +1,13 @@
 package org.gsoft.openserv.repositories.loan;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -39,7 +41,6 @@ public class LoanBalanceAdjustmentRepositoryTest {
 		lba.setFeesChange(0);
 		lba.setInterestChange(100);
 		lba.setLoanAdjustmentType(LoanAdjustmentType.DISBURSEMENT);
-		lba.setLoanID(123L);
 		lba.setPostDate(new Date());
 		lba.setPrincipalChange(10000);
 		HashMap<String, OpenServDomainObject> domainMap = new HashMap<String, OpenServDomainObject>();
@@ -47,28 +48,38 @@ public class LoanBalanceAdjustmentRepositoryTest {
 		
 		Loan loan = new Loan();
 		loan.setLoanType(LoanType.PRIVATE_STUDENT);
-		loan.setLoanID(123L);
 		loan.setStartingFees(0);
 		loan.setStartingInterest(BigDecimal.ZERO);
 		loan.setStartingPrincipal(0);
 		domainMap.put("loan", loan);
 		
-		seedData = Arrays.asList(domainMap);
+		seedData = new ArrayList<HashMap<String,OpenServDomainObject>>();
+		seedData.add(domainMap);
 	}
 	
 	@Test
 	@Rollback
 	public void test() {
+		int totalPrin = 0;
+		Long loanID = 0L;
 		for(HashMap<String, OpenServDomainObject> seed:seedData){
 			Loan loan = loanRepository.save((Loan)seed.get("loan"));
 			LoanBalanceAdjustment lba = (LoanBalanceAdjustment)seed.get("lba"); 
 			lba.setLoanID(loan.getLoanID());
+			loanID = loan.getLoanID();
 			loanBalAdjRepo.save(lba);
+			totalPrin += lba.getPrincipalChange();
 		}
-		loanBalAdjRepo.findAllLoanBalanceAdjustmentsForLoan(123L);
-		Long totalPrincipal = loanBalAdjRepo.findNetPrincipalChangeForPeriod(123L, new DateTime().minusDays(1).toDate(), new DateTime().plusDays(1).toDate());
-		List<Map<String, Integer>> changes = loanBalAdjRepo.findAllPrincipalChangesFromDateToDate(123L, new DateTime().minusDays(1).toDate(), new DateTime().plusDays(1).toDate());
-		System.out.println("pause");
+		List<LoanBalanceAdjustment> adjs = loanBalAdjRepo.findAllLoanBalanceAdjustmentsForLoan(loanID);
+		assertNotNull("Expected at least one LoanBalanceAdjustment", adjs);
+		assertTrue("Expected at least one LoanBalanceAdjustment", adjs.size() > 0);
+		assertTrue("Expecting 1 LoanBalanceAdjustment, found " + adjs.size(), adjs.size() == 1);
+		Long totalPrincipal = loanBalAdjRepo.findNetPrincipalChangeForPeriod(loanID, new DateTime().minusDays(1).toDate(), new DateTime().plusDays(1).toDate());
+		assertTrue("Expected sum of principal changes to equal " + totalPrin, totalPrincipal.equals((long)totalPrin));
+		List<LoanBalanceAdjustment> changes = loanBalAdjRepo.findAllPrincipalChangesFromDateToDate(loanID, new DateTime().minusDays(1).toDate(), new DateTime().plusDays(1).toDate());
+		assertNotNull("Expected at least one LoanBalanceAdjustment", changes);
+		assertTrue("Expected at least one LoanBalanceAdjustment", changes.size() > 0);
+		assertTrue("Expecting 1 LoanBalanceAdjustment, found " + changes.size(), changes.size() == 1);
 	}
 
 }

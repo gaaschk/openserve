@@ -2,7 +2,6 @@ package org.gsoft.openserv.repositories.loan;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -35,11 +34,11 @@ public class LoanBalanceAdjustmentRepository extends BaseRepository<LoanBalanceA
 		return this.getSpringRepository().findNetPrincipalChangeThruDate(loanID, toDate);
 	}
 	
-	public List<Map<String,Integer>> findAllPrincipalChangesFromDateToDate(Long loanID, Date fromDate, Date toDate){
+	public List<LoanBalanceAdjustment> findAllPrincipalChangesFromDateToDate(Long loanID, Date fromDate, Date toDate){
 		return this.getSpringRepository().findAllPrincipalChangesFromDateToDate(loanID, fromDate, toDate);
 	}
 
-	public List<Map<String,Integer>> findAllPrincipalChangesThruDate(Long loanID, Date toDate){
+	public List<LoanBalanceAdjustment> findAllPrincipalChangesThruDate(Long loanID, Date toDate){
 		return this.getSpringRepository().findAllPrincipalChangesThruDate(loanID, toDate);
 	}
 }
@@ -57,11 +56,11 @@ interface LoanBalanceAdjustmentRepoIF extends BaseSpringRepository<LoanBalanceAd
 			"WHERE lba.loanID = :loanID AND lba.effectiveDate <= :toDate")
 	Integer findNetPrincipalChangeThruDate(@Param("loanID") Long loanID, @Param("toDate") Date toDate);
 	
-	@Query("SELECT new Map(lba.effectiveDate as effectiveDate, lba.principalChange as principal) FROM LoanBalanceAdjustment lba " +
-			"WHERE lba.loanID = :loanID AND lba.effectiveDate <= :toDate")
-	List<Map<String,Integer>> findAllPrincipalChangesThruDate(@Param("loanID") Long loanID, @Param("toDate") Date toDate);
+	@Query("SELECT lba FROM LoanBalanceAdjustment lba " +
+			"WHERE lba.loanID = :loanID AND lba.effectiveDate <= :toDate AND lba.principalChange <> 0")
+	List<LoanBalanceAdjustment> findAllPrincipalChangesThruDate(@Param("loanID") Long loanID, @Param("toDate") Date toDate);
 
-	@Query("SELECT new Map(lba.effectiveDate as effectiveDate, lba.principalChange as principal) FROM LoanBalanceAdjustment lba " +
-			"WHERE lba.loanID = :loanID AND lba.effectiveDate >= :fromDate AND lba.effectiveDate <= :toDate")
-	List<Map<String,Integer>> findAllPrincipalChangesFromDateToDate(@Param("loanID") Long loanID, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+	@Query("SELECT lba FROM LoanBalanceAdjustment lba " +
+			"WHERE lba.loanID = :loanID AND lba.effectiveDate >= :fromDate AND lba.effectiveDate <= :toDate AND principalChange <> 0")
+	List<LoanBalanceAdjustment> findAllPrincipalChangesFromDateToDate(@Param("loanID") Long loanID, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
 } 
