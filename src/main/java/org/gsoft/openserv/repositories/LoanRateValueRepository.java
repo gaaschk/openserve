@@ -41,7 +41,7 @@ public class LoanRateValueRepository extends BaseRepository<LoanRateValue, Long>
 interface LoanRateValueSpringRepository extends BaseSpringRepository<LoanRateValue, Long>{
 
 	@Query("SELECT lrv FROM LoanRateValue lrv " +
-			"WHERE lrv.loanID = :loanID AND lrv.lockedDate <= :toDate")
+			"WHERE lrv.loanID = :loanID AND lrv.lockedDate <= :toDate order by lrv.lockedDate asc")
 	List<LoanRateValue> findAllLoanRateValuesThruDate(@Param("loanID") Long loanID, @Param("toDate") Date toDate);
 
 	@Query("SELECT lrv FROM LoanRateValue lrv " +

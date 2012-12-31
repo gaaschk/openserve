@@ -1,13 +1,10 @@
 package org.gsoft.openserv.buslogic.amortization;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.buslogic.interest.InterestCalculator;
-import org.gsoft.openserv.domain.amortization.AmortizationLoanPayment;
 import org.gsoft.openserv.domain.amortization.AmortizationSchedule;
 import org.gsoft.openserv.domain.amortization.LoanAmortizationSchedule;
 import org.gsoft.openserv.domain.loan.Loan;
@@ -19,8 +16,6 @@ import org.springframework.stereotype.Component;
 public class AmortizationLogic {
 	@Resource
 	private PaymentAmountCalculator paymentCalculator;
-	@Resource
-	private InterestCalculator interestLogic;
 	@Resource
 	private AmortizationScheduleRepository amortizationScheduleRepository;
 	@Resource

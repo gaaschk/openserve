@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import org.drools.KnowledgeBase;
@@ -25,9 +24,7 @@ import org.drools.runtime.StatelessKnowledgeSession;
 import org.gsoft.openserv.buslogic.amortization.AmortizationLogic;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.system.SystemSettings;
 import org.gsoft.openserv.util.ApplicationContextLocator;
-import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;

@@ -22,9 +22,12 @@ public class LoanPaymentRepository extends BaseRepository<LoanPayment, Long>{
 		return loanPaymentSpringRepository;
 	}
 	
-	
 	public List<LoanPayment> findAllLoanPaymentsEffectiveOnOrAfter(Date effectiveDate){
 		return this.loanPaymentSpringRepository.findAllLoanPaymentsEffectiveOnOrAfter(effectiveDate);
+	}
+
+	public List<LoanPayment> findAllLoanPaymentsEffectiveOnOrBefore(Long loanID, Date effectiveDate){
+		return this.loanPaymentSpringRepository.findAllLoanPaymentsForLoanEffectiveOnOrBefore(loanID, effectiveDate);
 	}
 }
 
@@ -33,4 +36,7 @@ interface LoanPaymentSpringRepository extends BaseSpringRepository<LoanPayment, 
 	
 	@Query("select lp from LoanPayment lp where lp.payment.effectiveDate >= :effectiveDate order by lp.payment.effectiveDate desc, lp.payment.postDate desc")
 	public List<LoanPayment> findAllLoanPaymentsEffectiveOnOrAfter(@Param("effectiveDate") Date effectiveDate);
+
+	@Query("select lp from LoanPayment lp where lp.loanID = :loanID AND lp.payment.effectiveDate <= :effectiveDate order by lp.payment.effectiveDate asc, lp.payment.postDate asc")
+	public List<LoanPayment> findAllLoanPaymentsForLoanEffectiveOnOrBefore(@Param("loanID") Long loanID, @Param("effectiveDate") Date effectiveDate);
 }
