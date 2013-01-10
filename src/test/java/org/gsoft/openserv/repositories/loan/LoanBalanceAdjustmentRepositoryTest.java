@@ -13,7 +13,6 @@ import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.OpenServDomainObject;
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.loan.LoanAdjustmentType;
 import org.gsoft.openserv.domain.loan.LoanBalanceAdjustment;
 import org.gsoft.openserv.domain.loan.LoanType;
 import org.joda.time.DateTime;
@@ -40,7 +39,6 @@ public class LoanBalanceAdjustmentRepositoryTest {
 		lba.setEffectiveDate(new Date());
 		lba.setFeesChange(0);
 		lba.setInterestChange(100);
-		lba.setLoanAdjustmentType(LoanAdjustmentType.DISBURSEMENT);
 		lba.setPostDate(new Date());
 		lba.setPrincipalChange(10000);
 		HashMap<String, OpenServDomainObject> domainMap = new HashMap<String, OpenServDomainObject>();
@@ -60,7 +58,6 @@ public class LoanBalanceAdjustmentRepositoryTest {
 	@Test
 	@Rollback
 	public void test() {
-		int totalPrin = 0;
 		Long loanID = 0L;
 		for(HashMap<String, OpenServDomainObject> seed:seedData){
 			Loan loan = loanRepository.save((Loan)seed.get("loan"));
@@ -68,14 +65,11 @@ public class LoanBalanceAdjustmentRepositoryTest {
 			lba.setLoanID(loan.getLoanID());
 			loanID = loan.getLoanID();
 			loanBalAdjRepo.save(lba);
-			totalPrin += lba.getPrincipalChange();
 		}
 		List<LoanBalanceAdjustment> adjs = loanBalAdjRepo.findAllLoanBalanceAdjustmentsForLoan(loanID);
 		assertNotNull("Expected at least one LoanBalanceAdjustment", adjs);
 		assertTrue("Expected at least one LoanBalanceAdjustment", adjs.size() > 0);
 		assertTrue("Expecting 1 LoanBalanceAdjustment, found " + adjs.size(), adjs.size() == 1);
-		Long totalPrincipal = loanBalAdjRepo.findNetPrincipalChangeForPeriod(loanID, new DateTime().minusDays(1).toDate(), new DateTime().plusDays(1).toDate());
-		assertTrue("Expected sum of principal changes to equal " + totalPrin, totalPrincipal.equals((long)totalPrin));
 		List<LoanBalanceAdjustment> changes = loanBalAdjRepo.findAllPrincipalChangesFromDateToDate(loanID, new DateTime().minusDays(1).toDate(), new DateTime().plusDays(1).toDate());
 		assertNotNull("Expected at least one LoanBalanceAdjustment", changes);
 		assertTrue("Expected at least one LoanBalanceAdjustment", changes.size() > 0);

@@ -26,18 +26,6 @@ public class LoanBalanceAdjustmentRepository extends BaseRepository<LoanBalanceA
 		return this.getSpringRepository().findAllByLoanID(loanID);
 	}
 	
-	public Long findNetPrincipalChangeForPeriod(Long loanID, Date fromDate, Date toDate){
-		return this.getSpringRepository().findNetPrincipalChangeForPeriod(loanID, fromDate, toDate);
-	}
-	
-	public Integer findNetPrincipalChangeThruDate(Long loanID, Date toDate){
-		return this.getSpringRepository().findNetPrincipalChangeThruDate(loanID, toDate);
-	}
-	
-	public Integer findNetInterestChangeThruDate(Long loanID, Date toDate){
-		return this.getSpringRepository().findNetInterestChangeThruDate(loanID, toDate);
-	}
-
 	public List<LoanBalanceAdjustment> findAllPrincipalChangesFromDateToDate(Long loanID, Date fromDate, Date toDate){
 		return this.getSpringRepository().findAllPrincipalChangesFromDateToDate(loanID, fromDate, toDate);
 	}
@@ -61,18 +49,6 @@ interface LoanBalanceAdjustmentRepoIF extends BaseSpringRepository<LoanBalanceAd
 			"WHERE lba.loanID = :loanID AND lba.effectiveDate <= :toDate ORDER BY lba.effectiveDate asc, lba.postDate asc")
 	List<LoanBalanceAdjustment> findAllForLoanThruDate(@Param("loanID") Long loanID, @Param("toDate") Date toDate);
 	
-	@Query("SELECT SUM(lba.principalChange) FROM LoanBalanceAdjustment lba " +
-			"WHERE lba.loanID = :loanID AND lba.effectiveDate >= :fromDate AND lba.effectiveDate <= :toDate")
-	Long findNetPrincipalChangeForPeriod(@Param("loanID") Long loanID, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
-
-	@Query("SELECT SUM(lba.principalChange) FROM LoanBalanceAdjustment lba " +
-			"WHERE lba.loanID = :loanID AND lba.effectiveDate <= :toDate")
-	Integer findNetPrincipalChangeThruDate(@Param("loanID") Long loanID, @Param("toDate") Date toDate);
-	
-	@Query("SELECT SUM(lba.interestChange) FROM LoanBalanceAdjustment lba " +
-			"WHERE lba.loanID = :loanID AND lba.effectiveDate <= :toDate")
-	Integer findNetInterestChangeThruDate(@Param("loanID") Long loanID, @Param("toDate") Date toDate);
-
 	@Query("SELECT lba FROM LoanBalanceAdjustment lba " +
 			"WHERE lba.loanID = :loanID AND lba.effectiveDate <= :toDate AND lba.principalChange <> 0")
 	List<LoanBalanceAdjustment> findAllPrincipalChangesThruDate(@Param("loanID") Long loanID, @Param("toDate") Date toDate);

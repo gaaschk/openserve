@@ -3,97 +3,167 @@ package org.gsoft.openserv.domain.loan;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import org.gsoft.openserv.util.Constants;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
+import org.gsoft.openserv.buslogic.interest.InterestCalculator;
 
 public class LoanState {
-	private Integer principal;
-	private BigDecimal interest;
-	private Integer fees;
+	private LoanState previousState;
+	private Date stateEffectiveDate;
+	private Date statePostDate;
+	private Integer principalChange;
+	private BigDecimal interestChange;
+	private Integer feesChange;
+	private Integer paymentAmount;
 	private BigDecimal interestRate;
-	private Date stateDate;
+	
+	public static LoanState ZERO_STATE = new LoanState(){
+		public Integer getPrincipal(){
+			return 0;
+		}
+		
+		public BigDecimal getInterest(){
+			return BigDecimal.ZERO;
+		}
+		
+		public Integer getFees(){
+			return 0;
+		}
+		
+		public BigDecimal getInterestRate(){
+			return BigDecimal.ZERO;
+		}
+	};
+	
+	private LoanState(){}
 
-	public LoanState(Integer principal, BigDecimal interest, Integer fees,
-			BigDecimal interestRate, Date stateDate) {
+	public LoanState(Date stateEffectiveDate, Date statePostDate,
+			Integer principalChange, BigDecimal interestChange,
+			Integer feesChange, Integer paymentAmount, BigDecimal interestRate) {
 		super();
-		this.principal = (principal==null)?0:principal;
-		this.interest = (interest==null)?BigDecimal.ZERO:interest;
-		this.fees = (fees==null)?0:fees;
-		this.interestRate = (interestRate==null)?BigDecimal.ZERO:interestRate;
-		this.stateDate = stateDate;
+		this.stateEffectiveDate = stateEffectiveDate;
+		this.statePostDate = statePostDate;
+		this.principalChange = (principalChange == null)?0:principalChange;
+		this.interestChange = (interestChange == null)?BigDecimal.ZERO:interestChange;
+		this.feesChange = (feesChange == null)?0:feesChange;
+		this.paymentAmount = paymentAmount;
+		this.interestRate = interestRate;
+	}
+	
+	private LoanState getPreviousState(){
+		return this.previousState;
+	}
+	
+	private Integer getFeesChange(){
+		return this.feesChange;
+	}
+	
+	private BigDecimal getInterestChange(){
+		return this.interestChange;
+	}
+	
+	private Integer getPrincipalChange(){
+		return this.principalChange;
+	}
+	
+	private Integer getPaymentAmount(){
+		return this.paymentAmount;
 	}
 
-	public Integer getPrincipal() {
-		return principal;
+	public BigDecimal getInterestRate(){
+		if(this.interestRate == null){
+			return this.getPreviousState().getInterestRate();
+		}
+		return this.interestRate;
 	}
-	public BigDecimal getInterest() {
-		return interest;
+	
+	public Date getStateEffectiveDate(){
+		return this.stateEffectiveDate;
 	}
-	public Integer getFees() {
+
+	public Date getStatePostDate(){
+		return this.statePostDate;
+	}
+	
+	public boolean isPayment(){
+		return this.getPaymentAmount() != null;
+	}
+	
+	private Integer getFeesBeforePayment(){
+		return this.getPreviousState().getFees() + this.getFeesChange();
+	}
+	
+	public Integer getFees(){
+		Integer fees = this.getFeesBeforePayment();
+		if(this.isPayment()){
+			if(fees > this.getPaymentAmount()){
+				fees = fees - this.getPaymentAmount();
+			}
+			else{
+				fees = 0;
+			}
+		}
 		return fees;
 	}
-	public BigDecimal getInterestRate() {
-		return interestRate;
-	}
-	public Date getStateDate() {
-		return stateDate;
+	
+	private BigDecimal getAccruedInterest(){
+		BigDecimal accruedInterest = InterestCalculator.calculateInterest(this.getPreviousState().getInterestRate(), this.getPreviousState().getPrincipal(), this.getPreviousState().getStateEffectiveDate(), this.getStateEffectiveDate());
+		return accruedInterest;
 	}
 	
-	public void adjustPrincipal(Integer amount, Date effectiveDate){
-		this.accrueInterestThru(effectiveDate);
-		principal += amount;
+	public BigDecimal getInterest(){
+		BigDecimal allInterest = this.getAccruedInterest().add(this.getPreviousState().getInterest());
+		if(this.getInterestChange() != null){
+			allInterest = allInterest.add(this.getInterestChange());
+		}
+		if(this.isPayment() && this.getPaymentAmount() > this.getFeesBeforePayment()){
+			BigDecimal paymentAfterFees = BigDecimal.valueOf(this.getPaymentAmount() - this.getFeesBeforePayment());
+			int allInterestWhole = allInterest.intValue();
+			if(allInterestWhole < paymentAfterFees.intValue()){
+				allInterest = allInterest.subtract(BigDecimal.valueOf(allInterestWhole));
+			}
+			else{
+				allInterest = allInterest.subtract(paymentAfterFees);
+			}
+		}
+		return allInterest;
 	}
 	
-	public void adjustInterest(BigDecimal amount, Date effectiveDate){
-		this.accrueInterestThru(effectiveDate);
-		interest = interest.add(amount);
-	}
-
-	public void adjustFees(Integer amount, Date effectiveDate){
-		this.accrueInterestThru(effectiveDate);
-		fees += amount;
-	}
-
-	public void setInterestRate(BigDecimal newRate, Date effectiveDate){
-		this.accrueInterestThru(effectiveDate);
-		this.interestRate = newRate;
-	}
-	
-	public Integer applyPayment(Integer amount, Date effectiveDate){
-		this.accrueInterestThru(effectiveDate);
-		if(amount >= fees){
-			amount -= fees; 
-			fees = 0;
+	public Integer getPrincipal(){
+		if(this.getPaymentAmount() == null){
+			return this.getPreviousState().getPrincipal() + this.getPrincipalChange();
 		}
-		else{
-			fees -= amount;
-			amount = 0;
+		Integer interest = this.getAccruedInterest().add(this.getPreviousState().getInterest()).intValue();
+		Integer paymentAfterFeesAndInterest = this.getPaymentAmount() - (interest + this.getPreviousState().getFees());
+		if(paymentAfterFeesAndInterest < 0){
+			return this.getPreviousState().getPrincipal();
 		}
-		Integer intInterest = interest.intValue();
-		if(amount >= intInterest){
-			amount -= intInterest;
-			interest.subtract(BigDecimal.valueOf(intInterest));
+		if(this.getPreviousState().getPrincipal() > paymentAfterFeesAndInterest){
+			return this.getPreviousState().getPrincipal() - paymentAfterFeesAndInterest;
 		}
-		else{
-			interest.subtract(BigDecimal.valueOf(amount));
-			amount = 0;
-		}
-		if(amount >= principal){
-			amount -= principal;
-			principal = 0;
-		}
-		else{
-			principal -= amount;
-			amount = 0;
-		}
-		return amount;
+		return 0;
 	}
 	
-	public void accrueInterestThru(Date asOfDate){
-		BigDecimal dailyIntRate = interestRate.divide(BigDecimal.valueOf(Constants.DAYS_IN_YEAR),Constants.INTEREST_ROUNDING_SCALE_35, Constants.INTEREST_ROUNDING_MODE);
-		int daysDiff = Days.daysBetween(new DateTime(stateDate), new DateTime(asOfDate)).getDays();
-		interest = interest.add(dailyIntRate.multiply(BigDecimal.valueOf(principal*daysDiff)));
-		stateDate = asOfDate;
+	public Integer getUnusedPaymentAmount(){
+		if(this.getPaymentAmount() != null){
+			Integer interest = this.getAccruedInterest().add(this.getPreviousState().getInterest()).intValue();
+			Integer paymentAfterPrincipalFeesAndInterest = this.getPaymentAmount() - (interest + this.getPreviousState().getFees() + this.getPreviousState().getPrincipal());
+			if(paymentAfterPrincipalFeesAndInterest>0){
+				return paymentAfterPrincipalFeesAndInterest;
+			}
+		}
+		return 0;
+	}
+	
+	public void setPreviousLoanState(LoanState prevState){
+		this.previousState = prevState;
+	}
+	
+	public String toString(){
+		StringBuffer strBuf = new StringBuffer("");
+		strBuf.append("Loan State as of ").append(this.getStateEffectiveDate()).append(System.getProperty("line.separator"));
+		strBuf.append("Principal: ").append(this.getPrincipal()).append(System.getProperty("line.separator"));
+		strBuf.append("Interest: ").append(this.getInterest()).append(System.getProperty("line.separator"));
+		strBuf.append("Fees: ").append(this.getFees()).append(System.getProperty("line.separator"));
+		strBuf.append("Interest Rate: ").append(this.getInterestRate()).append(System.getProperty("line.separator"));
+		return strBuf.toString();
 	}
 }

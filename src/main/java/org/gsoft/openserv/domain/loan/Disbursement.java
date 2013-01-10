@@ -16,7 +16,6 @@ import org.gsoft.openserv.domain.OpenServDomainObject;
 public class Disbursement extends OpenServDomainObject{
 	private static final long serialVersionUID = -8488460178826929454L;
 	private Long disbursementID;
-	private Long loanBalanceAdjustmentID;
 	private Loan loan;
 	private Date disbursementEffectiveDate;
 	private Integer disbursementAmount;
@@ -28,12 +27,6 @@ public class Disbursement extends OpenServDomainObject{
 	}
 	public void setDisbursementID(Long disbursementID) {
 		this.disbursementID = disbursementID;
-	}
-	public Long getLoanBalanceAdjustmentID() {
-		return loanBalanceAdjustmentID;
-	}
-	public void setLoanBalanceAdjustmentID(Long loanBalanceAdjustmentID) {
-		this.loanBalanceAdjustmentID = loanBalanceAdjustmentID;
 	}
 	public Loan getLoan() {
 		return loan;

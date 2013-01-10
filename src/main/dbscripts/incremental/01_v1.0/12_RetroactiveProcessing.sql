@@ -1,1 +1,0 @@
-alter table LoanEvent add column Sequence INT after EffectiveDate;

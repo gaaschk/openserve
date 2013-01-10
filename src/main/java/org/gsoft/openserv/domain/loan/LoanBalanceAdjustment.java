@@ -2,7 +2,6 @@ package org.gsoft.openserv.domain.loan;
 
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,8 +10,6 @@ import javax.persistence.Transient;
 
 import org.gsoft.openserv.domain.OpenServDomainObject;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
-import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
 
 @Entity
 @RulesEngineEntity
@@ -21,7 +18,6 @@ public class LoanBalanceAdjustment extends OpenServDomainObject{
 
 	private Long loanBalanceAdjustmentID;
 	private Long loanID;
-	private LoanAdjustmentType loanAdjustmentType;
 	private Integer principalChange;
 	private Integer interestChange;
 	private Integer feesChange;
@@ -45,18 +41,6 @@ public class LoanBalanceAdjustment extends OpenServDomainObject{
 	public void setLoanID(Long loanID) {
 		this.loanID = loanID;
 	}
-	@Type( type = "org.gsoft.openserv.util.jpa.GenericEnumUserType", parameters={
-			@Parameter(name = "enumClass", value = "org.gsoft.openserv.domain.loan.LoanAdjustmentType")
-	})
-    @Column( name = "LoanAdjustmentTypeID" )
-	public LoanAdjustmentType getLoanAdjustmentType() {
-		return loanAdjustmentType;
-	}
-
-	public void setLoanAdjustmentType(LoanAdjustmentType loanAdjustmentType) {
-		this.loanAdjustmentType = loanAdjustmentType;
-	}
-
 	public Date getEffectiveDate() {
 		return effectiveDate;
 	}
