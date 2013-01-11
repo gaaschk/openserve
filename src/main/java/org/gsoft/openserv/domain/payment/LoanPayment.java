@@ -15,7 +15,6 @@ public class LoanPayment extends OpenServDomainObject{
 	private static final long serialVersionUID = 643268263864731901L;
 	private Long loanPaymentID;
 	private Long loanID;
-	private Long loanBalanceAdjustmentID;
 	private Integer appliedAmount;
 	//Relationships
 	private Payment payment;
@@ -33,12 +32,6 @@ public class LoanPayment extends OpenServDomainObject{
 	}
 	public void setLoanID(Long loanID) {
 		this.loanID = loanID;
-	}
-	public Long getLoanBalanceAdjustmentID() {
-		return loanBalanceAdjustmentID;
-	}
-	public void setLoanBalanceAdjustmentID(Long loanBalanceAdjustmentID) {
-		this.loanBalanceAdjustmentID = loanBalanceAdjustmentID;
 	}
 	public Integer getAppliedAmount() {
 		return appliedAmount;

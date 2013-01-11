@@ -346,6 +346,12 @@ ALTER TABLE LoanTypeProfile
 	ON DELETE RESTRICT 
 	ON UPDATE RESTRICT ;
 ALTER TABLE LoanTypeProfile
+	ADD CONSTRAINT loantypeprofile_ibfk_4
+	FOREIGN KEY(RepaymentStartTypeID)
+	REFERENCES RepaymentStartType(RepaymentStartTypeID)
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT;
+ALTER TABLE LoanTypeProfile
 	ADD CONSTRAINT loantypeprofile_ibfk_1
 	FOREIGN KEY(LoanTypeID)
 	REFERENCES LoanType(LoanTypeID)
@@ -368,3 +374,11 @@ ALTER TABLE RateValue
 
 INSERT INTO LoanType values (10, 'PRIVATE_STUDENT', 'Private Student Loan');
 INSERT INTO LoanType values (20, 'MORTGAGE', 'Mortgage Loan');
+
+INSERT INTO RepaymentStartType values (10, 'FIRST_DISBURSEMENT', 'Repayment begins after first disbursement.');
+INSERT INTO RepaymentStartType values (20, 'LAST_DISBURSEMENT', 'Repayment begins after last disbursement.');
+
+INSERT INTO FrequencyType (FrequencyTypeID, Name) value (10, 'MONTHLY');
+INSERT INTO FrequencyType (FrequencyTypeID, Name) value (20, 'QUARTERLY');
+INSERT INTO FrequencyType (FrequencyTypeID, Name) value (30, 'SEMI_ANNUALLY');
+INSERT INTO FrequencyType (FrequencyTypeID, Name) value (40, 'ANNUALLY');
