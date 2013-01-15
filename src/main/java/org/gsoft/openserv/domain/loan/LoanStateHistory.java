@@ -30,11 +30,11 @@ public class LoanStateHistory {
 					if(arg1 == LoanState.ZERO_STATE){return 1;}
 					int compareValue = arg0.getStateEffectiveDate().compareTo(arg1.getStateEffectiveDate());
 					if(compareValue == 0){
-						if(arg0.isPayment() == arg1.isPayment()){
+						if(arg0 instanceof PaymentLoanState && arg1 instanceof PaymentLoanState){
 							compareValue = arg0.getStatePostDate().compareTo(arg0.getStatePostDate());
 						}
-						else if(arg0.isPayment()){compareValue = 1;}
-						else if(arg1.isPayment()){compareValue = -1;}
+						else if(arg0 instanceof PaymentLoanState){compareValue = 1;}
+						else if(arg1 instanceof PaymentLoanState){compareValue = -1;}
 					}
 					return compareValue;
 				}
@@ -49,7 +49,7 @@ public class LoanStateHistory {
 	}
 
 	public void addDisbursement(Disbursement disbursement){
-		LoanState newState = new LoanState(disbursement.getDisbursementEffectiveDate(), disbursement.getDisbursementEffectiveDate(), disbursement.getDisbursementAmount(), BigDecimal.ZERO, 0, null, null);
+		LoanState newState = new DisbursementLoanState(disbursement);
 		this.addState(newState);
 	}
 	
@@ -60,7 +60,7 @@ public class LoanStateHistory {
 	}
 	
 	public void addPayment(LoanPayment payment){
-		LoanState newState = new LoanState(payment.getPayment().getEffectiveDate(), payment.getPayment().getPostDate(), null, null, null, payment.getAppliedAmount(), null);
+		LoanState newState = new PaymentLoanState(payment);
 		this.addState(newState);
 	}
 	
@@ -71,7 +71,7 @@ public class LoanStateHistory {
 	}
 	
 	public void addAdjustment(LoanBalanceAdjustment adj){
-		LoanState newState = new LoanState(adj.getEffectiveDate(), adj.getPostDate(), adj.getPrincipalChange(), BigDecimal.valueOf(adj.getInterestChange()), adj.getFeesChange(), null, null);
+		LoanState newState = new BalanceAdjustmentLoanState(adj);
 		this.addState(newState);
 	}
 	
@@ -82,7 +82,7 @@ public class LoanStateHistory {
 	}
 	
 	public void addRateChange(LoanRateValue loanRate){
-		LoanState newState = new LoanState(loanRate.getLockedDate(), loanRate.getLockedDate(), null, null, null, null, loanRate.getRateValue().getRateValue());
+		LoanState newState = new RateValueLoanState(loanRate);
 		this.addState(newState);
 	}
 	

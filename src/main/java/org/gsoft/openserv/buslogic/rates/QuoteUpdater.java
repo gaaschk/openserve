@@ -1,5 +1,7 @@
 package org.gsoft.openserv.buslogic.rates;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.Iterator;
 
 import javax.annotation.Resource;
@@ -22,7 +24,7 @@ public class QuoteUpdater {
 		while(rateIter.hasNext()){
 			try {
 				rateFinder.findCurrentValueForRate(rateIter.next());
-			} catch (Exception e) {
+			} catch (IOException | ParseException e) {
 				e.printStackTrace();
 			}
 		}

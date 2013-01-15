@@ -41,7 +41,7 @@ public class LoanStateHistoryTest {
 		payment.setPostDate(paymentDate);
 		LoanPayment loanPayment = new LoanPayment();
 		loanPayment.setPayment(payment);
-		loanPayment.setAppliedAmount(50000);
+		loanPayment.setAppliedAmount(-50000);
 		history.addPayment(loanPayment);
 		paymentDate = new DateTime(today).plusDays(90).toDate();
 		payment = new Payment();
@@ -49,7 +49,7 @@ public class LoanStateHistoryTest {
 		payment.setPostDate(paymentDate);
 		loanPayment = new LoanPayment();
 		loanPayment.setPayment(payment);
-		loanPayment.setAppliedAmount(500000);
+		loanPayment.setAppliedAmount(-500000);
 		history.addPayment(loanPayment);
 		loanRate = new LoanRateValue();
 		loanRate.setLockedDate(new DateTime(today).plusDays(30).toDate());
