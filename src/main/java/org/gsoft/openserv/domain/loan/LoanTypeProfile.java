@@ -30,7 +30,7 @@ public class LoanTypeProfile extends OpenServDomainObject{
 	private Integer daysBeforeDueToBill;
 	private Integer daysLateForFee;
 	private Integer lateFeeAmount;
-	private Boolean variableRate;
+	private Boolean isVariableRate;
 	//Enumerations
 	private LoanType loanType;
 	private RepaymentStartType repaymentStartType;
@@ -125,11 +125,11 @@ public class LoanTypeProfile extends OpenServDomainObject{
 	public void setRepaymentStartType(RepaymentStartType repaymentStartType) {
 		this.repaymentStartType = repaymentStartType;
 	}
-	public Boolean getVariableRate() {
-		return variableRate;
+	public Boolean isVariableRate() {
+		return isVariableRate;
 	}
 	public void setVariableRate(Boolean variableRate) {
-		this.variableRate = variableRate;
+		this.isVariableRate = variableRate;
 	}
 	@Type( type = "org.gsoft.openserv.util.jpa.GenericEnumUserType", parameters={
 			@Parameter(name = "enumClass", value = "org.gsoft.openserv.domain.interest.FrequencyType")

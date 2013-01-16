@@ -12,10 +12,9 @@ import org.gsoft.openserv.domain.payment.LoanPayment;
 public class LoanStateHistory {
 	private ArrayList<LoanState> loanStates = null;
 	
-	private ArrayList<LoanState> getLoanStates(){
+	public ArrayList<LoanState> getLoanStates(){
 		if(loanStates == null){
 			loanStates = new ArrayList<LoanState>();
-			loanStates.add(LoanState.ZERO_STATE);
 		}
 		return loanStates;
 	}
@@ -26,8 +25,6 @@ public class LoanStateHistory {
 				@Override
 				public int compare(LoanState arg0, LoanState arg1) {
 					if(arg0 == arg1){return 0;}
-					if(arg0 == LoanState.ZERO_STATE){return -1;}
-					if(arg1 == LoanState.ZERO_STATE){return 1;}
 					int compareValue = arg0.getStateEffectiveDate().compareTo(arg1.getStateEffectiveDate());
 					if(compareValue == 0){
 						if(arg0 instanceof PaymentLoanState && arg1 instanceof PaymentLoanState){
@@ -44,8 +41,10 @@ public class LoanStateHistory {
 			LoanState nextState = this.getLoanStates().get(stateIndex+1);
 			nextState.setPreviousLoanState(newState);
 		}
-		LoanState previousState = this.getLoanStates().get(stateIndex-1);
-		newState.setPreviousLoanState(previousState);
+		if(stateIndex > 0){
+			LoanState previousState = this.getLoanStates().get(stateIndex-1);
+			newState.setPreviousLoanState(previousState);
+		}
 	}
 
 	public void addDisbursement(Disbursement disbursement){
@@ -111,7 +110,15 @@ public class LoanStateHistory {
 	public BigDecimal getEndingInterestRate(){
 		return this.getLastLoanState().getInterestRate();
 	}
-
+	
+	public BigDecimal getEndingBaseRate(){
+		return this.getLastLoanState().getBaseRate();
+	}
+	
+	public BigDecimal getEndingMargin(){
+		return this.getLastLoanState().getMargin();
+	}
+	
 	public String toString(){
 		StringBuffer strBuf = new StringBuffer();
 		for(LoanState state:this.getLoanStates()){

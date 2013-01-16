@@ -1,5 +1,7 @@
 package org.gsoft.openserv.domain.payment;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +17,10 @@ public class LateFee extends OpenServDomainObject{
 	private static final long serialVersionUID = 8734376381093496118L;
 	private Long lateFeeID;
 	private Integer feeAmount;
+	private Long billingStatementID;
+	private Boolean isCancelled;
+	private Date effectiveDate;
+	private Date postedDate;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -29,6 +35,30 @@ public class LateFee extends OpenServDomainObject{
 	}
 	public void setFeeAmount(Integer feeAmount) {
 		this.feeAmount = feeAmount;
+	}
+	public Long getBillingStatementID() {
+		return billingStatementID;
+	}
+	public void setBillingStatementID(Long billingStatementID) {
+		this.billingStatementID = billingStatementID;
+	}
+	public Boolean isCancelled() {
+		return isCancelled;
+	}
+	public void setCancelled(Boolean isCancelled) {
+		this.isCancelled = isCancelled;
+	}
+	public Date getEffectiveDate() {
+		return effectiveDate;
+	}
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = effectiveDate;
+	}
+	public Date getPostedDate() {
+		return postedDate;
+	}
+	public void setPostedDate(Date postedDate) {
+		this.postedDate = postedDate;
 	}
 	@Override
 	@Transient

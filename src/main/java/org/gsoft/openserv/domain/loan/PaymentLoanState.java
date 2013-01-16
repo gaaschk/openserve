@@ -22,13 +22,20 @@ public class PaymentLoanState extends LoanState {
 	}
 	
 	private void resetAllocations(){
-		int paymentAmount = this.getPayment().getAppliedAmount();
-		this.amountToFees = this.allocate(this.getPreviousState().getFees(), paymentAmount);
-		paymentAmount -= amountToFees;
-		BigDecimal interestAmount = this.getPreviousState().getInterest().add(this.getAccruedInterest());
-		this.amountToInterest = BigDecimal.valueOf(this.allocate(interestAmount.intValue(), paymentAmount));
-		paymentAmount -= this.amountToInterest.intValue();
-		this.amountToPrincipal = this.allocate(this.getPreviousState().getPrincipal(), paymentAmount);
+		if(this.getPreviousState() == null){
+			this.amountToFees = 0;
+			this.amountToInterest = BigDecimal.ZERO;
+			this.amountToPrincipal = 0;
+		}
+		else{
+			int paymentAmount = this.getPayment().getAppliedAmount();
+			this.amountToFees = this.allocate(this.getPreviousState().getFees(), paymentAmount);
+			paymentAmount -= amountToFees;
+			BigDecimal interestAmount = this.getPreviousState().getInterest().add(this.getAccruedInterest());
+			this.amountToInterest = BigDecimal.valueOf(this.allocate(interestAmount.intValue(), paymentAmount));
+			paymentAmount -= this.amountToInterest.intValue();
+			this.amountToPrincipal = this.allocate(this.getPreviousState().getPrincipal(), paymentAmount);
+		}
 	}
 	
 	private int allocate(int balance, int paymentAmount){
@@ -51,7 +58,7 @@ public class PaymentLoanState extends LoanState {
 	}
 	
 	@Override
-	Integer getFeesChange() {
+	public Integer getFeesChange() {
 		if(this.amountToFees == null){
 			this.resetAllocations();
 		}
@@ -59,7 +66,7 @@ public class PaymentLoanState extends LoanState {
 	}
 
 	@Override
-	BigDecimal getInterestChange() {
+	public BigDecimal getInterestChange() {
 		if(this.amountToInterest == null){
 			this.resetAllocations();
 		}
@@ -67,7 +74,7 @@ public class PaymentLoanState extends LoanState {
 	}
 
 	@Override
-	Integer getPrincipalChange() {
+	public Integer getPrincipalChange() {
 		if(this.amountToPrincipal == null){
 			this.resetAllocations();
 		}
@@ -75,23 +82,37 @@ public class PaymentLoanState extends LoanState {
 	}
 
 	@Override
-	BigDecimal getInterestRate() {
-		return this.getPreviousState().getInterestRate();
-	}
-
-	@Override
-	Date getStateEffectiveDate() {
+	public Date getStateEffectiveDate() {
 		return this.getPayment().getPayment().getEffectiveDate();
 	}
 
 	@Override
-	Date getStatePostDate() {
+	public Date getStatePostDate() {
 		return this.getPayment().getPayment().getPostDate();
 	}
 
 	@Override
 	public Integer getUnusedPaymentAmount() {
+		if(this.getPreviousState() == null){
+			return 0;
+		}
 		return this.getPreviousState().getUnusedPaymentAmount();
+	}
+
+	@Override
+	public BigDecimal getBaseRate() {
+		if(this.getPreviousState() == null){
+			return BigDecimal.ZERO;
+		}
+		return this.getPreviousState().getBaseRate();
+	}
+
+	@Override
+	public BigDecimal getMargin() {
+		if(this.getPreviousState() == null){
+			return BigDecimal.ZERO;
+		}
+		return this.getPreviousState().getMargin();
 	}
 
 

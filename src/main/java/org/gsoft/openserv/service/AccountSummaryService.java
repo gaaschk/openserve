@@ -6,9 +6,11 @@ import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.amortization.LoanAmortizationSchedule;
 import org.gsoft.openserv.domain.loan.Loan;
+import org.gsoft.openserv.domain.loan.LoanStateHistory;
 import org.gsoft.openserv.domain.payment.Payment;
 import org.gsoft.openserv.repositories.amortization.AmortizationScheduleRepository;
 import org.gsoft.openserv.repositories.loan.LoanRepository;
+import org.gsoft.openserv.repositories.loan.LoanStateHistoryRepository;
 import org.gsoft.openserv.repositories.payment.PaymentRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ public class AccountSummaryService {
 	private PaymentRepository paymentRepository;
 	@Resource
 	private AmortizationScheduleRepository amortizationRepository;
+	@Resource
+	private LoanStateHistoryRepository loanStateHistory;
 	
 	@PreAuthorize("hasRole('PERM_ViewAccountSummary')")
 	public List<Loan> getAllLoansForBorrower(Long borrowerID){
@@ -35,8 +39,8 @@ public class AccountSummaryService {
 	}
 	
 	@PreAuthorize("hasRole('PERM_ViewAccountSummary')")
-	public List<?> getAllLoanEventsForLoan(Long loanID){
-		return null;
+	public LoanStateHistory getLoanStateHistoryForLoan(Long loanID){
+		return loanStateHistory.findLoanStateHistory(loanID);
 	}
 	
 	@PreAuthorize("hasRole('PERM_ViewAccountSummary')")

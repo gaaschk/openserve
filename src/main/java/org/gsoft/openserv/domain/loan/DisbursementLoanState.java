@@ -15,37 +15,51 @@ public class DisbursementLoanState extends LoanState {
 	}
 
 	@Override
-	Integer getFeesChange() {
+	public Integer getFeesChange() {
 		return 0;
 	}
 
 	@Override
-	BigDecimal getInterestChange() {
+	public BigDecimal getInterestChange() {
 		return BigDecimal.ZERO;
 	}
 
 	@Override
-	Integer getPrincipalChange() {
+	public Integer getPrincipalChange() {
 		return this.getDisbursement().getDisbursementAmount();
 	}
 
 	@Override
-	BigDecimal getInterestRate() {
-		return getPreviousState().getInterestRate();
-	}
-
-	@Override
-	Date getStateEffectiveDate() {
+	public Date getStateEffectiveDate() {
 		return this.getDisbursement().getDisbursementEffectiveDate();
 	}
 
 	@Override
-	Date getStatePostDate() {
+	public Date getStatePostDate() {
 		return this.getDisbursement().getDisbursementEffectiveDate();
 	}
 
 	@Override
 	public Integer getUnusedPaymentAmount() {
+		if(this.getPreviousState() == null){
+			return 0;
+		}
 		return this.getPreviousState().getUnusedPaymentAmount();
+	}
+
+	@Override
+	public BigDecimal getBaseRate() {
+		if(this.getPreviousState() == null){
+			return BigDecimal.ZERO;
+		}
+		return this.getPreviousState().getBaseRate();
+	}
+
+	@Override
+	public BigDecimal getMargin() {
+		if(this.getPreviousState() == null){
+			return BigDecimal.ZERO;
+		}
+		return this.getPreviousState().getMargin();
 	}
 }

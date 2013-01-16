@@ -18,7 +18,7 @@ public class Principal extends OpenServDomainObject{
 	private static final long serialVersionUID = -4382980089519074792L;
 	private Long principalID;
 	private String name;
-	private Boolean active = true;
+	private Boolean isActive = true;
 	
 	@Id
     @GeneratedValue( strategy=GenerationType.AUTO )
@@ -34,11 +34,11 @@ public class Principal extends OpenServDomainObject{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Boolean getActive() {
-		return active;
+	public Boolean isActive() {
+		return isActive;
 	}
 	public void setActive(Boolean active) {
-		this.active = active;
+		this.isActive = active;
 	}
 	@Override
 	@Transient

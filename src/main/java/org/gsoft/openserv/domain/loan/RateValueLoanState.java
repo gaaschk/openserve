@@ -17,37 +17,45 @@ public class RateValueLoanState extends LoanState {
 	}
 	
 	@Override
-	Integer getFeesChange() {
+	public Integer getFeesChange() {
 		return 0;
 	}
 
 	@Override
-	BigDecimal getInterestChange() {
+	public BigDecimal getInterestChange() {
 		return BigDecimal.ZERO;
 	}
 
 	@Override
-	Integer getPrincipalChange() {
+	public Integer getPrincipalChange() {
 		return 0;
 	}
 
 	@Override
-	BigDecimal getInterestRate() {
-		return this.getRateValue().getRateValue().getRateValue();
-	}
-
-	@Override
-	Date getStateEffectiveDate() {
+	public Date getStateEffectiveDate() {
 		return this.getRateValue().getLockedDate();
 	}
 
 	@Override
-	Date getStatePostDate() {
+	public Date getStatePostDate() {
 		return this.getRateValue().getLockedDate();
 	}
 
 	@Override
 	public Integer getUnusedPaymentAmount() {
+		if(this.getPreviousState() == null){
+			return 0;
+		}
 		return this.getPreviousState().getUnusedPaymentAmount();
+	}
+
+	@Override
+	public BigDecimal getBaseRate() {
+		return this.getRateValue().getRateValue().getRateValue();
+	}
+
+	@Override
+	public BigDecimal getMargin() {
+		return this.getRateValue().getMarginValue();
 	}
 }

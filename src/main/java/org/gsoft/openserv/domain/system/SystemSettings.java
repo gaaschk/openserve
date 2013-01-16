@@ -11,7 +11,7 @@ public class SystemSettings extends OpenServDomainObject{
 	private static final long serialVersionUID = 4418309716452336867L;
 	private Long systemSettingsID;
 	private Integer daysDelta;
-	private Boolean triggerBatch;
+	private Boolean shouldTriggerBatch;
 
 	@Id
 	public Long getSystemSettingsID() {
@@ -30,12 +30,12 @@ public class SystemSettings extends OpenServDomainObject{
 		this.daysDelta = daysDelta;
 	}
 
-	public Boolean getTriggerBatch() {
-		return triggerBatch;
+	public Boolean getShouldTriggerBatch() {
+		return shouldTriggerBatch;
 	}
 
-	public void setTriggerBatch(Boolean triggerBatch) {
-		this.triggerBatch = triggerBatch;
+	public void setShouldTriggerBatch(Boolean triggerBatch) {
+		this.shouldTriggerBatch = triggerBatch;
 	}
 
 	@Override

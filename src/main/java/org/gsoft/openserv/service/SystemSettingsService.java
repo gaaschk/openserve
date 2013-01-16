@@ -29,16 +29,16 @@ public class SystemSettingsService {
 	}
 	
 	public Boolean isBatchTriggered(){
-		return this.systemSettingsLogic.getCurrentSystemSettings().getTriggerBatch();
+		return this.systemSettingsLogic.getCurrentSystemSettings().getShouldTriggerBatch();
 	}
 	
 	@Transactional
 	public void clearBatchTrigger(){
-		this.systemSettingsLogic.getCurrentSystemSettings().setTriggerBatch(false);
+		this.systemSettingsLogic.getCurrentSystemSettings().setShouldTriggerBatch(false);
 	}
 
 	@Transactional
 	public void setBatchTrigger(){
-		this.systemSettingsLogic.getCurrentSystemSettings().setTriggerBatch(true);
+		this.systemSettingsLogic.getCurrentSystemSettings().setShouldTriggerBatch(true);
 	}
 }

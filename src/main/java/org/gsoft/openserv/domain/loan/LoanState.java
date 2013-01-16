@@ -8,90 +8,54 @@ import org.gsoft.openserv.buslogic.interest.InterestCalculator;
 public abstract class LoanState {
 	private LoanState previousState;
 	
-	public static LoanState ZERO_STATE = new LoanState(){
-		public Integer getPrincipal(){
-			return 0;
-		}
-		
-		public BigDecimal getInterest(){
-			return BigDecimal.ZERO;
-		}
-		
-		public Integer getFees(){
-			return 0;
-		}
-		
-		public BigDecimal getInterestRate(){
-			return BigDecimal.ZERO;
-		}
-		
-		@Override
-		Integer getFeesChange() {
-			return 0;
-		}
-
-		@Override
-		BigDecimal getInterestChange() {
-			return BigDecimal.ZERO;
-		}
-
-		@Override
-		Integer getPrincipalChange() {
-			return 0;
-		}
-
-		@Override
-		Date getStateEffectiveDate() {
-			return null;
-		}
-
-		@Override
-		Date getStatePostDate() {
-			return null;
-		}
-
-		@Override
-		public Integer getUnusedPaymentAmount() {
-			return 0;
-		}
-	};
-	
 	protected LoanState(){}
 	
 	LoanState getPreviousState(){
 		return this.previousState;
 	}
 
-	abstract Integer getFeesChange();
+	public abstract Integer getFeesChange();
 	
-	abstract BigDecimal getInterestChange();
+	public abstract BigDecimal getInterestChange();
 	
-	abstract Integer getPrincipalChange();
+	public abstract Integer getPrincipalChange();
 	
-	abstract BigDecimal getInterestRate();
+	public final BigDecimal getInterestRate(){
+		return this.getBaseRate().add(this.getMargin());
+	}
 	
-	abstract Date getStateEffectiveDate();
+	public abstract BigDecimal getBaseRate();
+	
+	public abstract BigDecimal getMargin();
+	
+	public abstract Date getStateEffectiveDate();
 
-	abstract Date getStatePostDate();
+	public abstract Date getStatePostDate();
 	
 	public abstract Integer getUnusedPaymentAmount();
 	
 	public Integer getFees(){
-		return this.getPreviousState().getFees() + this.getFeesChange();
+		int previousFees = (this.getPreviousState() == null)?0:this.getPreviousState().getFees();
+		return previousFees + this.getFeesChange();
 	}
 	
 	BigDecimal getAccruedInterest(){
-		BigDecimal accruedInterest = InterestCalculator.calculateInterest(this.getPreviousState().getInterestRate(), this.getPreviousState().getPrincipal(), this.getPreviousState().getStateEffectiveDate(), this.getStateEffectiveDate());
+		BigDecimal accruedInterest = BigDecimal.ZERO;
+		if(this.getPreviousState() != null){
+			accruedInterest = InterestCalculator.calculateInterest(this.getPreviousState().getInterestRate(), this.getPreviousState().getPrincipal(), this.getPreviousState().getStateEffectiveDate(), this.getStateEffectiveDate());
+		}
 		return accruedInterest;
 	}
 	
 	public BigDecimal getInterest(){
-		BigDecimal allInterest = this.getAccruedInterest().add(this.getPreviousState().getInterest());
+		BigDecimal previousInterest = (this.getPreviousState() == null)?BigDecimal.ZERO:this.getPreviousState().getInterest();
+		BigDecimal allInterest = this.getAccruedInterest().add(previousInterest);
 		return allInterest.add(this.getInterestChange());
 	}
 	
 	public Integer getPrincipal(){
-		return this.getPreviousState().getPrincipal() + this.getPrincipalChange();
+		int previousPrincipal = (this.getPreviousState() == null)?0:this.getPreviousState().getPrincipal();
+		return previousPrincipal + this.getPrincipalChange();
 	}
 	
 	public void setPreviousLoanState(LoanState prevState){

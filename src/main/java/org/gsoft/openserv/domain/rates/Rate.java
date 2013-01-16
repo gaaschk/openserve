@@ -17,7 +17,7 @@ public class Rate extends OpenServDomainObject{
 
 	private Long rateId;
 	private String rateName;
-	private Boolean autoUpdate = false;
+	private Boolean shouldAutoUpdate = false;
 	private String tickerSymbol; 
 	
 	@Id
@@ -40,12 +40,12 @@ public class Rate extends OpenServDomainObject{
 		this.rateName = rateName;
 	}
 
-	public Boolean getAutoUpdate() {
-		return autoUpdate;
+	public Boolean getShouldAutoUpdate() {
+		return shouldAutoUpdate;
 	}
 
-	public void setAutoUpdate(Boolean autoUpdate) {
-		this.autoUpdate = autoUpdate;
+	public void setShouldAutoUpdate(Boolean autoUpdate) {
+		this.shouldAutoUpdate = autoUpdate;
 	}
 
 	public String getTickerSymbol() {

@@ -15,37 +15,51 @@ public class BalanceAdjustmentLoanState extends LoanState {
 	}
 
 	@Override
-	Integer getFeesChange() {
+	public Integer getFeesChange() {
 		return this.getBalanceAdjustment().getFeesChange();
 	}
 
 	@Override
-	BigDecimal getInterestChange() {
+	public BigDecimal getInterestChange() {
 		return BigDecimal.valueOf(this.getBalanceAdjustment().getInterestChange());
 	}
 
 	@Override
-	Integer getPrincipalChange() {
+	public Integer getPrincipalChange() {
 		return this.getBalanceAdjustment().getPrincipalChange();
 	}
 
 	@Override
-	BigDecimal getInterestRate() {
-		return this.getPreviousState().getInterestRate();
-	}
-
-	@Override
-	Date getStateEffectiveDate() {
+	public Date getStateEffectiveDate() {
 		return this.getBalanceAdjustment().getEffectiveDate();
 	}
 
 	@Override
-	Date getStatePostDate() {
+	public Date getStatePostDate() {
 		return this.getBalanceAdjustment().getPostDate();
 	}
 
 	@Override
 	public Integer getUnusedPaymentAmount() {
+		if(this.getPreviousState() == null){
+			return 0;
+		}
 		return this.getPreviousState().getUnusedPaymentAmount();
+	}
+
+	@Override
+	public BigDecimal getBaseRate() {
+		if(this.getPreviousState() == null){
+			return BigDecimal.ZERO;
+		}
+		return this.getPreviousState().getBaseRate();
+	}
+
+	@Override
+	public BigDecimal getMargin() {
+		if(this.getPreviousState() == null){
+			return BigDecimal.ZERO;
+		}
+		return this.getPreviousState().getMargin();
 	}
 }

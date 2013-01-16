@@ -41,6 +41,8 @@ CREATE TABLE LateFee (
 	LateFeeID           	BIGINT AUTO_INCREMENT NOT NULL,
 	BillingStatementID  	BIGINT NULL,
 	FeeAmount           	INT NULL,
+	EffectiveDate			DATE,
+	PostedDate				DATETIME,
 	PRIMARY KEY(LateFeeID)
 );
 
@@ -83,7 +85,7 @@ CREATE TABLE LoanTypeProfile (
 	DaysBeforeDueToBill      	INT NULL,
 	DaysLateForFee           	INT NULL,
 	LateFeeAmount            	INT NULL,
-	variableRate             	SMALLINT(6) NULL,
+	VariableRate             	SMALLINT NULL,
 	BaseRateUpdateFrequencyID	BIGINT NULL,
 	BaseRateID               	BIGINT NULL,
 	PRIMARY KEY(LoanTypeProfileID)
@@ -119,10 +121,10 @@ CREATE TABLE FrequencyType (
 	PRIMARY KEY(FrequencyTypeID)
 );
 CREATE TABLE Rate ( 
-	RateID      	BIGINT AUTO_INCREMENT NOT NULL,
-	RateName    	VARCHAR(50) NULL,
-	TickerSymbol	VARCHAR(20) NULL,
-	AutoUpDATE  	SMALLINT(6) NULL,
+	RateID      		BIGINT AUTO_INCREMENT NOT NULL,
+	RateName    		VARCHAR(50) NULL,
+	TickerSymbol		VARCHAR(20) NULL,
+	ShouldAutoUpdate  	SMALLINT NULL,
 	PRIMARY KEY(RateID)
 );
 CREATE TABLE RateValue ( 
@@ -130,8 +132,16 @@ CREATE TABLE RateValue (
 	RateID       	BIGINT NULL,
 	RateValueDate	DATE NULL,
 	RateValue    	DECIMAL(20,6) NULL,
-	IsValid      	SMALLINT(6) NULL,
+	IsValid      	SMALLINT NULL,
 	PRIMARY KEY(RateValueID)
+);
+CREATE TABLE LoanRateValue (
+	LoanRateValueID BIGINT AUTO_INCREMENT NOT NULL,
+	LoanID			BIGINT NULL,
+	RateValueID		BIGINT NULL,
+	MarginValue		DECIMAL(20,6) NULL,
+	LockedDate		DATE NULL,
+	PRIMARY KEY(LoanRateValueID)
 );
 
 CREATE TABLE LoanBalanceAdjustment ( 
@@ -172,7 +182,7 @@ CREATE TABLE SecPermission (
 CREATE TABLE SecPrincipal ( 
 	PrincipalID	BIGINT AUTO_INCREMENT NOT NULL,
 	Name       	VARCHAR(50) NULL,
-	Active     	SMALLINT(6) NULL,
+	IsActive     	SMALLINT NULL,
 	PRIMARY KEY(PrincipalID)
 );
 CREATE TABLE SecSystemRole ( 
@@ -184,7 +194,7 @@ CREATE TABLE SecSystemUser (
 	PrincipalID         	BIGINT NOT NULL,
 	Username            	VARCHAR(25) NULL,
 	Password            	VARCHAR(150) NULL,
-	LockedOut           	SMALLINT(6) NULL,
+	IsLockedOut           	SMALLINT NULL,
 	LastSuccessfullLogin	DATETIME NULL,
 	PRIMARY KEY(PrincipalID)
 );
@@ -205,9 +215,9 @@ CREATE TABLE userconnection (
 
 # System Configuration
 CREATE TABLE SystemSettings ( 
-	SystemSettingsID	BIGINT NOT NULL,
-	DaysDelta       	INT NULL,
-	TriggerBatch    	SMALLINT(6) NULL,
+	SystemSettingsID		BIGINT NOT NULL,
+	DaysDelta	  	     	INT NULL,
+	ShouldTriggerBatch    	SMALLINT NULL,
 	PRIMARY KEY(SystemSettingsID)
 );
 

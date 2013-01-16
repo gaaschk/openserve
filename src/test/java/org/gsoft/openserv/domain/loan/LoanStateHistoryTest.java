@@ -23,6 +23,7 @@ public class LoanStateHistoryTest {
 		disbursement.setDisbursementEffectiveDate(today);
 		history.addDisbursement(disbursement);
 		LoanRateValue loanRate = new LoanRateValue();
+		loanRate.setMarginValue(BigDecimal.ZERO);
 		loanRate.setLockedDate(today);
 		RateValue rateValue = new RateValue();
 		rateValue.setRateValue(BigDecimal.valueOf(.035));
@@ -53,6 +54,7 @@ public class LoanStateHistoryTest {
 		history.addPayment(loanPayment);
 		loanRate = new LoanRateValue();
 		loanRate.setLockedDate(new DateTime(today).plusDays(30).toDate());
+		loanRate.setMarginValue(BigDecimal.ZERO);
 		rateValue = new RateValue();
 		rateValue.setRateValue(BigDecimal.valueOf(.043));
 		loanRate.setRateValue(rateValue);

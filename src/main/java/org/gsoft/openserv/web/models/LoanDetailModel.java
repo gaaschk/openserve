@@ -3,10 +3,11 @@ package org.gsoft.openserv.web.models;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class LoanDetailModel {
 	private LoanFinancialDataModel loanFinancialData;
 	private LoanAmortizationModel currentAmortization;
-	private List<LoanEventModel> loanHistory;
+	private List<LoanStateModel> loanHistory;
 	private List<BillingStatementModel> billingStatements;
 	
 	public LoanFinancialDataModel getLoanFinancialData() {
@@ -21,10 +22,10 @@ public class LoanDetailModel {
 	public void setCurrentAmortization(LoanAmortizationModel currentAmortization) {
 		this.currentAmortization = currentAmortization;
 	}
-	public List<LoanEventModel> getLoanHistory() {
+	public List<LoanStateModel> getLoanHistory() {
 		return loanHistory;
 	}
-	public void setLoanHistory(List<LoanEventModel> loanHistory) {
+	public void setLoanHistory(List<LoanStateModel> loanHistory) {
 		this.loanHistory = loanHistory;
 	}
 	public List<BillingStatementModel> getBillingStatements() {

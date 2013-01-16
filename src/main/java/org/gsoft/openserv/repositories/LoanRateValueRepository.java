@@ -24,6 +24,10 @@ public class LoanRateValueRepository extends BaseRepository<LoanRateValue, Long>
 		return this.getSpringRepository().findAllLoanRateValuesThruDate(loanID, toDate);
 	}
 	
+	public List<LoanRateValue> findAllLoanRateValues(Long loanID){
+		return this.getSpringRepository().findAllLoanRateValues(loanID);
+	}
+
 	public List<LoanRateValue> findAllLoanRateValuesFromDateToDate(Long loanID, Date fromDate, Date toDate){
 		return this.getSpringRepository().findAllLoanRateValuesFromDateToDate(loanID, fromDate, toDate);
 	}
@@ -39,6 +43,10 @@ public class LoanRateValueRepository extends BaseRepository<LoanRateValue, Long>
 
 @Repository
 interface LoanRateValueSpringRepository extends BaseSpringRepository<LoanRateValue, Long>{
+
+	@Query("SELECT lrv FROM LoanRateValue lrv " +
+			"WHERE lrv.loanID = :loanID order by lrv.lockedDate asc")
+	List<LoanRateValue> findAllLoanRateValues(@Param("loanID") Long loanID);
 
 	@Query("SELECT lrv FROM LoanRateValue lrv " +
 			"WHERE lrv.loanID = :loanID AND lrv.lockedDate <= :toDate order by lrv.lockedDate asc")

@@ -1,5 +1,6 @@
 package org.gsoft.openserv.domain.interest;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -22,6 +23,7 @@ public class LoanRateValue extends OpenServDomainObject {
 	private Long loanRateValueID;
 	private Long loanID;
 	private RateValue rateValue;
+	private BigDecimal marginValue;
 	private Date lockedDate;
 	
 	@Id
@@ -52,6 +54,14 @@ public class LoanRateValue extends OpenServDomainObject {
 
 	public void setRateValue(RateValue rateValue) {
 		this.rateValue = rateValue;
+	}
+
+	public BigDecimal getMarginValue() {
+		return marginValue;
+	}
+
+	public void setMarginValue(BigDecimal marginValue) {
+		this.marginValue = marginValue;
 	}
 
 	public Date getLockedDate() {
