@@ -5,6 +5,7 @@ import org.gsoft.openserv.domain.loan.LoanTypeProfile
 import org.gsoft.openserv.domain.payment.BillingStatement
 import org.gsoft.openserv.buslogic.payment.BillingStatementLogic
 import org.gsoft.openserv.repositories.payment.BillingStatementRepository
+import org.gsoft.openserv.repositories.loan.LoanTypeProfileRepository
 import java.util.Date
 import java.util.Calendar
 import java.util.HashMap
@@ -19,30 +20,39 @@ function Date adjustDateByDays(Date incomingDate, int numberOfDays){
 	return cal.getTime();
 }
 
-declare LoanWrapper
-	loan : Loan
-	ltProfile : LoanTypeProfile
+declare LoanDueDateWrapper
+	loanId : Long
 	dueDateMinusWindow : Date
 end
 
-rule "Build Loan Wrapper"
+rule "Load Loan Type Profile"
 	when
-		$l : Loan(currentUnpaidDueDate != null, nextDueDate != null, $loanId : loanID, $ltpId : effectiveLoanTypeProfileID)
-		$ltp : LoanTypeProfile(loanTypeProfileID == $ltpId)
+		$l : Loan(currentUnpaidDueDate != null, nextDueDate != null, effectiveLoanTypeProfileID  != null, $ltpId : effectiveLoanTypeProfileID )
+		not LoanTypeProfile( loanTypeProfileID  ==  $ltpId)
 	then
-		System.out.println("Creating loan wrapper");
-		LoanWrapper lw = new LoanWrapper();
-		lw.setLoan($l);
-		lw.setLtProfile($ltp);
+		LoanTypeProfile ltp = springContext.getBean(LoanTypeProfileRepository.class).findOne($ltpId);
+		System.out.println("Loading Loan Type Profile [" + ltp.getLoanTypeProfileID() + "]");
+		insert(ltp);
+end
+
+rule "Build Loan DueDate Wrapper"
+	when
+		$l : Loan(currentUnpaidDueDate != null, nextDueDate != null, effectiveLoanTypeProfileID  != null, $ltpId : effectiveLoanTypeProfileID, $loanId : loanID )
+		$ltp : LoanTypeProfile(loanTypeProfileID == $ltpId)
+		not LoanDueDateWrapper(loanId == $loanId)
+	then
+		LoanDueDateWrapper lw = new LoanDueDateWrapper();
+		lw.setLoanId($loanId);
 		lw.setDueDateMinusWindow(adjustDateByDays($l.getCurrentUnpaidDueDate(), ((-1) * $ltp.getDaysBeforeDueToBill()))); 
+		System.out.println("Loading loan due date wrapper [" + lw.getLoanId() + ", " + lw.getDueDateMinusWindow() + "]");
 		insert(lw);
 end
 	
 rule "Generate Billing Statement"
 	when
 		HashMap($sysDate : this["systemDate"])
-		$lw : LoanWrapper(dueDateMinusWindow <= $sysDate)
-		$l : Loan($loanId : ID, $nextDue : nextDueDate) from $lw.loan
+		$lw : LoanDueDateWrapper(dueDateMinusWindow <= $sysDate, $loanId : loanId)
+		$l : Loan(loanID == $loanId, $nextDue : nextDueDate)
 		not BillingStatement(loanID == $loanId, dueDate >= $nextDue)
 	then
 		System.out.println("Generating a billing statement");
@@ -54,4 +64,3 @@ rule "Generate Billing Statement"
 		update($l);
 		insert(lastStatement);
 end
-

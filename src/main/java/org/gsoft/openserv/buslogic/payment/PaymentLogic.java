@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.gsoft.openserv.buslogic.payment.allocation.DefaultPaymentAllocationLogic;
+import org.gsoft.openserv.buslogic.payment.allocation.PastDueFirstPrincipalWeightedAllocationStrategy;
 import org.gsoft.openserv.buslogic.repayment.NextDueDateCalculator;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.loan.Loan;
@@ -21,7 +22,7 @@ public class PaymentLogic {
 	private LoanRepository loanRepository;
 	@Resource
 	private PaymentRepository paymentRepository;
-	@Resource(type=DefaultPaymentAllocationLogic.class)
+	@Resource(type=PastDueFirstPrincipalWeightedAllocationStrategy.class)
 	private PaymentAllocationLogic paymentAllocationLogic;
 	@Resource
 	private SystemSettingsLogic systemSettingsLogic;

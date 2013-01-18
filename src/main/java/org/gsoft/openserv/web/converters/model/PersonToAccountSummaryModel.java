@@ -12,6 +12,7 @@ import org.gsoft.openserv.service.AccountSummaryService;
 import org.gsoft.openserv.web.models.AccountSummaryModel;
 import org.gsoft.openserv.web.models.LoanSummaryModel;
 import org.gsoft.openserv.web.models.PaymentHistoryModel;
+import org.gsoft.openserv.web.models.PaymentModel;
 import org.gsoft.openserv.web.models.PersonModel;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
@@ -35,7 +36,12 @@ public class PersonToAccountSummaryModel implements Converter<Person,AccountSumm
 			accountSummaryModel.getLoans().add(conversionService.convert(loan,LoanSummaryModel.class));
 		}
 		List<Payment> payments = accountSummaryService.getAllPaymentsforBorrower(borrower.getPersonID());
-		PaymentHistoryModel paymentHistoryModel = conversionService.convert(payments, PaymentHistoryModel.class);
+		PaymentHistoryModel paymentHistoryModel = new PaymentHistoryModel();
+		ArrayList<PaymentModel> paymentModels = new ArrayList<>();
+		for(Payment payment : payments){
+			paymentModels.add(conversionService.convert(payment, PaymentModel.class));
+		}
+		paymentHistoryModel.setPayments(paymentModels);
 		accountSummaryModel.setPaymentHistory(paymentHistoryModel);
 		return accountSummaryModel;
 	}

@@ -4,8 +4,8 @@ import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanStateHistory;
-import org.gsoft.openserv.repositories.LoanRateValueRepository;
 import org.gsoft.openserv.repositories.payment.LoanPaymentRepository;
+import org.gsoft.openserv.repositories.rates.LoanRateValueRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

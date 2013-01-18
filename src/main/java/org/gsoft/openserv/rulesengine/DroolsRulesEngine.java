@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import org.drools.KnowledgeBase;
 import org.drools.KnowledgeBaseFactory;
 import org.drools.builder.KnowledgeBuilder;
+import org.drools.builder.KnowledgeBuilderError;
 import org.drools.builder.KnowledgeBuilderFactory;
 import org.drools.builder.ResourceType;
 import org.drools.io.ResourceFactory;
@@ -47,6 +48,16 @@ public class DroolsRulesEngine implements RulesEngine{
 				if(ruleFile.getName().endsWith(".drl"))
 					builder.add(ResourceFactory.newFileResource(ruleFile), ResourceType.DRL);
 			}
+			if(builder.hasErrors()){
+				StringBuilder errorMessage = new StringBuilder("Errors parsing DRLs.  KnowledgeBuilder errors: ");
+				String comma = "";
+				for(KnowledgeBuilderError error : builder.getErrors()){
+					errorMessage.append(comma);
+					errorMessage.append(error.getMessage());
+					comma = ",";
+				}
+				throw new RulesEngineException(errorMessage.toString());
+			}
 			base = KnowledgeBaseFactory.newKnowledgeBase();
 			base.addKnowledgePackages(builder.getKnowledgePackages());
 		}
@@ -70,7 +81,7 @@ public class DroolsRulesEngine implements RulesEngine{
 		if(!this.isOpen)
 			throw new RulesEngineException("RulesEngine must be open before it can be run.");
 		HashMap<String,Date> sysDate = new HashMap<String, Date>();
-		sysDate.put("SystemDate", systemSettingsLogic.getCurrentSystemDate());
+		sysDate.put("systemDate", systemSettingsLogic.getCurrentSystemDate());
 		knowledge.add(sysDate);
 		StatelessKnowledgeSession session = this.getKnowledgeBase().newStatelessKnowledgeSession();
 		session.setGlobal("springContext", springContext);

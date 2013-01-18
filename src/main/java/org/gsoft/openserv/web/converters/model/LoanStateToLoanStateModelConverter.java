@@ -31,8 +31,9 @@ public class LoanStateToLoanStateModelConverter implements Converter<LoanState, 
 		loanStateModel.setEndingInterest(loanState.getInterest());
 		loanStateModel.setEndingPrincipal(loanState.getPrincipal());
 		loanStateModel.setStartingFees(loanState.getFees() - loanState.getFeesChange());
-		loanStateModel.setStartingInterest(loanState.getInterest().subtract(loanState.getInterestChange()));
-		loanStateModel.setStartingPrincipal(loanState.getPrincipal() - loanState.getFeesChange());
+		loanStateModel.setStartingInterest(loanState.getInterest().subtract(loanState.getAccruedInterest().add(loanState.getInterestChange())));
+		loanStateModel.setStartingPrincipal(loanState.getPrincipal() - loanState.getPrincipalChange());
+		loanStateModel.setAccruedInterest(loanState.getAccruedInterest());
 		return loanStateModel;
 	}
 }

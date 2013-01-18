@@ -14,6 +14,7 @@ public class LoanStateModel {
 	private Integer endingPrincipal;
 	private BigDecimal endingInterest;
 	private Integer endingFees;
+	private BigDecimal accruedInterest;
 	private Date effectiveDate;
 	private Date postedDate;
 	
@@ -65,6 +66,28 @@ public class LoanStateModel {
 	public void setEndingFees(Integer endingFees) {
 		this.endingFees = endingFees;
 	}
+	@CurrencyInPenniesFormat
+	public BigDecimal getAccruedInterest() {
+		return accruedInterest;
+	}
+	public void setAccruedInterest(BigDecimal accruedInterest) {
+		this.accruedInterest = accruedInterest;
+	}
+	@CurrencyInPenniesFormat
+	public Integer getPrincipalChange(){
+		return this.getEndingPrincipal() - this.getStartingPrincipal();
+	}
+	public void setPrincipalChange(Integer change){}
+	@CurrencyInPenniesFormat
+	public BigDecimal getInterestChange(){
+		return this.getEndingInterest().subtract(this.getStartingInterest());
+	}
+	public void setInterestChange(BigDecimal change){}
+	@CurrencyInPenniesFormat
+	public Integer getFeesChange(){
+		return this.getEndingFees() - this.getStartingFees();
+	}
+	public void setFeesChange(Integer change){}
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	public Date getEffectiveDate() {
 		return effectiveDate;

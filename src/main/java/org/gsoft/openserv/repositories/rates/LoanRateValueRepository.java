@@ -1,4 +1,4 @@
-package org.gsoft.openserv.repositories;
+package org.gsoft.openserv.repositories.rates;
 
 import java.util.Date;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.interest.LoanRateValue;
+import org.gsoft.openserv.repositories.BaseRepository;
+import org.gsoft.openserv.repositories.BaseSpringRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;

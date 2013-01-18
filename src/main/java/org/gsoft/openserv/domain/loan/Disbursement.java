@@ -28,11 +28,11 @@ public class Disbursement extends OpenServDomainObject{
 	public void setDisbursementID(Long disbursementID) {
 		this.disbursementID = disbursementID;
 	}
+	@ManyToOne
+	@JoinColumn(name="LoanID")
 	public Loan getLoan() {
 		return loan;
 	}
-	@ManyToOne
-	@JoinColumn(name="LoanID", insertable=false, updatable=false)
 	public void setLoan(Loan theLoan) {
 		this.loan = theLoan;
 	}

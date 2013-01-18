@@ -17,6 +17,13 @@ import org.gsoft.openserv.repositories.loan.LoanTypeProfileRepository;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 
+/**
+ * This payment allocation strategy applies the payment first to the longest past due 
+ * loans. If the total of payment minimum payment amounts for all of the longest past 
+ * due loans is greater than the amount
+ * @author gaaschk
+ *
+ */
 @Component
 public class DefaultPaymentAllocationLogic implements PaymentAllocationLogic{
 	@Resource

@@ -39,7 +39,7 @@ public abstract class LoanState {
 		return previousFees + this.getFeesChange();
 	}
 	
-	BigDecimal getAccruedInterest(){
+	public BigDecimal getAccruedInterest(){
 		BigDecimal accruedInterest = BigDecimal.ZERO;
 		if(this.getPreviousState() != null){
 			accruedInterest = InterestCalculator.calculateInterest(this.getPreviousState().getInterestRate(), this.getPreviousState().getPrincipal(), this.getPreviousState().getStateEffectiveDate(), this.getStateEffectiveDate());

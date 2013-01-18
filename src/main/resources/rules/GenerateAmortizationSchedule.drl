@@ -9,7 +9,7 @@ global ApplicationContext springContext
 
 rule "Generate Amortization Schedule"
 	when
-		$l : Loan(minimumPaymentAmount == null, effectiveLoanTypeProfileID != null, remainingLoanTerm != null, repaymentStartDate != null)
+		$l : Loan(minimumPaymentAmount == null, effectiveLoanTypeProfileID != null, remainingLoanTerm != null, repaymentStartDate != null, interestRateCurrent)
 	then
 		System.out.println("Generating the Amortization Schedule");
 		springContext.getBean(AmortizationLogic.class).createAmortizationSchedule(Arrays.asList($l.getLoanID()), $l.getRepaymentStartDate());

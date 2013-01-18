@@ -8,10 +8,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class BillingStatementModel implements Serializable{
 	private static final long serialVersionUID = 831721439085817946L;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date createdDate;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date dueDate;
 	private Integer minimumRequiredPayment;
 	private Integer paidAmount;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date satisfiedDate;
 	private Integer lateFeeAmount;
 	
@@ -21,7 +24,6 @@ public class BillingStatementModel implements Serializable{
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
-	@DateTimeFormat(pattern="yyyy-MM-dd")
 	public Date getDueDate() {
 		return dueDate;
 	}
@@ -42,7 +44,6 @@ public class BillingStatementModel implements Serializable{
 	public void setPaidAmount(Integer paidAmount) {
 		this.paidAmount = paidAmount;
 	}
-	@DateTimeFormat(pattern="yyyy-MM-dd")
 	public Date getSatisfiedDate() {
 		return satisfiedDate;
 	}

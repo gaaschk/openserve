@@ -26,7 +26,7 @@ public class RateService {
 	private RateValueRepository rateValueRepository;
 	
 	@Transactional
-	@Scheduled(fixedRate=30000)
+//	@Scheduled(fixedRate=30000)
 	public void updateAllQuotes(){
 		quoteUpdater.updateQuotes();
 	}

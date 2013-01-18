@@ -50,6 +50,8 @@ public class Loan extends OpenServDomainObject{
 	private Date currentUnpaidDueDate;
 	private Date nextDueDate;
 	
+	private boolean interestRateCurrent = false;
+	
 	@Id
 	@GeneratedValue( strategy=GenerationType.AUTO)
 	public Long getLoanID() {
@@ -157,7 +159,7 @@ public class Loan extends OpenServDomainObject{
 	public void setNextDueDate(Date nextDueDate) {
 		this.nextDueDate = (nextDueDate==null)?null:(Date)nextDueDate.clone();
 	}
-	@OneToMany(mappedBy="loan")
+	@OneToMany(mappedBy="loan", cascade={CascadeType.ALL})
 	public List<Disbursement> getDisbursements() {
 		return disbursements;
 	}
@@ -191,6 +193,12 @@ public class Loan extends OpenServDomainObject{
 		return this.getStartingLoanTerm() - this.getUsedLoanTerm();
 	}
 	
+	public boolean isInterestRateCurrent() {
+		return interestRateCurrent;
+	}
+	public void setInterestRateCurrent(boolean interestRateCurrent) {
+		this.interestRateCurrent = interestRateCurrent;
+	}
 	@Override
 	@Transient
 	public Long getID() {

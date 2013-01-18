@@ -13,16 +13,17 @@ public class LoanAmortizationModel implements Serializable{
 	private Date effectiveDate;
 	private List<AmortizationPaymentGroupModel> paymentGroups;
 	
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	public Date getCreationDate() {
 		return creationDate;
 	}
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	public Date getEffectiveDate() {
 		return effectiveDate;
 	}
-	@DateTimeFormat(pattern="yyyy-MM-dd")
 	public void setEffectiveDate(Date effectiveDate) {
 		this.effectiveDate = effectiveDate;
 	}

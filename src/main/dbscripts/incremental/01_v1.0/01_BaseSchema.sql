@@ -41,6 +41,7 @@ CREATE TABLE LateFee (
 	LateFeeID           	BIGINT AUTO_INCREMENT NOT NULL,
 	BillingStatementID  	BIGINT NULL,
 	FeeAmount           	INT NULL,
+	Cancelled				SMALLINT,
 	EffectiveDate			DATE,
 	PostedDate				DATETIME,
 	PRIMARY KEY(LateFeeID)
@@ -64,8 +65,17 @@ CREATE TABLE Loan (
 	CurrentUnpaidDueDate      	DATE NULL,
 	InitialDueDate            	DATE NULL,
 	NextDueDate	            	DATE NULL,
+	InterestRateCurrent			SMALLINT,
 	PRIMARY KEY(LoanID)
 );
+CREATE TABLE Disbursement(
+	DisbursementID				BIGINT AUTO_INCREMENT NOT NULL,
+	LoanID						BIGINT NULL,
+	DisbursementEffectiveDate	DATE NULL,
+	DisbursementAmount			INT NULL,
+	PRIMARY KEY(DisbursementID)
+);
+
 CREATE TABLE LoanType ( 
 	LoanTypeID 	BIGINT NOT NULL,
 	Name       	VARCHAR(15) NULL,
@@ -182,7 +192,7 @@ CREATE TABLE SecPermission (
 CREATE TABLE SecPrincipal ( 
 	PrincipalID	BIGINT AUTO_INCREMENT NOT NULL,
 	Name       	VARCHAR(50) NULL,
-	IsActive     	SMALLINT NULL,
+	Active     	SMALLINT NULL,
 	PRIMARY KEY(PrincipalID)
 );
 CREATE TABLE SecSystemRole ( 
@@ -194,7 +204,7 @@ CREATE TABLE SecSystemUser (
 	PrincipalID         	BIGINT NOT NULL,
 	Username            	VARCHAR(25) NULL,
 	Password            	VARCHAR(150) NULL,
-	IsLockedOut           	SMALLINT NULL,
+	LockedOut           	SMALLINT NULL,
 	LastSuccessfullLogin	DATETIME NULL,
 	PRIMARY KEY(PrincipalID)
 );
@@ -220,6 +230,41 @@ CREATE TABLE SystemSettings (
 	ShouldTriggerBatch    	SMALLINT NULL,
 	PRIMARY KEY(SystemSettingsID)
 );
+
+insert into Rate values (10, '1 Month LIBOR US Dollars', 'LIBOR.USD1M', 0);
+
+insert into RateValue value (10, 10, '2000-01-01', .035, 1);
+
+
+
+INSERT INTO SystemSettings VALUES (10, 0, 0);
+
+INSERT INTO secprincipal(PrincipalID, Name, Active)
+  VALUES(1, 'Admin User', 1);
+INSERT INTO secprincipal(PrincipalID, Name, Active)
+  VALUES(2, 'Admin Role', 1);
+INSERT INTO secsystemuser(PrincipalID, Username, Password, LockedOut, LastSuccessfullLogin)
+    VALUES(1, 'admin', '1b771698e9d4723bfd35818165db49b7', 0, '2012-12-13 00:00:00.0');
+INSERT INTO secsystemrole(PrincipalID, Description)
+  VALUES(2, 'Admin Role');
+INSERT INTO secpermission(PermissionID, Name)
+  VALUES(4, 'ViewAccountSummary');
+INSERT INTO secpermission(PermissionID, Name)
+  VALUES(3, 'CreateAmortizationSchedule');
+INSERT INTO secpermission(PermissionID, Name)
+  VALUES(1, 'AddLoan');
+INSERT INTO secpermission(PermissionID, Name)
+  VALUES(2, 'AddPayment');
+INSERT INTO secassignedrole(RolePrincipalID, UserPrincipalID)
+  VALUES(2, 1);
+INSERT INTO secassignedpermission(AssignedPermissionID, PermissionID, PrincipalID)
+  VALUES(1, 1, 2);
+INSERT INTO secassignedpermission(AssignedPermissionID, PermissionID, PrincipalID)
+  VALUES(2, 2, 2);
+INSERT INTO secassignedpermission(AssignedPermissionID, PermissionID, PrincipalID)
+  VALUES(3, 3, 2);
+INSERT INTO secassignedpermission(AssignedPermissionID, PermissionID, PrincipalID)
+  VALUES(4, 4, 2);
 
 
 
@@ -331,6 +376,12 @@ ALTER TABLE LoanBalanceAdjustment
 	REFERENCES Loan(LoanID)
 	ON DELETE RESTRICT 
 	ON UPDATE RESTRICT ;
+ALTER TABLE Disbursement
+	ADD CONSTRAINT disbursement_loan_fk
+	FOREIGN KEY(LoanID)
+	REFERENCES Loan(LoanID)
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT;
 ALTER TABLE LoanPayment
 	ADD CONSTRAINT loanpayment_ibfk_2
 	FOREIGN KEY(LoanID)
@@ -381,6 +432,18 @@ ALTER TABLE RateValue
 	REFERENCES Rate(RateID)
 	ON DELETE RESTRICT 
 	ON UPDATE RESTRICT ;
+ALTER TABLE LoanRateValue
+	ADD CONSTRAINT loanratevalue_loan_fk
+	FOREIGN KEY(LoanID)
+	REFERENCES Loan(LoanID)
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT;
+ALTER TABLE LoanRateValue
+	ADD CONSTRAINT loanratevalue_ratevalue_fk
+	FOREIGN KEY(RateValueID)
+	REFERENCES RateValue(RateValueID)
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT;
 
 INSERT INTO LoanType values (10, 'PRIVATE_STUDENT', 'Private Student Loan');
 INSERT INTO LoanType values (20, 'MORTGAGE', 'Mortgage Loan');

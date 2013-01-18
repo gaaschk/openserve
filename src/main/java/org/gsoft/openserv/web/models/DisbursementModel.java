@@ -8,10 +8,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class DisbursementModel implements Serializable{
 	private static final long serialVersionUID = 8098319578885326678L;
+	@DateTimeFormat(pattern="MM/dd/yyyy")
 	private Date disbursementDate = new Date();
 	private Integer disbursementAmount;
 	
-	@DateTimeFormat(pattern="MM/dd/yyyy")
 	public Date getDisbursementDate() {
 		return disbursementDate;
 	}

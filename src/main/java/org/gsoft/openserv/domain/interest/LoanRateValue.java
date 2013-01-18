@@ -47,7 +47,7 @@ public class LoanRateValue extends OpenServDomainObject {
 	}
 
 	@ManyToOne
-	@JoinColumn(name="RateValueID", insertable=false, updatable=false)
+	@JoinColumn(name="RateValueID")
 	public RateValue getRateValue() {
 		return rateValue;
 	}

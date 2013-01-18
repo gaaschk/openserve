@@ -3,13 +3,16 @@ package org.gsoft.openserv.web.models;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class PaymentEntryModel implements Serializable{
 	private static final long serialVersionUID = -2289069982845305280L;
 	private PersonModel theBorrower;
 	private Integer paymentAmount;
+	@DateTimeFormat(pattern="MM/dd/yyyy")
 	private Date paymentEffectiveDate = new Date();
+	@DateTimeFormat(pattern="MM/dd/yyyy")
 	private Date paymentPostDate;
 	
 	public PersonModel getTheBorrower() {
@@ -18,13 +21,13 @@ public class PaymentEntryModel implements Serializable{
 	public void setTheBorrower(PersonModel theBorrower) {
 		this.theBorrower = theBorrower;
 	}
+	@CurrencyInPenniesFormat
 	public Integer getPaymentAmount() {
 		return paymentAmount;
 	}
 	public void setPaymentAmount(Integer paymentAmount) {
 		this.paymentAmount = paymentAmount;
 	}
-	@DateTimeFormat(pattern="MM/dd/yyyy")
 	public Date getPaymentEffectiveDate() {
 		return paymentEffectiveDate;
 	}

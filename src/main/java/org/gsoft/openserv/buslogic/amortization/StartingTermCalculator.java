@@ -8,11 +8,11 @@ import org.gsoft.openserv.repositories.loan.LoanTypeProfileRepository;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RemainingTermCalculator {
+public class StartingTermCalculator {
 	@Resource
 	private LoanTypeProfileRepository loanTypeProfileRepository;
 	
-	public void updateRemainingLoanTerm(Loan loan){
+	public void updateStartingLoanTerm(Loan loan){
 		LoanTypeProfile ltp = loanTypeProfileRepository.findOne(loan.getEffectiveLoanTypeProfileID());
 		loan.setStartingLoanTerm(ltp.getMaximumLoanTerm());
 	}

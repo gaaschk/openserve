@@ -19,6 +19,7 @@ public class LoanEntryModel implements Serializable{
 	private Integer startingPrincipal;
 	private BigDecimal startingInterest;
 	private Integer startingFees;
+	@DateTimeFormat(pattern="MM/dd/yyyy")
 	private Date effectiveDate;
 	private List<DisbursementModel> addedDisbursements;
 	private DisbursementModel newDisbursement;
@@ -41,6 +42,7 @@ public class LoanEntryModel implements Serializable{
 	public void setPerson(PersonModel person) {
 		this.person = person;
 	}
+	
 	@CurrencyInPenniesFormat
 	public Integer getStartingPrincipal() {
 		if(this.startingPrincipal == null && this.getAddedDisbursements() != null && this.getAddedDisbursements().size() > 0){
@@ -56,6 +58,7 @@ public class LoanEntryModel implements Serializable{
 	public void setStartingPrincipal(Integer startingPrincipal) {
 		this.startingPrincipal = startingPrincipal;
 	}
+
 	@CurrencyInPenniesFormat
 	public BigDecimal getStartingInterest() {
 		return startingInterest;
@@ -70,7 +73,6 @@ public class LoanEntryModel implements Serializable{
 	public void setStartingFees(Integer startingFees) {
 		this.startingFees = startingFees;
 	}
-	@DateTimeFormat(pattern="MM/dd/yyyy")
 	public Date getEffectiveDate() {
 		if(this.effectiveDate == null && this.getAddedDisbursements() != null && this.getAddedDisbursements().size() > 0){
 			Date earliestDate = null;

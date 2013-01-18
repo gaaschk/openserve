@@ -17,10 +17,10 @@
 	</tr>
 	<c:forEach var="loanevent" items="${loandetailmodel.loanHistory}" varStatus="index">
 		<tr class="loaneventrow" >
-			<td><form:input style="width: 90px; " disabled="true" path="loanHistory[${index.count-1}].loanEventEffectiveDate"/></td>
-			<td><form:input disabled="true" path="loanHistory[${index.count-1}].loanEventPostDate"/></td>
-			<td><form:input disabled="true" path="loanHistory[${index.count-1}].loanEventType"/></td>
-			<td><form:input disabled="true" path="loanHistory[${index.count-1}].interestAccrued"/></td>
+			<td><form:input style="width: 90px; " disabled="true" path="loanHistory[${index.count-1}].effectiveDate"/></td>
+			<td><form:input disabled="true" path="loanHistory[${index.count-1}].postedDate"/></td>
+			<td><form:input disabled="true" path="loanHistory[${index.count-1}].eventType"/></td>
+			<td><form:input disabled="true" path="loanHistory[${index.count-1}].accruedInterest"/></td>
 			<td><form:input style="width: 120px; " disabled="true" path="loanHistory[${index.count-1}].principalChange"/></td>
 			<td><form:input disabled="true" path="loanHistory[${index.count-1}].interestChange"/></td>
 			<td><form:input style="width: 120px; " disabled="true" path="loanHistory[${index.count-1}].feesChange"/></td>

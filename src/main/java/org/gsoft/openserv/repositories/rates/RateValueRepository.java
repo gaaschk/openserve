@@ -50,7 +50,7 @@ interface RateValueSpringRepository extends BaseSpringRepository<RateValue, Long
 	@Query("select rateValue from RateValue rateValue where rateValue.rate = :rate and rateValue.rateValueDate = :rateValueDate")
 	public RateValue findRateValue(@Param("rate") Rate rate, @Param("rateValueDate") Date date);
 
-	@Query("select rateValue from RateValue rateValue where rateValue.rate.tickerSymbol = :tickerSymbol and rateValue.rateValueDate = :rateValueDate")
+	@Query("select rateValue from RateValue rateValue where rateValue.rate.tickerSymbol = :tickerSymbol and rateValue.rateValueDate <= :rateValueDate")
 	public RateValue findRateValueByTickerSymbol(@Param("tickerSymbol") String tickerSymbol, @Param("rateValueDate") Date date);
 
 	@Query("select rateValue from RateValue rateValue where rateValue.rate = :rate and rateValue.rateValueDate = ( " +

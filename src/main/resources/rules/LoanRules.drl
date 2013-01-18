@@ -10,7 +10,8 @@ import org.gsoft.openserv.buslogic.repayment.NextDueDateCalculator
 import org.gsoft.openserv.buslogic.repayment.InitialDueDateCalculator
 import org.gsoft.openserv.buslogic.repayment.FirstDueDateCalculator
 import org.gsoft.openserv.buslogic.loan.LoanTypeLogic
-import org.gsoft.openserv.buslogic.amortization.RemainingTermCalculator
+import org.gsoft.openserv.buslogic.amortization.StartingTermCalculator
+import org.gsoft.openserv.buslogic.interest.LoanInterestRateFactory
 import java.util.Date
 import java.util.Calendar
 
@@ -73,12 +74,21 @@ rule "Update Effective Loan Type Profile"
 		update($l);
 end
 
-rule "Set Remaining Loan Term"
+rule "Set Starting Loan Term"
 	when
-		$l : Loan(remainingLoanTerm == null, effectiveLoanTypeProfileID != null)
+		$l : Loan(startingLoanTerm == null, effectiveLoanTypeProfileID != null)
 	then
 		System.out.println("set the remaining loan term");
-		springContext.getBean(RemainingTermCalculator.class).updateRemainingLoanTerm($l);
+		springContext.getBean(StartingTermCalculator.class).updateStartingLoanTerm($l);
 		update($l);
+end
+
+rule "Set initial interest rate"
+	when
+		$l : Loan(effectiveLoanTypeProfileID != null, servicingStartDate != null, interestRateCurrent == false)
+	then
+		System.out.println("Updating Interest rate");
+		springContext.getBean(LoanInterestRateFactory.class).setRateForLoan($l);
+		update($l);		
 end
 

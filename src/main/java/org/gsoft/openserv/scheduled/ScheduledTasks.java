@@ -20,7 +20,7 @@ public class ScheduledTasks {
 	//Run every day at midnight
 	//@Scheduled(cron="0 0 0 * * ?")
 	//@Scheduled(fixedRate=120000)
-	//@PostConstruct
+	@PostConstruct
 	public void runBatchProcessing(){
 		BatchProcessingService batchService = this.getBatchService();
 		List<Loan> loans = batchService.getAllActiveLoans();

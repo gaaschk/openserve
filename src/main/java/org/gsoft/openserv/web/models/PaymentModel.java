@@ -11,7 +11,9 @@ public class PaymentModel implements Serializable{
 	private static final long serialVersionUID = -3946500836466970L;
 	private Long paymentID;
 	private Integer paymentAmount;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date paymentEffectiveDate;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date paymentPostDate;
 	private List<LoanPaymentModel> loanPayments;
 	
@@ -28,7 +30,6 @@ public class PaymentModel implements Serializable{
 	public void setPaymentAmount(Integer paymentAmount) {
 		this.paymentAmount = paymentAmount;
 	}
-	@DateTimeFormat(pattern="yyyy-MM-dd")
 	public Date getPaymentEffectiveDate() {
 		return paymentEffectiveDate;
 	}
