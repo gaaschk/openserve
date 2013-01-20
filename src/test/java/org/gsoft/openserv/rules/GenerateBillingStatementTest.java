@@ -38,10 +38,7 @@ public class GenerateBillingStatementTest {
 	@Test
 	public void test() throws IOException {
 		Loan loan = new Loan();
-		loan.setEffectiveLoanTypeProfileID(1L);
-		loan.setNextDueDate(new Date());
 		loan.setLoanID(1L);
-		loan.setCurrentUnpaidDueDate(new Date());
 		
 		LoanTypeProfile ltp = new LoanTypeProfile();
 		ltp.setLoanTypeProfileID(1L);

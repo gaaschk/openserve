@@ -2,14 +2,13 @@ package org.gsoft.openserv.domain;
 
 import java.io.Serializable;
 
-public abstract class OpenServDomainObject implements Serializable {
+public abstract class PersistentDomainObject implements Serializable {
 	private static final long serialVersionUID = -3050035343078844357L;
 
 	@Override
     public int hashCode() {
         final int prime = 31;
-        int result = prime + ( ( this.getID() == null ) ? 0 : this.getID().hashCode() );
-        return result;
+        return prime + ( ( this.getID() == null ) ? 0 : this.getID().hashCode() );
     }
 
 	@Override
@@ -22,7 +21,7 @@ public abstract class OpenServDomainObject implements Serializable {
         }
         
         if ( this.getClass().equals( obj.getClass() ) ) {
-            final OpenServDomainObject other = (OpenServDomainObject)obj;
+            final PersistentDomainObject other = (PersistentDomainObject)obj;
             if ( this.equalsByID( other )) {
                 return true;
             }
@@ -30,7 +29,7 @@ public abstract class OpenServDomainObject implements Serializable {
         return false;
     }
 
-    protected boolean equalsByID( final OpenServDomainObject other ) {
+    protected boolean equalsByID( final PersistentDomainObject other ) {
         if ( this.getID() == null ) {
             return other.getID() == null;
         }

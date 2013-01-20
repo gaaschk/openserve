@@ -38,27 +38,56 @@ public class BillingStatementLogic {
 	@Resource
 	private LateFeeLogic lateFeeLogic;
 	
+	public boolean isBillingStatementNeeded(Loan loan){
+		Date systemDate = systemSettings.getCurrentSystemDate();
+		LoanTypeProfile ltp = loan.getEffectiveLoanTypeProfile();
+		Date repaymentStartDate = loan.getRepaymentStartDate();
+		Date earliestDueBillingDate = new DateTime(repaymentStartDate).plusDays(ltp.getMinDaysToFirstDue()).minusDays(ltp.getDaysBeforeDueToBill()).toDate();
+		if(!earliestDueBillingDate.after(systemDate)){
+			BillingStatement lastStatement = billingStatementRepository.findMostRecentBillingStatementForLoan(loan.getLoanID());
+			if(lastStatement == null || !new DateTime(lastStatement.getDueDate()).plusMonths(1).toDate().after(systemDate)){
+				return true;
+			}		
+		}
+		return false;
+	}
+	
+	public List<BillingStatement> createBillingStatements(Loan loan){
+		ArrayList<BillingStatement> statements = new ArrayList<>();
+		BillingStatement statement = null;
+		do{
+			statement = this.createBillingStatement(loan);
+			if(statement != null){
+				statements.add(statement);
+			}
+		}
+		while(statement != null);
+		return statements;
+	}
+	
 	public BillingStatement createBillingStatement(Loan loan){
-		LoanTypeProfile ltp = loanTypeProfileRepository.findOne(loan.getEffectiveLoanTypeProfileID());
-		BillingStatement lastStatement = billingStatementRepository.findMostRecentBillingStatementForLoan(loan.getLoanID());
-		DateTime dueDateMinusWindow = new DateTime(loan.getCurrentUnpaidDueDate()).minusDays(ltp.getDaysBeforeDueToBill());
-		DateTime sysDate = new DateTime(systemSettings.getCurrentSystemDate());
-		if(!dueDateMinusWindow.isAfter(sysDate) && (lastStatement == null || lastStatement.getDueDate().before(loan.getNextDueDate()))){
-			Date dueDate = null;
-			if(lastStatement == null)
-				dueDate = loan.getCurrentUnpaidDueDate();
-			else
-				dueDate = new DateTime(lastStatement.getDueDate()).plusMonths(1).toDate();
-			BillingStatement statement = new BillingStatement();
+		BillingStatement statement = null;
+		if(this.isBillingStatementNeeded(loan)){
+			Date systemDate = systemSettings.getCurrentSystemDate();
+			LoanTypeProfile ltp = loan.getEffectiveLoanTypeProfile();
+			Date repaymentStartDate = loan.getRepaymentStartDate();
+			Date earliestDueBillingDate = new DateTime(repaymentStartDate).plusDays(ltp.getMinDaysToFirstDue()).minusDays(ltp.getDaysBeforeDueToBill()).toDate();
+			BillingStatement lastStatement = billingStatementRepository.findMostRecentBillingStatementForLoan(loan.getLoanID());
+			statement = new BillingStatement();
 			statement.setLoanID(loan.getLoanID());
-			statement.setCreatedDate(new Date());
+			statement.setCreatedDate(systemDate);
+			Date dueDate = null;
+			if (lastStatement == null) {
+				dueDate = new DateTime(earliestDueBillingDate).plusDays(ltp.getDaysBeforeDueToBill()).toDate();
+			} else {
+				dueDate = new DateTime(lastStatement.getDueDate()).plusMonths(1).toDate();
+			}
 			statement.setDueDate(dueDate);
-			statement.setMinimumRequiredPayment(loan.getMinimumPaymentAmount());
+			statement.setMinimumRequiredPayment(loan.getMinimumPaymentAmountAsOf(dueDate));
 			statement = billingStatementRepository.save(statement);
-			lastStatement = statement;
 		}
 		lateFeeLogic.updateLateFees(loan);
-		return lastStatement;
+		return statement;
 	}
 	
 	/**
@@ -66,11 +95,10 @@ public class BillingStatementLogic {
 	 * 
 	 * @param the new LoanPayment to be applied
 	 */
-	public void updateBillingStatementsForLoan(Long loanID, Date startDate){
-		Loan theLoan = loanRepository.findOne(loanID);
-		LoanTypeProfile ltp = this.loanTypeProfileRepository.findOne(theLoan.getEffectiveLoanTypeProfileID());
+	public void updateBillingStatementsForLoan(Loan loan, Date startDate){
+		LoanTypeProfile ltp = loan.getEffectiveLoanTypeProfile();
 		Date effDatePrevMonth = new DateTime(startDate).minusMonths(1).toDate();
-		List<BillingStatement> dirtyStatements = billingStatementRepository.findAllBillsForLoanWithPaymentsMadeOnOrAfterOrUnpaidByOrDueAfter(loanID, startDate, startDate, effDatePrevMonth);
+		List<BillingStatement> dirtyStatements = billingStatementRepository.findAllBillsForLoanWithPaymentsMadeOnOrAfterOrUnpaidByOrDueAfter(loan.getLoanID(), startDate, startDate, effDatePrevMonth);
 		List<LoanPayment> dirtyPayments = loanPaymentRepository.findAllLoanPaymentsEffectiveOnOrAfter(startDate);
 		Stack<BillingStatement> billStack = new Stack<BillingStatement>();
 		for(BillingStatement statement:dirtyStatements){
@@ -123,6 +151,6 @@ public class BillingStatementLogic {
 				}
 			}
 		}
-		lateFeeLogic.updateLateFees(theLoan);
+		lateFeeLogic.updateLateFees(loan);
 	}
 }

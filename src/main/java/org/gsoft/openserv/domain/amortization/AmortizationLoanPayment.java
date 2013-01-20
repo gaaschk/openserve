@@ -8,12 +8,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.domain.PersistentDomainObject;
 
 @Entity
-public class AmortizationLoanPayment extends OpenServDomainObject{
+public class AmortizationLoanPayment extends PersistentDomainObject{
 	private static final long serialVersionUID = 3438237766896319509L;
 	private Long amortizationLoanPaymentID;
+	private Integer paymentOrder;
 	private Integer paymentAmount;
 	private Integer paymentCount;
 	private LoanAmortizationSchedule loanAmortizationSchedule;
@@ -25,6 +26,12 @@ public class AmortizationLoanPayment extends OpenServDomainObject{
 	}
 	public void setAmortizationLoanPaymentID(Long amortizationLoanPaymentID) {
 		this.amortizationLoanPaymentID = amortizationLoanPaymentID;
+	}
+	public Integer getPaymentOrder() {
+		return paymentOrder;
+	}
+	public void setPaymentOrder(Integer paymentOrder) {
+		this.paymentOrder = paymentOrder;
 	}
 	public Integer getPaymentAmount() {
 		return paymentAmount;

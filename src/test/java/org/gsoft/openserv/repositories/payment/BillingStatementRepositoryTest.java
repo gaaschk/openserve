@@ -1,6 +1,6 @@
 package org.gsoft.openserv.repositories.payment;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
 
@@ -9,16 +9,20 @@ import javax.annotation.Resource;
 import org.gsoft.openserv.domain.payment.BillingStatement;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/application-context.xml")
+@Transactional(readOnly=true)
 public class BillingStatementRepositoryTest {
 	@Resource
 	private BillingStatementRepository repository;
 	
 	@Test
+	@Rollback
 	public void test() {
 		Date today = new Date();
 		BillingStatement statement = new BillingStatement();

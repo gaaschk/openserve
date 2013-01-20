@@ -5,15 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.gsoft.openserv.util.Constants;
-import org.gsoft.openserv.util.time.ChronologicalFrequency;
-import org.gsoft.openserv.util.time.QuarterlyFrequency;
+import org.gsoft.openserv.util.time.FrequencyType;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CapitalizationLogic {
-	private ChronologicalFrequency frequency = new QuarterlyFrequency();
+	private FrequencyType frequency = FrequencyType.QUARTERLY;
 	
 	public List<Double> estimateCapEvents(double initialPrincipal, double interestRate, Date capPeriodBeg, Date capPeriodEnd){
 		double currentPrincipal = initialPrincipal;

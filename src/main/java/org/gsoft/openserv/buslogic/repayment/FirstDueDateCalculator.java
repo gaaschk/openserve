@@ -14,8 +14,7 @@ public class FirstDueDateCalculator {
 	private LoanTypeProfileRepository loanTypeProfileRepository;
 	
 	public void updateFirstDueDate(Loan loan){
-		Long ltpID = loan.getEffectiveLoanTypeProfileID();
-		LoanTypeProfile ltp = loanTypeProfileRepository.findOne(ltpID);
+		LoanTypeProfile ltp = loan.getEffectiveLoanTypeProfile();
 		loan.setFirstDueDate(new DateTime(loan.getRepaymentStartDate()).plusDays(ltp.getMinDaysToFirstDue()).toDate());
 	}
 }

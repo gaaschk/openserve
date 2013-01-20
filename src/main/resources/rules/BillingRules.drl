@@ -13,54 +13,34 @@ import org.springframework.context.ApplicationContext
 
 global ApplicationContext springContext
 
-function Date adjustDateByDays(Date incomingDate, int numberOfDays){
-	Calendar cal = Calendar.getInstance();
-	cal.setTime(incomingDate);
-	cal.add(Calendar.DATE, numberOfDays);
-	return cal.getTime();
-}
-
 declare LoanDueDateWrapper
 	loanId : Long
-	dueDateMinusWindow : Date
-end
-
-rule "Load Loan Type Profile"
-	when
-		$l : Loan(currentUnpaidDueDate != null, nextDueDate != null, effectiveLoanTypeProfileID  != null, $ltpId : effectiveLoanTypeProfileID )
-		not LoanTypeProfile( loanTypeProfileID  ==  $ltpId)
-	then
-		LoanTypeProfile ltp = springContext.getBean(LoanTypeProfileRepository.class).findOne($ltpId);
-		System.out.println("Loading Loan Type Profile [" + ltp.getLoanTypeProfileID() + "]");
-		insert(ltp);
+	isStatementNeeded : boolean
 end
 
 rule "Build Loan DueDate Wrapper"
 	when
-		$l : Loan(currentUnpaidDueDate != null, nextDueDate != null, effectiveLoanTypeProfileID  != null, $ltpId : effectiveLoanTypeProfileID, $loanId : loanID )
-		$ltp : LoanTypeProfile(loanTypeProfileID == $ltpId)
+		$l : Loan(effectiveLoanTypeProfile != null, currentAmortizationSchedule != null, $loanId : loanID )
 		not LoanDueDateWrapper(loanId == $loanId)
 	then
 		LoanDueDateWrapper lw = new LoanDueDateWrapper();
 		lw.setLoanId($loanId);
-		lw.setDueDateMinusWindow(adjustDateByDays($l.getCurrentUnpaidDueDate(), ((-1) * $ltp.getDaysBeforeDueToBill()))); 
-		System.out.println("Loading loan due date wrapper [" + lw.getLoanId() + ", " + lw.getDueDateMinusWindow() + "]");
+		boolean isNeeded = springContext.getBean(BillingStatementLogic.class).isBillingStatementNeeded($l);
+		lw.setIsStatementNeeded(isNeeded);
 		insert(lw);
 end
 	
 rule "Generate Billing Statement"
 	when
-		HashMap($sysDate : this["systemDate"])
-		$lw : LoanDueDateWrapper(dueDateMinusWindow <= $sysDate, $loanId : loanId)
-		$l : Loan(loanID == $loanId, $nextDue : nextDueDate)
-		not BillingStatement(loanID == $loanId, dueDate >= $nextDue)
+		$lw : LoanDueDateWrapper(isStatementNeeded, $loanId : loanId)
+		$l : Loan(loanID == $loanId)
 	then
 		System.out.println("Generating a billing statement");
 		BillingStatementLogic logic = springContext.getBean(BillingStatementLogic.class);
 		System.out.println("Logic is: " + logic);
 		logic.createBillingStatement($l);
-		BillingStatementRepository billingStatementRepository = springContext.getBean(BillingStatementRepository.class);
-		BillingStatement lastStatement = billingStatementRepository.findMostRecentBillingStatementForLoan($l.getLoanID());
+		boolean isStatementNeeded = logic.isBillingStatementNeeded($l);
+		$lw.setIsStatementNeeded(isStatementNeeded);
 		update($l);
-		insert(lastStatement);
+		update($lw);
 end

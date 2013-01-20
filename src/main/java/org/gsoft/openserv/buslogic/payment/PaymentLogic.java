@@ -5,9 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.buslogic.payment.allocation.DefaultPaymentAllocationLogic;
 import org.gsoft.openserv.buslogic.payment.allocation.PastDueFirstPrincipalWeightedAllocationStrategy;
-import org.gsoft.openserv.buslogic.repayment.NextDueDateCalculator;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.payment.LoanPayment;
@@ -27,8 +25,6 @@ public class PaymentLogic {
 	@Resource
 	private SystemSettingsLogic systemSettingsLogic;
 	@Resource
-	private NextDueDateCalculator nextDueCalculator;
-	@Resource
 	private BillingStatementLogic statementLogic;
 	
 	public void applyPayment(long borrowerPersonID, int amount, Date effectiveDate){
@@ -40,18 +36,9 @@ public class PaymentLogic {
 		
 		List<Loan> loans = loanRepository.findAllForBorrowerActiveOnOrBefore(borrowerPersonID, effectiveDate);
 		paymentAllocationLogic.allocatePayment(payment, loans);
-		payment = paymentRepository.save(payment);
-		this.applyPaymentToLoans(payment);
-	}
-	
-	private void applyPaymentToLoans(Payment payment){
-		for(LoanPayment loanPayment:payment.getLoanPayments()){
-			Loan theLoan = loanRepository.findOne(loanPayment.getLoanID());
-			//loanEventLogic.createLoanEvent(theLoan, LoanEventType.PAYMENT_APPLIED, payment.getEffectiveDate(), new BigDecimal(loanPayment.getAppliedAmount()).negate(), true, true, true);
-			nextDueCalculator.updateNextDueDate(theLoan);
-			statementLogic.updateBillingStatementsForLoan(loanPayment.getLoanID(), loanPayment.getPayment().getEffectiveDate());
-			if(theLoan.getLastPaidDate() == null || theLoan.getLastPaidDate().before(payment.getEffectiveDate()))
-				theLoan.setLastPaidDate(payment.getEffectiveDate());
+		for(Loan loan:loans){
+			statementLogic.updateBillingStatementsForLoan(loan, payment.getEffectiveDate());
 		}
+		payment = paymentRepository.save(payment);
 	}
 }

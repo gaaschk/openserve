@@ -8,12 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
 
 @Entity
 @RulesEngineEntity
-public class LoanBalanceAdjustment extends OpenServDomainObject{
+public class LoanBalanceAdjustment extends PersistentDomainObject{
 	private static final long serialVersionUID = 1401102307953286090L;
 
 	private Long loanBalanceAdjustmentID;

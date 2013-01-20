@@ -12,7 +12,7 @@ public class InterestCalculator {
 	public static BigDecimal calculateInterest(BigDecimal apr, Integer principal, Date fromDate, Date toDate){
 		BigDecimal dailyRate = apr.divide(BigDecimal.valueOf(Constants.DAYS_IN_YEAR), Constants.INTEREST_ROUNDING_SCALE_35, Constants.INTEREST_ROUNDING_MODE);
 		int days = Days.daysBetween(new DateTime(fromDate), new DateTime(toDate)).getDays();
-		BigDecimal accruedInterest = dailyRate.multiply(BigDecimal.valueOf(principal*days));
+		BigDecimal accruedInterest = dailyRate.multiply(BigDecimal.valueOf((long)principal*(long)days));
 		return accruedInterest;
 	}
 }

@@ -12,10 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.domain.PersistentDomainObject;
 
 @Entity
-public class Payment extends OpenServDomainObject{
+public class Payment extends PersistentDomainObject{
 	private static final long serialVersionUID = -7219483954230532294L;
 	private Long paymentID;
 	private Long borrowerPersonID;

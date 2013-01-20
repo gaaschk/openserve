@@ -1,9 +1,8 @@
 package org.gsoft.openserv.buslogic.loan;
 
-import java.util.Date;
-
 import javax.annotation.Resource;
 
+import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanTypeProfile;
 import org.gsoft.openserv.repositories.loan.LoanTypeProfileRepository;
@@ -13,10 +12,12 @@ import org.springframework.stereotype.Component;
 public class LoanTypeLogic {
 	@Resource
 	private LoanTypeProfileRepository loanTypeProfileRepository;
+	@Resource
+	private SystemSettingsLogic systemSettingsLogic;
 	
 	public LoanTypeProfile updateLoanTypeProfileForLoan(Loan loan){
-		LoanTypeProfile ltp = loanTypeProfileRepository.findLoanTypeProfileByLoanTypeAndEffectiveDate(loan.getLoanType(), new Date());
-		loan.setEffectiveLoanTypeProfileID(ltp.getID());
+		LoanTypeProfile ltp = loanTypeProfileRepository.findLoanTypeProfileByLoanTypeAndEffectiveDate(loan.getLoanType(), systemSettingsLogic.getCurrentSystemDate());
+		loan.setEffectiveLoanTypeProfile(ltp);
 		return ltp;
 	}
 }

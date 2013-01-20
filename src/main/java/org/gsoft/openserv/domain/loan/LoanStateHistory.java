@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 import org.gsoft.openserv.domain.interest.LoanRateValue;
 import org.gsoft.openserv.domain.payment.LoanPayment;
@@ -101,6 +102,16 @@ public class LoanStateHistory {
 	
 	public BigDecimal getEndingInterest(){
 		return this.getLastLoanState().getInterest();
+	}
+	
+	public LoanState getLoanStateAsOf(Date asOfDate){
+		LoanState lastState = null;
+		for(LoanState state:this.getLoanStates()){
+			if(!state.getStateEffectiveDate().after(asOfDate)){
+				lastState = state;
+			}
+		}
+		return lastState;
 	}
 	
 	public Integer getEndingFees(){

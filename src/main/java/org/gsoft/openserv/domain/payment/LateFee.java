@@ -8,12 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
 
 @Entity
 @RulesEngineEntity
-public class LateFee extends OpenServDomainObject{
+public class LateFee extends PersistentDomainObject{
 	private static final long serialVersionUID = 8734376381093496118L;
 	private Long lateFeeID;
 	private Integer feeAmount;

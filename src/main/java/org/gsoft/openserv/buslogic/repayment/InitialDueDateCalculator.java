@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 public class InitialDueDateCalculator {
 	
 	public void updateInitialDueDate(Loan loan){
-		loan.setInitialDueDate(loan.getFirstDueDate());
+		if(loan.getInitialDueDate() == null){
+			loan.setInitialDueDate(loan.getFirstDueDate());
+		}
 	}
 }

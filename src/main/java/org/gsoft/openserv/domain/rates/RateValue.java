@@ -11,12 +11,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
 
 @Entity
 @RulesEngineEntity
-public class RateValue extends OpenServDomainObject {
+public class RateValue extends PersistentDomainObject {
 	private static final long serialVersionUID = 5983796240499342749L;
 	private Long rateValueId;
 	private Rate rate;

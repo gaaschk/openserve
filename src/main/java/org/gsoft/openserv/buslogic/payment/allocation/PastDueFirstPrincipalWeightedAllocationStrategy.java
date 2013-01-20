@@ -9,12 +9,13 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.gsoft.openserv.buslogic.payment.PaymentAllocationLogic;
-import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanStateHistory;
+import org.gsoft.openserv.domain.payment.BillingStatement;
 import org.gsoft.openserv.domain.payment.LoanPayment;
 import org.gsoft.openserv.domain.payment.Payment;
 import org.gsoft.openserv.repositories.loan.LoanStateHistoryRepository;
+import org.gsoft.openserv.repositories.payment.BillingStatementRepository;
 import org.springframework.stereotype.Component;
 
 /**
@@ -29,9 +30,9 @@ import org.springframework.stereotype.Component;
 public class PastDueFirstPrincipalWeightedAllocationStrategy implements
 		PaymentAllocationLogic {
 	@Resource
-	private SystemSettingsLogic systemSettings;
-	@Resource
 	private LoanStateHistoryRepository loanStateHistoryRepo;
+	@Resource
+	private BillingStatementRepository billingStatementRepo;
 	
 	private Comparator<LoanAllocation> comparator = null;
 	
@@ -46,6 +47,12 @@ public class PastDueFirstPrincipalWeightedAllocationStrategy implements
 						return -1;
 					if(o2 == null)
 						return 1;
+					if(o1.getProjectedDueDate() == o2.getProjectedDueDate())
+						return 0;
+					if(o1.getProjectedDueDate() == null)
+						return -1;
+					if(o2.getProjectedDueDate() == null)
+						return 1;
 					return o1.getProjectedDueDate().compareTo(o2.getProjectedDueDate());
 				}
 			};
@@ -57,15 +64,13 @@ public class PastDueFirstPrincipalWeightedAllocationStrategy implements
 	public void allocatePayment(Payment payment, List<Loan> loans) {
 		ArrayList<LoanAllocation> allocations = new ArrayList<>();
 		for(Loan loan:loans){
-			LoanStateHistory history = loanStateHistoryRepo.findLoanStateHistory(loan);
-			allocations.add(new LoanAllocation(loan, history));
+			LoanStateHistory history = loanStateHistoryRepo.findLoanStateHistoryAsOf(loan, payment.getEffectiveDate());
+			List<BillingStatement> statements = billingStatementRepo.findAllBillsForLoanOnOrBefore(loan.getLoanID(), payment.getEffectiveDate());
+			allocations.add(new LoanAllocation(loan, history, statements));
 		}
 		int remainingPaymentAmount = payment.getPaymentAmount();
 		while(remainingPaymentAmount > 0){
 			remainingPaymentAmount = this.allocationAmountToLoans(allocations, remainingPaymentAmount, payment.getEffectiveDate());
-		}
-		if(payment.getLoanPayments() == null){
-			payment.setLoanPayments(new ArrayList<LoanPayment>());
 		}
 		for(LoanAllocation allocation:allocations){
 			LoanPayment loanPayment = new LoanPayment();
@@ -85,7 +90,7 @@ public class PastDueFirstPrincipalWeightedAllocationStrategy implements
 		}
 		else{
 			for(LoanAllocation allocation:oldestAllocations){
-				allocation.addToAppliedAmount(allocation.getLoan().getMinimumPaymentAmount());
+				allocation.addToAppliedAmount(allocation.getMinimumPaymentAmount());
 			}
 			amountRemaining = amountToPay - totalDue;
 		}
@@ -127,7 +132,7 @@ public class PastDueFirstPrincipalWeightedAllocationStrategy implements
 	private int getTotalDueForSet(List<LoanAllocation> allocations){
 		int totalDue = 0;
 		for(LoanAllocation allocation:allocations){
-			totalDue+=allocation.getLoan().getMinimumPaymentAmount();
+			totalDue+=allocation.getMinimumPaymentAmount();
 		}
 		return totalDue;
 	}

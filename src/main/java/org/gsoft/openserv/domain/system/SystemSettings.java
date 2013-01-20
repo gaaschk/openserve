@@ -4,10 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.domain.PersistentDomainObject;
 
 @Entity
-public class SystemSettings extends OpenServDomainObject{
+public class SystemSettings extends PersistentDomainObject{
 	private static final long serialVersionUID = 4418309716452336867L;
 	private Long systemSettingsID;
 	private Integer daysDelta;

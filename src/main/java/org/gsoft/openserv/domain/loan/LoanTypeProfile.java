@@ -11,14 +11,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.OpenServDomainObject;
-import org.gsoft.openserv.domain.interest.FrequencyType;
+import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.domain.rates.Rate;
+import org.gsoft.openserv.util.time.FrequencyType;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 @Entity
-public class LoanTypeProfile extends OpenServDomainObject{
+public class LoanTypeProfile extends PersistentDomainObject{
 	private static final long serialVersionUID = 6245557328161056820L;
 	private Long loanTypeProfileID;
 	private Date effectiveDate;
@@ -132,7 +132,7 @@ public class LoanTypeProfile extends OpenServDomainObject{
 		this.isVariableRate = variableRate;
 	}
 	@Type( type = "org.gsoft.openserv.util.jpa.GenericEnumUserType", parameters={
-			@Parameter(name = "enumClass", value = "org.gsoft.openserv.domain.interest.FrequencyType")
+			@Parameter(name = "enumClass", value = "org.gsoft.openserv.util.time.FrequencyType")
 	})
     @Column( name = "BaseRateUpdateFrequencyID" )
 	public FrequencyType getBaseRateUpdateFrequency() {

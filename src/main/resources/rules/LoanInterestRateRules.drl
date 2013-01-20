@@ -1,0 +1,31 @@
+import org.gsoft.openserv.domain.loan.Loan
+import org.springframework.context.ApplicationContext
+import org.gsoft.openserv.buslogic.interest.LoanInterestRateFactory
+
+global ApplicationContext springContext
+
+declare LoanInterestRateUpdateNeeded
+	loan : Loan
+	updateNeeded : boolean
+end
+
+rule "Check Interest Update"
+	when
+		$l : Loan(effectiveLoanTypeProfile  != null, servicingStartDate  != null, effectiveLoanTypeProfile.baseRateUpdateFrequency != null)
+		not LoanInterestRateUpdateNeeded(loan.loanID == $l.loanID)
+	then
+		boolean isNeeded = springContext.getBean(LoanInterestRateFactory.class).isLoanRateUpdateNeeded($l);
+		LoanInterestRateUpdateNeeded check = new LoanInterestRateUpdateNeeded();
+		check.setLoan($l);
+		check.setUpdateNeeded(isNeeded);
+		insert(check);
+end
+
+rule "Update Loan Interest Rate"
+	when
+		$liun : LoanInterestRateUpdateNeeded(updateNeeded, $l : loan)
+	then
+		springContext.getBean(LoanInterestRateFactory.class).setRateForLoan($l);
+		$liun.setUpdateNeeded(false);
+		update($liun);
+end

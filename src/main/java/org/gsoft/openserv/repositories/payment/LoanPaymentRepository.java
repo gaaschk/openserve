@@ -18,8 +18,16 @@ public class LoanPaymentRepository extends BaseRepository<LoanPayment, Long>{
 	private LoanPaymentSpringRepository loanPaymentSpringRepository;
 
 	@Override
-	protected BaseSpringRepository<LoanPayment, Long> getSpringRepository() {
+	protected LoanPaymentSpringRepository getSpringRepository() {
 		return loanPaymentSpringRepository;
+	}
+	
+	public LoanPayment findMostRecentLoanPayment(Long loanID){
+		List<LoanPayment> allPayments = this.getSpringRepository().findAllLoanPayments(loanID);
+		LoanPayment payment = null;
+		if(allPayments != null && allPayments.size()>0)
+			payment = allPayments.get(allPayments.size()-1);
+		return payment;
 	}
 	
 	public List<LoanPayment> findAllLoanPayments(Long loanID){
@@ -37,7 +45,6 @@ public class LoanPaymentRepository extends BaseRepository<LoanPayment, Long>{
 
 @Repository
 interface LoanPaymentSpringRepository extends BaseSpringRepository<LoanPayment, Long>{
-	
 	@Query("select lp from LoanPayment lp where lp.loanID= :loanID order by lp.payment.effectiveDate asc, lp.payment.postDate asc")
 	public List<LoanPayment> findAllLoanPayments(@Param("loanID") Long loanID);
 

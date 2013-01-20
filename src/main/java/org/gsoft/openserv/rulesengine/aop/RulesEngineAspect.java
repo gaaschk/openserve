@@ -10,7 +10,7 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.rulesengine.DroolsRulesEngine;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
 import org.springframework.stereotype.Component;
@@ -41,7 +41,7 @@ public class RulesEngineAspect {
 
 	@AfterReturning(pointcut="execution(* org.gsoft.openserv.repositories.*.*(..))",
 			returning="retVal")
-	public void addObjectToRulesEngine(OpenServDomainObject retVal){
+	public void addObjectToRulesEngine(PersistentDomainObject retVal){
 		if(retVal != null && rulesEngine.isOpen() && retVal.getClass().isAnnotationPresent(RulesEngineEntity.class)){
 			rulesEngine.addContext(retVal);
 		}
@@ -56,7 +56,7 @@ public class RulesEngineAspect {
 				if(types != null && types.length > 0 && types[0].getClass().isAnnotationPresent(RulesEngineEntity.class)){
 					Iterator<?> iterator = retVal.iterator();
 					while(iterator.hasNext()){
-						OpenServDomainObject obj = (OpenServDomainObject)iterator.next();
+						PersistentDomainObject obj = (PersistentDomainObject)iterator.next();
 						rulesEngine.addContext(obj);
 					}
 				}

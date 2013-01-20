@@ -37,16 +37,13 @@ public class GenerateAmortizationScheduleTest {
 	public void test() throws IOException {
 		final Loan loan = new Loan();
 		loan.setLoanID(1L);
-		loan.setEffectiveLoanTypeProfileID(1L);
-		loan.setRepaymentStartDate(new Date());
-		loan.setStartingLoanTerm(180);
+		loan.setInitialUsedLoanTerm(180);
 
 		final AmortizationLogic amortizor = mock(AmortizationLogic.class);
 		doAnswer(new Answer<Object>(){
 			public Object answer(InvocationOnMock invocation){
 				System.out.println("AmortizationLogic.createAmortizationSchedule called.");
 				//just need to set something to stop the rule from firing
-				loan.setMinimumPaymentAmount(1);
 				return null;
 			}
 		}).when(amortizor).createAmortizationSchedule(any(List.class), any(Date.class));

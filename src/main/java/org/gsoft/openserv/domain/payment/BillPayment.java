@@ -9,10 +9,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.domain.PersistentDomainObject;
 
 @Entity
-public class BillPayment extends OpenServDomainObject{
+public class BillPayment extends PersistentDomainObject{
 	private static final long serialVersionUID = 5401973510782252658L;
 	private Long billPaymentID;
 	private Integer amountAppliedToBill;

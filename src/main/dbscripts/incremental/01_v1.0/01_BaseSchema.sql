@@ -2,6 +2,7 @@
 CREATE TABLE AmortizationLoanPayment ( 
 	AmortizationLoanPaymentID 	BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 	LoanAmortizationScheduleID	BIGINT NULL,
+	PaymentOrder						INT NULL,
 	PaymentAmount             	INT NULL,
 	PaymentCount              	INT NULL
 );
@@ -49,23 +50,18 @@ CREATE TABLE LateFee (
 
 # Loan
 CREATE TABLE Loan ( 
-	LoanID                    	BIGINT AUTO_INCREMENT NOT NULL,
-	ServicingStartDate        	DATE NULL,
-	LoanTypeID                	BIGINT NULL,
-	BorrowerPersonID          	BIGINT NULL,
-	EffectiveLoanTypeProfileID	BIGINT NULL,
-	StartingPrincipal         	INT NOT NULL,
-	StartingInterest          	DECIMAL(20,6) NOT NULL,
-	StartingFees              	INT NOT NULL,
-	StartingLoanTerm          	INT NULL,
-	MinimumPaymentAmount      	INT NULL,
-	RepaymentStartDate        	DATETIME NULL,
-	FirstDueDate              	DATE NULL,
-	LastPaidDate              	DATE NULL,
-	CurrentUnpaidDueDate      	DATE NULL,
-	InitialDueDate            	DATE NULL,
-	NextDueDate	            	DATE NULL,
-	InterestRateCurrent			SMALLINT,
+	LoanID                    			BIGINT AUTO_INCREMENT NOT NULL,
+	ServicingStartDate        			DATE NULL,
+	LoanTypeID                			BIGINT NULL,
+	BorrowerPersonID          			BIGINT NULL,
+	EffectiveLoanTypeProfileID			BIGINT NULL,
+	CurrentLoanAmortizationScheduleID	BIGINT NULL,
+	StartingPrincipal         			INT NOT NULL,
+	StartingInterest          			DECIMAL(20,6) NOT NULL,
+	StartingFees              			INT NOT NULL,
+	InitialUsedLoanTerm         		INT NULL,
+	FirstDueDate              			DATE NULL,
+	InitialDueDate            			DATE NULL,
 	PRIMARY KEY(LoanID)
 );
 CREATE TABLE Disbursement(
@@ -231,11 +227,24 @@ CREATE TABLE SystemSettings (
 	PRIMARY KEY(SystemSettingsID)
 );
 
-insert into Rate values (10, '1 Month LIBOR US Dollars', 'LIBOR.USD1M', 0);
+INSERT INTO LoanType values (10, 'PRIVATE_STUDENT', 'Private Student Loan');
+INSERT INTO LoanType values (20, 'MORTGAGE', 'Mortgage Loan');
 
-insert into RateValue value (10, 10, '2000-01-01', .035, 1);
+INSERT INTO RepaymentStartType values (10, 'FIRST_DISBURSEMENT', 'Repayment begins after first disbursement.');
+INSERT INTO RepaymentStartType values (20, 'LAST_DISBURSEMENT', 'Repayment begins after last disbursement.');
 
+INSERT INTO FrequencyType (FrequencyTypeID, Name) value (10, 'MONTHLY');
+INSERT INTO FrequencyType (FrequencyTypeID, Name) value (20, 'QUARTERLY');
+INSERT INTO FrequencyType (FrequencyTypeID, Name) value (30, 'SEMI_ANNUALLY');
+INSERT INTO FrequencyType (FrequencyTypeID, Name) value (40, 'ANNUALLY');
 
+INSERT INTO LoanTypeProfile(LoanTypeProfileID, LoanTypeID, EffectiveDate, EndDate, RepaymentStartTypeID, MaximumLoanTerm, GraceMonths, MinDaysToFirstDue, PrepaymentDays, DaysBeforeDueToBill, DaysLateForFee, LateFeeAmount, VariableRate, BaseRateUpdateFrequencyID, BaseRateID)
+  VALUES(1, 20, '2013-01-17 22:22:51.0', NULL, 10, 180, 1, 1, 1, 1, 1, 1000, 1, NULL, NULL);
+
+INSERT INTO Rate(RateID, RateName, TickerSymbol, ShouldAutoUpdate)
+  VALUES(10, '1 Month LIBOR US Dollars', 'LIBOR.USD1M', 0);
+INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
+  VALUES(10, 10, '2000-01-01', 0.035000, 1);
 
 INSERT INTO SystemSettings VALUES (10, 0, 0);
 
@@ -445,13 +454,6 @@ ALTER TABLE LoanRateValue
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
 
-INSERT INTO LoanType values (10, 'PRIVATE_STUDENT', 'Private Student Loan');
-INSERT INTO LoanType values (20, 'MORTGAGE', 'Mortgage Loan');
-
-INSERT INTO RepaymentStartType values (10, 'FIRST_DISBURSEMENT', 'Repayment begins after first disbursement.');
-INSERT INTO RepaymentStartType values (20, 'LAST_DISBURSEMENT', 'Repayment begins after last disbursement.');
-
-INSERT INTO FrequencyType (FrequencyTypeID, Name) value (10, 'MONTHLY');
-INSERT INTO FrequencyType (FrequencyTypeID, Name) value (20, 'QUARTERLY');
-INSERT INTO FrequencyType (FrequencyTypeID, Name) value (30, 'SEMI_ANNUALLY');
-INSERT INTO FrequencyType (FrequencyTypeID, Name) value (40, 'ANNUALLY');
+ALTER TABLE Person
+	ADD CONSTRAINT ssn_unique
+	UNIQUE (SSN);

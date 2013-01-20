@@ -13,10 +13,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.domain.PersistentDomainObject;
 
 @Entity
-public class LoanAmortizationSchedule extends OpenServDomainObject {
+public class LoanAmortizationSchedule extends PersistentDomainObject {
 	private static final long serialVersionUID = -248336175803533637L;
 
 	private Long loanAmortizationScheduleID;
@@ -60,6 +60,14 @@ public class LoanAmortizationSchedule extends OpenServDomainObject {
 	}
 	public void setAmortizationSchedule(AmortizationSchedule amortizationSchedule) {
 		this.amortizationSchedule = amortizationSchedule;
+	}
+	@Transient
+	public int getTotalNumberOfPayment(){
+		int count = 0;
+		for(AmortizationLoanPayment payment:this.getAmortizationLoanPayments()){
+			count += payment.getPaymentCount();
+		}
+		return count;
 	}
 	@Override
 	@Transient

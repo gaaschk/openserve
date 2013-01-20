@@ -62,6 +62,12 @@ public abstract class LoanState {
 		this.previousState = prevState;
 	}
 	
+	public BigDecimal getInterestThrough(Date asOfDate){
+		BigDecimal totalInterest = this.getInterest();
+		BigDecimal accruedInterest = InterestCalculator.calculateInterest(this.getInterestRate(), this.getPrincipal(), this.getStateEffectiveDate(), asOfDate);
+		return totalInterest.add(accruedInterest);
+	}
+	
 	public String toString(){
 		StringBuffer strBuf = new StringBuffer("");
 		strBuf.append("Loan State as of ").append(this.getStateEffectiveDate()).append(System.getProperty("line.separator"));

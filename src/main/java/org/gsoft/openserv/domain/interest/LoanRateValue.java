@@ -11,13 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.domain.rates.RateValue;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
 
 @Entity
 @RulesEngineEntity
-public class LoanRateValue extends OpenServDomainObject {
+public class LoanRateValue extends PersistentDomainObject {
 	private static final long serialVersionUID = -6846403423957356884L;
 
 	private Long loanRateValueID;

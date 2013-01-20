@@ -11,7 +11,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanBalanceAdjustment;
 import org.gsoft.openserv.domain.loan.LoanType;
@@ -22,18 +22,21 @@ import org.junit.runner.RunWith;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/application-context.xml")
+@Transactional(readOnly=true)
 public class LoanBalanceAdjustmentRepositoryTest {
 	@Resource
 	private LoanBalanceAdjustmentRepository loanBalAdjRepo;
 	@Resource
 	private LoanRepository loanRepository;
 	
-	private List<HashMap<String, OpenServDomainObject>> seedData;
+	private List<HashMap<String, PersistentDomainObject>> seedData;
 	
 	@Before
+	@Rollback
 	public void setup(){
 		LoanBalanceAdjustment lba = new LoanBalanceAdjustment();
 		lba.setEffectiveDate(new Date());
@@ -41,7 +44,7 @@ public class LoanBalanceAdjustmentRepositoryTest {
 		lba.setInterestChange(100);
 		lba.setPostDate(new Date());
 		lba.setPrincipalChange(10000);
-		HashMap<String, OpenServDomainObject> domainMap = new HashMap<String, OpenServDomainObject>();
+		HashMap<String, PersistentDomainObject> domainMap = new HashMap<String, PersistentDomainObject>();
 		domainMap.put("lba", lba);
 		
 		Loan loan = new Loan();
@@ -51,7 +54,7 @@ public class LoanBalanceAdjustmentRepositoryTest {
 		loan.setStartingPrincipal(0);
 		domainMap.put("loan", loan);
 		
-		seedData = new ArrayList<HashMap<String,OpenServDomainObject>>();
+		seedData = new ArrayList<HashMap<String,PersistentDomainObject>>();
 		seedData.add(domainMap);
 	}
 	
@@ -59,7 +62,7 @@ public class LoanBalanceAdjustmentRepositoryTest {
 	@Rollback
 	public void test() {
 		Long loanID = 0L;
-		for(HashMap<String, OpenServDomainObject> seed:seedData){
+		for(HashMap<String, PersistentDomainObject> seed:seedData){
 			Loan loan = loanRepository.save((Loan)seed.get("loan"));
 			LoanBalanceAdjustment lba = (LoanBalanceAdjustment)seed.get("lba"); 
 			lba.setLoanID(loan.getLoanID());

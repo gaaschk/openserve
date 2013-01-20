@@ -1,10 +1,10 @@
 package org.gsoft.openserv.rulesengine.dataaccess;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface RuleDataLoader<T> {
 
-	public Class<T> forType(); 
+	Class<T> forType(); 
 	
-	public ArrayList<Object> loadRuleRelatedData(T contextObject);
+	List<Object> loadRuleRelatedData(T contextObject);
 }

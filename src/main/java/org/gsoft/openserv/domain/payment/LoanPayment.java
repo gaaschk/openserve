@@ -8,10 +8,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.domain.PersistentDomainObject;
 
 @Entity
-public class LoanPayment extends OpenServDomainObject{
+public class LoanPayment extends PersistentDomainObject{
 	private static final long serialVersionUID = 643268263864731901L;
 	private Long loanPaymentID;
 	private Long loanID;

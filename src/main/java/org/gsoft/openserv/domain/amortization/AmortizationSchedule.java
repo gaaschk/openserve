@@ -12,10 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.domain.OpenServDomainObject;
+import org.gsoft.openserv.domain.PersistentDomainObject;
 
 @Entity
-public class AmortizationSchedule extends OpenServDomainObject {
+public class AmortizationSchedule extends PersistentDomainObject {
 	private static final long serialVersionUID = -591660710764385964L;
 	private Long amortizationScheduleID;
 	private Date creationDate;
@@ -23,11 +23,13 @@ public class AmortizationSchedule extends OpenServDomainObject {
 	private List<LoanAmortizationSchedule> loanAmortizations;
 
 	public void addLoanAmortizationSchedule(LoanAmortizationSchedule loanAmortization){
-		if(this.loanAmortizations==null){
-			loanAmortizations = new ArrayList<LoanAmortizationSchedule>();
+		if(loanAmortization != null){
+			if(this.loanAmortizations==null){
+				loanAmortizations = new ArrayList<LoanAmortizationSchedule>();
+			}
+			loanAmortizations.add(loanAmortization);
+			loanAmortization.setAmortizationSchedule(this);
 		}
-		loanAmortizations.add(loanAmortization);
-		loanAmortization.setAmortizationSchedule(this);
 	}
 	
 	@Id

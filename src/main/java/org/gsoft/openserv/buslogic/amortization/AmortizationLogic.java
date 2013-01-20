@@ -21,8 +21,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class AmortizationLogic {
 	@Resource
-	private PaymentAmountCalculator paymentCalculator;
-	@Resource
 	private AmortizationScheduleRepository amortizationScheduleRepository;
 	@Resource
 	private LoanRepository loanRepository;
@@ -34,7 +32,11 @@ public class AmortizationLogic {
 	public AmortizationSchedule createAmortizationSchedule(List<Long> loanIDs, Date effectiveDate){
 		AmortizationSchedule amortizationSchedule = new AmortizationSchedule();
 		for(Long loanID:loanIDs){
-			amortizationSchedule.addLoanAmortizationSchedule(this.createLoanAmortizationSchedule(loanRepository.findOne(loanID)));
+			Loan loan = loanRepository.findOne(loanID);
+			LoanAmortizationSchedule loanAmortizationSchedule = this.createLoanAmortizationSchedule(loan, effectiveDate);
+			if(loanAmortizationSchedule != null){
+				amortizationSchedule.addLoanAmortizationSchedule(loanAmortizationSchedule);
+			}
 		}
 		amortizationSchedule.setCreationDate(new Date());
 		amortizationSchedule.setEffectiveDate(effectiveDate);
@@ -42,26 +44,32 @@ public class AmortizationLogic {
 		return amortizationSchedule;
 	}
 	
-	private LoanAmortizationSchedule createLoanAmortizationSchedule(Loan loan){
+	private LoanAmortizationSchedule createLoanAmortizationSchedule(Loan loan, Date effectiveDate){
+		LoanAmortizationSchedule loanAmortizationSchedule = null;
 		LoanRateValue lrv = loanRateValueRepository.findMostRecentLoanRateValueForLoan(loan.getLoanID());
-		BigDecimal margin = lrv.getMarginValue();
-		BigDecimal rate = lrv.getRateValue().getRateValue();
-		BigDecimal annualInterestRate = margin.add(rate);
-		LoanStateHistory loanHistory =  loanStateHistoryRepo.findLoanStateHistory(loan);
-		Integer paymentAmount = paymentCalculator.calculatePaymentAmount(loanHistory.getEndingPrincipal(), annualInterestRate, loan.getRemainingLoanTerm());
-		int regularPaymentCount = loanHistory.getEndingPrincipal()/paymentAmount;
-		int lastPaymentAmount = loanHistory.getEndingPrincipal() - (paymentAmount*regularPaymentCount);
-		LoanAmortizationSchedule loanAmortizationSchedule = new LoanAmortizationSchedule();
-		loanAmortizationSchedule.setLoanID(loan.getLoanID());
-		AmortizationLoanPayment regularPayment = new AmortizationLoanPayment();
-		regularPayment.setPaymentAmount(paymentAmount);
-		regularPayment.setPaymentCount(regularPaymentCount);
-		loanAmortizationSchedule.addAmortizationLoanPayment(regularPayment);
-		AmortizationLoanPayment lastPayment = new AmortizationLoanPayment();
-		lastPayment.setPaymentAmount(lastPaymentAmount);
-		lastPayment.setPaymentCount(1);
-		loanAmortizationSchedule.addAmortizationLoanPayment(lastPayment);
-		loan.setMinimumPaymentAmount(paymentAmount);
+		if(lrv != null){
+			BigDecimal margin = lrv.getMarginValue();
+			BigDecimal rate = lrv.getRateValue().getRateValue();
+			BigDecimal annualInterestRate = margin.add(rate);
+			LoanStateHistory loanHistory =  loanStateHistoryRepo.findLoanStateHistory(loan);
+		
+			Integer paymentAmount = PaymentAmountCalculator.calculatePaymentAmount(loanHistory.getEndingPrincipal(), annualInterestRate, loan.getRemainingLoanTermAsOf(effectiveDate));
+			int regularPaymentCount = loanHistory.getEndingPrincipal()/paymentAmount;
+			int lastPaymentAmount = loanHistory.getEndingPrincipal() - (paymentAmount*regularPaymentCount);
+			loanAmortizationSchedule = new LoanAmortizationSchedule();
+			loanAmortizationSchedule.setLoanID(loan.getLoanID());
+			loan.setCurrentAmortizationSchedule(loanAmortizationSchedule);
+			AmortizationLoanPayment regularPayment = new AmortizationLoanPayment();
+			regularPayment.setPaymentOrder(1);
+			regularPayment.setPaymentAmount(paymentAmount);
+			regularPayment.setPaymentCount(regularPaymentCount);
+			loanAmortizationSchedule.addAmortizationLoanPayment(regularPayment);
+			AmortizationLoanPayment lastPayment = new AmortizationLoanPayment();
+			lastPayment.setPaymentOrder(1);
+			lastPayment.setPaymentAmount(lastPaymentAmount);
+			lastPayment.setPaymentCount(1);
+			loanAmortizationSchedule.addAmortizationLoanPayment(lastPayment);
+		}
 		return loanAmortizationSchedule;
 	}
 }
