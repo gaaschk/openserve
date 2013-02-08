@@ -54,6 +54,7 @@ dependencies{
 	compile ("commons-codec:commons-codec:${apacheCommonsCodecVersion}")
 	compile ("commons-lang:commons-lang:2.6")
 	compile ("commons-collections:commons-collections:3.2.1")
+	compile ("commons-beanutils:commons-beanutils:1.8.0")
 	runtime ("commons-dbcp:commons-dbcp:1.4")
 
 	compile ("org.hibernate:hibernate-entitymanager:${hibernateVersion}")

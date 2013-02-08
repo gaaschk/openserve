@@ -31,7 +31,7 @@ public class LoanRepositoryTest {
 		Person borrower = new Person();
 		borrower.setFirstName("John");
 		borrower.setLastName("Doe");
-		borrower.setSsn("000000000");
+		borrower.setSsn("100000000");
 		Date today = new Date();
 		Loan loan = new Loan();
 		loan.setBorrower(borrower);
