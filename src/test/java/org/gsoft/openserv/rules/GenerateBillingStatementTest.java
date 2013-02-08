@@ -24,7 +24,7 @@ import org.drools.runtime.StatelessKnowledgeSession;
 import org.gsoft.openserv.buslogic.payment.BillingStatementLogic;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanTypeProfile;
-import org.gsoft.openserv.domain.payment.BillingStatement;
+import org.gsoft.openserv.domain.payment.billing.BillingStatement;
 import org.gsoft.openserv.repositories.payment.BillingStatementRepository;
 import org.joda.time.DateTime;
 import org.junit.Test;

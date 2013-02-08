@@ -6,7 +6,7 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.domain.payment.BillingStatement;
+import org.gsoft.openserv.domain.payment.billing.BillingStatement;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.annotation.Rollback;
@@ -29,7 +29,6 @@ public class BillingStatementRepositoryTest {
 		statement.setCreatedDate(today);
 		statement.setDueDate(today);
 		statement.setMinimumRequiredPayment(1000);
-		statement.setPaidAmount(0);
 		statement = repository.save(statement);
 		assertNotNull("Expected primary key to be set", statement.getBillingStatementID());
 		statement = repository.findOne(statement.getBillingStatementID());

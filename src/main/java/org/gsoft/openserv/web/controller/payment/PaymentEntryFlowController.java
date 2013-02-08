@@ -30,6 +30,6 @@ public class PaymentEntryFlowController {
 	}
 	
 	public void submitPayment(PaymentEntryModel paymentModel){
-		paymentService.applyPayment(paymentModel.getTheBorrower().getPersonID(), paymentModel.getPaymentAmount(), paymentModel.getPaymentEffectiveDate());
+		paymentService.applyPayment(paymentModel.getTheBorrower().getPersonID(), paymentModel.getPaymentAmount()*-1, paymentModel.getPaymentEffectiveDate());
 	}
 }

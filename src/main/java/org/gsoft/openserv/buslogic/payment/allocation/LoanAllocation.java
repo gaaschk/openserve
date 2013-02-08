@@ -1,24 +1,27 @@
 package org.gsoft.openserv.buslogic.payment.allocation;
 
 import java.util.Date;
-import java.util.List;
 
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanStateHistory;
-import org.gsoft.openserv.domain.payment.BillingStatement;
+import org.gsoft.openserv.domain.payment.LoanPayment;
+import org.gsoft.openserv.domain.payment.billing.BillingStatement;
+import org.gsoft.openserv.domain.payment.billing.LoanStatementSummary;
 
 public class LoanAllocation {
 	private Loan loan;
 	private LoanStateHistory loanStateHistory;
-	private Integer appliedAmount;
-	private List<BillingStatement> billingStatements;
-	private BillingStatement currentBillingStatement = null;
-
-	public LoanAllocation(Loan loan, LoanStateHistory loanStateHistory, List<BillingStatement> billingStatements){
+	private LoanStatementSummary statementSummary;
+	private LoanPayment newLoanPayment;
+	
+	public LoanAllocation(Loan loan, LoanStateHistory loanStateHistory, LoanStatementSummary statementSummary, LoanPayment newLoanPayment){
 		this.loan = loan;
-		this.billingStatements = billingStatements;
-		this.appliedAmount = 0;
+		this.statementSummary = statementSummary;
+		this.newLoanPayment = newLoanPayment;
 		this.loanStateHistory = loanStateHistory;
+		loanStateHistory.addPayment(newLoanPayment);
+		statementSummary.addPayment(newLoanPayment);
+		statementSummary.applyPayments();
 	}
 	
 	public Loan getLoan() {
@@ -33,40 +36,21 @@ public class LoanAllocation {
 	public void setLoanStateHistory(LoanStateHistory loanStateHistory) {
 		this.loanStateHistory = loanStateHistory;
 	}
-	private BillingStatement getCurrentBillingStatement(){
-		if(this.currentBillingStatement == null){
-			int amountToApply = appliedAmount;
-			int index = 0;
-			while(amountToApply > 0 && index < billingStatements.size()){
-				currentBillingStatement = billingStatements.get(index);
-				amountToApply -= currentBillingStatement.getMinimumRequiredPayment();
-				index++;
-			}
-		}
-		return currentBillingStatement;
-	}
+
 	public Date getProjectedDueDate() {
-		Date dueDate = null;
-		if(this.getCurrentBillingStatement() != null){
-			dueDate = this.getCurrentBillingStatement().getDueDate();
-		}
-		return dueDate;
+		return this.statementSummary.getEarliestUnpaidDueDate();
 	}
-	public int getMinimumPaymentAmount() {
-		int minAmount = 0;
-		if(this.getCurrentBillingStatement() != null){
-			minAmount = this.getCurrentBillingStatement().getMinimumRequiredPayment();
+	
+	public Integer getMinimumPaymentAmount() {
+		Integer minReq = this.statementSummary.getMinimumPaymentToAdvanceDueDate();
+		if(minReq == null){
+			minReq = this.getLoanStateHistory().getEndingPrincipal();
 		}
-		else{
-			minAmount = loanStateHistory.getEndingPrincipal();
-		}
-		return minAmount;
+		return minReq;
 	}
-	public Integer getAppliedAmount() {
-		return appliedAmount;
-	}
+	
 	public void addToAppliedAmount(Integer appliedAmount) {
-		this.appliedAmount += appliedAmount;
-		this.currentBillingStatement = null;
+		newLoanPayment.setAppliedAmount(newLoanPayment.getAppliedAmount()+appliedAmount);
+		statementSummary.applyPayments();
 	}
 }

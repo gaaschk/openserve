@@ -20,6 +20,7 @@ rule "Create Loan Amortization Wrapper"
 		$l : Loan(currentAmortizationSchedule == null, effectiveLoanTypeProfile != null, repaymentStartDate != null)
 		not LoanAmortizationWrapper(loan.loanID == $l.loanID)		
 	then
+		System.out.println("Creating LoanAmortizationWrapper");
 		LoanAmortizationWrapper law = new LoanAmortizationWrapper();
 		law.setLoan($l);
 		LoanRateValue lrv = springContext.getBean(LoanRateValueRepository.class).findMostRecentLoanRateValueForLoan($l.getLoanID());

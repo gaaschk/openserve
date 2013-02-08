@@ -2,7 +2,7 @@ package loan
 
 import org.gsoft.openserv.domain.loan.Loan
 import org.gsoft.openserv.domain.loan.LoanTypeProfile
-import org.gsoft.openserv.domain.payment.BillingStatement
+import org.gsoft.openserv.domain.payment.billing.BillingStatement
 import org.springframework.context.ApplicationContext
 import org.gsoft.openserv.buslogic.repayment.InitialDueDateCalculator
 import org.gsoft.openserv.buslogic.repayment.FirstDueDateCalculator

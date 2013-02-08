@@ -6,7 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.payment.BillingStatement;
+import org.gsoft.openserv.domain.payment.billing.BillingStatement;
 import org.gsoft.openserv.repositories.payment.BillingStatementRepository;
 import org.springframework.stereotype.Component;
 

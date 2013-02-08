@@ -8,14 +8,16 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.beanutils.BeanComparator;
+import org.apache.commons.collections.comparators.NullComparator;
 import org.gsoft.openserv.buslogic.payment.PaymentAllocationLogic;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanStateHistory;
-import org.gsoft.openserv.domain.payment.BillingStatement;
 import org.gsoft.openserv.domain.payment.LoanPayment;
 import org.gsoft.openserv.domain.payment.Payment;
+import org.gsoft.openserv.domain.payment.billing.LoanStatementSummary;
 import org.gsoft.openserv.repositories.loan.LoanStateHistoryRepository;
-import org.gsoft.openserv.repositories.payment.BillingStatementRepository;
+import org.gsoft.openserv.repositories.payment.LoanStatementRepository;
 import org.springframework.stereotype.Component;
 
 /**
@@ -32,30 +34,13 @@ public class PastDueFirstPrincipalWeightedAllocationStrategy implements
 	@Resource
 	private LoanStateHistoryRepository loanStateHistoryRepo;
 	@Resource
-	private BillingStatementRepository billingStatementRepo;
+	private LoanStatementRepository statementRepo;
 	
-	private Comparator<LoanAllocation> comparator = null;
+	private Comparator comparator = null;
 	
-	private Comparator<LoanAllocation> getLoanAllocationComparator(){
+	private Comparator getLoanAllocationComparator(){
 		if(this.comparator == null){
-			comparator = new Comparator<LoanAllocation>() {
-				@Override
-				public int compare(LoanAllocation o1, LoanAllocation o2) {
-					if(o1 == o2)
-						return 0;
-					if(o1 == null)
-						return -1;
-					if(o2 == null)
-						return 1;
-					if(o1.getProjectedDueDate() == o2.getProjectedDueDate())
-						return 0;
-					if(o1.getProjectedDueDate() == null)
-						return -1;
-					if(o2.getProjectedDueDate() == null)
-						return 1;
-					return o1.getProjectedDueDate().compareTo(o2.getProjectedDueDate());
-				}
-			};
+			comparator = new NullComparator(new BeanComparator("projectedDueDate", new NullComparator()));
 		}
 		return comparator;
 	}
@@ -63,21 +48,26 @@ public class PastDueFirstPrincipalWeightedAllocationStrategy implements
 	@Override
 	public void allocatePayment(Payment payment, List<Loan> loans) {
 		ArrayList<LoanAllocation> allocations = new ArrayList<>();
+		ArrayList<LoanPayment> newLoanPayments = new ArrayList<>();
 		for(Loan loan:loans){
 			LoanStateHistory history = loanStateHistoryRepo.findLoanStateHistoryAsOf(loan, payment.getEffectiveDate());
-			List<BillingStatement> statements = billingStatementRepo.findAllBillsForLoanOnOrBefore(loan.getLoanID(), payment.getEffectiveDate());
-			allocations.add(new LoanAllocation(loan, history, statements));
+			LoanStatementSummary statementSummary = statementRepo.getLoanStatementSummaryForLoanAsOfDate(loan, payment.getEffectiveDate());
+			LoanPayment loanPayment = new LoanPayment();
+			loanPayment.setAppliedAmount(0);
+			loanPayment.setLoanID(loan.getLoanID());
+			loanPayment.setPayment(payment);
+			newLoanPayments.add(loanPayment);
+			allocations.add(new LoanAllocation(loan, history, statementSummary, loanPayment));
 		}
 		int remainingPaymentAmount = payment.getPaymentAmount();
-		while(remainingPaymentAmount > 0){
+		while(remainingPaymentAmount < 0){
 			remainingPaymentAmount = this.allocationAmountToLoans(allocations, remainingPaymentAmount, payment.getEffectiveDate());
 		}
-		for(LoanAllocation allocation:allocations){
-			LoanPayment loanPayment = new LoanPayment();
-			loanPayment.setAppliedAmount(allocation.getAppliedAmount()*-1);
-			loanPayment.setLoanID(allocation.getLoan().getLoanID());
-			loanPayment.setPayment(payment);
-			payment.getLoanPayments().add(loanPayment);
+		for(LoanPayment loanPayment:newLoanPayments){
+			if(loanPayment.getAppliedAmount() < 0){
+				loanPayment.setAppliedAmount(loanPayment.getAppliedAmount());
+				payment.getLoanPayments().add(loanPayment);
+			}
 		}
 	}
 	
@@ -85,33 +75,33 @@ public class PastDueFirstPrincipalWeightedAllocationStrategy implements
 		List<LoanAllocation> oldestAllocations = this.getEarliestDueSubset(allocations, paymentEffectiveDate);
 		int totalDue = this.getTotalDueForSet(oldestAllocations);
 		int amountRemaining = 0;
-		if(totalDue > amountToPay || !oldestAllocations.get(0).getProjectedDueDate().before(paymentEffectiveDate)){
-			this.allocateBasedOnPrincipalWeight(oldestAllocations, amountToPay);
+		if(totalDue > Math.abs(amountToPay) || !oldestAllocations.get(0).getProjectedDueDate().before(paymentEffectiveDate)){
+			this.allocateBasedOnDueWeight(oldestAllocations, amountToPay);
 		}
 		else{
 			for(LoanAllocation allocation:oldestAllocations){
-				allocation.addToAppliedAmount(allocation.getMinimumPaymentAmount());
+				allocation.addToAppliedAmount(allocation.getMinimumPaymentAmount()*-1);
 			}
-			amountRemaining = amountToPay - totalDue;
+			amountRemaining = amountToPay + totalDue;
 		}
 		return amountRemaining;
 	}
 	
-	private void allocateBasedOnPrincipalWeight(List<LoanAllocation> allocations, int amountToPay){
-		int totalPrincipal = 0;
+	private void allocateBasedOnDueWeight(List<LoanAllocation> allocations, int amountToPay){
+		int totalDue = 0;
 		for(LoanAllocation allocation:allocations){
-			totalPrincipal += allocation.getLoanStateHistory().getEndingPrincipal();
+			totalDue += allocation.getMinimumPaymentAmount();
 		}
 		int amountApplied = 0;
 		for(LoanAllocation allocation:allocations){
-			long loanAmountToApply = ((long)allocation.getLoanStateHistory().getEndingPrincipal()*(long)amountToPay)/totalPrincipal;
+			long loanAmountToApply = ((long)allocation.getMinimumPaymentAmount()*(long)amountToPay)/totalDue;
 			allocation.addToAppliedAmount((int)loanAmountToApply);
 			amountApplied += loanAmountToApply;
 		}
 		int index = 0;
-		while(amountApplied < amountToPay){
-			allocations.get(index).addToAppliedAmount(1);
-			amountApplied++;
+		while(amountApplied > amountToPay){
+			allocations.get(index).addToAppliedAmount(-1);
+			amountApplied--;
 			index++;
 		}
 	}
@@ -123,8 +113,9 @@ public class PastDueFirstPrincipalWeightedAllocationStrategy implements
 		Date oldestDate = allocations.get(0).getProjectedDueDate();
 		int index = 0;
 		ArrayList<LoanAllocation> subset = new ArrayList<>();
-		while(!allocations.get(index).getProjectedDueDate().after(oldestDate)){
+		while(index < allocations.size() && !allocations.get(index).getProjectedDueDate().after(oldestDate)){
 			subset.add(allocations.get(index));
+			index++;
 		}
 		return subset;
 	}

@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 import org.gsoft.openserv.buslogic.payment.allocation.PastDueFirstPrincipalWeightedAllocationStrategy;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.payment.LoanPayment;
 import org.gsoft.openserv.domain.payment.Payment;
 import org.gsoft.openserv.repositories.loan.LoanRepository;
 import org.gsoft.openserv.repositories.payment.PaymentRepository;
@@ -36,9 +35,6 @@ public class PaymentLogic {
 		
 		List<Loan> loans = loanRepository.findAllForBorrowerActiveOnOrBefore(borrowerPersonID, effectiveDate);
 		paymentAllocationLogic.allocatePayment(payment, loans);
-		for(Loan loan:loans){
-			statementLogic.updateBillingStatementsForLoan(loan, payment.getEffectiveDate());
-		}
 		payment = paymentRepository.save(payment);
 	}
 }

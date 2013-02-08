@@ -27,16 +27,7 @@ CREATE TABLE BillingStatement (
 	CreatedDate           	DATETIME NULL,
 	DueDate               	DATE NULL,
 	MinimumRequiredPayment	INT NULL,
-	PaidAmount            	INT NULL,
-	SatisfiedDate         	DATE NULL,
 	PRIMARY KEY(BillingStatementID)
-);
-CREATE TABLE BillPayment ( 
-	BillPaymentID      	BIGINT AUTO_INCREMENT NOT NULL,
-	BillingStatementID 	BIGINT NULL,
-	LoanPaymentID      	BIGINT NULL,
-	AmountAppliedToBill	INT NULL,
-	PRIMARY KEY(BillPaymentID)
 );
 CREATE TABLE LateFee ( 
 	LateFeeID           	BIGINT AUTO_INCREMENT NOT NULL,
@@ -239,7 +230,9 @@ INSERT INTO FrequencyType (FrequencyTypeID, Name) value (30, 'SEMI_ANNUALLY');
 INSERT INTO FrequencyType (FrequencyTypeID, Name) value (40, 'ANNUALLY');
 
 INSERT INTO LoanTypeProfile(LoanTypeProfileID, LoanTypeID, EffectiveDate, EndDate, RepaymentStartTypeID, MaximumLoanTerm, GraceMonths, MinDaysToFirstDue, PrepaymentDays, DaysBeforeDueToBill, DaysLateForFee, LateFeeAmount, VariableRate, BaseRateUpdateFrequencyID, BaseRateID)
-  VALUES(1, 20, '2013-01-17 22:22:51.0', NULL, 10, 180, 1, 1, 1, 1, 1, 1000, 1, NULL, NULL);
+  VALUES(1, 20, '1900-01-17 22:22:51.0', NULL, 10, 180, 1, 1, 1, 1, 1, 1000, 1, 20, 10);
+INSERT INTO LoanTypeProfile(LoanTypeProfileID, LoanTypeID, EffectiveDate, EndDate, RepaymentStartTypeID, MaximumLoanTerm, GraceMonths, MinDaysToFirstDue, PrepaymentDays, DaysBeforeDueToBill, DaysLateForFee, LateFeeAmount, VariableRate, BaseRateUpdateFrequencyID, BaseRateID)
+  VALUES(2, 10, '1900-01-17 22:22:51.0', NULL, 10, 180, 1, 1, 1, 1, 1, 1000, 1, 30, 10);
 
 INSERT INTO Rate(RateID, RateName, TickerSymbol, ShouldAutoUpdate)
   VALUES(10, '1 Month LIBOR US Dollars', 'LIBOR.USD1M', 0);
@@ -340,18 +333,6 @@ ALTER TABLE BillingStatement
 	ADD CONSTRAINT billingstatement_ibfk_1
 	FOREIGN KEY(LoanID)
 	REFERENCES Loan(LoanID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
-ALTER TABLE BillPayment
-	ADD CONSTRAINT billpayment_ibfk_2
-	FOREIGN KEY(LoanPaymentID)
-	REFERENCES LoanPayment(LoanPaymentID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
-ALTER TABLE BillPayment
-	ADD CONSTRAINT billpayment_ibfk_1
-	FOREIGN KEY(BillingStatementID)
-	REFERENCES BillingStatement(BillingStatementID)
 	ON DELETE RESTRICT 
 	ON UPDATE RESTRICT ;
 ALTER TABLE LateFee
