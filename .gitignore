@@ -6,3 +6,4 @@ src/querydsl
 openserv-scripts
 openserv-scripts.zip
 /target
+/syncToRemoteMaster.sh
