@@ -1,6 +1,7 @@
 package org.gsoft.openserv.web.converters.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 import javax.annotation.Resource;
@@ -67,7 +68,10 @@ public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetai
 		finModel.setCurrentUnpaidDueDate(statementSummary.getEarliestUnpaidDueDate());
 		model.setCurrentAmortization(conversionService.convert(accountSummaryService.getAmortizationScheduleForLoan(loan.getLoanID()), LoanAmortizationModel.class));
 		ArrayList<LoanStateModel> loanHistory = new ArrayList<LoanStateModel>();
-		for(LoanState loanEvent:loanStateHistory.getLoanStates()){
+		ArrayList<LoanState> tempLoanStates = new ArrayList<>();
+		tempLoanStates.addAll(loanStateHistory.getLoanStates());
+		Collections.reverse(tempLoanStates);
+		for(LoanState loanEvent:tempLoanStates){
 			loanHistory.add(conversionService.convert(loanEvent, LoanStateModel.class));
 		}
 		for(StatementPaySummary statement:statementSummary.getStatements()){

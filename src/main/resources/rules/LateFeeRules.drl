@@ -10,6 +10,7 @@ import org.gsoft.openserv.buslogic.payment.LateFeeLogic
 
 import org.gsoft.openserv.rulesengine.event.LoanPaymentAppliedEvent
 import org.gsoft.openserv.rulesengine.event.BillingStatementCreatedEvent
+import org.gsoft.openserv.rulesengine.event.LoanTemporalEvent 
 
 import org.gsoft.openserv.repositories.payment.BillingStatementRepository
 import org.gsoft.openserv.repositories.loan.LoanTypeProfileRepository
@@ -40,6 +41,17 @@ end
 rule "Load LoanStatementSummary for StatementCreatedEvent"
   when
   	BillingStatementCreatedEvent($s:statement, $lId:statement.loanID)
+  	not LoanStatementSummary($lId == loan.loanID)
+  then
+  	System.out.println("Loading LoanStatementHistory");
+	LoanStatementRepository lsRepo = springContext.getBean(LoanStatementRepository.class);
+	LoanStatementSummary lss = lsRepo.getLoanStatementSummaryForLoan($lId);
+	insert(lss);  	
+end
+
+rule "Load LoanStatementSummary for LoanTemporalEvent"
+  when
+  	LoanTemporalEvent($lId:loan.loanID)
   	not LoanStatementSummary($lId == loan.loanID)
   then
   	System.out.println("Loading LoanStatementHistory");
