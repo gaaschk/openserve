@@ -12,7 +12,7 @@ import org.gsoft.openserv.repositories.BaseSpringRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
+//test
 @Repository
 public class RateValueRepository extends BaseRepository<RateValue, Long>{
 	@Resource
