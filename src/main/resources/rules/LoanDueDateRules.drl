@@ -13,10 +13,6 @@ import java.util.Calendar
 
 global ApplicationContext springContext
 
-declare LoanTypeProfileUpdated
-	loan : Loan
-end
-
 rule "Update Initial Due Date"
 	when
 		$l : Loan(initialDueDate == null, effectiveLoanTypeProfile != null, firstDueDate != null)
@@ -37,21 +33,3 @@ rule "Update First Due Date"
 		update($l);
 end
 
-rule "Update Effective Loan Type Profile"
-	when
-		$l : Loan(effectiveLoanTypeProfile == null)
-		not LoanTypeProfileUpdated(loan.loanID == $l.loanID)
-	then
-		System.out.println("set the effective loan type profile");
-		springContext.getBean(LoanTypeLogic.class).updateLoanTypeProfileForLoan($l);
-		update($l);
-end
-
-rule "Set Starting Loan Term"
-	when
-		$l : Loan(initialUsedLoanTerm == null, effectiveLoanTypeProfile != null)
-	then
-		System.out.println("set the remaining loan term");
-		$l.setInitialUsedLoanTerm(0);
-		update($l);
-end

@@ -30,10 +30,11 @@ ext.tilesVersion = '3.0.1'
 
 sourceSets.main.java.srcDir 'src/querydsl/java'
 
+configureEnv()
+
 repositories{
 	maven{
-		url "http://192.168.10.9:8081/artifactory/repo"
-//		url "https://www.laertessoft.biz/artifactory/repo"
+		url "${repositoryHost}/artifactory/repo"
 	}
 }
 
@@ -88,7 +89,7 @@ dependencies{
 
 sonar{
 	server{
-		url = "http://192.168.10.9:9000/sonar"
+		url = "${sonarHost}/sonar"
 	}
 	database{
 		url = "jdbc:mysql://192.168.10.9:3306/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true"
@@ -101,10 +102,11 @@ sonar{
 	}
 }
 
-configureEnv()
-
 def configureEnv(){
 	ext.environment = hasProperty('teamcity')?'ci':hasProperty('environment')?environment:'local'
+	ext.repositoryHost = hasProperty('teamcity')?'http://192.168.10.9:8081':'https://www.laertessoft.biz'
+//	ext.repositoryHost = 'http://192.168.10.9:8081'
+	ext.sonarHost = hasProperty('teamcity')?'http://192.168.10.9:9000':'https://www.laertessoft.biz'
 	println "Building environment: $environment"
 	def config = new ConfigSlurper().parse(file('env/'+environment+'.gradle').toURI().toURL())
 	ext.config = config	

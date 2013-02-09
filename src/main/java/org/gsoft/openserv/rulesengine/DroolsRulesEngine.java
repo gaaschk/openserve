@@ -18,7 +18,6 @@ import org.drools.builder.ResourceType;
 import org.drools.io.ResourceFactory;
 import org.drools.runtime.StatelessKnowledgeSession;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
-import org.gsoft.openserv.rulesengine.dataaccess.DataAccessService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
@@ -30,8 +29,6 @@ public class DroolsRulesEngine implements RulesEngine{
 	private ArrayList<Object> knowledge = new ArrayList<Object>();
 	@Resource
 	private ApplicationContext springContext;
-	@Resource
-	private DataAccessService dataAccessService;
 	@Resource
 	private SystemSettingsLogic systemSettingsLogic;
 	
@@ -92,7 +89,6 @@ public class DroolsRulesEngine implements RulesEngine{
 		if(!this.isOpen)
 			throw new RulesEngineException("RulesEngine must be open before objects can be added to the context.");
 		knowledge.addAll(Arrays.asList(addedContext));
-		knowledge.addAll(dataAccessService.loadRuleRelatedObjects(addedContext));
 	}
 
 }

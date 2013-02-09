@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.gsoft.openserv.domain.interest.LoanRateValue;
+import org.gsoft.openserv.domain.payment.LateFee;
 import org.gsoft.openserv.domain.payment.LoanPayment;
 
 public class LoanStateHistory {
@@ -62,6 +63,17 @@ public class LoanStateHistory {
 	public void addPayment(LoanPayment payment){
 		LoanState newState = new PaymentLoanState(payment);
 		this.addState(newState);
+	}
+	
+	public void addLateFee(LateFee lateFee){
+		LoanState newState = new LateFeeState(lateFee);
+		this.addState(newState);
+	}
+	
+	public void addAllLateFees(Collection<LateFee> lateFees){
+		for(LateFee lateFee:lateFees){
+			this.addLateFee(lateFee);
+		}
 	}
 	
 	public void addAllPayments(Collection<LoanPayment> payments){

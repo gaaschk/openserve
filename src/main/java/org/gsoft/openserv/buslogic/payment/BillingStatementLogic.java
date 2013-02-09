@@ -14,6 +14,8 @@ import org.gsoft.openserv.repositories.loan.LoanRepository;
 import org.gsoft.openserv.repositories.loan.LoanTypeProfileRepository;
 import org.gsoft.openserv.repositories.payment.BillingStatementRepository;
 import org.gsoft.openserv.repositories.payment.LoanPaymentRepository;
+import org.gsoft.openserv.rulesengine.event.BillingStatementCreatedEvent;
+import org.gsoft.openserv.rulesengine.event.SystemEventHandler;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +33,8 @@ public class BillingStatementLogic {
 	private LoanPaymentRepository loanPaymentRepository;
 	@Resource
 	private LateFeeLogic lateFeeLogic;
+	@Resource
+	private SystemEventHandler systemEventHandler;
 	
 	public boolean isBillingStatementNeeded(Loan loan){
 		Date systemDate = systemSettings.getCurrentSystemDate();
@@ -80,7 +84,7 @@ public class BillingStatementLogic {
 			statement.setMinimumRequiredPayment(loan.getMinimumPaymentAmountAsOf(dueDate));
 			statement = billingStatementRepository.save(statement);
 		}
-		lateFeeLogic.updateLateFees(loan);
+		systemEventHandler.handleEvent(new BillingStatementCreatedEvent(statement));
 		return statement;
 	}
 }

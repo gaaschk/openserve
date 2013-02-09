@@ -1,0 +1,62 @@
+package billing
+
+import org.gsoft.openserv.domain.loan.Loan
+import org.gsoft.openserv.domain.loan.LoanTypeProfile
+import org.gsoft.openserv.domain.payment.billing.BillingStatement
+import org.gsoft.openserv.domain.payment.LoanPayment
+import org.gsoft.openserv.domain.payment.billing.LoanStatementSummary
+
+import org.gsoft.openserv.buslogic.payment.LateFeeLogic
+
+import org.gsoft.openserv.rulesengine.event.LoanPaymentAppliedEvent
+import org.gsoft.openserv.rulesengine.event.BillingStatementCreatedEvent
+
+import org.gsoft.openserv.repositories.payment.BillingStatementRepository
+import org.gsoft.openserv.repositories.loan.LoanTypeProfileRepository
+import org.gsoft.openserv.repositories.payment.LoanStatementRepository
+
+import java.util.Date
+import java.util.Calendar
+import java.util.HashMap
+import org.springframework.context.ApplicationContext
+
+global ApplicationContext springContext
+
+declare LateFeesUpdated
+	lss : LoanStatementSummary
+end
+
+rule "Load LoanStatementSummary for LoanPaymentAppliedEvent"
+  when
+  	LoanPaymentAppliedEvent($lp:payment, $lId:payment.loanID)
+  	not LoanStatementSummary($lId == loan.loanID)
+  then
+  	System.out.println("Loading LoanStatementHistory");
+	LoanStatementRepository lsRepo = springContext.getBean(LoanStatementRepository.class);
+	LoanStatementSummary lss = lsRepo.getLoanStatementSummaryForLoan($lId);
+	insert(lss);  	
+end
+
+rule "Load LoanStatementSummary for StatementCreatedEvent"
+  when
+  	BillingStatementCreatedEvent($s:statement, $lId:statement.loanID)
+  	not LoanStatementSummary($lId == loan.loanID)
+  then
+  	System.out.println("Loading LoanStatementHistory");
+	LoanStatementRepository lsRepo = springContext.getBean(LoanStatementRepository.class);
+	LoanStatementSummary lss = lsRepo.getLoanStatementSummaryForLoan($lId);
+	insert(lss);  	
+end
+
+rule "Update Late Fees"
+  when
+  	$lss : LoanStatementSummary()
+  	not LateFeesUpdated(lss == $lss)
+  then
+  	System.out.println("Updating Late Fees");
+  	LateFeeLogic lfl = springContext.getBean(LateFeeLogic.class);
+  	lfl.updateLateFees($lss);
+  	LateFeesUpdated lfu = new LateFeesUpdated();
+  	lfu.setLss($lss);
+  	insert(lfu);
+end

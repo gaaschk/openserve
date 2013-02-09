@@ -13,6 +13,7 @@ import org.aspectj.lang.annotation.Before;
 import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.rulesengine.DroolsRulesEngine;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
+import org.gsoft.openserv.rulesengine.event.SystemEvent;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -47,6 +48,12 @@ public class RulesEngineAspect {
 		}
 	}
 
+	@AfterReturning(pointcut="execution(* org.gsoft.openserv.rulesengine.event.SystemEventHandler.*(..)) && args(event)")
+	public void addEventToRulesEngine(SystemEvent event){
+		if(event != null && rulesEngine.isOpen())
+			rulesEngine.addContext(event);
+	}
+	
 	@AfterReturning(pointcut="execution(* org.gsoft.openserv.repositories.*.*(..))",
 			returning="retVal")
 	public void addObjectsToRulesEngine(Iterable<?> retVal){

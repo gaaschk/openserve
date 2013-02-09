@@ -40,7 +40,7 @@ public class PastDueFirstPrincipalWeightedAllocationStrategy implements
 	
 	private Comparator getLoanAllocationComparator(){
 		if(this.comparator == null){
-			comparator = new NullComparator(new BeanComparator("projectedDueDate", new NullComparator()));
+			comparator = new NullComparator(new BeanComparator("projectedPrepayDate", new NullComparator()));
 		}
 		return comparator;
 	}
@@ -75,7 +75,7 @@ public class PastDueFirstPrincipalWeightedAllocationStrategy implements
 		List<LoanAllocation> oldestAllocations = this.getEarliestDueSubset(allocations, paymentEffectiveDate);
 		int totalDue = this.getTotalDueForSet(oldestAllocations);
 		int amountRemaining = 0;
-		if(totalDue > Math.abs(amountToPay) || !oldestAllocations.get(0).getProjectedDueDate().before(paymentEffectiveDate)){
+		if(totalDue > Math.abs(amountToPay) || !oldestAllocations.get(0).getProjectedPrepayDate().before(paymentEffectiveDate)){
 			this.allocateBasedOnDueWeight(oldestAllocations, amountToPay);
 		}
 		else{
@@ -106,14 +106,15 @@ public class PastDueFirstPrincipalWeightedAllocationStrategy implements
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private List<LoanAllocation> getEarliestDueSubset(List<LoanAllocation> allocations, Date paymentEffectiveDate){
 		Collections.sort(allocations, this.getLoanAllocationComparator());
-		if(allocations.size() <= 1 || !allocations.get(0).getProjectedDueDate().before(paymentEffectiveDate))
+		if(allocations.size() <= 1 || !allocations.get(0).getProjectedPrepayDate().before(paymentEffectiveDate))
 			return allocations;
-		Date oldestDate = allocations.get(0).getProjectedDueDate();
+		Date oldestDate = allocations.get(0).getProjectedPrepayDate();
 		int index = 0;
 		ArrayList<LoanAllocation> subset = new ArrayList<>();
-		while(index < allocations.size() && !allocations.get(index).getProjectedDueDate().after(oldestDate)){
+		while(index < allocations.size() && !allocations.get(index).getProjectedPrepayDate().after(oldestDate)){
 			subset.add(allocations.get(index));
 			index++;
 		}

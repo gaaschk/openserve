@@ -6,10 +6,13 @@ import java.util.List;
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.commons.collections.comparators.NullComparator;
+import org.gsoft.openserv.domain.loan.LoanTypeProfile;
 import org.gsoft.openserv.util.collections.SortedList;
 import org.gsoft.openserv.util.comparator.ComparatorAdapter;
+import org.joda.time.DateTime;
 
 public class StatementPaySummary {
+	private LoanTypeProfile effectiveLoanTypeProfile;
 	private BillingStatement statement;
 	private List<StatementPayment> payments;
 	
@@ -27,8 +30,23 @@ public class StatementPaySummary {
 		return payments;
 	}
 	
-	public StatementPaySummary(BillingStatement statement){
+	public StatementPaySummary(BillingStatement statement, LoanTypeProfile effectiveProfile){
+		this.effectiveLoanTypeProfile = effectiveProfile;
 		this.statement = statement;
+	}
+	
+	public boolean shouldAssessLateFee(Date effectiveDate){
+		Date lateFeeDate = this.expectedLateFeeDate();
+		return effectiveDate.after(lateFeeDate) && (this.getSatisfiedDate() == null || this.getSatisfiedDate().after(lateFeeDate));
+	}
+	
+	public Date expectedLateFeeDate(){
+		int dpdflf = this.getEffectiveLoanTypeProfile().getDaysLateForFee();
+		return new DateTime(this.getStatement().getDueDate()).plusDays(dpdflf).toDate();
+	}
+
+	public LoanTypeProfile getEffectiveLoanTypeProfile(){
+		return this.effectiveLoanTypeProfile;
 	}
 	
 	public boolean addPayment(StatementPayment payment){
@@ -62,6 +80,11 @@ public class StatementPaySummary {
 			paidAmt += payment.getAppliedAmount();
 		}
 		return paidAmt;
+	}
+	
+	public Date getPrepayDate(){
+		int prepayDays = this.getEffectiveLoanTypeProfile().getPrepaymentDays();
+		return new DateTime(this.getStatement().getDueDate()).minusDays(prepayDays).toDate();
 	}
 	
 	public void clear(){

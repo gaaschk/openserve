@@ -1,0 +1,29 @@
+package loan
+
+import org.gsoft.openserv.domain.loan.Loan
+import org.gsoft.openserv.domain.loan.LoanTypeProfile
+import org.gsoft.openserv.domain.payment.billing.BillingStatement
+import org.springframework.context.ApplicationContext
+import org.gsoft.openserv.buslogic.repayment.InitialDueDateCalculator
+import org.gsoft.openserv.buslogic.repayment.FirstDueDateCalculator
+import org.gsoft.openserv.buslogic.loan.LoanTypeLogic
+import org.gsoft.openserv.buslogic.interest.LoanInterestRateFactory
+import java.util.Date
+import java.util.Calendar
+
+global ApplicationContext springContext
+
+declare LoanTypeProfileUpdated
+	loan : Loan
+end
+
+rule "Update Effective Loan Type Profile"
+	when
+		$l : Loan(effectiveLoanTypeProfile == null)
+		not LoanTypeProfileUpdated(loan.loanID == $l.loanID)
+	then
+		System.out.println("set the effective loan type profile");
+		springContext.getBean(LoanTypeLogic.class).updateLoanTypeProfileForLoan($l);
+		update($l);
+end
+

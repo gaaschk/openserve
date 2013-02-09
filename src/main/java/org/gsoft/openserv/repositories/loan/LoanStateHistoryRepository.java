@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.gsoft.openserv.domain.loan.Disbursement;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanStateHistory;
+import org.gsoft.openserv.repositories.payment.LateFeeRepository;
 import org.gsoft.openserv.repositories.payment.LoanPaymentRepository;
 import org.gsoft.openserv.repositories.rates.LoanRateValueRepository;
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,8 @@ public class LoanStateHistoryRepository {
 	private LoanBalanceAdjustmentRepository loanBalanceAdjustmentRepo;
 	@Resource
 	private LoanRateValueRepository loanRateValueRepo;
+	@Resource
+	private LateFeeRepository lateFeeRepository;
 	
 	public LoanStateHistory findLoanStateHistory(Long loanID){
 		Loan loan = loanRepo.findOne(loanID);
@@ -33,6 +36,7 @@ public class LoanStateHistoryRepository {
 		loanStateHistory.addAllRateChanges(loanRateValueRepo.findAllLoanRateValues(loan.getLoanID()));
 		loanStateHistory.addAllAdjustments(loanBalanceAdjustmentRepo.findAllLoanBalanceAdjustmentsForLoan(loan.getLoanID()));
 		loanStateHistory.addAllPayments(paymentRepo.findAllLoanPayments(loan.getLoanID()));
+		loanStateHistory.addAllLateFees(lateFeeRepository.findAllForLoan(loan.getLoanID()));
 		return loanStateHistory;
 	}
 	

@@ -5,8 +5,8 @@ import java.util.Date;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanStateHistory;
 import org.gsoft.openserv.domain.payment.LoanPayment;
-import org.gsoft.openserv.domain.payment.billing.BillingStatement;
 import org.gsoft.openserv.domain.payment.billing.LoanStatementSummary;
+import org.gsoft.openserv.domain.payment.billing.StatementPaySummary;
 
 public class LoanAllocation {
 	private Loan loan;
@@ -37,8 +37,11 @@ public class LoanAllocation {
 		this.loanStateHistory = loanStateHistory;
 	}
 
-	public Date getProjectedDueDate() {
-		return this.statementSummary.getEarliestUnpaidDueDate();
+	public Date getProjectedPrepayDate() {
+		StatementPaySummary stmt = this.statementSummary.getEarliestUnpaidByDate(newLoanPayment.getPayment().getEffectiveDate());
+		if(stmt == null)
+			return newLoanPayment.getPayment().getEffectiveDate();
+		return stmt.getPrepayDate();
 	}
 	
 	public Integer getMinimumPaymentAmount() {

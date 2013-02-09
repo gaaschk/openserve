@@ -2,6 +2,7 @@ package org.gsoft.openserv.web.converters.model;
 
 import org.gsoft.openserv.domain.loan.BalanceAdjustmentLoanState;
 import org.gsoft.openserv.domain.loan.DisbursementLoanState;
+import org.gsoft.openserv.domain.loan.LateFeeState;
 import org.gsoft.openserv.domain.loan.LoanState;
 import org.gsoft.openserv.domain.loan.PaymentLoanState;
 import org.gsoft.openserv.domain.loan.RateValueLoanState;
@@ -24,6 +25,9 @@ public class LoanStateToLoanStateModelConverter implements Converter<LoanState, 
 		}
 		else if(loanState instanceof PaymentLoanState){
 			loanStateModel.setEventType("Payment Applied");
+		}
+		else if(loanState instanceof LateFeeState){
+			loanStateModel.setEventType("Late Fee Assessed");
 		}
 		loanStateModel.setEffectiveDate(loanState.getStateEffectiveDate());
 		loanStateModel.setPostedDate(loanState.getStatePostDate());

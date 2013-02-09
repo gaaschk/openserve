@@ -2,6 +2,7 @@ package org.gsoft.openserv.web.converters.model;
 
 import javax.annotation.Resource;
 
+import org.gsoft.openserv.domain.payment.LateFee;
 import org.gsoft.openserv.domain.payment.billing.StatementPaySummary;
 import org.gsoft.openserv.repositories.loan.LoanTypeProfileRepository;
 import org.gsoft.openserv.repositories.payment.LateFeeRepository;
@@ -25,7 +26,10 @@ public class BillingStatementToBillingStatementModelConverter implements Convert
 		model.setPaidAmount(source.getTotalPaid());
 		model.setMinimumRequiredPayment(source.getStatement().getMinimumRequiredPayment());
 		model.setSatisfiedDate(source.getSatisfiedDate());
-		model.setLateFeeAmount(0);
+		LateFee lateFee = lateFeeRepo.findByBillingStatementID(source.getStatement().getBillingStatementID());
+		if(lateFee != null){
+			model.setLateFeeAmount(lateFee.getFeeAmount());
+		}
 		return model;
 	}
 

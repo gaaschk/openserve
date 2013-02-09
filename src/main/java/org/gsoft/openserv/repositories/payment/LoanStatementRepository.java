@@ -34,7 +34,7 @@ public class LoanStatementRepository {
 		List<BillingStatement> billingStatements = statementRepository.findAllBillsForLoan(loan.getLoanID());
 		List<LoanPayment> loanPayments = loanPaymentRepository.findAllLoanPayments(loan.getLoanID());
 		List<LoanTypeProfile> loanTypeProfiles = loanTypeProfileRepository.findLoanTypeProfilesByLoanTypeAndEffectiveDate(loan.getLoanType(), loan.getServicingStartDate());
-		LoanStatementSummary summary = new LoanStatementSummary(billingStatements, loanPayments, loanTypeProfiles);
+		LoanStatementSummary summary = new LoanStatementSummary(loan, billingStatements, loanPayments, loanTypeProfiles);
 		return summary;
 	}
 
@@ -47,7 +47,7 @@ public class LoanStatementRepository {
 		List<BillingStatement> billingStatements = statementRepository.findAllBillsForLoanOnOrBefore(loan.getLoanID(), asOfDate);
 		List<LoanPayment> loanPayments = loanPaymentRepository.findAllLoanPaymentsEffectiveOnOrBefore(loan.getLoanID(), asOfDate);
 		List<LoanTypeProfile> loanTypeProfiles = loanTypeProfileRepository.findLoanTypeProfilesByLoanTypeAndEffectiveDate(loan.getLoanType(), loan.getServicingStartDate());
-		LoanStatementSummary summary = new LoanStatementSummary(billingStatements, loanPayments, loanTypeProfiles);
+		LoanStatementSummary summary = new LoanStatementSummary(loan, billingStatements, loanPayments, loanTypeProfiles);
 		return summary;
 	}
 }

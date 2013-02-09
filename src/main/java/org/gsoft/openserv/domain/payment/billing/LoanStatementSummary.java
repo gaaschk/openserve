@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.commons.collections.comparators.NullComparator;
+import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanTypeProfile;
 import org.gsoft.openserv.domain.payment.LoanPayment;
 import org.gsoft.openserv.util.collections.SortedList;
@@ -15,9 +16,14 @@ import org.gsoft.openserv.util.comparator.ComparatorAdapter;
 import org.joda.time.DateTime;
 
 public class LoanStatementSummary {
+	private Loan loan;
 	private List<LoanPayment> payments;
 	private List<StatementPaySummary> statements;
 	private List<LoanTypeProfile> loanTypeProfiles;
+	
+	public Loan getLoan(){
+		return loan;
+	}
 	
 	private List<LoanPayment> getPayments(){
 		if(this.payments == null){
@@ -75,9 +81,12 @@ public class LoanStatementSummary {
 		return ltp;
 	}
 
-	public LoanStatementSummary(){}
+	public LoanStatementSummary(Loan loan){
+		this.loan = loan;
+	}
 	
-	public LoanStatementSummary(List<BillingStatement> statements, List<LoanPayment> payments, List<LoanTypeProfile> profiles){
+	public LoanStatementSummary(Loan loan, List<BillingStatement> statements, List<LoanPayment> payments, List<LoanTypeProfile> profiles){
+		this.loan = loan;
 		this.setLoanTypeProfiles(profiles);
 		this.setStatements(statements);
 		this.setPayments(payments);
@@ -99,13 +108,13 @@ public class LoanStatementSummary {
 	}
 	
 	public void addStatement(BillingStatement statement){
-		this.getStatements().add(new StatementPaySummary(statement));
+		this.getStatements().add(new StatementPaySummary(statement, this.getEffectiveLoanTypeProfile(statement.getDueDate())));
 		this.applyPayments();
 	}
 	
 	public void addStatements(List<BillingStatement> statements){
 		for(BillingStatement statement:statements){
-			this.getStatements().add(new StatementPaySummary(statement));
+			this.getStatements().add(new StatementPaySummary(statement, this.getEffectiveLoanTypeProfile(statement.getDueDate())));
 		}
 		this.applyPayments();
 	}
@@ -150,6 +159,16 @@ public class LoanStatementSummary {
 			}
 		}
 		return dueDate;
+	}
+	
+	public StatementPaySummary getEarliestUnpaidByDate(Date byDate){
+		StatementPaySummary statement = null;
+		for(StatementPaySummary stmt:this.getStatements()){
+			if(stmt.getSatisfiedDate() == null||stmt.getSatisfiedDate().after(byDate)){
+				return stmt;
+			}
+		}
+		return statement;
 	}
 	
 	public Integer getMinimumPaymentToAdvanceDueDate(){
