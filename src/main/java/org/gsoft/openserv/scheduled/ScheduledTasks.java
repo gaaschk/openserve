@@ -6,8 +6,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.rulesengine.event.SystemEventHandler;
-import org.gsoft.openserv.rulesengine.event.LoanTemporalEvent;
 import org.gsoft.openserv.service.SystemSettingsService;
 import org.gsoft.openserv.service.batch.BatchProcessingService;
 import org.springframework.context.ApplicationContext;
