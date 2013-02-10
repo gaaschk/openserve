@@ -13,25 +13,10 @@ declare LoanRateValueLoaded
 	loanId : long
 end
 
-declare LRVCheckedAfterUpdate
-	loanId : long
-end
-
-rule "Remove LRV loaded flag"
-	when
-		$l : Loan(currentAmortizationSchedule == null, effectiveLoanTypeProfile != null, repaymentStartDate != null)
-		$liru : LoanInterestRateUpdated(loanId == $l.loanID)
-		not LRVCheckedAfterUpdate(loanId == $l.loanID)
-	then
-		LRVCheckedAfterUpdate lcau = new LRVCheckedAfterUpdate();
-		lcau.setLoanId($l.getLoanID());
-		retract($liru);
-		insert(lcau);
-end
-
 rule "Load LoanRateValue"
 	when
 		$l : Loan(currentAmortizationSchedule == null, effectiveLoanTypeProfile != null, repaymentStartDate != null)
+		LoanInterestRateUpdated(loanId == $l.loanID)
 		not LoanRateValueLoaded(loanId == $l.loanID)		
 	then
 		System.out.println("Loading LoanRateValue");
