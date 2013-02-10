@@ -149,10 +149,6 @@ public class Loan extends PersistentDomainObject{
 		return LoanTermCalculator.calculateRemainingLoanTermAsOf(this, asOfDate);
 	}
 	
-	@Transient
-	public int getMinimumPaymentAmountAsOf(Date asOfDate){
-		return PaymentAmountCalculator.findPaymentAmountForDate(this, asOfDate);
-	}
 	@Override
 	@Transient
 	public Long getID() {

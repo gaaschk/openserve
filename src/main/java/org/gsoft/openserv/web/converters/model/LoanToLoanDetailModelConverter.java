@@ -7,6 +7,7 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
+import org.gsoft.openserv.buslogic.amortization.AmortizationLogic;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanState;
@@ -39,6 +40,8 @@ public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetai
 	private LoanPaymentRepository loanPaymentRepository;
 	@Resource
 	private LoanStatementRepository statementRepository;
+	@Resource
+	private AmortizationLogic amortizationLogic;
 	
 	public LoanDetailModel convert(Loan loan){
 		Date systemDate = systemSettings.getCurrentSystemDate();
@@ -54,7 +57,7 @@ public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetai
 		finModel.setMargin(loanStateHistory.getEndingMargin());
 		finModel.setEffectiveIntRate(finModel.getBaseRate().add(finModel.getMargin()));
 		finModel.setDailyInterestAmount(loanStateHistory.getEndingInterestRate().multiply(BigDecimal.valueOf(loanStateHistory.getEndingPrincipal())).divide(BigDecimal.valueOf(Constants.DAYS_IN_YEAR), Constants.INTEREST_ROUNDING_SCALE_35, Constants.INTEREST_ROUNDING_MODE));
-		finModel.setMinimumPaymentAmount(loan.getMinimumPaymentAmountAsOf(systemSettings.getCurrentSystemDate()));
+		finModel.setMinimumPaymentAmount(amortizationLogic.findPaymentAmountForDate(loan,systemSettings.getCurrentSystemDate()));
 		LoanStatementSummary statementSummary = statementRepository.getLoanStatementSummaryForLoan(loan);
 		finModel.setNextDueDate(statementSummary.getNextDueDate());
 		LoanPayment lastPayment = loanPaymentRepository.findMostRecentLoanPayment(loan.getLoanID());

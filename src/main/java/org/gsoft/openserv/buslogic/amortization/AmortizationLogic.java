@@ -2,6 +2,8 @@ package org.gsoft.openserv.buslogic.amortization;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -126,5 +128,33 @@ public class AmortizationLogic {
 			}
 		}
 		return loanAmortizationSchedule;
+	}
+	
+	public Integer findPaymentAmountForDate(Loan loan, Date asOfDate){
+		int minPaymentAmount = 0;
+		LoanAmortizationSchedule effectiveAmortization = amortizationScheduleRepository.findScheduleForLoanEffectiveOn(loan.getLoanID(), asOfDate);
+		if(effectiveAmortization != null){
+			List<AmortizationLoanPayment> payments = effectiveAmortization.getAmortizationLoanPayments();
+			Collections.sort(payments, new Comparator<AmortizationLoanPayment>(){
+				@Override
+				public int compare(AmortizationLoanPayment p1, AmortizationLoanPayment p2){
+					return p1.getPaymentOrder() - p2.getPaymentOrder();
+				}
+			});
+			int remainingTerm = loan.getRemainingLoanTermAsOf(asOfDate);
+			int totalTerm = 0;
+			for(AmortizationLoanPayment amortPayment:payments){
+				totalTerm+=amortPayment.getPaymentCount();
+			}
+			int usedTerm = totalTerm - remainingTerm;
+			int index = 0;
+			int paymentCount = payments.get(index).getPaymentCount();
+			while(paymentCount < usedTerm){
+				paymentCount += payments.get(index).getPaymentCount();
+				index++;
+			}
+			minPaymentAmount = payments.get(index).getPaymentAmount(); 
+		}
+		return minPaymentAmount; 
 	}
 }

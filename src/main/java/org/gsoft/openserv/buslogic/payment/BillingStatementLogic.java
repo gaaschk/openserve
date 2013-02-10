@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.gsoft.openserv.buslogic.amortization.AmortizationLogic;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanTypeProfile;
@@ -35,6 +36,8 @@ public class BillingStatementLogic {
 	private LateFeeLogic lateFeeLogic;
 	@Resource
 	private SystemEventHandler systemEventHandler;
+	@Resource
+	private AmortizationLogic amortizationLogic;
 	
 	public boolean isBillingStatementNeeded(Loan loan){
 		Date systemDate = systemSettings.getCurrentSystemDate();
@@ -67,21 +70,21 @@ public class BillingStatementLogic {
 		BillingStatement statement = null;
 		if(this.isBillingStatementNeeded(loan)){
 			Date systemDate = systemSettings.getCurrentSystemDate();
-			LoanTypeProfile ltp = loan.getEffectiveLoanTypeProfile();
 			Date repaymentStartDate = loan.getRepaymentStartDate();
-			Date earliestDueBillingDate = new DateTime(repaymentStartDate).plusDays(ltp.getMinDaysToFirstDue()).minusDays(ltp.getDaysBeforeDueToBill()).toDate();
+			LoanTypeProfile ltpAtRepayStart = loanTypeProfileRepository.findLoanTypeProfileByLoanTypeAndEffectiveDate(loan.getLoanType(), repaymentStartDate);
+			Date earliestDueBillingDate = new DateTime(repaymentStartDate).plusDays(ltpAtRepayStart.getMinDaysToFirstDue()).minusDays(ltpAtRepayStart.getDaysBeforeDueToBill()).toDate();
 			BillingStatement lastStatement = billingStatementRepository.findMostRecentBillingStatementForLoan(loan.getLoanID());
-			statement = new BillingStatement();
-			statement.setLoanID(loan.getLoanID());
-			statement.setCreatedDate(systemDate);
 			Date dueDate = null;
 			if (lastStatement == null) {
-				dueDate = new DateTime(earliestDueBillingDate).plusDays(ltp.getDaysBeforeDueToBill()).toDate();
+				dueDate = new DateTime(earliestDueBillingDate).plusDays(ltpAtRepayStart.getDaysBeforeDueToBill()).toDate();
 			} else {
 				dueDate = new DateTime(lastStatement.getDueDate()).plusMonths(1).toDate();
 			}
+			statement = new BillingStatement();
+			statement.setLoanID(loan.getLoanID());
+			statement.setCreatedDate(systemDate);
 			statement.setDueDate(dueDate);
-			statement.setMinimumRequiredPayment(loan.getMinimumPaymentAmountAsOf(dueDate));
+			statement.setMinimumRequiredPayment(amortizationLogic.findPaymentAmountForDate(loan,dueDate));
 			statement = billingStatementRepository.save(statement);
 		}
 		systemEventHandler.handleEvent(new BillingStatementCreatedEvent(statement));
