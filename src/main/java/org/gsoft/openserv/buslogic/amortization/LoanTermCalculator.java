@@ -9,15 +9,10 @@ import org.joda.time.Months;
 public class LoanTermCalculator {
 	
 	public static int calculateRemainingLoanTermAsOf(Loan loan, Date asOfDate){
-		int remainingTerm = 0;
-		if(loan.getCurrentAmortizationSchedule() != null){
-			int term = loan.getCurrentAmortizationSchedule().getTotalNumberOfPayment();
-			int used = Months.monthsBetween(new DateTime(loan.getCurrentAmortizationSchedule().getAmortizationSchedule().getEffectiveDate()),new DateTime(asOfDate)).getMonths(); 
-			remainingTerm = term - used;
+		int used = 0;
+		if(loan.getRepaymentStartDate() != null){
+			used = Months.monthsBetween(new DateTime(loan.getRepaymentStartDate()),new DateTime(asOfDate)).getMonths(); 
 		}
-		else{
-			remainingTerm = loan.getEffectiveLoanTypeProfile().getMaximumLoanTerm(); 
-		}
-		return remainingTerm;
+		return loan.getEffectiveLoanTypeProfile().getMaximumLoanTerm() - used;
 	}
 }
