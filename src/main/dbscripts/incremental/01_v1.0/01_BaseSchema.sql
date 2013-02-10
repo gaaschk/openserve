@@ -238,6 +238,30 @@ INSERT INTO Rate(RateID, RateName, TickerSymbol, ShouldAutoUpdate)
   VALUES(10, '1 Month LIBOR US Dollars', 'LIBOR.USD1M', 0);
 INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
   VALUES(10, 10, '2000-01-01', 0.035000, 1);
+INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
+  VALUES(11, 10, '2012-01-01', .036, 1);
+INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
+  VALUES(12, 10, '2012-02-01', .037, 1);
+INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
+  VALUES(13, 10, '2012-03-01', .038, 1);
+INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
+  VALUES(14, 10, '2012-04-01', .039, 1);
+INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
+  VALUES(15, 10, '2012-05-01', .040, 1);
+INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
+  VALUES(16, 10, '2012-06-01', .030, 1);
+INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
+  VALUES(17, 10, '2012-07-01', .031, 1);
+INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
+  VALUES(18, 10, '2012-08-01', .032, 1);
+INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
+  VALUES(19, 10, '2012-09-01', .033, 1);
+INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
+  VALUES(20, 10, '2012-10-01', .034, 1);
+INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
+  VALUES(21, 10, '2012-11-01', .035, 1);
+INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
+  VALUES(22, 10, '2012-12-01', .036, 1);
 
 INSERT INTO SystemSettings VALUES (10, 0, 0);
 
