@@ -6,6 +6,8 @@ import org.springframework.context.ApplicationContext
 import org.gsoft.openserv.domain.interest.LoanRateValue
 import org.gsoft.openserv.repositories.rates.LoanRateValueRepository
 import java.util.Arrays
+import java.util.List
+import java.util.Date
 
 global ApplicationContext springContext
 
@@ -13,27 +15,36 @@ declare LoanRateValueLoaded
 	loanId : long
 end
 
-rule "Load LoanRateValue"
-	when
-		$l : Loan(currentAmortizationSchedule == null, effectiveLoanTypeProfile != null, repaymentStartDate != null)
-		LoanInterestRateUpdated(loanId == $l.loanID)
-		not LoanRateValueLoaded(loanId == $l.loanID)		
-	then
-		System.out.println("Loading LoanRateValue");
-		LoanRateValue lrv = springContext.getBean(LoanRateValueRepository.class).findLoanRateValueForLoanAsOf($l.getLoanID(), $l.getRepaymentStartDate());
-		LoanRateValueLoaded lrvl = new LoanRateValueLoaded();
-		lrvl.setLoanId($l.getLoanID());
-		insert(lrvl);
-		insert(lrv);
+declare MissingAmortizationDates
+	loanId : long
+	dates : List
 end
 
-rule "Generate Amortization Schedule"
+declare AmortizationSchedulesGenerated
+	loanId : long
+end
+
+rule "Load Missing Amortization Dates"
 	when
-		$l : Loan(currentAmortizationSchedule == null, effectiveLoanTypeProfile != null, repaymentStartDate != null)
-		$lrv : LoanRateValue(loanID == $l.loanID, lockedDate <= $l.repaymentStartDate)
-		LoanRateValueLoaded(loanId == $l.loanID)
+		$l : Loan(effectiveLoanTypeProfile != null, repaymentStartDate != null)
+		LoanInterestRateUpdated(loanId == $l.loanID)
+		not MissingAmortizationDates(loanId == $l.loanID)
 	then
-		System.out.println("Generating the Amortization Schedule");
-		springContext.getBean(AmortizationLogic.class).createAmortizationSchedule(Arrays.asList($l.getLoanID()), $l.getRepaymentStartDate());
+		System.out.println("Load Missing Amortization Schedule Dates");
+		List<Date> missingDates = springContext.getBean(AmortizationLogic.class).getMissingAmortizationScheduleDates(Arrays.asList($l.getLoanID()));
+		MissingAmortizationDates dates = new MissingAmortizationDates($l.getLoanID(), missingDates);
+		insert(dates);
+end
+
+rule "Generate Missing Amortization Schedules"
+	when
+		$l : Loan(effectiveLoanTypeProfile != null, repaymentStartDate != null)
+		$mad : MissingAmortizationDates(loanId == $l.loanID, dates != null, dates.size > 0)
+		not AmortizationSchedulesGenerated(loanId == $l.loanID)
+	then
+		System.out.println("Generating Missing Amortization Schedules");
+		springContext.getBean(AmortizationLogic.class).createAmortizationSchedule(Arrays.asList($l.getLoanID()), $mad.getDates());
+		AmortizationSchedulesGenerated flag = new AmortizationSchedulesGenerated($l.getLoanID());
+		insert(flag);
 		update($l);
 end

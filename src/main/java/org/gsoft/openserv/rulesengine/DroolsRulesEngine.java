@@ -25,7 +25,7 @@ import org.springframework.util.ResourceUtils;
 @Component
 public class DroolsRulesEngine implements RulesEngine{
 	private boolean isOpen = false;
-	private boolean isRunning = false;
+	private boolean knowledgeModified = false;
 	private KnowledgeBase base = null;
 	private ArrayList<Object> knowledge = new ArrayList<Object>();
 	@Resource
@@ -78,11 +78,16 @@ public class DroolsRulesEngine implements RulesEngine{
 	public void open() {
 		isOpen = true;
 	}
+	
+	public void setModified(){
+		this.knowledgeModified = true;
+	}
 
 	public void evaluateRules() {
 		if(!this.isOpen)
 			throw new RulesEngineException("RulesEngine must be open before it can be run.");
-		while(knowledge.size()>0){
+		while(knowledge.size()>0 && knowledgeModified){
+			knowledgeModified = false;
 			ArrayList<Object> workingKnowledge = new ArrayList<>();
 			workingKnowledge.addAll(knowledge);
 			knowledge.clear();

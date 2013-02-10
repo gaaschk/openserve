@@ -27,6 +27,12 @@ public class PaymentAmountCalculator {
 		return paymentAmount;
 	}
 	
+	public static BigDecimal calculatePaymentAmountExact(Integer principalBalance, BigDecimal annualInterestRate, Integer remainingTerm){
+        BigDecimal periodicRate = annualInterestRate.divide(new BigDecimal(Constants.MONTHS_IN_YEAR), Constants.INTEREST_ROUNDING_SCALE_35, Constants.INTEREST_ROUNDING_MODE);
+		BigDecimal paymentAmount = periodicRate.multiply(BigDecimal.valueOf(principalBalance)).divide(BigDecimal.ONE.subtract(periodicRate.add(BigDecimal.valueOf(1)).pow(remainingTerm * ( -1 ), MathContext.DECIMAL128)), Constants.INTEREST_ROUNDING_SCALE_35, Constants.INTEREST_ROUNDING_MODE);
+		return paymentAmount;
+	}
+	
 	public static Integer findPaymentAmountForDate(Loan loan, Date asOfDate){
 		int minPaymentAmount = 0;
 		if(loan.getCurrentAmortizationSchedule() != null){

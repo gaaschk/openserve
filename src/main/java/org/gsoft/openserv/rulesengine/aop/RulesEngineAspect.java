@@ -22,7 +22,10 @@ public class RulesEngineAspect {
 	@Resource
 	private DroolsRulesEngine rulesEngine;
 	
-	
+	@AfterReturning(pointcut="within(org.gsoft.openserv.repositories.BaseRepository+) && execution(* save(..))")
+	public void setModified(){
+		this.rulesEngine.setModified();
+	}
 	
 	@AfterReturning(pointcut="@annotation(org.gsoft.openserv.rulesengine.annotation.RunRulesEngine)")
 	public void runRulesEngine() throws FileNotFoundException{
@@ -38,6 +41,9 @@ public class RulesEngineAspect {
 	@Before(value="@annotation(org.gsoft.openserv.rulesengine.annotation.RunRulesEngine)")
 	public void openRulesEngine(){
 		rulesEngine.open();
+		//need to do this to ensure that it runs at least once.  
+		//TODO consider renaming this property
+		rulesEngine.setModified();
 	}
 
 	@AfterReturning(pointcut="execution(* org.gsoft.openserv.repositories.*.*(..))",

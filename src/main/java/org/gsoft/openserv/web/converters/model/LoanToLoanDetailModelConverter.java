@@ -1,5 +1,6 @@
 package org.gsoft.openserv.web.converters.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -16,6 +17,7 @@ import org.gsoft.openserv.domain.payment.billing.StatementPaySummary;
 import org.gsoft.openserv.repositories.payment.LoanPaymentRepository;
 import org.gsoft.openserv.repositories.payment.LoanStatementRepository;
 import org.gsoft.openserv.service.AccountSummaryService;
+import org.gsoft.openserv.util.Constants;
 import org.gsoft.openserv.web.models.BillingStatementModel;
 import org.gsoft.openserv.web.models.LoanAmortizationModel;
 import org.gsoft.openserv.web.models.LoanDetailModel;
@@ -51,7 +53,7 @@ public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetai
 		finModel.setBaseRate(loanStateHistory.getEndingBaseRate());
 		finModel.setMargin(loanStateHistory.getEndingMargin());
 		finModel.setEffectiveIntRate(finModel.getBaseRate().add(finModel.getMargin()));
-		finModel.setDailyInterestAmount(loanStateHistory.getEndingInterestRate());
+		finModel.setDailyInterestAmount(loanStateHistory.getEndingInterestRate().multiply(BigDecimal.valueOf(loanStateHistory.getEndingPrincipal())).divide(BigDecimal.valueOf(Constants.DAYS_IN_YEAR), Constants.INTEREST_ROUNDING_SCALE_35, Constants.INTEREST_ROUNDING_MODE));
 		finModel.setMinimumPaymentAmount(loan.getMinimumPaymentAmountAsOf(systemSettings.getCurrentSystemDate()));
 		LoanStatementSummary statementSummary = statementRepository.getLoanStatementSummaryForLoan(loan);
 		finModel.setNextDueDate(statementSummary.getNextDueDate());

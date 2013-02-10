@@ -9,7 +9,7 @@ global ApplicationContext springContext
 
 rule "Update Loan Interest Rate"
 	when
-		$l : Loan(effectiveLoanTypeProfile  != null, servicingStartDate  != null, effectiveLoanTypeProfile.baseRateUpdateFrequency != null)
+		$l : Loan(effectiveLoanTypeProfile  != null, servicingStartDate != null, effectiveLoanTypeProfile.baseRateUpdateFrequency != null)
 		not LoanInterestRateUpdated(loanId == $l.loanID)
 	then
 		System.out.println("Updating Interest Rate");
