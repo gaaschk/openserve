@@ -1,6 +1,7 @@
 package org.gsoft.openserv.buslogic.amortization;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -14,9 +15,7 @@ public class PaymentAmountCalculator {
 	
 	public static Integer calculatePaymentAmount(Integer principalBalance, BigDecimal annualInterestRate, Integer remainingTerm){
         BigDecimal periodicRate = annualInterestRate.divide(new BigDecimal(Constants.MONTHS_IN_YEAR), Constants.INTEREST_ROUNDING_SCALE_35, Constants.INTEREST_ROUNDING_MODE);
-		Integer paymentAmount =
-                (int)Math.ceil( ( periodicRate.floatValue() * principalBalance ) /
-                        ( 1 - Math.pow( ( 1 + periodicRate.floatValue() ), remainingTerm * ( -1 ) ) ) );
+		Integer paymentAmount = periodicRate.multiply(BigDecimal.valueOf(principalBalance)).divide(BigDecimal.ONE.subtract(periodicRate.add(BigDecimal.valueOf(1)).pow(remainingTerm * ( -1 ), MathContext.DECIMAL128)), Constants.INTEREST_ROUNDING_SCALE_35, Constants.INTEREST_ROUNDING_MODE).intValue();
 		if(paymentAmount <= 0){
 			if(remainingTerm > 0){
 				paymentAmount = principalBalance/remainingTerm;
