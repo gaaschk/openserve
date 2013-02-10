@@ -23,7 +23,7 @@ rule "Create Loan Amortization Wrapper"
 		System.out.println("Creating LoanAmortizationWrapper");
 		LoanAmortizationWrapper law = new LoanAmortizationWrapper();
 		law.setLoan($l);
-		LoanRateValue lrv = springContext.getBean(LoanRateValueRepository.class).findMostRecentLoanRateValueForLoan($l.getLoanID());
+		LoanRateValue lrv = springContext.getBean(LoanRateValueRepository.class).findLoanRateValueForLoanAsOf($l.getLoanID(), $l.getRepaymentStartDate());
 		law.setLrv(lrv);
 		law.setUpdated(false);
 		insert(law);

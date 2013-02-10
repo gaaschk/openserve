@@ -1,6 +1,11 @@
 import javax.security.auth.login.ConfigurationSpi;
 import com.sun.org.apache.bcel.internal.util.ClassPath;
 
+//this doesn't work right now. not sure why.
+buildscript {
+    apply from: 'https://github.com/valkolovos/gradle_cobertura/raw/master/repo/gradle_cobertura/gradle_cobertura/1.2.1/coberturainit.gradle'
+}
+
 apply plugin: 'eclipse'
 apply plugin: 'war'
 apply plugin: 'sonar'
@@ -114,6 +119,9 @@ def configureEnv(){
 	ext.config = config	
 }
 
+cobertura {
+}
+
 task generateQueryDSL (type: JavaCompile) {
 		source = 'src/main/java'
 		classpath = configurations.compile
@@ -182,4 +190,5 @@ task checkLibVersions << {
 	  }
   }	
 }
+
 

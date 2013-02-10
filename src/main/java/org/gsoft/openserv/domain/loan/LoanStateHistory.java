@@ -142,6 +142,7 @@ public class LoanStateHistory {
 		return this.getLastLoanState().getMargin();
 	}
 	
+/*
 	public String toString(){
 		StringBuffer strBuf = new StringBuffer();
 		for(LoanState state:this.getLoanStates()){
@@ -151,5 +152,6 @@ public class LoanStateHistory {
 		}
 		return strBuf.toString();
 	}
+*/
 }
 
