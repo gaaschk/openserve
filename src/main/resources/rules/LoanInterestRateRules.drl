@@ -1,3 +1,5 @@
+package loan
+
 import org.gsoft.openserv.domain.loan.Loan
 import org.gsoft.openserv.rulesengine.event.LoanTemporalEvent
 import org.springframework.context.ApplicationContext
@@ -5,38 +7,14 @@ import org.gsoft.openserv.buslogic.interest.LoanInterestRateFactory
 
 global ApplicationContext springContext
 
-declare LoanInterestRateUpdateNeeded
-	loan : Loan
-	updateNeeded : boolean
-end
-
-rule "Temporal Interest Rate check"
-	when
-		$lte : LoanTemporalEvent($l:loan)
-		
-	then
-		insert($lte.getLoan());
-end
-
-rule "Check Interest Update"
-	when
-		$l : Loan(effectiveLoanTypeProfile  != null, servicingStartDate  != null, effectiveLoanTypeProfile.baseRateUpdateFrequency != null)
-		not LoanInterestRateUpdateNeeded(loan.loanID == $l.loanID)
-	then
-		System.out.println("Determining need for Interest Rate update");
-		boolean isNeeded = springContext.getBean(LoanInterestRateFactory.class).isLoanRateUpdateNeeded($l);
-		LoanInterestRateUpdateNeeded check = new LoanInterestRateUpdateNeeded();
-		check.setLoan($l);
-		check.setUpdateNeeded(isNeeded);
-		insert(check);
-end
-
 rule "Update Loan Interest Rate"
 	when
-		$liun : LoanInterestRateUpdateNeeded(updateNeeded, $l : loan)
+		$l : Loan(effectiveLoanTypeProfile  != null, servicingStartDate  != null, effectiveLoanTypeProfile.baseRateUpdateFrequency != null)
+		not LoanInterestRateUpdated(loanId == $l.loanID)
 	then
 		System.out.println("Updating Interest Rate");
 		springContext.getBean(LoanInterestRateFactory.class).setRateForLoan($l);
-		$liun.setUpdateNeeded(false);
-		update($liun);
+		LoanInterestRateUpdated liru = new LoanInterestRateUpdated();
+		liru.setLoanId($l.getLoanID());
+		insert(liru);
 end

@@ -1,4 +1,4 @@
-package payment
+package loan
 
 import org.gsoft.openserv.domain.loan.Loan
 import org.gsoft.openserv.buslogic.amortization.AmortizationLogic
@@ -9,34 +9,46 @@ import java.util.Arrays
 
 global ApplicationContext springContext
 
-declare LoanAmortizationWrapper
-	loan : Loan
-	lrv : LoanRateValue
-	updated : boolean
+declare LoanRateValueLoaded
+	loanId : long
 end
 
-rule "Create Loan Amortization Wrapper"
+declare LRVCheckedAfterUpdate
+	loanId : long
+end
+
+rule "Remove LRV loaded flag"
 	when
 		$l : Loan(currentAmortizationSchedule == null, effectiveLoanTypeProfile != null, repaymentStartDate != null)
-		not LoanAmortizationWrapper(loan.loanID == $l.loanID)		
+		$liru : LoanInterestRateUpdated(loanId == $l.loanID)
+		not LRVCheckedAfterUpdate(loanId == $l.loanID)
 	then
-		System.out.println("Creating LoanAmortizationWrapper");
-		LoanAmortizationWrapper law = new LoanAmortizationWrapper();
-		law.setLoan($l);
+		LRVCheckedAfterUpdate lcau = new LRVCheckedAfterUpdate();
+		lcau.setLoanId($l.getLoanID());
+		retract($liru);
+		insert(lcau);
+end
+
+rule "Load LoanRateValue"
+	when
+		$l : Loan(currentAmortizationSchedule == null, effectiveLoanTypeProfile != null, repaymentStartDate != null)
+		not LoanRateValueLoaded(loanId == $l.loanID)		
+	then
+		System.out.println("Loading LoanRateValue");
 		LoanRateValue lrv = springContext.getBean(LoanRateValueRepository.class).findLoanRateValueForLoanAsOf($l.getLoanID(), $l.getRepaymentStartDate());
-		law.setLrv(lrv);
-		law.setUpdated(false);
-		insert(law);
+		LoanRateValueLoaded lrvl = new LoanRateValueLoaded();
+		lrvl.setLoanId($l.getLoanID());
+		insert(lrvl);
+		insert(lrv);
 end
 
 rule "Generate Amortization Schedule"
 	when
 		$l : Loan(currentAmortizationSchedule == null, effectiveLoanTypeProfile != null, repaymentStartDate != null)
-		$law : LoanAmortizationWrapper(loan.loanID == $l.loanID, lrv != null, updated == false)
+		$lrv : LoanRateValue(loanID == $l.loanID, lockedDate <= $l.repaymentStartDate)
+		LoanRateValueLoaded(loanId == $l.loanID)
 	then
 		System.out.println("Generating the Amortization Schedule");
 		springContext.getBean(AmortizationLogic.class).createAmortizationSchedule(Arrays.asList($l.getLoanID()), $l.getRepaymentStartDate());
-		$law.setUpdated(true);
-		update($law);
 		update($l);
 end

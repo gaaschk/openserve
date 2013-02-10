@@ -1,0 +1,6 @@
+package loan
+
+declare LoanInterestRateUpdated
+	loanId : long
+end
+

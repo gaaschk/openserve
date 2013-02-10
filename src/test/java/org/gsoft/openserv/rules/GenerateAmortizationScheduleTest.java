@@ -63,7 +63,9 @@ public class GenerateAmortizationScheduleTest {
 		new ApplicationContextLocator().setApplicationContext(springContext);
 		
 		KnowledgeBuilder builder= KnowledgeBuilderFactory.newKnowledgeBuilder();
-		File ruleFile = ResourceUtils.getFile("classpath:rules/GenerateAmortizationSchedule.drl");
+		File ruleFile = ResourceUtils.getFile("classpath:rules/loan.package");
+		builder.add(ResourceFactory.newFileResource(ruleFile), ResourceType.DRL);
+		ruleFile = ResourceUtils.getFile("classpath:rules/GenerateAmortizationSchedule.drl");
 		builder.add(ResourceFactory.newFileResource(ruleFile), ResourceType.DRL);
 		if(builder.hasErrors())
 			System.out.println(builder.getErrors());

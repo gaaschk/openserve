@@ -41,6 +41,10 @@ public class DroolsRulesEngine implements RulesEngine{
 			} catch (FileNotFoundException e) {
 				throw new RulesEngineException("Unable to load DRL files.", e);
 			}
+			for(File packageFile:ruleDir.listFiles()){
+				if(packageFile.getName().endsWith(".package"))
+					builder.add(ResourceFactory.newFileResource(packageFile), ResourceType.DRL);
+			}
 			for(File ruleFile:ruleDir.listFiles()){
 				if(ruleFile.getName().endsWith(".drl"))
 					builder.add(ResourceFactory.newFileResource(ruleFile), ResourceType.DRL);
