@@ -13,6 +13,15 @@ import java.util.Calendar
 
 global ApplicationContext springContext
 
+rule "Update First Due Date"
+	when
+		$l : Loan(firstDueDate == null, effectiveLoanTypeProfile != null, getRepaymentStartDate() != null)
+	then
+		System.out.println("set the first due date");
+		springContext.getBean(FirstDueDateCalculator.class).updateFirstDueDate($l);
+		update($l);
+end
+
 rule "Update Initial Due Date"
 	when
 		$l : Loan(initialDueDate == null, effectiveLoanTypeProfile != null, firstDueDate != null)
@@ -21,15 +30,6 @@ rule "Update Initial Due Date"
 		InitialDueDateCalculator calculator = springContext.getBean(InitialDueDateCalculator.class);
 		System.out.println("InitialDueDateCalculator: " + calculator);
 		calculator.updateInitialDueDate($l);
-		update($l);
-end
-
-rule "Update First Due Date"
-	when
-		$l : Loan(firstDueDate == null, effectiveLoanTypeProfile != null, getRepaymentStartDate() != null)
-	then
-		System.out.println("set the first due date");
-		springContext.getBean(FirstDueDateCalculator.class).updateFirstDueDate($l);
 		update($l);
 end
 

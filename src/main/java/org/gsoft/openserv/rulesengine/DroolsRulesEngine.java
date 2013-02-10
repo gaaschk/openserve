@@ -25,6 +25,7 @@ import org.springframework.util.ResourceUtils;
 @Component
 public class DroolsRulesEngine implements RulesEngine{
 	private boolean isOpen = false;
+	private boolean isRunning = false;
 	private KnowledgeBase base = null;
 	private ArrayList<Object> knowledge = new ArrayList<Object>();
 	@Resource
@@ -81,12 +82,17 @@ public class DroolsRulesEngine implements RulesEngine{
 	public void evaluateRules() {
 		if(!this.isOpen)
 			throw new RulesEngineException("RulesEngine must be open before it can be run.");
-		HashMap<String,Date> sysDate = new HashMap<String, Date>();
-		sysDate.put("systemDate", systemSettingsLogic.getCurrentSystemDate());
-		knowledge.add(sysDate);
-		StatelessKnowledgeSession session = this.getKnowledgeBase().newStatelessKnowledgeSession();
-		session.setGlobal("springContext", springContext);
-		session.execute(knowledge);
+		while(knowledge.size()>0){
+			ArrayList<Object> workingKnowledge = new ArrayList<>();
+			workingKnowledge.addAll(knowledge);
+			knowledge.clear();
+			HashMap<String,Date> sysDate = new HashMap<String, Date>();
+			sysDate.put("systemDate", systemSettingsLogic.getCurrentSystemDate());
+			workingKnowledge.add(sysDate);
+			StatelessKnowledgeSession session = this.getKnowledgeBase().newStatelessKnowledgeSession();
+			session.setGlobal("springContext", springContext);
+			session.execute(workingKnowledge);
+		}
 	}
 
 	public void addContext(final Object... addedContext) {
