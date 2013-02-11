@@ -2,10 +2,10 @@
 <form:form modelAttribute="loanModel">
 	<fieldset>
 		<label>Loan Type:</label>
-		<form:select path="loanType">
-     		<form:option value="-" label="--Please Select"/>
-     		<form:options/>
-		</form:select>
+		<form:select path="selectedLoanTypeID">
+     		<form:option value="-">Select Loan Type</form:option>
+     	    <form:options items="${loanModel.loanTypeList}" itemValue="loanTypeID" itemLabel="name"/>
+     	</form:select>
 	</fieldset>
 	<table>
   		<tr>

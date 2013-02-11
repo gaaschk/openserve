@@ -37,7 +37,9 @@ public class LoanRepositoryTest {
 		loan.setBorrower(borrower);
 		loan.setFirstDueDate(today);
 		loan.setInitialDueDate(today);
-		loan.setLoanType(LoanType.PRIVATE_STUDENT);
+		LoanType loanType = new LoanType();
+		loanType.setLoanTypeID(10L);
+		loan.setLoanType(loanType);
 		loan.setServicingStartDate(today);
 		loan.setStartingFees(0);
 		loan.setStartingInterest(BigDecimal.ZERO);

@@ -24,21 +24,21 @@ public class LoanTypeProfileRepository extends BaseRepository<LoanTypeProfile, L
 	}
 
 	public LoanTypeProfile findLoanTypeProfileByLoanTypeAndEffectiveDate(LoanType loanType, Date effectiveDate){
-		return this.loanTypeProfileSpringRepository.findLoanTypeProfileByLoanTypeAndEffectiveDate(loanType, effectiveDate);
+		return this.loanTypeProfileSpringRepository.findLoanTypeProfileByLoanTypeAndEffectiveDate(loanType.getLoanTypeID(), effectiveDate);
 	}
 
 	public List<LoanTypeProfile> findLoanTypeProfilesByLoanTypeAndEffectiveDate(LoanType loanType, Date effectiveDate){
-		return this.getSpringRepository().findLoanTypeProfilesByLoanTypeAndEffectiveDate(loanType, effectiveDate);
+		return this.getSpringRepository().findLoanTypeProfilesByLoanTypeAndEffectiveDate(loanType.getLoanTypeID(), effectiveDate);
 	}
 }
 
 @Repository
 interface LoanTypeProfileSpringRepository extends BaseSpringRepository<LoanTypeProfile, Long>{
 
-	@Query("select ltp from LoanTypeProfile ltp where ltp.loanType = :loanType and ltp.effectiveDate <= :effectiveDate " +
+	@Query("select ltp from LoanTypeProfile ltp where ltp.loanType.loanTypeID = :loanTypeID and ltp.effectiveDate <= :effectiveDate " +
 			"and (ltp.endDate is null or ltp.endDate > :effectiveDate)")
-	public LoanTypeProfile findLoanTypeProfileByLoanTypeAndEffectiveDate(@Param("loanType") LoanType loanType, @Param("effectiveDate") Date effectiveDate);
+	public LoanTypeProfile findLoanTypeProfileByLoanTypeAndEffectiveDate(@Param("loanTypeID") Long loanTypeID, @Param("effectiveDate") Date effectiveDate);
 
-	@Query("select ltp from LoanTypeProfile ltp where ltp.loanType = :loanType and (ltp.endDate is null or ltp.endDate > :effectiveDate)")
-	public List<LoanTypeProfile> findLoanTypeProfilesByLoanTypeAndEffectiveDate(@Param("loanType") LoanType loanType, @Param("effectiveDate") Date effectiveDate);
+	@Query("select ltp from LoanTypeProfile ltp where ltp.loanType.loanTypeID = :loanTypeID and (ltp.endDate is null or ltp.endDate > :effectiveDate)")
+	public List<LoanTypeProfile> findLoanTypeProfilesByLoanTypeAndEffectiveDate(@Param("loanTypeID") Long loanTypeID, @Param("effectiveDate") Date effectiveDate);
 }

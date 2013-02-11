@@ -1,11 +1,14 @@
 package org.gsoft.openserv.web.controller.addloan;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.Person;
 import org.gsoft.openserv.domain.loan.Loan;
+import org.gsoft.openserv.domain.loan.LoanType;
+import org.gsoft.openserv.repositories.loan.LoanTypeRepository;
 import org.gsoft.openserv.service.PersonService;
 import org.gsoft.openserv.service.loanentry.LoanEntryService;
 import org.gsoft.openserv.web.models.DisbursementModel;
@@ -23,6 +26,8 @@ public class AddLoanFlowController {
 	private ConversionService conversionService;
 	@Resource
 	private LoanEntryService loanEntryService;
+	@Resource
+	private LoanTypeRepository loanTypeRepository;
 	
 	public LoanEntryModel findPerson(PersonSearchCriteria personSearchCriteria){
 		Person person = personService.findPersonBySSN(personSearchCriteria.getSsn());
@@ -31,6 +36,8 @@ public class AddLoanFlowController {
 		newPersonModel.setSsn(personSearchCriteria.getSsn());
 		LoanEntryModel loanModel = new LoanEntryModel();
 		loanModel.setNewDisbursement(new DisbursementModel());
+		List<LoanType> loanTypes = loanTypeRepository.findAll();
+		loanModel.setLoanTypeList(loanTypes);
 		loanModel.setPerson(newPersonModel);
 		return loanModel;
 	}

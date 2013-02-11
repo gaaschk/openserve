@@ -46,10 +46,8 @@ public class LoanTypeProfile extends PersistentDomainObject{
 	public void setLoanTypeProfileID(Long loanTypeProfileID) {
 		this.loanTypeProfileID = loanTypeProfileID;
 	}
-	@Type( type = "org.gsoft.openserv.util.jpa.GenericEnumUserType", parameters={
-			@Parameter(name = "enumClass", value = "org.gsoft.openserv.domain.loan.LoanType")
-	})
-    @Column( name = "LoanTypeID" )
+	@ManyToOne
+	@JoinColumn( name = "LoanTypeID" )
 	public LoanType getLoanType() {
 		return loanType;
 	}

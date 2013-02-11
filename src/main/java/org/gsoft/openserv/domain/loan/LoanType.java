@@ -1,36 +1,24 @@
 package org.gsoft.openserv.domain.loan;
 
-import org.gsoft.openserv.util.jpa.OpenServEnum;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 
-public enum LoanType implements OpenServEnum<LoanType>{
-	PRIVATE_STUDENT(10L, "PRIVATE_STUDENT", "Private Student Loan"), 
-	MORTGAGE(20L, "MORTGAGE", "Mortgage Loan");
+import org.gsoft.openserv.domain.PersistentDomainObject;
+import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
 
+@Entity
+@RulesEngineEntity
+public class LoanType extends PersistentDomainObject{
+	private static final long serialVersionUID = -4023897386004756328L;
 	private Long loanTypeID;
 	private String name;
 	private String description;
 
-	LoanType(Long loanTypeID, String loanTypeName,
-			String loanTypeDesc) {
-		this.setLoanTypeID(loanTypeID);
-		this.setName(loanTypeName);
-		this.setDescription(loanTypeDesc);
-	}
-
-
-	public Long getID() {
-		return this.getLoanTypeID();
-	}
-
-	public static LoanType forID(Long id) {
-		for (final LoanType loanType : values()) {
-			if (loanType.getID().equals(id)) {
-				return loanType;
-			}
-		}
-		return null;
-	}
-
+	@Id
+	@GeneratedValue( strategy=GenerationType.AUTO)
 	public Long getLoanTypeID() {
 		return loanTypeID;
 	}
@@ -53,6 +41,12 @@ public enum LoanType implements OpenServEnum<LoanType>{
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Override
+	@Transient
+	public Long getID() {
+		return this.getLoanTypeID();
 	}
 
 }

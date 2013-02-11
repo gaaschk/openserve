@@ -48,7 +48,9 @@ public class LoanBalanceAdjustmentRepositoryTest {
 		domainMap.put("lba", lba);
 		
 		Loan loan = new Loan();
-		loan.setLoanType(LoanType.PRIVATE_STUDENT);
+		LoanType privateLoanType = new LoanType();
+		privateLoanType.setLoanTypeID(10L);
+		privateLoanType.setName("PRIVATE_LOAN");
 		loan.setStartingFees(0);
 		loan.setStartingInterest(BigDecimal.ZERO);
 		loan.setStartingPrincipal(0);

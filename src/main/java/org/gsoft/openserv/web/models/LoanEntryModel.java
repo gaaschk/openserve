@@ -8,13 +8,15 @@ import java.util.List;
 import org.gsoft.openserv.domain.loan.LoanType;
 import org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormat;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 
 
 public class LoanEntryModel implements Serializable{
 	private static final long serialVersionUID = -4761897960840405245L;
 
 	private Long loanID;
-	private LoanType loanType;
+	private String selectedLoanTypeID;
+	private List<LoanType> loanTypeList;
 	private PersonModel person;
 	private Integer startingPrincipal;
 	private BigDecimal startingInterest;
@@ -30,11 +32,17 @@ public class LoanEntryModel implements Serializable{
 	public void setLoanID(Long loanID) {
 		this.loanID = loanID;
 	}
-	public LoanType getLoanType() {
-		return loanType;
+	public String getSelectedLoanTypeID() {
+		return selectedLoanTypeID;
 	}
-	public void setLoanType(LoanType loanType) {
-		this.loanType = loanType;
+	public void setSelectedLoanTypeID(String loanTypeID) {
+		this.selectedLoanTypeID = loanTypeID;
+	}
+	public List<LoanType> getLoanTypeList() {
+		return loanTypeList;
+	}
+	public void setLoanTypeList(List<LoanType> loanTypeList) {
+		this.loanTypeList = loanTypeList;
 	}
 	public PersonModel getPerson() {
 		return person;

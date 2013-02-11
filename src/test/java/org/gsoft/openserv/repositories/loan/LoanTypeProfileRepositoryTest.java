@@ -35,7 +35,9 @@ public class LoanTypeProfileRepositoryTest {
 		ltp.setEndDate(null);
 		ltp.setGraceMonths(1);
 		ltp.setLateFeeAmount(1000);
-		ltp.setLoanType(LoanType.MORTGAGE);
+		LoanType loanType = new LoanType();
+		loanType.setLoanTypeID(20L);
+		ltp.setLoanType(loanType);
 		ltp.setMaximumLoanTerm(180);
 		ltp.setMinDaysToFirstDue(1);
 		ltp.setPrepaymentDays(1);
@@ -44,7 +46,7 @@ public class LoanTypeProfileRepositoryTest {
 		ltp = loanTypeProfileRepository.save(ltp);
 		assertNotNull("Expected primary key to be generated", ltp.getLoanTypeProfileID());
 		ltp = loanTypeProfileRepository.findOne(ltp.getLoanTypeProfileID());
-		assertEquals("Expected LoanType to be mortgage", ltp.getLoanType(), LoanType.MORTGAGE);
+		assertEquals("Expected LoanType to be mortgage", ltp.getLoanType().getLoanTypeID(), loanType.getLoanTypeID());
 	}
 
 }

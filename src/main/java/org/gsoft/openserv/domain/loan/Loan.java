@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,14 +16,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import org.gsoft.openserv.buslogic.amortization.LoanTermCalculator;
-import org.gsoft.openserv.buslogic.amortization.PaymentAmountCalculator;
 import org.gsoft.openserv.buslogic.repayment.RepaymentStartDateCalculator;
 import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.domain.Person;
 import org.gsoft.openserv.domain.amortization.LoanAmortizationSchedule;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
-import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
 
 @Entity
 @RulesEngineEntity
@@ -60,10 +56,8 @@ public class Loan extends PersistentDomainObject{
 	public void setServicingStartDate(Date servicingStartDate) {
 		this.servicingStartDate = (servicingStartDate==null)?null:(Date)servicingStartDate.clone();
 	}
-	@Type( type = "org.gsoft.openserv.util.jpa.GenericEnumUserType", parameters={
-			@Parameter(name = "enumClass", value = "org.gsoft.openserv.domain.loan.LoanType")
-	})
-    @Column( name = "LoanTypeID" )
+	@ManyToOne(cascade={CascadeType.REFRESH})
+	@JoinColumn( name = "LoanTypeID" )
 	public LoanType getLoanType() {
 		return loanType;
 	}

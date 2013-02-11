@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.gsoft.openserv.domain.loan.LoanType;
 import org.gsoft.openserv.util.jpa.OpenServEnum;
 import org.joda.time.DateTime;
 import org.joda.time.MonthDay;
 import org.joda.time.Period;
 
-public enum FrequencyType implements OpenServEnum<LoanType>{
+public enum FrequencyType implements OpenServEnum<FrequencyType>{
 	MONTHLY(10L, Period.months(1)),
 	QUARTERLY(20L, Period.months(3)),
 	SEMI_ANNUALLY(30L, Period.months(6)),
