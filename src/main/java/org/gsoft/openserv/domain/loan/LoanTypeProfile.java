@@ -14,20 +14,31 @@ import javax.persistence.Transient;
 import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.domain.rates.Rate;
 import org.gsoft.openserv.util.time.FrequencyType;
+import org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormat;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 
 @Entity
 public class LoanTypeProfile extends PersistentDomainObject{
 	private static final long serialVersionUID = 6245557328161056820L;
 	private Long loanTypeProfileID;
+	@DateTimeFormat(pattern="MM/dd/yyyy")
 	private Date effectiveDate;
+	@DateTimeFormat(pattern="MM/dd/yyyy")
 	private Date endDate;
+	@NumberFormat
 	private Integer maximumLoanTerm;
+	@NumberFormat
 	private Integer graceMonths;
+	@NumberFormat
 	private Integer minDaysToFirstDue;
+	@NumberFormat
 	private Integer prepaymentDays;
+	@NumberFormat
 	private Integer daysBeforeDueToBill;
+	@NumberFormat
 	private Integer daysLateForFee;
 	private Integer lateFeeAmount;
 	private Boolean isVariableRate;
@@ -102,6 +113,7 @@ public class LoanTypeProfile extends PersistentDomainObject{
 	public void setDaysLateForFee(Integer daysLateForFee){
 		this.daysLateForFee = daysLateForFee;
 	}
+	@CurrencyInPenniesFormat
 	public Integer getLateFeeAmount(){
 		return this.lateFeeAmount;
 	}

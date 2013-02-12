@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                          http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<on-start>
+		<evaluate expression="manageLoanTypeProfileController.loadLoanTypeProfileModel()" result="flowScope.loanTypeProfileModel"/>
+	</on-start>
+
+	<view-state id="manageloantypes" view="loantype/manageloantypes" model="loanTypeProfileModel" >
+		<transition on="addLoanType" to="manageloantypes">
+			<evaluate expression="manageLoanTypeProfileController.addLoanType(loanTypeProfileModel)"/>
+		</transition>
+		<transition on="addLoanTypeProfile" to="manageloantypes">
+			<evaluate expression="manageLoanTypeProfileController.addLoanTypeProfile(loanTypeProfileModel)"/>
+		</transition>
+		<transition on="save" to="manageLoanTypeProfileComplete">
+			<evaluate expression="manageLoanTypeProfileController.save(loanTypeProfileModel)"/>
+		</transition>
+	</view-state>
+
+	<end-state id="manageLoanTypeProfileComplete" />
+</flow>

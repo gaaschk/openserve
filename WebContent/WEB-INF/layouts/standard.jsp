@@ -67,6 +67,7 @@
 				<li class="menu-item"><a href="/openserv/web/addloan">Add a new Loan</a></li>
 				<li class="menu-item"><a href="/openserv/web/payment">Payment</a></li>
 				<li class="menu-item"><a href="/openserv/web/accountsummary">Account Summary</a></li>
+				<li class="menu-item"><a href="/openserv/web/loantype">Manage Loan Programs</a></li>
 				<li class="menu-item"><a href="/openserv/web/rates/stocks">Stocks</a></li>
 			</ul>
 		  </div>

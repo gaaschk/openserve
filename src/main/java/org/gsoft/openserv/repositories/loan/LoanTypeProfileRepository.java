@@ -30,6 +30,10 @@ public class LoanTypeProfileRepository extends BaseRepository<LoanTypeProfile, L
 	public List<LoanTypeProfile> findLoanTypeProfilesByLoanTypeAndEffectiveDate(LoanType loanType, Date effectiveDate){
 		return this.getSpringRepository().findLoanTypeProfilesByLoanTypeAndEffectiveDate(loanType.getLoanTypeID(), effectiveDate);
 	}
+
+	public List<LoanTypeProfile> findLoanTypeProfilesByLoanType(LoanType loanType){
+		return this.getSpringRepository().findLoanTypeProfilesByLoanType(loanType.getLoanTypeID());
+	}
 }
 
 @Repository
@@ -41,4 +45,7 @@ interface LoanTypeProfileSpringRepository extends BaseSpringRepository<LoanTypeP
 
 	@Query("select ltp from LoanTypeProfile ltp where ltp.loanType.loanTypeID = :loanTypeID and (ltp.endDate is null or ltp.endDate > :effectiveDate)")
 	public List<LoanTypeProfile> findLoanTypeProfilesByLoanTypeAndEffectiveDate(@Param("loanTypeID") Long loanTypeID, @Param("effectiveDate") Date effectiveDate);
+
+	@Query("select ltp from LoanTypeProfile ltp where ltp.loanType.loanTypeID = :loanTypeID")
+	public List<LoanTypeProfile> findLoanTypeProfilesByLoanType(@Param("loanTypeID") Long loanTypeID);
 }

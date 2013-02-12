@@ -1,0 +1,14 @@
+package loan
+
+import org.gsoft.openserv.domain.loan.LoanType
+import org.gsoft.openserv.domain.loan.LoanTypeProfile
+import org.gsoft.openserv.rulesengine.event.LoanTypeChangedEvent;
+
+global ApplicationContext springContext
+
+rule "Load Loans on LoanType"
+	when
+		LoanTypeChangedEvent($lt:loanType)
+	then
+		System.out.println("Loading Loans based on loan type");
+end
