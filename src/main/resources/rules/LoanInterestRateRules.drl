@@ -13,7 +13,7 @@ rule "Update Loan Interest Rate"
 		not LoanInterestRateUpdated(loanId == $l.loanID)
 	then
 		System.out.println("Updating Interest Rate");
-		springContext.getBean(LoanInterestRateFactory.class).setRateForLoan($l);
+		springContext.getBean(LoanInterestRateFactory.class).updateRateForLoan($l);
 		LoanInterestRateUpdated liru = new LoanInterestRateUpdated();
 		liru.setLoanId($l.getLoanID());
 		insert(liru);

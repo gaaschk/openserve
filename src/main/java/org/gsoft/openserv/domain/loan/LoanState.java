@@ -13,6 +13,8 @@ public abstract class LoanState {
 	LoanState getPreviousState(){
 		return this.previousState;
 	}
+	
+	public abstract String getDescription();
 
 	public abstract Integer getFeesChange();
 	

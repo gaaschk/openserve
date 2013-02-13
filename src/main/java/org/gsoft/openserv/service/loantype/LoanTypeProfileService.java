@@ -7,6 +7,7 @@ import org.gsoft.openserv.domain.loan.LoanTypeProfile;
 import org.gsoft.openserv.repositories.loan.LoanTypeProfileRepository;
 import org.gsoft.openserv.repositories.loan.LoanTypeRepository;
 import org.gsoft.openserv.rulesengine.annotation.RunRulesEngine;
+import org.gsoft.openserv.rulesengine.event.LoanTypeChangedEvent;
 import org.gsoft.openserv.rulesengine.event.LoanTypeProfileChangedEvent;
 import org.gsoft.openserv.rulesengine.event.SystemEventHandler;
 import org.springframework.stereotype.Service;
@@ -25,15 +26,34 @@ public class LoanTypeProfileService {
 	@Transactional
 	@RunRulesEngine
 	public LoanTypeProfile saveLoanTypeProfile(LoanTypeProfile loanTypeProfile){
-		loanTypeProfile = loanTypeProfileRepository.save(loanTypeProfile);
-		systemEventHandler.handleEvent(new LoanTypeProfileChangedEvent(loanTypeProfile));
+		if(loanTypeProfile.getLoanTypeProfileID() != null){
+			LoanTypeProfile oldLtp = loanTypeProfileRepository.findOne(loanTypeProfile.getLoanTypeProfileID());
+			if(!loanTypeProfile.equals(oldLtp)){
+				loanTypeProfile = loanTypeProfileRepository.save(loanTypeProfile);
+				systemEventHandler.handleEvent(new LoanTypeProfileChangedEvent(loanTypeProfile));
+			}
+		}
+		else{
+			loanTypeProfile = loanTypeProfileRepository.save(loanTypeProfile);
+			systemEventHandler.handleEvent(new LoanTypeProfileChangedEvent(loanTypeProfile));
+		}
 		return loanTypeProfile;
 	}
 
 	@Transactional
 	@RunRulesEngine
 	public LoanType saveLoanType(LoanType loanType){
-		loanType = loanTypeRepository.save(loanType);
+		if(loanType.getLoanTypeID() != null){
+			LoanType oldLt = loanTypeRepository.findOne(loanType.getLoanTypeID());
+			if(!loanType.equals(oldLt)){
+				loanType = loanTypeRepository.save(loanType);
+				systemEventHandler.handleEvent(new LoanTypeChangedEvent(loanType));
+			}
+		}
+		else{
+			loanType = loanTypeRepository.save(loanType);
+			systemEventHandler.handleEvent(new LoanTypeChangedEvent(loanType));
+		}
 		return loanType;
 	}
 }

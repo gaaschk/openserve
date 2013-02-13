@@ -10,6 +10,11 @@ public class BalanceAdjustmentLoanState extends LoanState {
 		return balanceAdjustment;
 	}
 	
+	@Override
+	public String getDescription(){
+		return "Balance Adjustment";
+	}
+	
 	public BalanceAdjustmentLoanState(LoanBalanceAdjustment balanceAdjustment) {
 		this.balanceAdjustment = balanceAdjustment;
 	}

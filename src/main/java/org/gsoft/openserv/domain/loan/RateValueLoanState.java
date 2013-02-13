@@ -2,11 +2,14 @@ package org.gsoft.openserv.domain.loan;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Locale;
 
 import org.gsoft.openserv.domain.interest.LoanRateValue;
+import org.gsoft.openserv.web.formatter.percent.PercentFormatter;
 
 public class RateValueLoanState extends LoanState {
 	private LoanRateValue rateValue;
+	private PercentFormatter formatter = new PercentFormatter();
 	
 	private LoanRateValue getRateValue(){
 		return this.rateValue;
@@ -14,6 +17,11 @@ public class RateValueLoanState extends LoanState {
 	
 	public RateValueLoanState(LoanRateValue rateValue){
 		this.rateValue = rateValue;
+	}
+	
+	@Override
+	public String getDescription(){
+		return "Int Rate Chngd to " + formatter.print(this.getInterestRate(), Locale.US);
 	}
 	
 	@Override

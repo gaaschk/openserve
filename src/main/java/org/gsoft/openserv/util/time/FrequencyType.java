@@ -54,6 +54,13 @@ public enum FrequencyType implements OpenServEnum<FrequencyType>{
 		return adjustedDate.toDate();
 	}
 
+	/**
+	 * exclusive of from date if fromdate is a period begin. inclusive of todate 
+	 * if todate falls on a period end.
+	 * @param fromDate
+	 * @param toDate
+	 * @return
+	 */
 	public List<Date> findAllDatesBetween(Date fromDate, Date toDate){
 		DateTime endDate = new DateTime(toDate);
 		ArrayList<Date> quarterEnds = new ArrayList<Date>();

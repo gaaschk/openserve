@@ -15,6 +15,11 @@ public class DisbursementLoanState extends LoanState {
 	}
 
 	@Override
+	public String getDescription(){
+		return "Disbursement";
+	}
+	
+	@Override
 	public Integer getFeesChange() {
 		return 0;
 	}

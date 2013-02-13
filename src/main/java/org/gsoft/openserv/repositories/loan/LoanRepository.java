@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.loan.Loan;
+import org.gsoft.openserv.domain.loan.LoanType;
 import org.gsoft.openserv.repositories.BaseRepository;
 import org.gsoft.openserv.repositories.BaseSpringRepository;
 import org.gsoft.openserv.repositories.predicates.LoanPredicates;
@@ -26,6 +27,10 @@ public class LoanRepository extends BaseRepository<Loan, Long>{
 	
 	public List<Loan> findAllForBorrower(Long borrowerID){
 		return this.findAll(LoanPredicates.borrowerIdIs(borrowerID));
+	}
+	
+	public List<Loan> findAllByLoanType(LoanType loanType){
+		return this.findAll(LoanPredicates.loanTypeIs(loanType));
 	}
 }
 

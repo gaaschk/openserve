@@ -13,6 +13,11 @@ public class LateFeeState extends LoanState {
 	}
 	
 	@Override
+	public String getDescription(){
+		return "Late Fee Assessed";
+	}
+	
+	@Override
 	public Integer getFeesChange() {
 		return lateFee.getFeeAmount();
 	}

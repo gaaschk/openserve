@@ -2,14 +2,18 @@ package org.gsoft.openserv.domain.loan;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Locale;
 
 import org.gsoft.openserv.domain.payment.LoanPayment;
+import org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormat;
+import org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormatter;
 
 public class PaymentLoanState extends LoanState {
 	private LoanPayment payment;
 	private Integer amountToFees;
 	private BigDecimal amountToInterest;
 	private Integer amountToPrincipal;
+	private CurrencyInPenniesFormatter currencyFormatter = new CurrencyInPenniesFormatter(0);
 
 	private LoanPayment getPayment(){
 		return payment;
@@ -49,6 +53,11 @@ public class PaymentLoanState extends LoanState {
 	
 	public PaymentLoanState(LoanPayment payment){
 		this.payment = payment;
+	}
+	
+	@Override
+	public String getDescription(){
+		return "Payment of " + currencyFormatter.print(this.getPayment().getAppliedAmount(), Locale.US) + " Applied";
 	}
 	
 	@Override
