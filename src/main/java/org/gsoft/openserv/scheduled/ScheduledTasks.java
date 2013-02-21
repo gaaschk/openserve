@@ -29,7 +29,7 @@ public class ScheduledTasks {
 		}
 	}
 	
-	@Scheduled(fixedRate=60000)
+	@Scheduled(fixedRate=10000)
 	public void checkForOnDemandTrigger(){
 		SystemSettingsService settingsService = this.getSystemSettingsService();
 		if(settingsService.isBatchTriggered() == null || settingsService.isBatchTriggered()){

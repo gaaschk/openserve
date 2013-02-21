@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.Person;
+import org.gsoft.openserv.domain.lender.Lender;
 import org.gsoft.openserv.domain.loan.Disbursement;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanType;
+import org.gsoft.openserv.repositories.lender.LenderRepository;
 import org.gsoft.openserv.repositories.loan.LoanTypeRepository;
 import org.gsoft.openserv.web.models.DisbursementModel;
 import org.gsoft.openserv.web.models.LoanEntryModel;
@@ -21,6 +23,8 @@ public class LoanEntryModelToLoanConverter implements Converter<LoanEntryModel, 
 	private ConversionService conversionService;
 	@Resource
 	private LoanTypeRepository loanTypeRepository;
+	@Resource
+	private LenderRepository lenderRepository;
 	
 	
 	public Loan convert(LoanEntryModel loanModel){
@@ -28,6 +32,7 @@ public class LoanEntryModelToLoanConverter implements Converter<LoanEntryModel, 
 		newLoan.setServicingStartDate(loanModel.getEffectiveDate());
 		LoanType loanType = loanTypeRepository.findOne(Long.valueOf(loanModel.getSelectedLoanTypeID()));
 		newLoan.setLoanType(loanType);
+		newLoan.setLenderID(Long.valueOf(loanModel.getSelectedLenderID()));
 		Person person = conversionService.convert(loanModel.getPerson(), Person.class);
 		newLoan.setBorrower(person);
 		newLoan.setDisbursements(new ArrayList<Disbursement>());

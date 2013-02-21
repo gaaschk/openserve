@@ -42,7 +42,7 @@ public class BillingStatementLogic {
 	public boolean isBillingStatementNeeded(Loan loan){
 		Date systemDate = systemSettings.getCurrentSystemDate();
 		LoanTypeProfile ltp = loan.getEffectiveLoanTypeProfile();
-		Date repaymentStartDate = loan.getRepaymentStartDate();
+		Date repaymentStartDate = loan.getEarliestRepaymentStartDate();
 		Date earliestDueBillingDate = new DateTime(repaymentStartDate).plusDays(ltp.getMinDaysToFirstDue()).minusDays(ltp.getDaysBeforeDueToBill()).toDate();
 		if(!earliestDueBillingDate.after(systemDate)){
 			BillingStatement lastStatement = billingStatementRepository.findMostRecentBillingStatementForLoan(loan.getLoanID());
@@ -70,7 +70,7 @@ public class BillingStatementLogic {
 		BillingStatement statement = null;
 		if(this.isBillingStatementNeeded(loan)){
 			Date systemDate = systemSettings.getCurrentSystemDate();
-			Date repaymentStartDate = loan.getRepaymentStartDate();
+			Date repaymentStartDate = loan.getEarliestRepaymentStartDate();
 			LoanTypeProfile ltpAtRepayStart = loanTypeProfileRepository.findLoanTypeProfileByLoanTypeAndEffectiveDate(loan.getLoanType(), repaymentStartDate);
 			Date earliestDueBillingDate = new DateTime(repaymentStartDate).plusDays(ltpAtRepayStart.getMinDaysToFirstDue()).minusDays(ltpAtRepayStart.getDaysBeforeDueToBill()).toDate();
 			BillingStatement lastStatement = billingStatementRepository.findMostRecentBillingStatementForLoan(loan.getLoanID());

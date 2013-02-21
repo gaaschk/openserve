@@ -32,6 +32,10 @@ public class LoanRepository extends BaseRepository<Loan, Long>{
 	public List<Loan> findAllByLoanType(LoanType loanType){
 		return this.findAll(LoanPredicates.loanTypeIs(loanType));
 	}
+	
+	public List<Loan> findAllByAccountID(Long accountID){
+		return this.findAll(LoanPredicates.accountIDIs(accountID));
+	}
 }
 
 @Repository

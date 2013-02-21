@@ -6,21 +6,29 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.annotation.Resource;
 
+import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.amortization.AmortizationLoanPayment;
 import org.gsoft.openserv.domain.amortization.AmortizationSchedule;
 import org.gsoft.openserv.domain.amortization.LoanAmortizationSchedule;
 import org.gsoft.openserv.domain.interest.LoanRateValue;
+import org.gsoft.openserv.domain.loan.Account;
 import org.gsoft.openserv.domain.loan.Disbursement;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanStateHistory;
+import org.gsoft.openserv.repositories.account.AccountRepository;
 import org.gsoft.openserv.repositories.amortization.AmortizationScheduleRepository;
 import org.gsoft.openserv.repositories.loan.LoanRepository;
 import org.gsoft.openserv.repositories.loan.LoanStateHistoryRepository;
 import org.gsoft.openserv.repositories.rates.LoanRateValueRepository;
 import org.springframework.stereotype.Component;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 @Component
 public class AmortizationLogic {
@@ -32,65 +40,113 @@ public class AmortizationLogic {
 	private LoanRateValueRepository loanRateValueRepository;
 	@Resource
 	private LoanStateHistoryRepository loanStateHistoryRepo;
+	@Resource
+	private SystemSettingsLogic systemSettings;
+	@Resource
+	private AccountRepository accountRepository;
 	
-	public List<AmortizationSchedule> createAmortizationSchedule(List<Long> loanIDs, List<Date> effectiveDates){
-		ArrayList<AmortizationSchedule> schedules = new ArrayList<>();
-		for(Date date:effectiveDates){
-			AmortizationSchedule sched = this.createAmortizationSchedule(loanIDs, date);
-			schedules.add(sched);
-		}
-		return schedules;
+	public boolean invalidAmortizationSchedulesExist(Long accountID, Date asOfDate){
+		return this.findInvalidAmortizationSchedules(accountID, asOfDate).size() > 0;
 	}
 	
-	public AmortizationSchedule createAmortizationSchedule(List<Long> loanIDs, Date effectiveDate){
-		ArrayList<LoanAmortizationSchedule> newLoanAmortizations = new ArrayList<>();
-		for(Long loanID:loanIDs){
-			Loan loan = loanRepository.findOne(loanID);
-			LoanAmortizationSchedule loanAmortizationSchedule = this.createLoanAmortizationSchedule(loan, effectiveDate);
-			if(loanAmortizationSchedule != null && loanAmortizationSchedule.getAmortizationSchedule() == null){
-				newLoanAmortizations.add(loanAmortizationSchedule);
-			}
-		}
-		AmortizationSchedule amortizationSchedule = null;
-		if(newLoanAmortizations.size()>0){
-			amortizationSchedule = new AmortizationSchedule();
-			amortizationSchedule = amortizationScheduleRepository.save(amortizationSchedule);
-			amortizationSchedule.setCreationDate(new Date());
-			amortizationSchedule.setEffectiveDate(effectiveDate);
-			for(LoanAmortizationSchedule loanSched:newLoanAmortizations){
-				amortizationSchedule.addLoanAmortizationSchedule(loanSched);
-			}
-		}
-		for(Long loanID:loanIDs){
-			Loan loan = loanRepository.findOne(loanID);
-			loan.setCurrentAmortizationSchedule(amortizationScheduleRepository.findScheduleForLoan(loanID));
-		}
-		return amortizationSchedule;
+	public boolean amortizationSchedulesMissing(Long accountID, Date asOfDate){
+		return this.getMissingAmortizationScheduleDates(accountID, asOfDate).size() > 0;
 	}
 	
-	public List<Date> getMissingAmortizationScheduleDates(List<Long> loanIDs){
-		ArrayList<Date> missingAmortizationDates = new ArrayList<>();
-		for(Long loanID:loanIDs){
-			Loan loan = loanRepository.findOne(loanID);
-			List<LoanAmortizationSchedule> existingScheds = amortizationScheduleRepository.findAllSchedulesForLoan(loanID);
-			Date repayStartDate = loan.getRepaymentStartDate();
-			if(!scheduleExists(existingScheds, repayStartDate)){
-				missingAmortizationDates.add(repayStartDate);
+	public List<AmortizationSchedule> updateInvalidAmortizationSchedules(Long accountID, Date asOfDate){
+		List<AmortizationSchedule> invalidSchedules = this.findInvalidAmortizationSchedules(accountID, asOfDate);
+		for(AmortizationSchedule schedule:invalidSchedules){
+			schedule.setInvalid(true);
+			amortizationScheduleRepository.save(schedule);
+		}
+		return invalidSchedules;
+	}
+	
+	public List<AmortizationSchedule> createMissingAmortizationSchedules(Long accountID, Date asOfDate){
+		List<Date> missingDates = this.getMissingAmortizationScheduleDates(accountID, asOfDate);
+		ArrayList<AmortizationSchedule> newSchedules = new ArrayList<>();
+		for(Date effectiveDate:missingDates){
+			AmortizationSchedule newSchedule = this.createAmortizationSchedule(accountID, effectiveDate);
+			amortizationScheduleRepository.save(newSchedule);
+			newSchedules.add(newSchedule);
+		}
+		return newSchedules;
+	}
+	
+	private AmortizationSchedule createAmortizationSchedule(Long accountID, Date effectiveDate){
+		AmortizationSchedule amortSched = null; 
+		List<Loan> loans = loanRepository.findAllByAccountID(accountID);
+		ArrayList<LoanAmortizationSchedule> lams = new ArrayList<>();
+		for(Loan loan:loans){
+			LoanAmortizationSchedule lam = this.createLoanAmortizationSchedule(loan, effectiveDate);
+			lams.add(lam);
+		}
+		if(lams.size()>0){
+			amortSched = new AmortizationSchedule();
+			amortSched.setAccountID(accountID);
+			amortSched.setCreationDate(systemSettings.getCurrentSystemDate());
+			amortSched.setEffectiveDate(effectiveDate);
+			amortSched.setInvalid(false);
+			amortSched.setLoanAmortizationSchedules(lams);
+			for(LoanAmortizationSchedule lam:lams){
+				lam.setAmortizationSchedule(amortSched);
 			}
+		}
+		return amortSched;
+	}
+	
+	private List<Date> findExpectedAmortizationDates(Long accountID, Date throughDate){
+		Set<Date> amortizationDates = new TreeSet<>();
+		Account account = accountRepository.findOne(accountID);
+		amortizationDates.add(account.getRepaymentStartDate());
+		List<Loan> loans = loanRepository.findAllByAccountID(accountID);
+		for(Loan loan:loans){
 			for(Disbursement disb:loan.getDisbursements()){
-				if(disb.getDisbursementEffectiveDate().after(repayStartDate) && 
-						!scheduleExists(existingScheds, disb.getDisbursementEffectiveDate()) && 
-						!missingAmortizationDates.contains(disb.getDisbursementEffectiveDate())){
-					missingAmortizationDates.add(disb.getDisbursementEffectiveDate());
-				}
+				amortizationDates.add(disb.getDisbursementEffectiveDate());
+			}
+			List<LoanRateValue> loanRateValues = loanRateValueRepository.findAllLoanRateValuesThruDate(loan.getLoanID(), throughDate);
+			for(LoanRateValue lrv:loanRateValues){
+				amortizationDates.add(lrv.getLockedDate());
 			}
 		}
-		return missingAmortizationDates;
+		return Lists.newArrayList(amortizationDates);
 	}
 	
-	private boolean scheduleExists(List<LoanAmortizationSchedule> lams, Date date){
-		for(LoanAmortizationSchedule lam:lams){
-			if(lam.getAmortizationSchedule().getEffectiveDate().compareTo(date) == 0){
+	private List<AmortizationSchedule> findInvalidAmortizationSchedules(Long accountID, Date throughDate){
+		List<Date> dates = this.findExpectedAmortizationDates(accountID, throughDate);
+		List<AmortizationSchedule> schedules = amortizationScheduleRepository.findAllSchedulesForAccountThroughDate(accountID, throughDate);
+		ArrayList<AmortizationSchedule> invalidSchedules = new ArrayList<>();
+		for(AmortizationSchedule ams:schedules){
+			if(!containsDate(dates, ams.getEffectiveDate())){
+				invalidSchedules.add(ams);
+			}
+		}
+		return invalidSchedules;
+	}
+	
+	private boolean containsDate(List<Date> dates, Date date){
+		for(Date aDate:dates){
+			if(aDate.compareTo(date)==0)
+				return true;
+		}
+		return false;
+	}
+	
+	private List<Date> getMissingAmortizationScheduleDates(Long accountID, Date throughDate){
+		List<Date> dates = this.findExpectedAmortizationDates(accountID, throughDate);
+		List<AmortizationSchedule> schedules = amortizationScheduleRepository.findAllSchedulesForAccountThroughDate(accountID, throughDate);
+		ArrayList<Date> missingDates = new ArrayList<>();
+		for(Date date:dates){
+			if(!scheduleExists(schedules, date)){
+				missingDates.add(date);
+			}
+		}
+		return missingDates;
+	}
+	
+	private boolean scheduleExists(List<AmortizationSchedule> ams, Date date){
+		for(AmortizationSchedule am:ams){
+			if(am.getEffectiveDate().compareTo(date) == 0){
 				return true;
 			}
 		}

@@ -38,21 +38,28 @@ public class AmortizationScheduleRepository extends BaseRepository<AmortizationS
 	public LoanAmortizationSchedule findScheduleForLoanWithEffectiveDate(Long loanID, Date effectiveDate){
 		return this.getSpringRepository().findScheduleForLoanWithEffectiveDate(loanID, effectiveDate);
 	}
+	
+	public List<AmortizationSchedule> findAllSchedulesForAccountThroughDate(Long accountID, Date effectiveDate){
+		return this.getSpringRepository().findAllSchedulesForAccountThroughDate(accountID, effectiveDate);
+	}
 }
 
 @Repository
 interface AmortizationScheduleSpringRepository extends BaseSpringRepository<AmortizationSchedule, Long>{
 	@Query("select lam from LoanAmortizationSchedule lam where lam.loanID = :loanID and lam.amortizationSchedule.effectiveDate = " +
 			"(SELECT MAX(lam2.amortizationSchedule.effectiveDate) FROM LoanAmortizationSchedule lam2 where lam2.loanID = :loanID)")
-	public LoanAmortizationSchedule findScheduleForLoan(@Param("loanID") Long loanID);
+	LoanAmortizationSchedule findScheduleForLoan(@Param("loanID") Long loanID);
 	
 	@Query("select lam from LoanAmortizationSchedule lam where lam.loanID = :loanID and lam.amortizationSchedule.effectiveDate = " +
 			"(SELECT MAX(lam2.amortizationSchedule.effectiveDate) FROM LoanAmortizationSchedule lam2 where lam2.loanID = :loanID and lam2.amortizationSchedule.effectiveDate <= :effectiveDate)")
-	public LoanAmortizationSchedule findScheduleForLoanEffectiveOn(@Param("loanID") Long loanID, @Param("effectiveDate") Date effectiveDate);
+	LoanAmortizationSchedule findScheduleForLoanEffectiveOn(@Param("loanID") Long loanID, @Param("effectiveDate") Date effectiveDate);
 
 	@Query("select lam from LoanAmortizationSchedule lam where lam.loanID = :loanID and lam.amortizationSchedule.effectiveDate = :effectiveDate")
-	public LoanAmortizationSchedule findScheduleForLoanWithEffectiveDate(@Param("loanID") Long loanID, @Param("effectiveDate") Date effectiveDate);
+	LoanAmortizationSchedule findScheduleForLoanWithEffectiveDate(@Param("loanID") Long loanID, @Param("effectiveDate") Date effectiveDate);
 
 	@Query("SELECT lam FROM LoanAmortizationSchedule lam WHERE lam.loanID = :loanID")
-	public List<LoanAmortizationSchedule> findAllSchedulesForLoan(@Param("loanID") Long loanID);
+	List<LoanAmortizationSchedule> findAllSchedulesForLoan(@Param("loanID") Long loanID);
+
+	@Query("select ams from AmortizationSchedule ams where ams.accountID = :accountID and ams.effectiveDate <= :effectiveDate and ams.invalid <> true")
+	List<AmortizationSchedule> findAllSchedulesForAccountThroughDate(@Param("accountID") Long accountID, @Param("effectiveDate") Date effectiveDate);
 } 

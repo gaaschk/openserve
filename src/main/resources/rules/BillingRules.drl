@@ -1,6 +1,7 @@
 package billing
 
 import org.gsoft.openserv.domain.loan.Loan
+import org.gsoft.openserv.domain.loan.Account
 import org.gsoft.openserv.domain.loan.LoanTypeProfile
 import org.gsoft.openserv.domain.payment.billing.BillingStatement
 import org.gsoft.openserv.buslogic.payment.BillingStatementLogic
@@ -20,7 +21,8 @@ end
 
 rule "Build Loan DueDate Wrapper"
 	when
-		$l : Loan(effectiveLoanTypeProfile != null, currentAmortizationSchedule != null, $loanId : loanID )
+		$l : Loan(effectiveLoanTypeProfile != null, $loanId : loanID, account != null)
+		$a : Account() from $l.account
 		not LoanDueDateWrapper(loanId == $loanId)
 	then
 		LoanDueDateWrapper lw = new LoanDueDateWrapper();

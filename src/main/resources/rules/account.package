@@ -1,0 +1,5 @@
+package loan
+
+declare AmortizationSchedulesUpdated
+	accountId : long
+end

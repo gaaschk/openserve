@@ -5,46 +5,43 @@ import org.gsoft.openserv.buslogic.amortization.AmortizationLogic
 import org.springframework.context.ApplicationContext
 import org.gsoft.openserv.domain.interest.LoanRateValue
 import org.gsoft.openserv.repositories.rates.LoanRateValueRepository
+import org.gsoft.openserv.domain.loan.Account
+import org.gsoft.openserv.buslogic.system.SystemSettingsLogic
 import java.util.Arrays
 import java.util.List
 import java.util.Date
 
 global ApplicationContext springContext
 
-declare LoanRateValueLoaded
-	loanId : long
-end
-
-declare MissingAmortizationDates
-	loanId : long
-	dates : List
-end
-
-declare AmortizationSchedulesGenerated
-	loanId : long
+declare AmortizationScheduleChecked
+	accountId : Long
+	updateNeeded : boolean
 end
 
 rule "Load Missing Amortization Dates"
 	when
 		$l : Loan(effectiveLoanTypeProfile != null, repaymentStartDate != null)
 		LoanInterestRateUpdated(loanId == $l.loanID)
-		not MissingAmortizationDates(loanId == $l.loanID)
+		not AmortizationSchedulesUpdated(accountId == $l.account.accountID)
+		not AmortizationScheduleChecked(accountId == $l.account.accountID)
 	then
-		System.out.println("Load Missing Amortization Schedule Dates");
-		List<Date> missingDates = springContext.getBean(AmortizationLogic.class).getMissingAmortizationScheduleDates(Arrays.asList($l.getLoanID()));
-		MissingAmortizationDates dates = new MissingAmortizationDates($l.getLoanID(), missingDates);
-		insert(dates);
+		System.out.println("Amortization Schedule Update Needed");
+		Date sysDate = springContext.getBean(SystemSettingsLogic.class).getCurrentSystemDate();
+		boolean invalidScheds = springContext.getBean(AmortizationLogic.class).invalidAmortizationSchedulesExist($l.getAccount().getAccountID(), sysDate);
+		boolean missingScheds = springContext.getBean(AmortizationLogic.class).amortizationSchedulesMissing($l.getAccount().getAccountID(), sysDate);
+		AmortizationScheduleChecked check = new AmortizationScheduleChecked($l.getAccount().getAccountID(), invalidScheds || missingScheds);
+		insert(check);
 end
 
 rule "Generate Missing Amortization Schedules"
 	when
-		$l : Loan(effectiveLoanTypeProfile != null, repaymentStartDate != null)
-		$mad : MissingAmortizationDates(loanId == $l.loanID, dates != null, dates.size > 0)
-		not AmortizationSchedulesGenerated(loanId == $l.loanID)
+		AmortizationScheduleChecked(updateNeeded == true, $aid : accountId)
+		not AmortizationSchedulesUpdated(accountId == $aid)
 	then
 		System.out.println("Generating Missing Amortization Schedules");
-		springContext.getBean(AmortizationLogic.class).createAmortizationSchedule(Arrays.asList($l.getLoanID()), $mad.getDates());
-		AmortizationSchedulesGenerated flag = new AmortizationSchedulesGenerated($l.getLoanID());
+		Date sysDate = springContext.getBean(SystemSettingsLogic.class).getCurrentSystemDate();
+		springContext.getBean(AmortizationLogic.class).updateInvalidAmortizationSchedules($aid, sysDate);
+		springContext.getBean(AmortizationLogic.class).createMissingAmortizationSchedules($aid, sysDate);
+		AmortizationSchedulesUpdated flag = new AmortizationSchedulesUpdated($aid);
 		insert(flag);
-		update($l);
 end

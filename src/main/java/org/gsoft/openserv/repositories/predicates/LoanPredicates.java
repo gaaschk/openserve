@@ -21,4 +21,9 @@ public class LoanPredicates {
 		QLoan loan = QLoan.loan;
 		return loan.loanType.eq(loanType);
 	}
+	
+	public static Predicate accountIDIs(Long accountID){
+		QLoan loan = QLoan.loan;
+		return loan.account.accountID.eq(accountID);
+	}
 }

@@ -7,6 +7,13 @@
      	    <form:options items="${loanModel.loanTypeList}" itemValue="loanTypeID" itemLabel="name"/>
      	</form:select>
 	</fieldset>
+	<fieldset>
+		<label>Lender:</label>
+		<form:select path="selectedLenderID">
+			<form:option value="-">Select Lender</form:option>
+			<form:options items="${loanModel.lenderList}" itemValue="lenderID" itemLabel="name"/>
+		</form:select>
+	</fieldset>
 	<table>
   		<tr>
     		<th>Disbursement Date</th>

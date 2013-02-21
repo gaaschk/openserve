@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import org.drools.KnowledgeBase;
 import org.drools.KnowledgeBaseFactory;
@@ -23,6 +22,7 @@ import org.drools.logger.KnowledgeRuntimeLoggerFactory;
 import org.drools.runtime.StatelessKnowledgeSession;
 import org.gsoft.openserv.buslogic.amortization.AmortizationLogic;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
+import org.gsoft.openserv.domain.loan.Account;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.util.ApplicationContextLocator;
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class GenerateAmortizationScheduleTest {
 				//just need to set something to stop the rule from firing
 				return null;
 			}
-		}).when(amortizor).createAmortizationSchedule(any(List.class), any(Date.class));
+		}).when(amortizor).createMissingAmortizationSchedules(any(Long.class), any(Date.class));
 		
 		SystemSettingsLogic sysSettingsLogic = mock(SystemSettingsLogic.class);
 		when(sysSettingsLogic.getCurrentSystemDate()).thenReturn(new Date());
@@ -63,7 +63,9 @@ public class GenerateAmortizationScheduleTest {
 		new ApplicationContextLocator().setApplicationContext(springContext);
 		
 		KnowledgeBuilder builder= KnowledgeBuilderFactory.newKnowledgeBuilder();
-		File ruleFile = ResourceUtils.getFile("classpath:rules/loan.package");
+		File ruleFile = ResourceUtils.getFile("classpath:rules/account.package");
+		builder.add(ResourceFactory.newFileResource(ruleFile), ResourceType.DRL);
+		ruleFile = ResourceUtils.getFile("classpath:rules/loan.package");
 		builder.add(ResourceFactory.newFileResource(ruleFile), ResourceType.DRL);
 		ruleFile = ResourceUtils.getFile("classpath:rules/GenerateAmortizationSchedule.drl");
 		builder.add(ResourceFactory.newFileResource(ruleFile), ResourceType.DRL);

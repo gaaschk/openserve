@@ -10,8 +10,8 @@ public class LoanTermCalculator {
 	
 	public static int calculateRemainingLoanTermAsOf(Loan loan, Date asOfDate){
 		int used = 0;
-		if(loan.getRepaymentStartDate() != null){
-			used = Months.monthsBetween(new DateTime(loan.getRepaymentStartDate()),new DateTime(asOfDate)).getMonths(); 
+		if(loan.getEarliestRepaymentStartDate() != null){
+			used = Months.monthsBetween(new DateTime(loan.getEarliestRepaymentStartDate()),new DateTime(asOfDate)).getMonths(); 
 		}
 		return loan.getEffectiveLoanTypeProfile().getMaximumLoanTerm() - used;
 	}

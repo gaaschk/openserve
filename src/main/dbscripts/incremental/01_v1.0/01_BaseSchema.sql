@@ -1,4 +1,11 @@
 # Amortization
+CREATE TABLE Account(
+	AccountID			BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+	AccountNumber		VARCHAR(15),
+	BorrowerPersonID 	BIGINT,
+	LoanTypeID 			BIGINT,
+	LenderID			BIGINT
+);
 CREATE TABLE AmortizationLoanPayment ( 
 	AmortizationLoanPaymentID 	BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 	LoanAmortizationScheduleID	BIGINT NULL,
@@ -8,6 +15,8 @@ CREATE TABLE AmortizationLoanPayment (
 );
 CREATE TABLE AmortizationSchedule ( 
 	AmortizationScheduleID	BIGINT AUTO_INCREMENT NOT NULL,
+	AccountID				BIGINT NULL,
+	Invalid					SMALLINT NULL,
 	CreationDate          	DATETIME NULL,
 	EffectiveDate         	DATETIME NULL,
 	PRIMARY KEY(AmortizationScheduleID)
@@ -18,6 +27,11 @@ CREATE TABLE LoanAmortizationSchedule (
 	LoanID                    	BIGINT NULL,
 	AmortizationScheduleID    	BIGINT NULL,
 	PRIMARY KEY(LoanAmortizationScheduleID)
+);
+
+CREATE TABLE Lender(
+	LenderID 	BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+	Name 		VARCHAR(25)
 );
 
 # Billing Statement
@@ -53,6 +67,8 @@ CREATE TABLE Loan (
 	InitialUsedLoanTerm         		INT NULL,
 	FirstDueDate              			DATE NULL,
 	InitialDueDate            			DATE NULL,
+	LenderID 							BIGINT NULL,
+	AccountID 							BIGINT NULL,
 	PRIMARY KEY(LoanID)
 );
 CREATE TABLE Disbursement(
@@ -292,173 +308,197 @@ INSERT INTO secassignedpermission(AssignedPermissionID, PermissionID, PrincipalI
 INSERT INTO secassignedpermission(AssignedPermissionID, PermissionID, PrincipalID)
   VALUES(4, 4, 2);
 
-
-
+INSERT INTO Lender(name)
+  VALUES('Test Lender');
+  
+ALTER TABLE AmortizationSchedule
+	ADD CONSTRAINT amortizationschedule_account_fk
+		FOREIGN KEY(AccountID)
+		REFERENCES Account(AccountID)
+		ON DELETE RESTRICT
+		ON UPDATE RESTRICT;
 ALTER TABLE AmortizationLoanPayment
 	ADD CONSTRAINT amortizationloanpayment_ibfk_1
-	FOREIGN KEY(LoanAmortizationScheduleID)
-	REFERENCES LoanAmortizationSchedule(LoanAmortizationScheduleID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
+		FOREIGN KEY(LoanAmortizationScheduleID)
+		REFERENCES LoanAmortizationSchedule(LoanAmortizationScheduleID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT ;
 ALTER TABLE LoanAmortizationSchedule
 	ADD CONSTRAINT loanamortizationschedule_ibfk_2
-	FOREIGN KEY(LoanID)
-	REFERENCES Loan(LoanID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
-ALTER TABLE LoanAmortizationSchedule
+		FOREIGN KEY(LoanID)
+		REFERENCES Loan(LoanID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT,
 	ADD CONSTRAINT loanamortizationschedule_ibfk_1
-	FOREIGN KEY(AmortizationScheduleID)
-	REFERENCES AmortizationSchedule(AmortizationScheduleID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
+		FOREIGN KEY(AmortizationScheduleID)
+		REFERENCES AmortizationSchedule(AmortizationScheduleID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT ;
 
 ALTER TABLE userconnection
 	ADD CONSTRAINT UserConnectionRank
-	UNIQUE (userId, providerId, rank);
+		UNIQUE (userId, providerId, rank);
 ALTER TABLE SecAssignedPermission
 	ADD CONSTRAINT secassignedpermission_ibfk_2
-	FOREIGN KEY(PrincipalID)
-	REFERENCES SecPrincipal(PrincipalID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
-ALTER TABLE SecAssignedPermission
+		FOREIGN KEY(PrincipalID)
+		REFERENCES SecPrincipal(PrincipalID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT,
 	ADD CONSTRAINT secassignedpermission_ibfk_1
-	FOREIGN KEY(PermissionID)
-	REFERENCES SecPermission(PermissionID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
+		FOREIGN KEY(PermissionID)
+		REFERENCES SecPermission(PermissionID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT ;
 ALTER TABLE SecAssignedRole
 	ADD CONSTRAINT secassignedrole_ibfk_2
-	FOREIGN KEY(UserPrincipalID)
-	REFERENCES SecSystemUser(PrincipalID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
-ALTER TABLE SecAssignedRole
+		FOREIGN KEY(UserPrincipalID)
+		REFERENCES SecSystemUser(PrincipalID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT,
 	ADD CONSTRAINT secassignedrole_ibfk_1
-	FOREIGN KEY(RolePrincipalID)
-	REFERENCES SecSystemRole(PrincipalID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
+		FOREIGN KEY(RolePrincipalID)
+		REFERENCES SecSystemRole(PrincipalID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT ;
 ALTER TABLE SecSystemRole
 	ADD CONSTRAINT secsystemrole_ibfk_1
-	FOREIGN KEY(PrincipalID)
-	REFERENCES SecPrincipal(PrincipalID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
+		FOREIGN KEY(PrincipalID)
+		REFERENCES SecPrincipal(PrincipalID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT ;
 ALTER TABLE SecSystemUser
 	ADD CONSTRAINT secsystemuser_ibfk_1
-	FOREIGN KEY(PrincipalID)
-	REFERENCES SecPrincipal(PrincipalID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
+		FOREIGN KEY(PrincipalID)
+		REFERENCES SecPrincipal(PrincipalID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT ;
 
 ALTER TABLE BillingStatement
 	ADD CONSTRAINT billingstatement_ibfk_1
-	FOREIGN KEY(LoanID)
-	REFERENCES Loan(LoanID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
+		FOREIGN KEY(LoanID)
+		REFERENCES Loan(LoanID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT ;
 ALTER TABLE LateFee
 	ADD CONSTRAINT latefee_ibfk_1
-	FOREIGN KEY(BillingStatementID)
-	REFERENCES BillingStatement(BillingStatementID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
+		FOREIGN KEY(BillingStatementID)
+		REFERENCES BillingStatement(BillingStatementID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT ;
+ALTER TABLE Account
+	ADD CONSTRAINT account_person_fk
+		FOREIGN KEY(BorrowerPersonID)
+		REFERENCES Person(PersonID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT,
+	ADD CONSTRAINT account_loantype_fk
+		FOREIGN KEY(LoanTypeID)
+		REFERENCES LoanType(LoanTypeID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT,
+	ADD CONSTRAINT account_lender_fk
+		FOREIGN KEY(LenderID)
+		REFERENCES Lender(LenderID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT;
 
 ALTER TABLE Loan
+	ADD CONSTRAINT loan_lender_fk
+		FOREIGN KEY(LenderID)
+		REFERENCES Lender(LenderID)
+		ON DELETE RESTRICT
+		ON UPDATE RESTRICT,
+	ADD CONSTRAINT loan_account_fk
+		FOREIGN KEY(AccountID)
+		REFERENCES Account(AccountID)
+		ON DELETE RESTRICT
+		ON UPDATE RESTRICT,
 	ADD CONSTRAINT loan_ibfk_3
-	FOREIGN KEY(EffectiveLoanTypeProfileID)
-	REFERENCES LoanTypeProfile(LoanTypeProfileID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
-ALTER TABLE Loan
+		FOREIGN KEY(EffectiveLoanTypeProfileID)
+		REFERENCES LoanTypeProfile(LoanTypeProfileID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT,
 	ADD CONSTRAINT loan_ibfk_2
-	FOREIGN KEY(LoanTypeID)
-	REFERENCES LoanType(LoanTypeID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
-ALTER TABLE Loan
+		FOREIGN KEY(LoanTypeID)
+		REFERENCES LoanType(LoanTypeID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT,
 	ADD CONSTRAINT loan_ibfk_1
-	FOREIGN KEY(BorrowerPersonID)
-	REFERENCES Person(PersonID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
+		FOREIGN KEY(BorrowerPersonID)
+		REFERENCES Person(PersonID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT ;
+
 ALTER TABLE LoanBalanceAdjustment
 	ADD CONSTRAINT loanbalanceadjustment_ibfk_2
-	FOREIGN KEY(LoanID)
-	REFERENCES Loan(LoanID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
+		FOREIGN KEY(LoanID)
+		REFERENCES Loan(LoanID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT ;
 ALTER TABLE Disbursement
 	ADD CONSTRAINT disbursement_loan_fk
-	FOREIGN KEY(LoanID)
-	REFERENCES Loan(LoanID)
-	ON DELETE RESTRICT
-	ON UPDATE RESTRICT;
+		FOREIGN KEY(LoanID)
+		REFERENCES Loan(LoanID)
+		ON DELETE RESTRICT
+		ON UPDATE RESTRICT;
 ALTER TABLE LoanPayment
 	ADD CONSTRAINT loanpayment_ibfk_2
-	FOREIGN KEY(LoanID)
-	REFERENCES Loan(LoanID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
-ALTER TABLE LoanPayment
+		FOREIGN KEY(LoanID)
+		REFERENCES Loan(LoanID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT,
 	ADD CONSTRAINT loanpayment_ibfk_1
-	FOREIGN KEY(PaymentID)
-	REFERENCES Payment(PaymentID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
+		FOREIGN KEY(PaymentID)
+		REFERENCES Payment(PaymentID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT ;
 ALTER TABLE LoanTypeProfile
 	ADD CONSTRAINT loantypeprofile_ibfk_3
-	FOREIGN KEY(BaseRateID)
-	REFERENCES Rate(RateID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
-ALTER TABLE LoanTypeProfile
+		FOREIGN KEY(BaseRateID)
+		REFERENCES Rate(RateID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT,
 	ADD CONSTRAINT loantypeprofile_ibfk_2
-	FOREIGN KEY(BaseRateUpdateFrequencyID)
-	REFERENCES FrequencyType(FrequencyTypeID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
-ALTER TABLE LoanTypeProfile
+		FOREIGN KEY(BaseRateUpdateFrequencyID)
+		REFERENCES FrequencyType(FrequencyTypeID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT,
 	ADD CONSTRAINT loantypeprofile_ibfk_4
-	FOREIGN KEY(RepaymentStartTypeID)
-	REFERENCES RepaymentStartType(RepaymentStartTypeID)
-	ON DELETE RESTRICT
-	ON UPDATE RESTRICT;
-ALTER TABLE LoanTypeProfile
+		FOREIGN KEY(RepaymentStartTypeID)
+		REFERENCES RepaymentStartType(RepaymentStartTypeID)
+		ON DELETE RESTRICT
+		ON UPDATE RESTRICT,
 	ADD CONSTRAINT loantypeprofile_ibfk_1
-	FOREIGN KEY(LoanTypeID)
-	REFERENCES LoanType(LoanTypeID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
+		FOREIGN KEY(LoanTypeID)
+		REFERENCES LoanType(LoanTypeID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT ;
 
 ALTER TABLE Payment
 	ADD CONSTRAINT payment_ibfk_1
-	FOREIGN KEY(BorrowerPersonID)
-	REFERENCES Person(PersonID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
+		FOREIGN KEY(BorrowerPersonID)
+		REFERENCES Person(PersonID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT ;
 
 ALTER TABLE RateValue
 	ADD CONSTRAINT ratevalue_ibfk_1
-	FOREIGN KEY(RateID)
-	REFERENCES Rate(RateID)
-	ON DELETE RESTRICT 
-	ON UPDATE RESTRICT ;
+		FOREIGN KEY(RateID)
+		REFERENCES Rate(RateID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT ;
 ALTER TABLE LoanRateValue
 	ADD CONSTRAINT loanratevalue_loan_fk
-	FOREIGN KEY(LoanID)
-	REFERENCES Loan(LoanID)
-	ON DELETE RESTRICT
-	ON UPDATE RESTRICT;
-ALTER TABLE LoanRateValue
+		FOREIGN KEY(LoanID)
+		REFERENCES Loan(LoanID)
+		ON DELETE RESTRICT
+		ON UPDATE RESTRICT,
 	ADD CONSTRAINT loanratevalue_ratevalue_fk
-	FOREIGN KEY(RateValueID)
-	REFERENCES RateValue(RateValueID)
-	ON DELETE RESTRICT
-	ON UPDATE RESTRICT;
+		FOREIGN KEY(RateValueID)
+		REFERENCES RateValue(RateValueID)
+		ON DELETE RESTRICT
+		ON UPDATE RESTRICT;
 
 ALTER TABLE Person
 	ADD CONSTRAINT ssn_unique
-	UNIQUE (SSN);
+		UNIQUE (SSN);

@@ -64,7 +64,7 @@ public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetai
 		if(lastPayment != null){
 			finModel.setLastPaidDate(lastPayment.getPayment().getEffectiveDate());
 		}
-		finModel.setRepaymentStartDate(loan.getRepaymentStartDate());
+		finModel.setRepaymentStartDate(loan.getEarliestRepaymentStartDate());
 		finModel.setFirstDueDate(loan.getFirstDueDate());
 		finModel.setInitialDueDate(loan.getInitialDueDate());
 		int remainingTerm = loan.getRemainingLoanTermAsOf(systemDate);

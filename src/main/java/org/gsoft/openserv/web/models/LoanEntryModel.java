@@ -5,10 +5,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.gsoft.openserv.domain.lender.Lender;
 import org.gsoft.openserv.domain.loan.LoanType;
 import org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormat;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.NumberFormat;
 
 
 public class LoanEntryModel implements Serializable{
@@ -17,6 +17,8 @@ public class LoanEntryModel implements Serializable{
 	private Long loanID;
 	private String selectedLoanTypeID;
 	private List<LoanType> loanTypeList;
+	private String selectedLenderID;
+	private List<Lender> lenderList;
 	private PersonModel person;
 	private Integer startingPrincipal;
 	private BigDecimal startingInterest;
@@ -43,6 +45,18 @@ public class LoanEntryModel implements Serializable{
 	}
 	public void setLoanTypeList(List<LoanType> loanTypeList) {
 		this.loanTypeList = loanTypeList;
+	}
+	public String getSelectedLenderID() {
+		return selectedLenderID;
+	}
+	public void setSelectedLenderID(String selectedLenderID) {
+		this.selectedLenderID = selectedLenderID;
+	}
+	public List<Lender> getLenderList() {
+		return lenderList;
+	}
+	public void setLenderList(List<Lender> lenderList) {
+		this.lenderList = lenderList;
 	}
 	public PersonModel getPerson() {
 		return person;

@@ -18,6 +18,8 @@ import org.gsoft.openserv.domain.PersistentDomainObject;
 public class AmortizationSchedule extends PersistentDomainObject {
 	private static final long serialVersionUID = -591660710764385964L;
 	private Long amortizationScheduleID;
+	private Long accountID;
+	private Boolean invalid;
 	private Date creationDate;
 	private Date effectiveDate;
 	private List<LoanAmortizationSchedule> loanAmortizations;
@@ -41,7 +43,23 @@ public class AmortizationSchedule extends PersistentDomainObject {
 	public void setAmortizationScheduleID(Long amortizationScheduleID) {
 		this.amortizationScheduleID = amortizationScheduleID;
 	}
+	
+	public Long getAccountID(){
+		return accountID;
+	}
+	
+	public void setAccountID(Long accountID){
+		this.accountID = accountID;
+	}
 
+	public Boolean isInvalid(){
+		return this.invalid;
+	}
+	
+	public void setInvalid(Boolean invalid){
+		this.invalid = invalid;
+	}
+	
 	public Date getCreationDate() {
 		return (creationDate==null)?null:(Date)creationDate.clone();
 	}
