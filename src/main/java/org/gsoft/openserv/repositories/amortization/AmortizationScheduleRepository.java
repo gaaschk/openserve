@@ -51,7 +51,8 @@ interface AmortizationScheduleSpringRepository extends BaseSpringRepository<Amor
 	LoanAmortizationSchedule findScheduleForLoan(@Param("loanID") Long loanID);
 	
 	@Query("select lam from LoanAmortizationSchedule lam where lam.loanID = :loanID and lam.amortizationSchedule.effectiveDate = " +
-			"(SELECT MAX(lam2.amortizationSchedule.effectiveDate) FROM LoanAmortizationSchedule lam2 where lam2.loanID = :loanID and lam2.amortizationSchedule.effectiveDate <= :effectiveDate)")
+			"(SELECT MAX(lam2.amortizationSchedule.effectiveDate) FROM LoanAmortizationSchedule lam2 where lam2.loanID = :loanID and lam2.amortizationSchedule.effectiveDate <= :effectiveDate " +
+			"and lam2.amortizationSchedule.invalid <> true)")
 	LoanAmortizationSchedule findScheduleForLoanEffectiveOn(@Param("loanID") Long loanID, @Param("effectiveDate") Date effectiveDate);
 
 	@Query("select lam from LoanAmortizationSchedule lam where lam.loanID = :loanID and lam.amortizationSchedule.effectiveDate = :effectiveDate")

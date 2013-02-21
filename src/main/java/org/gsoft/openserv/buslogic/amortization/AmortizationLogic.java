@@ -89,7 +89,8 @@ public class AmortizationLogic {
 			amortSched.setInvalid(false);
 			amortSched.setLoanAmortizationSchedules(lams);
 			for(LoanAmortizationSchedule lam:lams){
-				lam.setAmortizationSchedule(amortSched);
+				if(lam!=null)
+					lam.setAmortizationSchedule(amortSched);
 			}
 		}
 		return amortSched;
@@ -102,11 +103,15 @@ public class AmortizationLogic {
 		List<Loan> loans = loanRepository.findAllByAccountID(accountID);
 		for(Loan loan:loans){
 			for(Disbursement disb:loan.getDisbursements()){
-				amortizationDates.add(disb.getDisbursementEffectiveDate());
+				if(!disb.getDisbursementEffectiveDate().before(loan.getAccount().getRepaymentStartDate())){
+					amortizationDates.add(disb.getDisbursementEffectiveDate());
+				}
 			}
 			List<LoanRateValue> loanRateValues = loanRateValueRepository.findAllLoanRateValuesThruDate(loan.getLoanID(), throughDate);
 			for(LoanRateValue lrv:loanRateValues){
-				amortizationDates.add(lrv.getLockedDate());
+				if(!lrv.getLockedDate().before(loan.getAccount().getRepaymentStartDate())){
+					amortizationDates.add(lrv.getLockedDate());
+				}
 			}
 		}
 		return Lists.newArrayList(amortizationDates);
@@ -115,9 +120,10 @@ public class AmortizationLogic {
 	private List<AmortizationSchedule> findInvalidAmortizationSchedules(Long accountID, Date throughDate){
 		List<Date> dates = this.findExpectedAmortizationDates(accountID, throughDate);
 		List<AmortizationSchedule> schedules = amortizationScheduleRepository.findAllSchedulesForAccountThroughDate(accountID, throughDate);
+		List<Loan> accountLoans = loanRepository.findAllByAccountID(accountID);
 		ArrayList<AmortizationSchedule> invalidSchedules = new ArrayList<>();
 		for(AmortizationSchedule ams:schedules){
-			if(!containsDate(dates, ams.getEffectiveDate())){
+			if(!containsDate(dates, ams.getEffectiveDate()) || ams.getLoanAmortizationSchedules().size() != accountLoans.size()){
 				invalidSchedules.add(ams);
 			}
 		}

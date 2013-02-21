@@ -25,7 +25,7 @@ rule "Load Missing Amortization Dates"
 		not AmortizationSchedulesUpdated(accountId == $l.account.accountID)
 		not AmortizationScheduleChecked(accountId == $l.account.accountID)
 	then
-		System.out.println("Amortization Schedule Update Needed");
+		System.out.println("Check for Needed Amortization Schedule Update");
 		Date sysDate = springContext.getBean(SystemSettingsLogic.class).getCurrentSystemDate();
 		boolean invalidScheds = springContext.getBean(AmortizationLogic.class).invalidAmortizationSchedulesExist($l.getAccount().getAccountID(), sysDate);
 		boolean missingScheds = springContext.getBean(AmortizationLogic.class).amortizationSchedulesMissing($l.getAccount().getAccountID(), sysDate);
