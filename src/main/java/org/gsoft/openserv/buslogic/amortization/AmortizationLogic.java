@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 import javax.annotation.Resource;
 
+import org.gsoft.openserv.buslogic.repayment.RepaymentStartDateCalculator;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.amortization.AmortizationLoanPayment;
 import org.gsoft.openserv.domain.amortization.AmortizationSchedule;
@@ -28,7 +29,6 @@ import org.gsoft.openserv.repositories.rates.LoanRateValueRepository;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 @Component
 public class AmortizationLogic {
@@ -44,6 +44,10 @@ public class AmortizationLogic {
 	private SystemSettingsLogic systemSettings;
 	@Resource
 	private AccountRepository accountRepository;
+	@Resource
+	private RepaymentStartDateCalculator repaymentStartDateCalculator;
+	@Resource
+	private LoanTermCalculator loanTermCalculator;
 	
 	public boolean invalidAmortizationSchedulesExist(Long accountID, Date asOfDate){
 		return this.findInvalidAmortizationSchedules(accountID, asOfDate).size() > 0;
@@ -99,17 +103,18 @@ public class AmortizationLogic {
 	private List<Date> findExpectedAmortizationDates(Long accountID, Date throughDate){
 		Set<Date> amortizationDates = new TreeSet<>();
 		Account account = accountRepository.findOne(accountID);
-		amortizationDates.add(account.getRepaymentStartDate());
+		Date accountRepayStart = repaymentStartDateCalculator.calculateRepaymentStartDateForAccount(account);
+		amortizationDates.add(accountRepayStart);
 		List<Loan> loans = loanRepository.findAllByAccountID(accountID);
 		for(Loan loan:loans){
 			for(Disbursement disb:loan.getDisbursements()){
-				if(!disb.getDisbursementEffectiveDate().before(loan.getAccount().getRepaymentStartDate())){
+				if(!disb.getDisbursementEffectiveDate().before(accountRepayStart)){
 					amortizationDates.add(disb.getDisbursementEffectiveDate());
 				}
 			}
 			List<LoanRateValue> loanRateValues = loanRateValueRepository.findAllLoanRateValuesThruDate(loan.getLoanID(), throughDate);
 			for(LoanRateValue lrv:loanRateValues){
-				if(!lrv.getLockedDate().before(loan.getAccount().getRepaymentStartDate())){
+				if(!lrv.getLockedDate().before(accountRepayStart)){
 					amortizationDates.add(lrv.getLockedDate());
 				}
 			}
@@ -167,7 +172,7 @@ public class AmortizationLogic {
 				BigDecimal margin = lrv.getMarginValue();
 				BigDecimal rate = lrv.getRateValue().getRateValue();
 				BigDecimal annualInterestRate = margin.add(rate);
-				int remainingTerm = loan.getRemainingLoanTermAsOf(effectiveDate);	
+				int remainingTerm = loanTermCalculator.calculateRemainingLoanTermAsOf(loan, effectiveDate); 
 				LoanStateHistory loanHistory =  loanStateHistoryRepo.findLoanStateHistoryAsOf(loan, effectiveDate);
 				int principal = loanHistory.getEndingPrincipal();
 				Integer paymentAmount = PaymentAmountCalculator.calculatePaymentAmount(principal,annualInterestRate,remainingTerm);
@@ -203,7 +208,7 @@ public class AmortizationLogic {
 					return p1.getPaymentOrder() - p2.getPaymentOrder();
 				}
 			});
-			int remainingTerm = loan.getRemainingLoanTermAsOf(asOfDate);
+			int remainingTerm = loanTermCalculator.calculateRemainingLoanTermAsOf(loan, asOfDate); 
 			int totalTerm = 0;
 			for(AmortizationLoanPayment amortPayment:payments){
 				totalTerm+=amortPayment.getPaymentCount();

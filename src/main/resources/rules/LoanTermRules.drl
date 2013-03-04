@@ -6,7 +6,6 @@ import org.gsoft.openserv.domain.payment.billing.BillingStatement
 import org.springframework.context.ApplicationContext
 import org.gsoft.openserv.buslogic.repayment.InitialDueDateCalculator
 import org.gsoft.openserv.buslogic.repayment.FirstDueDateCalculator
-import org.gsoft.openserv.buslogic.loan.LoanTypeLogic
 import org.gsoft.openserv.buslogic.interest.LoanInterestRateFactory
 import java.util.Date
 import java.util.Calendar
@@ -15,7 +14,7 @@ global ApplicationContext springContext
 
 rule "Set Starting Loan Term"
 	when
-		$l : Loan(initialUsedLoanTerm == null, effectiveLoanTypeProfile != null)
+		$l : Loan(initialUsedLoanTerm == null)
 	then
 		System.out.println("set the remaining loan term");
 		$l.setInitialUsedLoanTerm(0);

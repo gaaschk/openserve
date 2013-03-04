@@ -9,7 +9,7 @@ import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.commons.collections.comparators.NullComparator;
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.loan.LoanTypeProfile;
+import org.gsoft.openserv.domain.loan.LoanProgramSettings;
 import org.gsoft.openserv.domain.payment.LoanPayment;
 import org.gsoft.openserv.util.collections.SortedList;
 import org.gsoft.openserv.util.comparator.ComparatorAdapter;
@@ -19,7 +19,7 @@ public class LoanStatementSummary {
 	private Loan loan;
 	private List<LoanPayment> payments;
 	private List<StatementPaySummary> statements;
-	private List<LoanTypeProfile> loanTypeProfiles;
+	private List<LoanProgramSettings> loanProgramSettings;
 	
 	public Loan getLoan(){
 		return loan;
@@ -45,11 +45,11 @@ public class LoanStatementSummary {
 		return statements;
 	}
 	
-	private List<LoanTypeProfile> getLoanTypeProfiles(){
-		if(this.loanTypeProfiles == null){
-			this.loanTypeProfiles = new SortedList<>(new ComparatorAdapter<LoanTypeProfile>(new BeanComparator("effectiveDate")),true);
+	private List<LoanProgramSettings> getLoanProgramSettings(){
+		if(this.loanProgramSettings == null){
+			this.loanProgramSettings = new SortedList<>(new ComparatorAdapter<LoanProgramSettings>(new BeanComparator("effectiveDate")),true);
 		}
-		return this.loanTypeProfiles;
+		return this.loanProgramSettings;
 	}
 	
 	private void clearStatements(){
@@ -61,7 +61,7 @@ public class LoanStatementSummary {
 	private List<StatementPaySummary> getEligibleStatements(Date effectiveDate){
 		ArrayList<StatementPaySummary> eligStmts = new ArrayList<>();
 		for(StatementPaySummary stmt:this.getStatements()){
-			LoanTypeProfile ltp = this.getEffectiveLoanTypeProfile(stmt.getStatement().getDueDate());
+			LoanProgramSettings ltp = this.getEffectiveLoanProgramSettings(stmt.getStatement().getDueDate());
 			int prepayDays = (ltp==null)?0:ltp.getPrepaymentDays();
 			Date prepayDate = new DateTime(stmt.getStatement().getDueDate()).minusDays(prepayDays).toDate();
 			if(prepayDate.after(effectiveDate))return eligStmts;
@@ -71,9 +71,9 @@ public class LoanStatementSummary {
 	}
 	
 
-	private LoanTypeProfile getEffectiveLoanTypeProfile(Date effectiveDate){
-		LoanTypeProfile ltp = null;
-		for(LoanTypeProfile profile:this.getLoanTypeProfiles()){
+	private LoanProgramSettings getEffectiveLoanProgramSettings(Date effectiveDate){
+		LoanProgramSettings ltp = null;
+		for(LoanProgramSettings profile:this.getLoanProgramSettings()){
 			if(!profile.getEffectiveDate().before(effectiveDate))
 				return ltp;
 			ltp = profile;
@@ -85,9 +85,9 @@ public class LoanStatementSummary {
 		this.loan = loan;
 	}
 	
-	public LoanStatementSummary(Loan loan, List<BillingStatement> statements, List<LoanPayment> payments, List<LoanTypeProfile> profiles){
+	public LoanStatementSummary(Loan loan, List<BillingStatement> statements, List<LoanPayment> payments, List<LoanProgramSettings> profiles){
 		this.loan = loan;
-		this.setLoanTypeProfiles(profiles);
+		this.loanProgramSettings = profiles;
 		this.setStatements(statements);
 		this.setPayments(payments);
 	}
@@ -108,13 +108,13 @@ public class LoanStatementSummary {
 	}
 	
 	public void addStatement(BillingStatement statement){
-		this.getStatements().add(new StatementPaySummary(statement, this.getEffectiveLoanTypeProfile(statement.getDueDate())));
+		this.getStatements().add(new StatementPaySummary(statement, this.getEffectiveLoanProgramSettings(statement.getDueDate())));
 		this.applyPayments();
 	}
 	
 	public void addStatements(List<BillingStatement> statements){
 		for(BillingStatement statement:statements){
-			this.getStatements().add(new StatementPaySummary(statement, this.getEffectiveLoanTypeProfile(statement.getDueDate())));
+			this.getStatements().add(new StatementPaySummary(statement, this.getEffectiveLoanProgramSettings(statement.getDueDate())));
 		}
 		this.applyPayments();
 	}
@@ -124,9 +124,9 @@ public class LoanStatementSummary {
 		this.addStatements(statements);
 	}
 	
-	public void setLoanTypeProfiles(List<LoanTypeProfile> loanTypeProfiles){
-		this.getLoanTypeProfiles().clear();
-		this.getLoanTypeProfiles().addAll(loanTypeProfiles);
+	public void setLoanTypeProfiles(List<LoanProgramSettings> loanTypeProfiles){
+		this.getLoanProgramSettings().clear();
+		this.getLoanProgramSettings().addAll(loanTypeProfiles);
 	}
 	
 	public void applyPayments(){

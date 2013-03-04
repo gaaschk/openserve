@@ -1,6 +1,7 @@
 package loan
 
 import org.gsoft.openserv.domain.loan.Loan
+import org.gsoft.openserv.domain.loan.LoanProgramSettings
 import org.gsoft.openserv.buslogic.amortization.AmortizationLogic
 import org.springframework.context.ApplicationContext
 import org.gsoft.openserv.domain.interest.LoanRateValue
@@ -13,14 +14,10 @@ import java.util.Date
 
 global ApplicationContext springContext
 
-declare AmortizationScheduleChecked
-	accountId : Long
-	updateNeeded : boolean
-end
-
 rule "Load Missing Amortization Dates"
 	when
-		$l : Loan(effectiveLoanTypeProfile != null, repaymentStartDate != null)
+		$l : Loan(account != null)
+		$ld : LoanDecorator(loanId == $l.loanID, effectiveLoanProgramSettings != null)
 		LoanInterestRateUpdated(loanId == $l.loanID)
 		not AmortizationSchedulesUpdated(accountId == $l.account.accountID)
 		not AmortizationScheduleChecked(accountId == $l.account.accountID)
@@ -35,7 +32,7 @@ end
 
 rule "Generate Missing Amortization Schedules"
 	when
-		AmortizationScheduleChecked(updateNeeded == true, $aid : accountId)
+		$asc : AmortizationScheduleChecked(updateNeeded == true, $aid : accountId)
 		not AmortizationSchedulesUpdated(accountId == $aid)
 	then
 		System.out.println("Generating Missing Amortization Schedules");
@@ -43,5 +40,7 @@ rule "Generate Missing Amortization Schedules"
 		springContext.getBean(AmortizationLogic.class).updateInvalidAmortizationSchedules($aid, sysDate);
 		springContext.getBean(AmortizationLogic.class).createMissingAmortizationSchedules($aid, sysDate);
 		AmortizationSchedulesUpdated flag = new AmortizationSchedulesUpdated($aid);
+		$asc.setUpdateNeeded(false);
 		insert(flag);
+		update($asc);
 end

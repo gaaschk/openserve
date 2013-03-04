@@ -1,0 +1,39 @@
+package loan
+
+import org.gsoft.openserv.domain.loan.Loan
+import org.gsoft.openserv.domain.loan.LoanProgramSettings
+import org.gsoft.openserv.buslogic.amortization.AmortizationLogic
+import org.springframework.context.ApplicationContext
+import org.gsoft.openserv.domain.interest.LoanRateValue
+import org.gsoft.openserv.repositories.rates.LoanRateValueRepository
+import org.gsoft.openserv.repositories.loan.LoanProgramSettingsRepository
+import org.gsoft.openserv.domain.loan.Account
+import org.gsoft.openserv.buslogic.system.SystemSettingsLogic
+import java.util.Arrays
+import java.util.List
+import java.util.Date
+
+global ApplicationContext springContext
+
+rule "Create Loan Decorator"
+	when
+		$l : Loan()
+		not LoanDecorator(loanId == $l.loanID)
+	then
+		System.out.println("Creating Extended Loan");
+		LoanDecorator decorator = new LoanDecorator();
+		decorator.setLoanId($l.getLoanID());
+		insert(decorator);
+end
+
+rule "Load Loan Program Settings"
+	when
+		$l : Loan()
+		$ld : LoanDecorator(loanId == $l.loanID, effectiveLoanProgramSettings == null)
+	then
+		System.out.println("Loading Loan Program Settings");
+		LoanProgramSettings loanSettings = springContext.getBean(LoanProgramSettingsRepository.class).findEffectiveLoanProgramSettingsForLoan($l);
+		$ld.setEffectiveLoanProgramSettings(loanSettings);
+		update($ld);
+end
+

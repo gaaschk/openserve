@@ -1,3 +1,4 @@
+# edit me to force a db rebuild
 # Amortization
 CREATE TABLE Account(
 	AccountID			BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -59,7 +60,6 @@ CREATE TABLE Loan (
 	ServicingStartDate        			DATE NULL,
 	LoanTypeID                			BIGINT NULL,
 	BorrowerPersonID          			BIGINT NULL,
-	EffectiveLoanTypeProfileID			BIGINT NULL,
 	CurrentLoanAmortizationScheduleID	BIGINT NULL,
 	StartingPrincipal         			INT NOT NULL,
 	StartingInterest          			DECIMAL(20,6) NOT NULL,
@@ -102,6 +102,25 @@ CREATE TABLE LoanTypeProfile (
 	BaseRateUpdateFrequencyID	BIGINT NULL,
 	BaseRateID               	BIGINT NULL,
 	PRIMARY KEY(LoanTypeProfileID)
+);
+CREATE TABLE LenderLoanProgram ( 
+	LenderLoanProgramID        	BIGINT AUTO_INCREMENT NOT NULL,
+	LoanTypeID               	BIGINT NULL,
+	LenderID					BIGINT NULL,
+	ProgramBeginDate           	DATETIME NULL,
+	ProgramEndDate             	DATETIME NULL,
+	RepaymentStartTypeID     	BIGINT NULL,
+	MaximumLoanTerm          	INT NULL,
+	GraceMonths              	INT NULL,
+	MinDaysToFirstDue        	INT NULL,
+	PrepaymentDays           	INT NULL,
+	DaysBeforeDueToBill      	INT NULL,
+	DaysLateForFee           	INT NULL,
+	LateFeeAmount            	INT NULL,
+	VariableRate             	SMALLINT NULL,
+	BaseRateUpdateFrequencyID	BIGINT NULL,
+	BaseRateID               	BIGINT NULL,
+	PRIMARY KEY(LenderLoanProgramID)
 );
 
 # Repayment
@@ -249,6 +268,14 @@ INSERT INTO LoanTypeProfile(LoanTypeProfileID, LoanTypeID, EffectiveDate, EndDat
   VALUES(1, 20, '1900-01-17 22:22:51.0', NULL, 10, 180, 1, 1, 1, 1, 1, 1000, 1, 20, 10);
 INSERT INTO LoanTypeProfile(LoanTypeProfileID, LoanTypeID, EffectiveDate, EndDate, RepaymentStartTypeID, MaximumLoanTerm, GraceMonths, MinDaysToFirstDue, PrepaymentDays, DaysBeforeDueToBill, DaysLateForFee, LateFeeAmount, VariableRate, BaseRateUpdateFrequencyID, BaseRateID)
   VALUES(2, 10, '1900-01-17 22:22:51.0', NULL, 10, 180, 1, 1, 1, 1, 1, 1000, 1, 30, 10);
+  
+INSERT INTO Lender(LenderID, Name)
+  VALUES(1, 'Test Lender');
+  
+INSERT INTO LenderLoanProgram(LenderLoanProgramID, LoanTypeID, LenderID, ProgramBeginDate) 
+  VALUES (1, 10, 1, '1900-01-17 22:22:51.0');
+INSERT INTO LenderLoanProgram(LenderLoanProgramID, LoanTypeID, LenderID, ProgramBeginDate) 
+  VALUES (2, 20, 1, '1900-01-17 22:22:51.0');
 
 INSERT INTO Rate(RateID, RateName, TickerSymbol, ShouldAutoUpdate)
   VALUES(10, '1 Month LIBOR US Dollars', 'LIBOR.USD1M', 0);
@@ -308,9 +335,6 @@ INSERT INTO secassignedpermission(AssignedPermissionID, PermissionID, PrincipalI
 INSERT INTO secassignedpermission(AssignedPermissionID, PermissionID, PrincipalID)
   VALUES(4, 4, 2);
 
-INSERT INTO Lender(name)
-  VALUES('Test Lender');
-  
 ALTER TABLE AmortizationSchedule
 	ADD CONSTRAINT amortizationschedule_account_fk
 		FOREIGN KEY(AccountID)
@@ -413,11 +437,6 @@ ALTER TABLE Loan
 		REFERENCES Account(AccountID)
 		ON DELETE RESTRICT
 		ON UPDATE RESTRICT,
-	ADD CONSTRAINT loan_ibfk_3
-		FOREIGN KEY(EffectiveLoanTypeProfileID)
-		REFERENCES LoanTypeProfile(LoanTypeProfileID)
-		ON DELETE RESTRICT 
-		ON UPDATE RESTRICT,
 	ADD CONSTRAINT loan_ibfk_2
 		FOREIGN KEY(LoanTypeID)
 		REFERENCES LoanType(LoanTypeID)
@@ -473,7 +492,33 @@ ALTER TABLE LoanTypeProfile
 		REFERENCES LoanType(LoanTypeID)
 		ON DELETE RESTRICT 
 		ON UPDATE RESTRICT ;
-
+ALTER TABLE LenderLoanProgram
+	ADD CONSTRAINT lenderloanprogram_baserate_fk
+		FOREIGN KEY(BaseRateID)
+		REFERENCES Rate(RateID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT,
+	ADD CONSTRAINT lenderloanprogram_baserateupdatefrequency_fk
+		FOREIGN KEY(BaseRateUpdateFrequencyID)
+		REFERENCES FrequencyType(FrequencyTypeID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT,
+	ADD CONSTRAINT lenderloanprogram_repaymentstarttyep_fk
+		FOREIGN KEY(RepaymentStartTypeID)
+		REFERENCES RepaymentStartType(RepaymentStartTypeID)
+		ON DELETE RESTRICT
+		ON UPDATE RESTRICT,
+	ADD CONSTRAINT lenderloanprogram_loantype_fk
+		FOREIGN KEY(LoanTypeID)
+		REFERENCES LoanType(LoanTypeID)
+		ON DELETE RESTRICT 
+		ON UPDATE RESTRICT ,
+	ADD CONSTRAINT lenderloanprogram_lender_fk
+		FOREIGN KEY(LenderID)
+		REFERENCES Lender(LenderID)
+		ON DELETE RESTRICT
+		ON UPDATE RESTRICT ;
+		
 ALTER TABLE Payment
 	ADD CONSTRAINT payment_ibfk_1
 		FOREIGN KEY(BorrowerPersonID)

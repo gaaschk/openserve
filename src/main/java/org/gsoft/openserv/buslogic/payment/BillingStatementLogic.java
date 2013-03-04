@@ -7,10 +7,13 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.gsoft.openserv.buslogic.amortization.AmortizationLogic;
+import org.gsoft.openserv.buslogic.repayment.RepaymentStartDateCalculator;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.loan.Loan;
+import org.gsoft.openserv.domain.loan.LoanProgramSettings;
 import org.gsoft.openserv.domain.loan.LoanTypeProfile;
 import org.gsoft.openserv.domain.payment.billing.BillingStatement;
+import org.gsoft.openserv.repositories.loan.LoanProgramSettingsRepository;
 import org.gsoft.openserv.repositories.loan.LoanRepository;
 import org.gsoft.openserv.repositories.loan.LoanTypeProfileRepository;
 import org.gsoft.openserv.repositories.payment.BillingStatementRepository;
@@ -38,12 +41,16 @@ public class BillingStatementLogic {
 	private SystemEventHandler systemEventHandler;
 	@Resource
 	private AmortizationLogic amortizationLogic;
+	@Resource
+	private LoanProgramSettingsRepository loanProgramSettingsRepository;
+	@Resource
+	private RepaymentStartDateCalculator repaymentStartDateCalculator;
 	
 	public boolean isBillingStatementNeeded(Loan loan){
 		Date systemDate = systemSettings.getCurrentSystemDate();
-		LoanTypeProfile ltp = loan.getEffectiveLoanTypeProfile();
-		Date repaymentStartDate = loan.getEarliestRepaymentStartDate();
-		Date earliestDueBillingDate = new DateTime(repaymentStartDate).plusDays(ltp.getMinDaysToFirstDue()).minusDays(ltp.getDaysBeforeDueToBill()).toDate();
+		LoanProgramSettings loanSettings = loanProgramSettingsRepository.findEffectiveLoanProgramSettingsForLoan(loan);
+		Date repaymentStartDate = repaymentStartDateCalculator.calculateEarliestRepaymentStartDate(loan); 
+		Date earliestDueBillingDate = new DateTime(repaymentStartDate).plusDays(loanSettings.getMinDaysToFirstDue()).minusDays(loanSettings.getDaysBeforeDueToBill()).toDate();
 		if(!earliestDueBillingDate.after(systemDate)){
 			BillingStatement lastStatement = billingStatementRepository.findMostRecentBillingStatementForLoan(loan.getLoanID());
 			if(lastStatement == null || !new DateTime(lastStatement.getDueDate()).plusMonths(1).toDate().after(systemDate)){
@@ -70,7 +77,7 @@ public class BillingStatementLogic {
 		BillingStatement statement = null;
 		if(this.isBillingStatementNeeded(loan)){
 			Date systemDate = systemSettings.getCurrentSystemDate();
-			Date repaymentStartDate = loan.getAccount().getRepaymentStartDate();
+			Date repaymentStartDate = repaymentStartDateCalculator.calculateRepaymentStartDateForAccount(loan.getAccount()); 
 			LoanTypeProfile ltpAtRepayStart = loanTypeProfileRepository.findLoanTypeProfileByLoanTypeAndEffectiveDate(loan.getLoanType(), repaymentStartDate);
 			Date earliestDueBillingDate = new DateTime(repaymentStartDate).plusDays(ltpAtRepayStart.getMinDaysToFirstDue()).minusDays(ltpAtRepayStart.getDaysBeforeDueToBill()).toDate();
 			BillingStatement lastStatement = billingStatementRepository.findMostRecentBillingStatementForLoan(loan.getLoanID());

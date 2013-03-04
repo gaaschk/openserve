@@ -20,7 +20,6 @@ import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.domain.Person;
 import org.gsoft.openserv.domain.amortization.LoanAmortizationSchedule;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
-import org.joda.time.DateTime;
 
 @Entity
 @RulesEngineEntity
@@ -35,13 +34,13 @@ public class Loan extends PersistentDomainObject{
 	private Integer initialUsedLoanTerm;
 	private Date firstDueDate;
 	private Date initialDueDate;
+	private Date repaymentStartDate;
 	//Enumerations
 	private LoanType loanType;
 	//Relationships
 	private Account account;
 	private Person borrower;
 	private List<Disbursement> disbursements;
-	private LoanTypeProfile effectiveLoanTypeProfile;
 	private LoanAmortizationSchedule currentAmortizationSchedule;
 
 	@Id
@@ -79,14 +78,6 @@ public class Loan extends PersistentDomainObject{
 	}
 	public void setAccount(Account account) {
 		this.account = account;
-	}
-	@ManyToOne
-	@JoinColumn(name="EffectiveLoanTypeProfileID")
-	public LoanTypeProfile getEffectiveLoanTypeProfile() {
-		return effectiveLoanTypeProfile;
-	}
-	public void setEffectiveLoanTypeProfile(LoanTypeProfile effectiveLoanTypeProfile) {
-		this.effectiveLoanTypeProfile = effectiveLoanTypeProfile;
 	}
 	@OneToOne
 	@JoinColumn(name="CurrentLoanAmortizationScheduleID")
@@ -148,47 +139,6 @@ public class Loan extends PersistentDomainObject{
 	public void setBorrower(Person borrower) {
 		this.borrower = borrower;
 	}
-	
-	@Transient
-	public Date getRepaymentStartDate(){
-		Date repaymentStartDate = null;
-		if(this.getAccount() != null){
-			repaymentStartDate = this.getAccount().getRepaymentStartDate();
-		}
-		return repaymentStartDate;
-	}
-	
-	@Transient
-	public Date getEarliestRepaymentStartDate(){
-		Date repaymentStartDate = null;
-		if(this.getDisbursements() != null && this.getDisbursements().size() > 0){
-			LoanTypeProfile ltp = this.getEffectiveLoanTypeProfile();
-			RepaymentStartType repaymentStartType = ltp.getRepaymentStartType();
-			Disbursement firstDisb = null;
-			Disbursement lastDisb = null;
-			for(Disbursement disb: this.getDisbursements()){
-				if(firstDisb == null || firstDisb.getDisbursementEffectiveDate().after(disb.getDisbursementEffectiveDate())){
-					firstDisb = disb;
-				}
-				if(lastDisb == null || lastDisb.getDisbursementEffectiveDate().before(disb.getDisbursementEffectiveDate())){
-					lastDisb = disb;
-				}
-			}
-			if(repaymentStartType == RepaymentStartType.FIRST_DISBUREMENT){
-				repaymentStartDate = new DateTime(firstDisb.getDisbursementEffectiveDate()).plusMonths(ltp.getGraceMonths()).toDate();
-			}
-			else if(repaymentStartType == RepaymentStartType.LAST_DISBURSEMENT){
-				repaymentStartDate = new DateTime(lastDisb.getDisbursementEffectiveDate()).plusMonths(ltp.getGraceMonths()).toDate();
-			}
-		}
-		return repaymentStartDate;
-	}
-	
-	@Transient
-	public int getRemainingLoanTermAsOf(Date asOfDate){
-		return LoanTermCalculator.calculateRemainingLoanTermAsOf(this, asOfDate);
-	}
-	
 	@Override
 	@Transient
 	public Long getID() {

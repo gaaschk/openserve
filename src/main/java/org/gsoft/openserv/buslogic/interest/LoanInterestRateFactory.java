@@ -13,10 +13,10 @@ import org.apache.commons.beanutils.BeanComparator;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.interest.LoanRateValue;
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.loan.LoanTypeProfile;
+import org.gsoft.openserv.domain.loan.LoanProgramSettings;
 import org.gsoft.openserv.domain.rates.Rate;
 import org.gsoft.openserv.domain.rates.RateValue;
-import org.gsoft.openserv.repositories.loan.LoanTypeProfileRepository;
+import org.gsoft.openserv.repositories.loan.LoanProgramSettingsRepository;
 import org.gsoft.openserv.repositories.rates.LoanRateValueRepository;
 import org.gsoft.openserv.repositories.rates.RateValueRepository;
 import org.gsoft.openserv.util.comparator.ComparatorAdapter;
@@ -26,21 +26,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoanInterestRateFactory {
 	@Resource
-	private LoanTypeProfileRepository loanTypeProfileRepo;
+	private LoanProgramSettingsRepository loanProgramSettingsRepo;
 	@Resource
 	private RateValueRepository rateValueRepository;
 	@Resource
 	private LoanRateValueRepository loanRateValueRepo;
 	@Resource
 	private SystemSettingsLogic systemSettignsLogic;
-	private Comparator<LoanTypeProfile> loanTypeProfileComparator;
+	private Comparator<LoanProgramSettings> loanProgramSettingsComparator;
 	
-	private Comparator<LoanTypeProfile> getLoanTypeProfileComparator(){
-		if(this.loanTypeProfileComparator == null){
+	private Comparator<LoanProgramSettings> getLoanProgramSettingsComparator(){
+		if(this.loanProgramSettingsComparator == null){
 			BeanComparator comp1 = new BeanComparator("effectiveDate");
-			loanTypeProfileComparator = new ComparatorAdapter<>(comp1);
+			loanProgramSettingsComparator = new ComparatorAdapter<>(comp1);
 		}
-		return loanTypeProfileComparator;
+		return loanProgramSettingsComparator;
 	}
 	
 	public boolean isLoanRateUpdateNeeded(Loan loan){
@@ -55,32 +55,32 @@ public class LoanInterestRateFactory {
 		
 	}
 	
-	private List<Date> findExpectedLoanRateDatesForPeriod(Loan loan, Date start, Date end, LoanTypeProfile ltp){
-		FrequencyType frequency = ltp.getBaseRateUpdateFrequency();
+	private List<Date> findExpectedLoanRateDatesForPeriod(Loan loan, Date start, Date end, LoanProgramSettings settings){
+		FrequencyType frequency = settings.getBaseRateUpdateFrequency();
 		List<Date> dates = frequency.findAllDatesBetween(start, end);
 		return dates;
 	}
 	
 	private List<Date> findAllRateChangeDates(Loan loan){
-		List<LoanTypeProfile> ltps = loanTypeProfileRepo.findLoanTypeProfilesByLoanTypeAndEffectiveDate(loan.getLoanType(), loan.getServicingStartDate());
-		Collections.sort(ltps, this.getLoanTypeProfileComparator());
+		List<LoanProgramSettings> lps = loanProgramSettingsRepo.findAllLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(loan.getLenderID(), loan.getLoanType(), loan.getServicingStartDate());
+		Collections.sort(lps, this.getLoanProgramSettingsComparator());
 		Date sysDate = systemSettignsLogic.getCurrentSystemDate();
 		Date startDate = loan.getServicingStartDate();
 		List<Date> dates = new ArrayList<>();
 		dates.add(loan.getServicingStartDate());
-		if(ltps.size()==1){
-			dates.addAll(this.findExpectedLoanRateDatesForPeriod(loan, startDate, sysDate, ltps.get(0)));
+		if(lps.size()==1){
+			dates.addAll(this.findExpectedLoanRateDatesForPeriod(loan, startDate, sysDate, lps.get(0)));
 		}
 		else{
-			LoanTypeProfile lastLtp = null;
-			for(LoanTypeProfile ltp:ltps){
-				lastLtp = ltp;
-				if(ltp.getEffectiveDate().after(startDate)){
-					dates.addAll(this.findExpectedLoanRateDatesForPeriod(loan, startDate, ltp.getEffectiveDate(), ltp));
-					startDate = ltp.getEffectiveDate();
+			LoanProgramSettings lastSettings = null;
+			for(LoanProgramSettings settings:lps){
+				lastSettings = settings;
+				if(settings.getEffectiveDate().after(startDate)){
+					dates.addAll(this.findExpectedLoanRateDatesForPeriod(loan, startDate, settings.getEffectiveDate(), settings));
+					startDate = settings.getEffectiveDate();
 				}
 			}
-			dates.addAll(this.findExpectedLoanRateDatesForPeriod(loan, startDate, sysDate, lastLtp));
+			dates.addAll(this.findExpectedLoanRateDatesForPeriod(loan, startDate, sysDate, lastSettings));
 		}
 		return dates;
 	}
@@ -120,8 +120,8 @@ public class LoanInterestRateFactory {
 	}
 	
 	public BigDecimal getBaseRateForLoan(Loan loan){
-		LoanTypeProfile ltp = loan.getEffectiveLoanTypeProfile();
-		RateValue quote = rateValueRepository.findCurrentRateAsOf(ltp.getBaseRate(), loan.getServicingStartDate());
+		LoanProgramSettings settings = loanProgramSettingsRepo.findEffectiveLoanProgramSettingsForLoan(loan);
+		RateValue quote = rateValueRepository.findCurrentRateAsOf(settings.getBaseRate(), loan.getServicingStartDate());
 		if(quote != null){
 			return quote.getRateValue();
 		}
@@ -135,8 +135,8 @@ public class LoanInterestRateFactory {
 		List<Date> missingDates = this.findMissingLoanRateDates(allLRVs,allDates);
 		LoanRateValue lastRate = null;
 		for(Date date:missingDates){
-			LoanTypeProfile ltp = loanTypeProfileRepo.findLoanTypeProfileByLoanTypeAndEffectiveDate(loan.getLoanType(), date);
-			Rate rate = ltp.getBaseRate();
+			LoanProgramSettings settings = loanProgramSettingsRepo.findLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(loan.getLenderID(), loan.getLoanType(), date);
+			Rate rate = settings.getBaseRate();
 			RateValue rateValue = rateValueRepository.findRateValue(rate, date);
 			LoanRateValue loanRateValue = new LoanRateValue();
 			loanRateValue.setLockedDate(date);

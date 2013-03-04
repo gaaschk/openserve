@@ -26,7 +26,7 @@ public class LateFeeLogic {
 				if(lateFee == null){
 					lateFee = new LateFee();
 					lateFee.setBillingStatementID(sps.getStatement().getBillingStatementID());
-					lateFee.setFeeAmount(sps.getEffectiveLoanTypeProfile().getLateFeeAmount());
+					lateFee.setFeeAmount(sps.getEffectiveLoanProgramSettings().getLateFeeAmount());
 					lateFee.setPostedDate(systemDate);
 					lateFee.setEffectiveDate(sps.expectedLateFeeDate());
 					lateFee.setCancelled(false);

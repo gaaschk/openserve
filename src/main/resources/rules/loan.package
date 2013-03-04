@@ -1,6 +1,18 @@
 package loan
 
+import org.gsoft.openserv.domain.loan.LoanProgramSettings
+
 declare LoanInterestRateUpdated
 	loanId : long
+end
+
+declare LoanDecorator
+	loanId : long
+	effectiveLoanProgramSettings : LoanProgramSettings
+end
+
+declare AmortizationScheduleChecked
+	accountId : Long
+	updateNeeded : boolean
 end
 

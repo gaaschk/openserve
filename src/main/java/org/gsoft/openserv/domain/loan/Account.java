@@ -1,6 +1,5 @@
 package org.gsoft.openserv.domain.loan;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -73,17 +72,6 @@ public class Account extends PersistentDomainObject{
 
 	public void setLoans(List<Loan> loans) {
 		this.loans = loans;
-	}
-
-	@Transient
-	public Date getRepaymentStartDate() {
-		Date repaymentStartDate = null;
-		for(Loan loan:this.getLoans()){
-			if(repaymentStartDate == null || (loan.getEarliestRepaymentStartDate() != null && loan.getEarliestRepaymentStartDate().after(repaymentStartDate))){
-				repaymentStartDate = loan.getEarliestRepaymentStartDate();
-			}
-		}
-		return repaymentStartDate;
 	}
 
 	@Transient

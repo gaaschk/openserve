@@ -11,6 +11,8 @@ import java.util.Date
 import java.util.Calendar
 import java.util.HashMap
 import org.springframework.context.ApplicationContext
+import loan.LoanDecorator
+import loan.AmortizationScheduleChecked
 
 global ApplicationContext springContext
 
@@ -21,7 +23,8 @@ end
 
 rule "Build Loan DueDate Wrapper"
 	when
-		$l : Loan(effectiveLoanTypeProfile != null, $loanId : loanID, account != null)
+		$l : Loan($loanId : loanID, account != null)
+		$ld : LoanDecorator(loanId == $l.loanID, effectiveLoanProgramSettings != null)
 		$a : Account() from $l.account
 		not LoanDueDateWrapper(loanId == $loanId)
 	then
@@ -36,6 +39,7 @@ rule "Generate Billing Statement"
 	when
 		$lw : LoanDueDateWrapper(isStatementNeeded, $loanId : loanId)
 		$l : Loan(loanID == $loanId)
+		AmortizationScheduleChecked(accountId == $l.account.accountID, !updateNeeded)
 	then
 		System.out.println("Generating a billing statement");
 		BillingStatementLogic logic = springContext.getBean(BillingStatementLogic.class);

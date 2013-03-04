@@ -6,7 +6,6 @@ import org.gsoft.openserv.domain.payment.billing.BillingStatement
 import org.springframework.context.ApplicationContext
 import org.gsoft.openserv.buslogic.repayment.InitialDueDateCalculator
 import org.gsoft.openserv.buslogic.repayment.FirstDueDateCalculator
-import org.gsoft.openserv.buslogic.loan.LoanTypeLogic
 import org.gsoft.openserv.buslogic.interest.LoanInterestRateFactory
 import java.util.Date
 import java.util.Calendar
@@ -15,7 +14,7 @@ global ApplicationContext springContext
 
 rule "Update First Due Date"
 	when
-		$l : Loan(firstDueDate == null, effectiveLoanTypeProfile != null, getRepaymentStartDate() != null)
+		$l : Loan(firstDueDate == null)
 	then
 		System.out.println("set the first due date");
 		springContext.getBean(FirstDueDateCalculator.class).updateFirstDueDate($l);
@@ -24,7 +23,7 @@ end
 
 rule "Update Initial Due Date"
 	when
-		$l : Loan(initialDueDate == null, effectiveLoanTypeProfile != null, firstDueDate != null)
+		$l : Loan(initialDueDate == null, firstDueDate != null)
 	then
 		System.out.println("set the initial due date");
 		InitialDueDateCalculator calculator = springContext.getBean(InitialDueDateCalculator.class);

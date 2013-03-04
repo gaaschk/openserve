@@ -1,10 +1,12 @@
 package org.gsoft.openserv.buslogic.account;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.gsoft.openserv.buslogic.repayment.RepaymentStartDateCalculator;
 import org.gsoft.openserv.domain.loan.Account;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.repositories.account.AccountRepository;
@@ -14,12 +16,16 @@ import org.springframework.stereotype.Component;
 public class AccountLogic {
 	@Resource
 	private AccountRepository accountRepository;
+	@Resource
+	private RepaymentStartDateCalculator repaymentStartDateCalculator;
 	
 	public Loan addLoanToAccount(Loan loan){
 		if(loan.getAccount() == null){
+			Date repaymentStartDate = repaymentStartDateCalculator.calculateEarliestRepaymentStartDate(loan);
 			List<Account> possibleAccounts = accountRepository.findAccountsByBorrowerAndLoanTypeAndLenderID(loan.getBorrower().getPersonID(), loan.getLoanType().getLoanTypeID(), loan.getLenderID());
 			for(Account possibleAccount:possibleAccounts){
-				if(!possibleAccount.getRepaymentStartDate().before(loan.getEarliestRepaymentStartDate())){
+				Date accountRepayStart = repaymentStartDateCalculator.calculateRepaymentStartDateForAccount(possibleAccount);
+				if(!accountRepayStart.before(repaymentStartDate)){
 					possibleAccount.getLoans().add(loan);
 					loan.setAccount(possibleAccount);
 					break;

@@ -8,13 +8,17 @@ import java.util.Date;
 import javax.annotation.Resource;
 
 import org.gsoft.openserv.buslogic.amortization.AmortizationLogic;
+import org.gsoft.openserv.buslogic.amortization.LoanTermCalculator;
+import org.gsoft.openserv.buslogic.repayment.RepaymentStartDateCalculator;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.loan.Loan;
+import org.gsoft.openserv.domain.loan.LoanProgramSettings;
 import org.gsoft.openserv.domain.loan.LoanState;
 import org.gsoft.openserv.domain.loan.LoanStateHistory;
 import org.gsoft.openserv.domain.payment.LoanPayment;
 import org.gsoft.openserv.domain.payment.billing.LoanStatementSummary;
 import org.gsoft.openserv.domain.payment.billing.StatementPaySummary;
+import org.gsoft.openserv.repositories.loan.LoanProgramSettingsRepository;
 import org.gsoft.openserv.repositories.payment.LoanPaymentRepository;
 import org.gsoft.openserv.repositories.payment.LoanStatementRepository;
 import org.gsoft.openserv.service.AccountSummaryService;
@@ -42,6 +46,12 @@ public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetai
 	private LoanStatementRepository statementRepository;
 	@Resource
 	private AmortizationLogic amortizationLogic;
+	@Resource
+	private RepaymentStartDateCalculator repaymentStartCalculator;
+	@Resource
+	private LoanTermCalculator loanTermCalculator;
+	@Resource
+	private LoanProgramSettingsRepository loanProgramSettingsRepository;
 	
 	public LoanDetailModel convert(Loan loan){
 		Date systemDate = systemSettings.getCurrentSystemDate();
@@ -64,11 +74,13 @@ public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetai
 		if(lastPayment != null){
 			finModel.setLastPaidDate(lastPayment.getPayment().getEffectiveDate());
 		}
-		finModel.setRepaymentStartDate(loan.getAccount().getRepaymentStartDate());
+		Date repaymentStartDate = repaymentStartCalculator.calculateRepaymentStartDateForAccount(loan.getAccount());
+		finModel.setRepaymentStartDate(repaymentStartDate);
 		finModel.setFirstDueDate(loan.getFirstDueDate());
 		finModel.setInitialDueDate(loan.getInitialDueDate());
-		int remainingTerm = loan.getRemainingLoanTermAsOf(systemDate);
-		finModel.setUsedTerm(loan.getEffectiveLoanTypeProfile().getMaximumLoanTerm()-remainingTerm);
+		int remainingTerm = loanTermCalculator.calculateRemainingLoanTermAsOf(loan, systemDate);
+		LoanProgramSettings loanSettings = loanProgramSettingsRepository.findEffectiveLoanProgramSettingsForLoan(loan);
+		finModel.setUsedTerm(loanSettings.getMaximumLoanTerm()-remainingTerm);
 		finModel.setRemainingTerm(remainingTerm);
 		finModel.setCurrentUnpaidDueDate(statementSummary.getEarliestUnpaidDueDate());
 		model.setCurrentAmortization(conversionService.convert(accountSummaryService.getAmortizationScheduleForLoan(loan.getLoanID()), LoanAmortizationModel.class));
