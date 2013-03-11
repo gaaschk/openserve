@@ -2,7 +2,7 @@ package org.gsoft.openserv.repositories.predicates;
 
 import java.util.Date;
 
-import org.gsoft.openserv.domain.loan.LoanType;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.domain.loan.QLoan;
 
 import com.mysema.query.types.Predicate;
@@ -17,9 +17,9 @@ public class LoanPredicates {
 		return loan.borrower.personID.eq(borrowerPersonId).and(loan.servicingStartDate.loe(asOfDate));
 	}
 	
-	public static Predicate loanTypeIs(LoanType loanType){
+	public static Predicate loanProgramIs(LoanProgram loanProgram){
 		QLoan loan = QLoan.loan;
-		return loan.loanType.eq(loanType);
+		return loan.loanProgram.eq(loanProgram);
 	}
 	
 	public static Predicate accountIDIs(Long accountID){

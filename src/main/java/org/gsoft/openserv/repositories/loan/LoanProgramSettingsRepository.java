@@ -8,42 +8,46 @@ import java.util.Stack;
 import javax.annotation.Resource;
 
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
-import org.gsoft.openserv.domain.loan.LenderLoanProgram;
+import org.gsoft.openserv.domain.loan.LenderLoanProgramSettings;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanProgramSettings;
-import org.gsoft.openserv.domain.loan.LoanType;
-import org.gsoft.openserv.domain.loan.LoanTypeProfile;
+import org.gsoft.openserv.domain.loan.LoanProgram;
+import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class LoanProgramSettingsRepository {
 	@Resource
-	private LoanTypeProfileRepository loanTypeProfileRepository;
+	private DefaultLoanProgramSettingsRepository loanTypeProfileRepository;
 	@Resource
-	private LenderLoanProgramRepository lenderLoanProgramRepository;
+	private LenderLoanProgramSettingsRepository lenderLoanProgramRepository;
 	@Resource
 	private SystemSettingsLogic systemSettingsLogic;
 
 	public LoanProgramSettings findEffectiveLoanProgramSettingsForLoan(Loan loan){
-		return this.findLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(loan.getLenderID(), loan.getLoanType(), systemSettingsLogic.getCurrentSystemDate());
+		return this.findLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(loan.getLenderID(), loan.getLoanProgram(), systemSettingsLogic.getCurrentSystemDate());
 	}
 
+	public LoanProgramSettings findLoanProgramSettingsForLoanEffectiveOn(Loan loan, Date effectiveDate){
+		return this.findLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(loan.getLenderID(), loan.getLoanProgram(), systemSettingsLogic.getCurrentSystemDate());
+	}
+	
 	public List<LoanProgramSettings> findAllLoanProgramSettingsForLoan(Loan loan){
-		return this.findAllLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(loan.getLenderID(), loan.getLoanType(), systemSettingsLogic.getCurrentSystemDate());
+		return this.findAllLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(loan.getLenderID(), loan.getLoanProgram(), systemSettingsLogic.getCurrentSystemDate());
 	}
 
-	public List<LoanProgramSettings> findAllLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(Long lenderID, LoanType loanType, Date effectiveDate) {
-		List<LoanTypeProfile> defaultSettings = loanTypeProfileRepository.findLoanTypeProfilesByLoanTypeAndEffectiveDate(loanType, effectiveDate);
-		List<LenderLoanProgram> lenderSettings = lenderLoanProgramRepository.findAllByLoanTypeAndEffectiveDate(lenderID, loanType, effectiveDate);
-		Stack<LoanTypeProfile> defaultSettingsStack = new Stack<LoanTypeProfile>();
+	public List<LoanProgramSettings> findAllLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(Long lenderID, LoanProgram loanType, Date effectiveDate) {
+		List<DefaultLoanProgramSettings> defaultSettings = loanTypeProfileRepository.findAllDefaultLoanProgramSettingsByLoanProgramAndEffectiveDate(loanType, effectiveDate);
+		List<LenderLoanProgramSettings> lenderSettings = lenderLoanProgramRepository.findAllByLoanProgramAndEffectiveDate(lenderID, loanType, effectiveDate);
+		Stack<DefaultLoanProgramSettings> defaultSettingsStack = new Stack<DefaultLoanProgramSettings>();
 		defaultSettingsStack.addAll(defaultSettings);
-		Stack<LenderLoanProgram> lenderSettingsStack = new Stack<LenderLoanProgram>();
+		Stack<LenderLoanProgramSettings> lenderSettingsStack = new Stack<LenderLoanProgramSettings>();
 		lenderSettingsStack.addAll(lenderSettings);
 		ArrayList<LoanProgramSettings> loanProgramSettings = new ArrayList<>();
 		LoanProgramSettings lastSettings = null;
 		while(defaultSettingsStack.size() > 0 && lenderSettingsStack.size() > 0){
-			LoanTypeProfile currentDefaultSettings = defaultSettingsStack.peek();
-			LenderLoanProgram currentLenderSettings = lenderSettingsStack.peek();
+			DefaultLoanProgramSettings currentDefaultSettings = defaultSettingsStack.peek();
+			LenderLoanProgramSettings currentLenderSettings = lenderSettingsStack.peek();
 			LoanProgramSettings lpSettings = new LoanProgramSettings(currentDefaultSettings, currentLenderSettings);
 			loanProgramSettings.add(lpSettings);
 			if(lastSettings == null){
@@ -66,9 +70,9 @@ public class LoanProgramSettingsRepository {
 		return false;
 	}
 
-	public LoanProgramSettings findLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(Long lenderID, LoanType loanType, Date effectiveDate) {
-		LoanTypeProfile defaultSettings = loanTypeProfileRepository.findLoanTypeProfileByLoanTypeAndEffectiveDate(loanType, effectiveDate);
-		LenderLoanProgram lenderSettings = lenderLoanProgramRepository.findByLoanTypeAndEffectiveDate(lenderID, loanType, effectiveDate);
+	public LoanProgramSettings findLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(Long lenderID, LoanProgram loanType, Date effectiveDate) {
+		DefaultLoanProgramSettings defaultSettings = loanTypeProfileRepository.findDefaultLoanProgramSettingsByLoanProgramAndEffectiveDate(loanType, effectiveDate);
+		LenderLoanProgramSettings lenderSettings = lenderLoanProgramRepository.findByLoanProgramAndEffectiveDate(lenderID, loanType, effectiveDate);
 		return new LoanProgramSettings(defaultSettings, lenderSettings);
 	}
 }

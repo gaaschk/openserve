@@ -1,12 +1,7 @@
 package loan
 
 import org.gsoft.openserv.domain.loan.Loan
-import org.gsoft.openserv.domain.loan.LoanTypeProfile
-import org.gsoft.openserv.domain.payment.billing.BillingStatement
 import org.springframework.context.ApplicationContext
-import org.gsoft.openserv.buslogic.repayment.InitialDueDateCalculator
-import org.gsoft.openserv.buslogic.repayment.FirstDueDateCalculator
-import org.gsoft.openserv.buslogic.interest.LoanInterestRateFactory
 import org.gsoft.openserv.buslogic.account.AccountLogic
 import java.util.Date
 import java.util.Calendar
@@ -15,7 +10,7 @@ global ApplicationContext springContext
 
 rule "Assign account number to loan"
 	when
-		$l : Loan(account == null, lenderID != null, loanType != null)
+		$l : Loan(account == null, lenderID != null, loanProgram != null)
 	then
 		$l = springContext.getBean(AccountLogic.class).addLoanToAccount($l);
 		update($l);

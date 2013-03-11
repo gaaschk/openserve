@@ -23,9 +23,9 @@ import org.springframework.format.annotation.NumberFormat;
 
 @Entity
 @RulesEngineEntity
-public class LenderLoanProgram extends PersistentDomainObject {
+public class LenderLoanProgramSettings extends PersistentDomainObject {
 	private static final long serialVersionUID = 2305820144103922657L;
-	private Long lenderLoanProgramID;
+	private Long loanProgramID;
 	private Long lenderID;
 	@DateTimeFormat(pattern="MM/dd/yyyy")
 	private Date programBeginDate;
@@ -46,7 +46,7 @@ public class LenderLoanProgram extends PersistentDomainObject {
 	private Integer lateFeeAmount;
 	private Boolean isVariableRate;
 	//Enumerations
-	private LoanType loanType;
+	private LoanProgram loanProgram;
 	private RepaymentStartType repaymentStartType;
 	private FrequencyType baseRateUpdateFrequency;
 	//Relationships
@@ -54,11 +54,11 @@ public class LenderLoanProgram extends PersistentDomainObject {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	public Long getLenderLoanProgramID() {
-		return lenderLoanProgramID;
+	public Long getLoanProgramID() {
+		return loanProgramID;
 	}
-	public void setLenderLoanProgramID(Long lenderLoanProgramID) {
-		this.lenderLoanProgramID = lenderLoanProgramID;
+	public void setLoanProgramID(Long loanProgramID) {
+		this.loanProgramID = loanProgramID;
 	}
 	public Long getLenderID() {
 		return lenderID;
@@ -67,12 +67,12 @@ public class LenderLoanProgram extends PersistentDomainObject {
 		this.lenderID = lenderID;
 	}
 	@ManyToOne
-	@JoinColumn( name = "LoanTypeID" )
-	public LoanType getLoanType() {
-		return loanType;
+	@JoinColumn( name = "LoanProgramID" )
+	public LoanProgram getLoanProgram() {
+		return loanProgram;
 	}
-	public void setLoanType(LoanType loanType) {
-		this.loanType = loanType;
+	public void setLoanProgram(LoanProgram loanProgram) {
+		this.loanProgram = loanProgram;
 	}
 	public Date getProgramBeginDate() {
 		return (programBeginDate==null)?null:(Date)programBeginDate.clone();
@@ -132,7 +132,7 @@ public class LenderLoanProgram extends PersistentDomainObject {
 	@Override
 	@Transient
 	public Long getID() {
-		return this.getLenderLoanProgramID();
+		return this.getLoanProgramID();
 	}
 	@Type( type = "org.gsoft.openserv.util.jpa.GenericEnumUserType", parameters={
 			@Parameter(name = "enumClass", value = "org.gsoft.openserv.domain.loan.RepaymentStartType")

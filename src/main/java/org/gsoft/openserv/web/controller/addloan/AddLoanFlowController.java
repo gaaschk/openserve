@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import org.gsoft.openserv.domain.Person;
 import org.gsoft.openserv.domain.lender.Lender;
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.loan.LoanType;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.repositories.lender.LenderRepository;
 import org.gsoft.openserv.repositories.loan.LoanTypeRepository;
 import org.gsoft.openserv.service.PersonService;
@@ -40,7 +40,7 @@ public class AddLoanFlowController {
 		newPersonModel.setSsn(personSearchCriteria.getSsn());
 		LoanEntryModel loanModel = new LoanEntryModel();
 		loanModel.setNewDisbursement(new DisbursementModel());
-		List<LoanType> loanTypes = loanTypeRepository.findAll();
+		List<LoanProgram> loanTypes = loanTypeRepository.findAll();
 		List<Lender> lenders = lenderRepository.findAll();
 		loanModel.setLenderList(lenders);
 		loanModel.setLoanTypeList(loanTypes);

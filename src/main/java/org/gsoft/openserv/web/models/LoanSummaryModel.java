@@ -3,13 +3,13 @@ package org.gsoft.openserv.web.models;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import org.gsoft.openserv.domain.loan.LoanType;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormat;
 
 public class LoanSummaryModel implements Serializable{
 	private static final long serialVersionUID = -6256763851983742148L;
 	private Long loanID;
-	private LoanType loanType;
+	private LoanProgram loanType;
 	private Integer currentPrincipal;
 	private BigDecimal currentInterest;
 	private Integer currentFees;
@@ -21,10 +21,10 @@ public class LoanSummaryModel implements Serializable{
 	public void setLoanID(Long loanID){
 		this.loanID = loanID;
 	}
-	public LoanType getLoanType() {
+	public LoanProgram getLoanType() {
 		return loanType;
 	}
-	public void setLoanType(LoanType loanType) {
+	public void setLoanType(LoanProgram loanType) {
 		this.loanType = loanType;
 	}
 	@CurrencyInPenniesFormat

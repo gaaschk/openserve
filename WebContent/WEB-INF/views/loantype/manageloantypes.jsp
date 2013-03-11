@@ -39,7 +39,7 @@ function inittables(thebutton){
 	</tr>
 	<c:forEach var="loanTypeProfilesModel" items="${loanTypeProfileModel.loanTypeProfilesModels}" varStatus="typeIndex">
 		<tr class="loantyperow" >
-			<td><form:radiobutton class="loantyperowrb" id="${loanTypeProfilesModel.loanType.loanTypeID}" path="loanTypeProfilesModels[${typeIndex.count-1}].selected" value="true"/></td>
+			<td><form:radiobutton class="loantyperowrb" id="${loanTypeProfilesModel.loanType.loanProgramID}" path="loanTypeProfilesModels[${typeIndex.count-1}].selected" value="true"/></td>
 			<td><form:input class="loantypecell" disabled="false" path="loanTypeProfilesModels[${typeIndex.count-1}].loanType.name"/></td>
 			<td><form:input class="loantypecell" disabled="false" path="loanTypeProfilesModels[${typeIndex.count-1}].loanType.description"/></td>
 		</tr>
@@ -51,8 +51,8 @@ function inittables(thebutton){
 <br>
 <caption style="text-align: left;"><b>Loans Type Profiles</b></caption>
 <c:forEach var="loanTypeProfilesModel" items="${loanTypeProfileModel.loanTypeProfilesModels}" varStatus="typeIndex">
-<div id="${loanTypeProfilesModel.loanType.loanTypeID}-panel" class="loanTypeProfiles-panel">
-<table id="${loanTypeProfilesModel.loanType.loanTypeID}-loantypeprofiletable">
+<div id="${loanTypeProfilesModel.loanType.loanProgramID}-panel" class="loanTypeProfiles-panel">
+<table id="${loanTypeProfilesModel.loanType.loanProgramID}-loantypeprofiletable">
 	<col style="width: 30px;"/>
 	<tr>
 		<th><label>Loan Type</label></th>
@@ -62,7 +62,7 @@ function inittables(thebutton){
 	</tr>
 	<c:forEach var="loanTypeProfile" items="${loanTypeProfilesModel.loanTypeProfiles}" varStatus="index">
 		<tr class="loantypeprofilerow" >
-			<td><form:input class="loantypeprofilecell" disabled="true" path="loanTypeProfilesModels[${typeIndex.count-1}].loanTypeProfiles[${index.count-1}].loanType"/></td>
+			<td><form:input class="loantypeprofilecell" disabled="true" path="loanTypeProfilesModels[${typeIndex.count-1}].loanTypeProfiles[${index.count-1}].loanProgram"/></td>
 			<td><form:input class="loantypeprofilecell" disabled="false" path="loanTypeProfilesModels[${typeIndex.count-1}].loanTypeProfiles[${index.count-1}].effectiveDate"/></td>
 			<td><form:input class="loantypeprofilecell" disabled="false" path="loanTypeProfilesModels[${typeIndex.count-1}].loanTypeProfiles[${index.count-1}].endDate"/></td>
 			<td><form:select path="loanTypeProfilesModels[${typeIndex.count-1}].loanTypeProfiles[${index.count-1}].baseRate">

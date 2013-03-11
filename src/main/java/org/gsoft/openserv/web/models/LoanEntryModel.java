@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.gsoft.openserv.domain.lender.Lender;
-import org.gsoft.openserv.domain.loan.LoanType;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,7 +16,7 @@ public class LoanEntryModel implements Serializable{
 
 	private Long loanID;
 	private String selectedLoanTypeID;
-	private List<LoanType> loanTypeList;
+	private List<LoanProgram> loanTypeList;
 	private String selectedLenderID;
 	private List<Lender> lenderList;
 	private PersonModel person;
@@ -40,10 +40,10 @@ public class LoanEntryModel implements Serializable{
 	public void setSelectedLoanTypeID(String loanTypeID) {
 		this.selectedLoanTypeID = loanTypeID;
 	}
-	public List<LoanType> getLoanTypeList() {
+	public List<LoanProgram> getLoanTypeList() {
 		return loanTypeList;
 	}
-	public void setLoanTypeList(List<LoanType> loanTypeList) {
+	public void setLoanTypeList(List<LoanProgram> loanTypeList) {
 		this.loanTypeList = loanTypeList;
 	}
 	public String getSelectedLenderID() {

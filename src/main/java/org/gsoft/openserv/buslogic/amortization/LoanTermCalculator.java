@@ -20,7 +20,7 @@ public class LoanTermCalculator {
 	private RepaymentStartDateCalculator repaymentStartDateCalculator;
 	
 	public int calculateRemainingLoanTermAsOf(Loan loan, Date asOfDate){
-		LoanProgramSettings settings = loanProgramRepository.findLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(loan.getLenderID(), loan.getLoanType(), asOfDate);
+		LoanProgramSettings settings = loanProgramRepository.findLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(loan.getLenderID(), loan.getLoanProgram(), asOfDate);
 		int used = 0;
 		Date repaymentStartDate = repaymentStartDateCalculator.calculateEarliestRepaymentStartDate(loan);
 		if(repaymentStartDate != null){

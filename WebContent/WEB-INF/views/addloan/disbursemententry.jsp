@@ -4,7 +4,7 @@
 		<label>Loan Type:</label>
 		<form:select path="selectedLoanTypeID">
      		<form:option value="-">Select Loan Type</form:option>
-     	    <form:options items="${loanModel.loanTypeList}" itemValue="loanTypeID" itemLabel="name"/>
+     	    <form:options items="${loanModel.loanTypeList}" itemValue="loanProgramID" itemLabel="name"/>
      	</form:select>
 	</fieldset>
 	<fieldset>

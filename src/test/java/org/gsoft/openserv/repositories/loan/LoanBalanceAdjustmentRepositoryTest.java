@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanBalanceAdjustment;
-import org.gsoft.openserv.domain.loan.LoanType;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,8 +48,8 @@ public class LoanBalanceAdjustmentRepositoryTest {
 		domainMap.put("lba", lba);
 		
 		Loan loan = new Loan();
-		LoanType privateLoanType = new LoanType();
-		privateLoanType.setLoanTypeID(10L);
+		LoanProgram privateLoanType = new LoanProgram();
+		privateLoanType.setLoanProgramID(10L);
 		privateLoanType.setName("PRIVATE_LOAN");
 		loan.setStartingFees(0);
 		loan.setStartingInterest(BigDecimal.ZERO);

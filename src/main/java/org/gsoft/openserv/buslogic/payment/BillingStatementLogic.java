@@ -11,11 +11,9 @@ import org.gsoft.openserv.buslogic.repayment.RepaymentStartDateCalculator;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanProgramSettings;
-import org.gsoft.openserv.domain.loan.LoanTypeProfile;
 import org.gsoft.openserv.domain.payment.billing.BillingStatement;
 import org.gsoft.openserv.repositories.loan.LoanProgramSettingsRepository;
 import org.gsoft.openserv.repositories.loan.LoanRepository;
-import org.gsoft.openserv.repositories.loan.LoanTypeProfileRepository;
 import org.gsoft.openserv.repositories.payment.BillingStatementRepository;
 import org.gsoft.openserv.repositories.payment.LoanPaymentRepository;
 import org.gsoft.openserv.rulesengine.event.BillingStatementCreatedEvent;
@@ -27,8 +25,6 @@ import org.springframework.stereotype.Component;
 public class BillingStatementLogic {
 	@Resource
 	private BillingStatementRepository billingStatementRepository;
-	@Resource
-	private LoanTypeProfileRepository loanTypeProfileRepository;
 	@Resource
 	private LoanRepository loanRepository;
 	@Resource
@@ -78,7 +74,7 @@ public class BillingStatementLogic {
 		if(this.isBillingStatementNeeded(loan)){
 			Date systemDate = systemSettings.getCurrentSystemDate();
 			Date repaymentStartDate = repaymentStartDateCalculator.calculateRepaymentStartDateForAccount(loan.getAccount()); 
-			LoanTypeProfile ltpAtRepayStart = loanTypeProfileRepository.findLoanTypeProfileByLoanTypeAndEffectiveDate(loan.getLoanType(), repaymentStartDate);
+			LoanProgramSettings ltpAtRepayStart = loanProgramSettingsRepository.findLoanProgramSettingsForLoanEffectiveOn(loan, repaymentStartDate);
 			Date earliestDueBillingDate = new DateTime(repaymentStartDate).plusDays(ltpAtRepayStart.getMinDaysToFirstDue()).minusDays(ltpAtRepayStart.getDaysBeforeDueToBill()).toDate();
 			BillingStatement lastStatement = billingStatementRepository.findMostRecentBillingStatementForLoan(loan.getLoanID());
 			Date dueDate = null;

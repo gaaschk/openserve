@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.Date;
 
-import org.gsoft.openserv.domain.loan.LoanType;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.junit.Test;
 
 public class LoanPredicatesTest {
@@ -21,9 +21,9 @@ public class LoanPredicatesTest {
 
 	@Test
 	public void testLoanTypeIs() {
-		LoanType lt = new LoanType();
-		lt.setLoanTypeID(10L);
-		System.out.println(LoanPredicates.loanTypeIs(lt).toString());
+		LoanProgram lt = new LoanProgram();
+		lt.setLoanProgramID(10L);
+		System.out.println(LoanPredicates.loanProgramIs(lt).toString());
 	}
 
 	@Test

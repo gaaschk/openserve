@@ -4,7 +4,7 @@ CREATE TABLE Account(
 	AccountID			BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 	AccountNumber		VARCHAR(15),
 	BorrowerPersonID 	BIGINT,
-	LoanTypeID 			BIGINT,
+	LoanProgramID 		BIGINT,
 	LenderID			BIGINT
 );
 CREATE TABLE AmortizationLoanPayment ( 
@@ -58,7 +58,7 @@ CREATE TABLE LateFee (
 CREATE TABLE Loan ( 
 	LoanID                    			BIGINT AUTO_INCREMENT NOT NULL,
 	ServicingStartDate        			DATE NULL,
-	LoanTypeID                			BIGINT NULL,
+	LoanProgramID                		BIGINT NULL,
 	BorrowerPersonID          			BIGINT NULL,
 	CurrentLoanAmortizationScheduleID	BIGINT NULL,
 	StartingPrincipal         			INT NOT NULL,
@@ -79,33 +79,33 @@ CREATE TABLE Disbursement(
 	PRIMARY KEY(DisbursementID)
 );
 
-CREATE TABLE LoanType ( 
-	LoanTypeID 	BIGINT NOT NULL,
-	Name       	VARCHAR(15) NULL,
-	Description	VARCHAR(45) NULL,
-	PRIMARY KEY(LoanTypeID)
+CREATE TABLE LoanProgram ( 
+	LoanProgramID 	BIGINT NOT NULL,
+	Name       		VARCHAR(15) NULL,
+	Description		VARCHAR(45) NULL,
+	PRIMARY KEY(LoanProgramID)
 );
-CREATE TABLE LoanTypeProfile ( 
-	LoanTypeProfileID        	BIGINT AUTO_INCREMENT NOT NULL,
-	LoanTypeID               	BIGINT NULL,
-	EffectiveDate            	DATETIME NULL,
-	EndDate                  	DATETIME NULL,
-	RepaymentStartTypeID     	BIGINT NULL,
-	MaximumLoanTerm          	INT NULL,
-	GraceMonths              	INT NULL,
-	MinDaysToFirstDue        	INT NULL,
-	PrepaymentDays           	INT NULL,
-	DaysBeforeDueToBill      	INT NULL,
-	DaysLateForFee           	INT NULL,
-	LateFeeAmount            	INT NULL,
-	VariableRate             	SMALLINT NULL,
-	BaseRateUpdateFrequencyID	BIGINT NULL,
-	BaseRateID               	BIGINT NULL,
-	PRIMARY KEY(LoanTypeProfileID)
+CREATE TABLE DefaultLoanProgramSettings ( 
+	DefaultLoanProgramSettingsID	BIGINT AUTO_INCREMENT NOT NULL,
+	LoanProgramID               	BIGINT NULL,
+	EffectiveDate            		DATETIME NULL,
+	EndDate                  		DATETIME NULL,
+	RepaymentStartTypeID     		BIGINT NULL,
+	MaximumLoanTerm          		INT NULL,
+	GraceMonths              		INT NULL,
+	MinDaysToFirstDue        		INT NULL,
+	PrepaymentDays           		INT NULL,
+	DaysBeforeDueToBill      		INT NULL,
+	DaysLateForFee           		INT NULL,
+	LateFeeAmount            		INT NULL,
+	VariableRate             		SMALLINT NULL,
+	BaseRateUpdateFrequencyID		BIGINT NULL,
+	BaseRateID               		BIGINT NULL,
+	PRIMARY KEY(DefaultLoanProgramSettingsID)
 );
-CREATE TABLE LenderLoanProgram ( 
-	LenderLoanProgramID        	BIGINT AUTO_INCREMENT NOT NULL,
-	LoanTypeID               	BIGINT NULL,
+CREATE TABLE LenderLoanProgramSettings ( 
+	LenderLoanProgramSettingsID	BIGINT AUTO_INCREMENT NOT NULL,
+	LoanProgramID               BIGINT NULL,
 	LenderID					BIGINT NULL,
 	ProgramBeginDate           	DATETIME NULL,
 	ProgramEndDate             	DATETIME NULL,
@@ -120,7 +120,7 @@ CREATE TABLE LenderLoanProgram (
 	VariableRate             	SMALLINT NULL,
 	BaseRateUpdateFrequencyID	BIGINT NULL,
 	BaseRateID               	BIGINT NULL,
-	PRIMARY KEY(LenderLoanProgramID)
+	PRIMARY KEY(LenderLoanProgramSettingsID)
 );
 
 # Repayment
@@ -253,87 +253,84 @@ CREATE TABLE SystemSettings (
 	PRIMARY KEY(SystemSettingsID)
 );
 
-INSERT INTO LoanType values (10, 'PRIVATE_STUDENT', 'Private Student Loan');
-INSERT INTO LoanType values (20, 'MORTGAGE', 'Mortgage Loan');
+INSERT INTO LoanProgram 
+  VALUES
+    (10, 'PRIVATE_STUDENT', 'Private Student Loan'),
+    (20, 'MORTGAGE', 'Mortgage Loan');
 
-INSERT INTO RepaymentStartType values (10, 'FIRST_DISBURSEMENT', 'Repayment begins after first disbursement.');
-INSERT INTO RepaymentStartType values (20, 'LAST_DISBURSEMENT', 'Repayment begins after last disbursement.');
+INSERT INTO RepaymentStartType 
+  VALUES
+    (10, 'FIRST_DISBURSEMENT', 'Repayment begins after first disbursement.'),
+    (20, 'LAST_DISBURSEMENT', 'Repayment begins after last disbursement.');
 
-INSERT INTO FrequencyType (FrequencyTypeID, Name) value (10, 'MONTHLY');
-INSERT INTO FrequencyType (FrequencyTypeID, Name) value (20, 'QUARTERLY');
-INSERT INTO FrequencyType (FrequencyTypeID, Name) value (30, 'SEMI_ANNUALLY');
-INSERT INTO FrequencyType (FrequencyTypeID, Name) value (40, 'ANNUALLY');
+INSERT INTO FrequencyType (FrequencyTypeID, Name)
+  VALUES
+	(10, 'MONTHLY'),
+	(20, 'QUARTERLY'),
+	(30, 'SEMI_ANNUALLY'),
+	(40, 'ANNUALLY');
 
-INSERT INTO LoanTypeProfile(LoanTypeProfileID, LoanTypeID, EffectiveDate, EndDate, RepaymentStartTypeID, MaximumLoanTerm, GraceMonths, MinDaysToFirstDue, PrepaymentDays, DaysBeforeDueToBill, DaysLateForFee, LateFeeAmount, VariableRate, BaseRateUpdateFrequencyID, BaseRateID)
-  VALUES(1, 20, '1900-01-17 22:22:51.0', NULL, 10, 180, 1, 1, 1, 1, 1, 1000, 1, 20, 10);
-INSERT INTO LoanTypeProfile(LoanTypeProfileID, LoanTypeID, EffectiveDate, EndDate, RepaymentStartTypeID, MaximumLoanTerm, GraceMonths, MinDaysToFirstDue, PrepaymentDays, DaysBeforeDueToBill, DaysLateForFee, LateFeeAmount, VariableRate, BaseRateUpdateFrequencyID, BaseRateID)
-  VALUES(2, 10, '1900-01-17 22:22:51.0', NULL, 10, 180, 1, 1, 1, 1, 1, 1000, 1, 30, 10);
+INSERT INTO DefaultLoanProgramSettings(DefaultLoanProgramSettingsID, LoanProgramID, EffectiveDate, EndDate, RepaymentStartTypeID, MaximumLoanTerm, GraceMonths, MinDaysToFirstDue, PrepaymentDays, DaysBeforeDueToBill, DaysLateForFee, LateFeeAmount, VariableRate, BaseRateUpdateFrequencyID, BaseRateID)
+  VALUES
+    (1, 20, '1900-01-17 22:22:51.0', NULL, 10, 180, 1, 1, 1, 1, 1, 1000, 1, 20, 10),
+    (2, 10, '1900-01-17 22:22:51.0', NULL, 10, 180, 1, 1, 1, 1, 1, 1000, 1, 30, 10);
   
 INSERT INTO Lender(LenderID, Name)
   VALUES(1, 'Test Lender');
   
-INSERT INTO LenderLoanProgram(LenderLoanProgramID, LoanTypeID, LenderID, ProgramBeginDate) 
-  VALUES (1, 10, 1, '1900-01-17 22:22:51.0');
-INSERT INTO LenderLoanProgram(LenderLoanProgramID, LoanTypeID, LenderID, ProgramBeginDate) 
-  VALUES (2, 20, 1, '1900-01-17 22:22:51.0');
+INSERT INTO LenderLoanProgramSettings(LenderLoanProgramSettingsID, LoanProgramID, LenderID, ProgramBeginDate) 
+  VALUES 
+    (1, 10, 1, '1900-01-17 22:22:51.0'),
+    (2, 20, 1, '1900-01-17 22:22:51.0');
 
 INSERT INTO Rate(RateID, RateName, TickerSymbol, ShouldAutoUpdate)
   VALUES(10, '1 Month LIBOR US Dollars', 'LIBOR.USD1M', 0);
+
 INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
-  VALUES(10, 10, '2000-01-01', 0.035000, 1);
-INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
-  VALUES(11, 10, '2012-01-01', .036, 1);
-INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
-  VALUES(12, 10, '2012-02-01', .037, 1);
-INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
-  VALUES(13, 10, '2012-03-01', .038, 1);
-INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
-  VALUES(14, 10, '2012-04-01', .039, 1);
-INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
-  VALUES(15, 10, '2012-05-01', .040, 1);
-INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
-  VALUES(16, 10, '2012-06-01', .030, 1);
-INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
-  VALUES(17, 10, '2012-07-01', .031, 1);
-INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
-  VALUES(18, 10, '2012-08-01', .032, 1);
-INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
-  VALUES(19, 10, '2012-09-01', .033, 1);
-INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
-  VALUES(20, 10, '2012-10-01', .034, 1);
-INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
-  VALUES(21, 10, '2012-11-01', .035, 1);
-INSERT INTO RateValue(RateValueID, RateID, RateValueDate, RateValue, IsValid)
-  VALUES(22, 10, '2012-12-01', .036, 1);
+  VALUES
+    (10, 10, '2000-01-01', 0.035000, 1),
+    (11, 10, '2012-01-01', .036, 1),
+    (12, 10, '2012-02-01', .037, 1),
+    (13, 10, '2012-03-01', .038, 1),
+    (14, 10, '2012-04-01', .039, 1),
+    (15, 10, '2012-05-01', .040, 1),
+    (16, 10, '2012-06-01', .030, 1),
+    (17, 10, '2012-07-01', .031, 1),
+    (18, 10, '2012-08-01', .032, 1),
+    (19, 10, '2012-09-01', .033, 1),
+    (20, 10, '2012-10-01', .034, 1),
+    (21, 10, '2012-11-01', .035, 1),
+    (22, 10, '2012-12-01', .036, 1);
 
 INSERT INTO SystemSettings VALUES (10, 0, 0);
 
 INSERT INTO secprincipal(PrincipalID, Name, Active)
-  VALUES(1, 'Admin User', 1);
-INSERT INTO secprincipal(PrincipalID, Name, Active)
-  VALUES(2, 'Admin Role', 1);
+  VALUES
+    (1, 'Admin User', 1),
+    (2, 'Admin Role', 1);
+    
 INSERT INTO secsystemuser(PrincipalID, Username, Password, LockedOut, LastSuccessfullLogin)
-    VALUES(1, 'admin', '1b771698e9d4723bfd35818165db49b7', 0, '2012-12-13 00:00:00.0');
+  VALUES(1, 'admin', '1b771698e9d4723bfd35818165db49b7', 0, '2012-12-13 00:00:00.0');
+
 INSERT INTO secsystemrole(PrincipalID, Description)
   VALUES(2, 'Admin Role');
+
 INSERT INTO secpermission(PermissionID, Name)
-  VALUES(4, 'ViewAccountSummary');
-INSERT INTO secpermission(PermissionID, Name)
-  VALUES(3, 'CreateAmortizationSchedule');
-INSERT INTO secpermission(PermissionID, Name)
-  VALUES(1, 'AddLoan');
-INSERT INTO secpermission(PermissionID, Name)
-  VALUES(2, 'AddPayment');
+  VALUES
+    (4, 'ViewAccountSummary'),
+    (3, 'CreateAmortizationSchedule'),
+    (1, 'AddLoan'),
+    (2, 'AddPayment');
+
 INSERT INTO secassignedrole(RolePrincipalID, UserPrincipalID)
   VALUES(2, 1);
+
 INSERT INTO secassignedpermission(AssignedPermissionID, PermissionID, PrincipalID)
-  VALUES(1, 1, 2);
-INSERT INTO secassignedpermission(AssignedPermissionID, PermissionID, PrincipalID)
-  VALUES(2, 2, 2);
-INSERT INTO secassignedpermission(AssignedPermissionID, PermissionID, PrincipalID)
-  VALUES(3, 3, 2);
-INSERT INTO secassignedpermission(AssignedPermissionID, PermissionID, PrincipalID)
-  VALUES(4, 4, 2);
+  VALUES
+    (1, 1, 2),
+    (2, 2, 2),
+    (3, 3, 2),
+    (4, 4, 2);
 
 ALTER TABLE AmortizationSchedule
 	ADD CONSTRAINT amortizationschedule_account_fk
@@ -415,9 +412,9 @@ ALTER TABLE Account
 		REFERENCES Person(PersonID)
 		ON DELETE RESTRICT 
 		ON UPDATE RESTRICT,
-	ADD CONSTRAINT account_loantype_fk
-		FOREIGN KEY(LoanTypeID)
-		REFERENCES LoanType(LoanTypeID)
+	ADD CONSTRAINT account_loanprogram_fk
+		FOREIGN KEY(LoanProgramID)
+		REFERENCES LoanProgram(LoanProgramID)
 		ON DELETE RESTRICT 
 		ON UPDATE RESTRICT,
 	ADD CONSTRAINT account_lender_fk
@@ -438,8 +435,8 @@ ALTER TABLE Loan
 		ON DELETE RESTRICT
 		ON UPDATE RESTRICT,
 	ADD CONSTRAINT loan_ibfk_2
-		FOREIGN KEY(LoanTypeID)
-		REFERENCES LoanType(LoanTypeID)
+		FOREIGN KEY(LoanProgramID)
+		REFERENCES LoanProgram(LoanProgramID)
 		ON DELETE RESTRICT 
 		ON UPDATE RESTRICT,
 	ADD CONSTRAINT loan_ibfk_1
@@ -471,49 +468,49 @@ ALTER TABLE LoanPayment
 		REFERENCES Payment(PaymentID)
 		ON DELETE RESTRICT 
 		ON UPDATE RESTRICT ;
-ALTER TABLE LoanTypeProfile
-	ADD CONSTRAINT loantypeprofile_ibfk_3
+ALTER TABLE DefaultLoanProgramSettings
+	ADD CONSTRAINT defaultloanprogramsettings_ibfk_3
 		FOREIGN KEY(BaseRateID)
 		REFERENCES Rate(RateID)
 		ON DELETE RESTRICT 
 		ON UPDATE RESTRICT,
-	ADD CONSTRAINT loantypeprofile_ibfk_2
+	ADD CONSTRAINT defaultloanprogramsettings_ibfk_2
 		FOREIGN KEY(BaseRateUpdateFrequencyID)
 		REFERENCES FrequencyType(FrequencyTypeID)
 		ON DELETE RESTRICT 
 		ON UPDATE RESTRICT,
-	ADD CONSTRAINT loantypeprofile_ibfk_4
+	ADD CONSTRAINT defaultloanprogramsettings_ibfk_4
 		FOREIGN KEY(RepaymentStartTypeID)
 		REFERENCES RepaymentStartType(RepaymentStartTypeID)
 		ON DELETE RESTRICT
 		ON UPDATE RESTRICT,
-	ADD CONSTRAINT loantypeprofile_ibfk_1
-		FOREIGN KEY(LoanTypeID)
-		REFERENCES LoanType(LoanTypeID)
+	ADD CONSTRAINT defaultloanprogramsettings_ibfk_1
+		FOREIGN KEY(LoanProgramID)
+		REFERENCES LoanProgram(LoanProgramID)
 		ON DELETE RESTRICT 
 		ON UPDATE RESTRICT ;
-ALTER TABLE LenderLoanProgram
-	ADD CONSTRAINT lenderloanprogram_baserate_fk
+ALTER TABLE LenderLoanProgramSettings
+	ADD CONSTRAINT lenderloanprogramsettings_baserate_fk
 		FOREIGN KEY(BaseRateID)
 		REFERENCES Rate(RateID)
 		ON DELETE RESTRICT 
 		ON UPDATE RESTRICT,
-	ADD CONSTRAINT lenderloanprogram_baserateupdatefrequency_fk
+	ADD CONSTRAINT lenderloanprogramsettings_baserateupdatefrequency_fk
 		FOREIGN KEY(BaseRateUpdateFrequencyID)
 		REFERENCES FrequencyType(FrequencyTypeID)
 		ON DELETE RESTRICT 
 		ON UPDATE RESTRICT,
-	ADD CONSTRAINT lenderloanprogram_repaymentstarttyep_fk
+	ADD CONSTRAINT lenderloanprogramsettings_repaymentstarttyep_fk
 		FOREIGN KEY(RepaymentStartTypeID)
 		REFERENCES RepaymentStartType(RepaymentStartTypeID)
 		ON DELETE RESTRICT
 		ON UPDATE RESTRICT,
-	ADD CONSTRAINT lenderloanprogram_loantype_fk
-		FOREIGN KEY(LoanTypeID)
-		REFERENCES LoanType(LoanTypeID)
+	ADD CONSTRAINT lenderloanprogramsettings_loanprogram_fk
+		FOREIGN KEY(LoanProgramID)
+		REFERENCES LoanProgram(LoanProgramID)
 		ON DELETE RESTRICT 
 		ON UPDATE RESTRICT ,
-	ADD CONSTRAINT lenderloanprogram_lender_fk
+	ADD CONSTRAINT lenderloanprogramsettings_lender_fk
 		FOREIGN KEY(LenderID)
 		REFERENCES Lender(LenderID)
 		ON DELETE RESTRICT

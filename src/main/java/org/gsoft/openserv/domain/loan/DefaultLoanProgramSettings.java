@@ -21,9 +21,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
 @Entity
-public class LoanTypeProfile extends PersistentDomainObject{
+public class DefaultLoanProgramSettings extends PersistentDomainObject{
 	private static final long serialVersionUID = 6245557328161056820L;
-	private Long loanTypeProfileID;
+	private Long defaultLoanProgramSettingsID;
 	@DateTimeFormat(pattern="MM/dd/yyyy")
 	private Date effectiveDate;
 	@DateTimeFormat(pattern="MM/dd/yyyy")
@@ -43,7 +43,7 @@ public class LoanTypeProfile extends PersistentDomainObject{
 	private Integer lateFeeAmount;
 	private Boolean isVariableRate;
 	//Enumerations
-	private LoanType loanType;
+	private LoanProgram loanProgram;
 	private RepaymentStartType repaymentStartType;
 	private FrequencyType baseRateUpdateFrequency;
 	//Relationships
@@ -51,19 +51,19 @@ public class LoanTypeProfile extends PersistentDomainObject{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	public Long getLoanTypeProfileID() {
-		return loanTypeProfileID;
+	public Long getDefaultLoanProgramSettingsID() {
+		return defaultLoanProgramSettingsID;
 	}
-	public void setLoanTypeProfileID(Long loanTypeProfileID) {
-		this.loanTypeProfileID = loanTypeProfileID;
+	public void setDefaultLoanProgramSettingsID(Long defaultLoanProgramSettingsID) {
+		this.defaultLoanProgramSettingsID = defaultLoanProgramSettingsID;
 	}
 	@ManyToOne
-	@JoinColumn( name = "LoanTypeID" )
-	public LoanType getLoanType() {
-		return loanType;
+	@JoinColumn( name = "LoanProgramID" )
+	public LoanProgram getLoanProgram() {
+		return loanProgram;
 	}
-	public void setLoanType(LoanType loanType) {
-		this.loanType = loanType;
+	public void setLoanProgram(LoanProgram loanProgram) {
+		this.loanProgram = loanProgram;
 	}
 	public Date getEffectiveDate() {
 		return (effectiveDate==null)?null:(Date)effectiveDate.clone();
@@ -123,7 +123,7 @@ public class LoanTypeProfile extends PersistentDomainObject{
 	@Override
 	@Transient
 	public Long getID() {
-		return this.getLoanTypeProfileID();
+		return this.getDefaultLoanProgramSettingsID();
 	}
 	@Type( type = "org.gsoft.openserv.util.jpa.GenericEnumUserType", parameters={
 			@Parameter(name = "enumClass", value = "org.gsoft.openserv.domain.loan.RepaymentStartType")
@@ -186,10 +186,10 @@ public class LoanTypeProfile extends PersistentDomainObject{
 		result = prime * result
 				+ ((lateFeeAmount == null) ? 0 : lateFeeAmount.hashCode());
 		result = prime * result
-				+ ((loanType == null) ? 0 : loanType.hashCode());
+				+ ((loanProgram == null) ? 0 : loanProgram.hashCode());
 		result = prime
 				* result
-				+ ((loanTypeProfileID == null) ? 0 : loanTypeProfileID
+				+ ((defaultLoanProgramSettingsID == null) ? 0 : defaultLoanProgramSettingsID
 						.hashCode());
 		result = prime * result
 				+ ((maximumLoanTerm == null) ? 0 : maximumLoanTerm.hashCode());
@@ -213,7 +213,7 @@ public class LoanTypeProfile extends PersistentDomainObject{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		LoanTypeProfile other = (LoanTypeProfile) obj;
+		DefaultLoanProgramSettings other = (DefaultLoanProgramSettings) obj;
 		if (baseRate == null) {
 			if (other.baseRate != null)
 				return false;
@@ -256,15 +256,15 @@ public class LoanTypeProfile extends PersistentDomainObject{
 				return false;
 		} else if (!lateFeeAmount.equals(other.lateFeeAmount))
 			return false;
-		if (loanType == null) {
-			if (other.loanType != null)
+		if (loanProgram == null) {
+			if (other.loanProgram != null)
 				return false;
-		} else if (!loanType.equals(other.loanType))
+		} else if (!loanProgram.equals(other.loanProgram))
 			return false;
-		if (loanTypeProfileID == null) {
-			if (other.loanTypeProfileID != null)
+		if (defaultLoanProgramSettingsID == null) {
+			if (other.defaultLoanProgramSettingsID != null)
 				return false;
-		} else if (!loanTypeProfileID.equals(other.loanTypeProfileID))
+		} else if (!defaultLoanProgramSettingsID.equals(other.defaultLoanProgramSettingsID))
 			return false;
 		if (maximumLoanTerm == null) {
 			if (other.maximumLoanTerm != null)

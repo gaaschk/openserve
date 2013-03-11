@@ -23,7 +23,7 @@ import org.drools.logger.KnowledgeRuntimeLoggerFactory;
 import org.drools.runtime.StatelessKnowledgeSession;
 import org.gsoft.openserv.buslogic.payment.BillingStatementLogic;
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.loan.LoanTypeProfile;
+import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings;
 import org.gsoft.openserv.domain.payment.billing.BillingStatement;
 import org.gsoft.openserv.repositories.payment.BillingStatementRepository;
 import org.joda.time.DateTime;
@@ -40,8 +40,8 @@ public class GenerateBillingStatementTest {
 		Loan loan = new Loan();
 		loan.setLoanID(1L);
 		
-		LoanTypeProfile ltp = new LoanTypeProfile();
-		ltp.setLoanTypeProfileID(1L);
+		DefaultLoanProgramSettings ltp = new DefaultLoanProgramSettings();
+		ltp.setDefaultLoanProgramSettingsID(1L);
 		ltp.setDaysBeforeDueToBill(20);
 		
 		BillingStatement lastStatement = new BillingStatement();

@@ -2,13 +2,13 @@ package org.gsoft.openserv.repositories.loan;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.domain.loan.LoanType;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.repositories.BaseRepository;
 import org.gsoft.openserv.repositories.BaseSpringRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class LoanTypeRepository extends BaseRepository<LoanType, Long>{
+public class LoanTypeRepository extends BaseRepository<LoanProgram, Long>{
 	@Resource
 	private LoanTypeSpringRepository loanTypeSpringRepository;
 
@@ -19,6 +19,6 @@ public class LoanTypeRepository extends BaseRepository<LoanType, Long>{
 }
 
 @Repository
-interface LoanTypeSpringRepository extends BaseSpringRepository<LoanType, Long>{
+interface LoanTypeSpringRepository extends BaseSpringRepository<LoanProgram, Long>{
 
 }

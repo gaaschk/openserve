@@ -23,7 +23,7 @@ public class LoanToLoanSummaryModelConverter implements Converter<Loan, LoanSumm
 		Date systemDate = systemSettingsLogic.getCurrentSystemDate();
 		LoanSummaryModel model = new LoanSummaryModel();
 		model.setLoanID(loan.getLoanID());
-		model.setLoanType(loan.getLoanType());
+		model.setLoanType(loan.getLoanProgram());
 		LoanStateHistory loanStateHistory = accountSummaryService.getLoanStateHistoryForLoan(loan.getLoanID());
 		model.setCurrentPrincipal(loanStateHistory.getEndingPrincipal());
 		model.setCurrentInterest(loanStateHistory.getLoanStateAsOf(systemDate).getInterestThrough(systemDate));

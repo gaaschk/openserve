@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import org.gsoft.openserv.domain.loan.LoanType;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
@@ -13,7 +13,7 @@ public class LoanFinancialDataModel implements Serializable{
 	private static final long serialVersionUID = 2799991603651710288L;
 
 	private Long loanID;
-	private LoanType loanType;
+	private LoanProgram loanType;
 	private Integer currentPrincipal;
 	private BigDecimal currentInterest;
 	private Integer currentFees;
@@ -38,10 +38,10 @@ public class LoanFinancialDataModel implements Serializable{
 	public void setLoanID(Long loanID){
 		this.loanID = loanID;
 	}
-	public LoanType getLoanType() {
+	public LoanProgram getLoanType() {
 		return loanType;
 	}
-	public void setLoanType(LoanType loanType) {
+	public void setLoanType(LoanProgram loanType) {
 		this.loanType = loanType;
 	}
 	@CurrencyInPenniesFormat

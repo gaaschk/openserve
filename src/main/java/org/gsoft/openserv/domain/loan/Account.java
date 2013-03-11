@@ -20,7 +20,7 @@ public class Account extends PersistentDomainObject{
 	private String accountNumber;
 	private Long borrowerPersonID;
 	private Long lenderID;
-	private Long loanTypeID;
+	private Long loanProgramID;
 	private List<Loan> loans;
 	
 	@Id
@@ -57,12 +57,12 @@ public class Account extends PersistentDomainObject{
 		this.lenderID = lenderID;
 	}
 
-	public Long getLoanTypeID() {
-		return loanTypeID;
+	public Long getLoanProgramID() {
+		return loanProgramID;
 	}
 
-	public void setLoanTypeID(Long loanTypeID) {
-		this.loanTypeID = loanTypeID;
+	public void setLoanProgramID(Long loanProgramID) {
+		this.loanProgramID = loanProgramID;
 	}
 
 	@OneToMany(mappedBy="account")

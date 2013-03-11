@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.payment.LateFee;
 import org.gsoft.openserv.domain.payment.billing.StatementPaySummary;
-import org.gsoft.openserv.repositories.loan.LoanTypeProfileRepository;
+import org.gsoft.openserv.repositories.loan.DefaultLoanProgramSettingsRepository;
 import org.gsoft.openserv.repositories.payment.LateFeeRepository;
 import org.gsoft.openserv.web.models.BillingStatementModel;
 import org.springframework.core.convert.converter.Converter;
@@ -15,7 +15,7 @@ public class BillingStatementToBillingStatementModelConverter implements Convert
 	@Resource
 	private LateFeeRepository lateFeeRepo;
 	@Resource
-	private LoanTypeProfileRepository loanTypeProfileRepository;
+	private DefaultLoanProgramSettingsRepository loanTypeProfileRepository;
 	
 	
 	@Override

@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gsoft.openserv.domain.loan.LoanType;
-import org.gsoft.openserv.domain.loan.LoanTypeProfile;
+import org.gsoft.openserv.domain.loan.LoanProgram;
+import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings;
 import org.gsoft.openserv.domain.rates.Rate;
 
 public class LoanTypeProfileModel implements Serializable{
@@ -32,7 +32,7 @@ public class LoanTypeProfileModel implements Serializable{
 		this.loanTypeProfilesModels = loanTypeProfilesModels;
 	}
 	
-	public void addLoanTypeProfiles(LoanType loanType, List<LoanTypeProfile> loanTypeProfiles){
+	public void addLoanTypeProfiles(LoanProgram loanType, List<DefaultLoanProgramSettings> loanTypeProfiles){
 		LoanTypeProfilesModel model = new LoanTypeProfilesModel();
 		model.setLoanType(loanType);
 		model.setLoanTypeProfiles(loanTypeProfiles);

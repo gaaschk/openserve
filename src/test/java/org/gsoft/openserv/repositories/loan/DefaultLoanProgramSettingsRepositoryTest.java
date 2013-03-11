@@ -7,8 +7,8 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.domain.loan.LoanType;
-import org.gsoft.openserv.domain.loan.LoanTypeProfile;
+import org.gsoft.openserv.domain.loan.LoanProgram;
+import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings;
 import org.gsoft.openserv.domain.loan.RepaymentStartType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,33 +20,33 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/application-context.xml")
 @Transactional(readOnly=true)
-public class LoanTypeProfileRepositoryTest {
+public class DefaultLoanProgramSettingsRepositoryTest {
 	@Resource
-	private LoanTypeProfileRepository loanTypeProfileRepository;
+	private DefaultLoanProgramSettingsRepository defaultLoanProgramSettingsRepository;
 	
 	@Test
 	@Rollback
 	public void test() {
 		Date today = new Date();
-		LoanTypeProfile ltp = new LoanTypeProfile();
+		DefaultLoanProgramSettings ltp = new DefaultLoanProgramSettings();
 		ltp.setDaysBeforeDueToBill(1);
 		ltp.setDaysLateForFee(1);
 		ltp.setEffectiveDate(today);
 		ltp.setEndDate(null);
 		ltp.setGraceMonths(1);
 		ltp.setLateFeeAmount(1000);
-		LoanType loanType = new LoanType();
-		loanType.setLoanTypeID(20L);
-		ltp.setLoanType(loanType);
+		LoanProgram loanType = new LoanProgram();
+		loanType.setLoanProgramID(20L);
+		ltp.setLoanProgram(loanType);
 		ltp.setMaximumLoanTerm(180);
 		ltp.setMinDaysToFirstDue(1);
 		ltp.setPrepaymentDays(1);
 		ltp.setRepaymentStartType(RepaymentStartType.FIRST_DISBUREMENT);
 		ltp.setVariableRate(true);
-		ltp = loanTypeProfileRepository.save(ltp);
-		assertNotNull("Expected primary key to be generated", ltp.getLoanTypeProfileID());
-		ltp = loanTypeProfileRepository.findOne(ltp.getLoanTypeProfileID());
-		assertEquals("Expected LoanType to be mortgage", ltp.getLoanType().getLoanTypeID(), loanType.getLoanTypeID());
+		ltp = defaultLoanProgramSettingsRepository.save(ltp);
+		assertNotNull("Expected primary key to be generated", ltp.getDefaultLoanProgramSettingsID());
+		ltp = defaultLoanProgramSettingsRepository.findOne(ltp.getDefaultLoanProgramSettingsID());
+		assertEquals("Expected LoanType to be mortgage", ltp.getLoanProgram().getLoanProgramID(), loanType.getLoanProgramID());
 	}
 
 }

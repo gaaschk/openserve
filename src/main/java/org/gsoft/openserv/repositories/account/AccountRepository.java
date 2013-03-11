@@ -21,12 +21,12 @@ public class AccountRepository extends BaseRepository<Account, Long> {
 		return springRepository;
 	}
 
-	public List<Account> findAccountsByBorrowerAndLoanTypeAndLenderID(Long borrowerPersonID, Long loanTypeID, Long lenderID){
-		return this.getSpringRepository().findAccountsByBorrowerAndLoanTypeAndLenderIDAndNotInRepaymentBy(borrowerPersonID, loanTypeID, lenderID);
+	public List<Account> findAccountsByBorrowerAndLoanProgramAndLenderID(Long borrowerPersonID, Long loanProgramID, Long lenderID){
+		return this.getSpringRepository().findAccountsByBorrowerAndLoanProgramAndLenderIDAndNotInRepaymentBy(borrowerPersonID, loanProgramID, lenderID);
 	}
 }
 
 interface AccountSpringRepository extends BaseSpringRepository<Account, Long>{
-	@Query("SELECT account FROM Account account WHERE borrowerPersonID = :borrowerPersonID AND loanTypeID = :loanTypeID AND lenderID = :lenderID")
-	public List<Account> findAccountsByBorrowerAndLoanTypeAndLenderIDAndNotInRepaymentBy(@Param("borrowerPersonID") Long borrowerPersonID, @Param("loanTypeID") Long loanTypeID, @Param("lenderID") Long lenderID);
+	@Query("SELECT account FROM Account account WHERE borrowerPersonID = :borrowerPersonID AND loanProgramID = :loanProgramID AND lenderID = :lenderID")
+	List<Account> findAccountsByBorrowerAndLoanProgramAndLenderIDAndNotInRepaymentBy(@Param("borrowerPersonID") Long borrowerPersonID, @Param("loanProgramID") Long loanProgramID, @Param("lenderID") Long lenderID);
 }

@@ -3,13 +3,13 @@ package org.gsoft.openserv.web.models;
 import java.io.Serializable;
 import java.util.List;
 
-import org.gsoft.openserv.domain.loan.LoanType;
-import org.gsoft.openserv.domain.loan.LoanTypeProfile;
+import org.gsoft.openserv.domain.loan.LoanProgram;
+import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings;
 
 public class LoanTypeProfilesModel implements Serializable{
 	private static final long serialVersionUID = 8854407098839115592L;
-	private LoanType loanType;
-	private List<LoanTypeProfile> loanTypeProfiles;
+	private LoanProgram loanType;
+	private List<DefaultLoanProgramSettings> loanTypeProfiles;
 	private boolean selected;
 	
 	public boolean isSelected(){
@@ -20,16 +20,16 @@ public class LoanTypeProfilesModel implements Serializable{
 		this.selected = selected;
 	}
 	
-	public LoanType getLoanType() {
+	public LoanProgram getLoanType() {
 		return loanType;
 	}
-	public void setLoanType(LoanType loanType) {
+	public void setLoanType(LoanProgram loanType) {
 		this.loanType = loanType;
 	}
-	public List<LoanTypeProfile> getLoanTypeProfiles() {
+	public List<DefaultLoanProgramSettings> getLoanTypeProfiles() {
 		return loanTypeProfiles;
 	}
-	public void setLoanTypeProfiles(List<LoanTypeProfile> loanTypeProfiles) {
+	public void setLoanTypeProfiles(List<DefaultLoanProgramSettings> loanTypeProfiles) {
 		this.loanTypeProfiles = loanTypeProfiles;
 	}
 }

@@ -18,7 +18,7 @@ targetCompatibility=1.7
 
 ext.springVersion = '3.2.1.RELEASE'
 ext.springSecurityVersion = '3.1.3.RELEASE'
-ext.springDataVersion = '1.2.0.RELEASE'
+ext.springDataVersion = '1.3.0.RELEASE'
 ext.springWebFlowVersion = '2.3.2.RELEASE'
 ext.springSocialVersion = '1.0.2.RELEASE' 
 ext.querydslVersion = '2.9.0'

@@ -11,20 +11,20 @@ import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
 
 @Entity
 @RulesEngineEntity
-public class LoanType extends PersistentDomainObject{
+public class LoanProgram extends PersistentDomainObject{
 	private static final long serialVersionUID = -4023897386004756328L;
-	private Long loanTypeID;
+	private Long loanProgramID;
 	private String name;
 	private String description;
 
 	@Id
 	@GeneratedValue( strategy=GenerationType.AUTO)
-	public Long getLoanTypeID() {
-		return loanTypeID;
+	public Long getLoanProgramID() {
+		return loanProgramID;
 	}
 
-	public void setLoanTypeID(Long loanTypeID) {
-		this.loanTypeID = loanTypeID;
+	public void setLoanProgramID(Long loanProgramID) {
+		this.loanProgramID = loanProgramID;
 	}
 
 	public String getName() {
@@ -46,7 +46,7 @@ public class LoanType extends PersistentDomainObject{
 	@Override
 	@Transient
 	public Long getID() {
-		return this.getLoanTypeID();
+		return this.getLoanProgramID();
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class LoanType extends PersistentDomainObject{
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
 		result = prime * result
-				+ ((loanTypeID == null) ? 0 : loanTypeID.hashCode());
+				+ ((loanProgramID == null) ? 0 : loanProgramID.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -69,16 +69,16 @@ public class LoanType extends PersistentDomainObject{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		LoanType other = (LoanType) obj;
+		LoanProgram other = (LoanProgram) obj;
 		if (description == null) {
 			if (other.description != null)
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
-		if (loanTypeID == null) {
-			if (other.loanTypeID != null)
+		if (loanProgramID == null) {
+			if (other.loanProgramID != null)
 				return false;
-		} else if (!loanTypeID.equals(other.loanTypeID))
+		} else if (!loanProgramID.equals(other.loanProgramID))
 			return false;
 		if (name == null) {
 			if (other.name != null)

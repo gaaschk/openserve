@@ -36,7 +36,7 @@ public class Loan extends PersistentDomainObject{
 	private Date initialDueDate;
 	private Date repaymentStartDate;
 	//Enumerations
-	private LoanType loanType;
+	private LoanProgram loanProgram;
 	//Relationships
 	private Account account;
 	private Person borrower;
@@ -64,12 +64,12 @@ public class Loan extends PersistentDomainObject{
 		this.servicingStartDate = (servicingStartDate==null)?null:(Date)servicingStartDate.clone();
 	}
 	@ManyToOne(cascade={CascadeType.REFRESH})
-	@JoinColumn( name = "LoanTypeID" )
-	public LoanType getLoanType() {
-		return loanType;
+	@JoinColumn( name = "LoanProgramID" )
+	public LoanProgram getLoanProgram() {
+		return loanProgram;
 	}
-	public void setLoanType(LoanType loanType) {
-		this.loanType = loanType;
+	public void setLoanProgram(LoanProgram loanProgram) {
+		this.loanProgram = loanProgram;
 	}
 	@ManyToOne
 	@JoinColumn(name = "AccountID")

@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.loan.Disbursement;
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.loan.LoanType;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.springframework.stereotype.Repository;
 
 
@@ -20,9 +20,9 @@ public class LoanFactory {
 	public Loan getLoanByID(int testLoanID){
 		Loan newLoan = new Loan();
 		newLoan.setServicingStartDate(new Date());
-		LoanType loanType = new LoanType();
-		loanType.setLoanTypeID(20L);
-		newLoan.setLoanType(loanType);
+		LoanProgram loanType = new LoanProgram();
+		loanType.setLoanProgramID(20L);
+		newLoan.setLoanProgram(loanType);
 		newLoan.setDisbursements(new ArrayList<Disbursement>());
 		Disbursement disb = new Disbursement();
 		disb.setLoan(newLoan);

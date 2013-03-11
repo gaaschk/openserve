@@ -8,7 +8,7 @@ import org.gsoft.openserv.domain.Person;
 import org.gsoft.openserv.domain.lender.Lender;
 import org.gsoft.openserv.domain.loan.Disbursement;
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.loan.LoanType;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.repositories.lender.LenderRepository;
 import org.gsoft.openserv.repositories.loan.LoanTypeRepository;
 import org.gsoft.openserv.web.models.DisbursementModel;
@@ -30,8 +30,8 @@ public class LoanEntryModelToLoanConverter implements Converter<LoanEntryModel, 
 	public Loan convert(LoanEntryModel loanModel){
 		Loan newLoan = new Loan();
 		newLoan.setServicingStartDate(loanModel.getEffectiveDate());
-		LoanType loanType = loanTypeRepository.findOne(Long.valueOf(loanModel.getSelectedLoanTypeID()));
-		newLoan.setLoanType(loanType);
+		LoanProgram loanType = loanTypeRepository.findOne(Long.valueOf(loanModel.getSelectedLoanTypeID()));
+		newLoan.setLoanProgram(loanType);
 		newLoan.setLenderID(Long.valueOf(loanModel.getSelectedLenderID()));
 		Person person = conversionService.convert(loanModel.getPerson(), Person.class);
 		newLoan.setBorrower(person);

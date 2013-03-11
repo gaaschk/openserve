@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.Person;
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.loan.LoanType;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.annotation.Rollback;
@@ -37,9 +37,9 @@ public class LoanRepositoryTest {
 		loan.setBorrower(borrower);
 		loan.setFirstDueDate(today);
 		loan.setInitialDueDate(today);
-		LoanType loanType = new LoanType();
-		loanType.setLoanTypeID(10L);
-		loan.setLoanType(loanType);
+		LoanProgram loanType = new LoanProgram();
+		loanType.setLoanProgramID(10L);
+		loan.setLoanProgram(loanType);
 		loan.setServicingStartDate(today);
 		loan.setStartingFees(0);
 		loan.setStartingInterest(BigDecimal.ZERO);

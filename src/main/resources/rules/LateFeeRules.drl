@@ -1,7 +1,6 @@
 package billing
 
 import org.gsoft.openserv.domain.loan.Loan
-import org.gsoft.openserv.domain.loan.LoanTypeProfile
 import org.gsoft.openserv.domain.payment.billing.BillingStatement
 import org.gsoft.openserv.domain.payment.LoanPayment
 import org.gsoft.openserv.domain.payment.billing.LoanStatementSummary
@@ -13,7 +12,6 @@ import org.gsoft.openserv.rulesengine.event.BillingStatementCreatedEvent
 import org.gsoft.openserv.rulesengine.event.LoanTemporalEvent 
 
 import org.gsoft.openserv.repositories.payment.BillingStatementRepository
-import org.gsoft.openserv.repositories.loan.LoanTypeProfileRepository
 import org.gsoft.openserv.repositories.payment.LoanStatementRepository
 
 import java.util.Date

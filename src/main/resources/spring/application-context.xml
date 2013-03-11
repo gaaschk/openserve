@@ -1,44 +1,32 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:data="http://www.springframework.org/schema/data/jpa"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:task="http://www.springframework.org/schema/task"
-	xsi:schemaLocation=
-	"http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans.xsd
-     http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
-     http://www.springframework.org/schema/tx       http://www.springframework.org/schema/tx/spring-tx.xsd
-     http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-     http://www.springframework.org/schema/aop      http://www.springframework.org/schema/aop/spring-aop.xsd
-     http://www.springframework.org/schema/task     http://www.springframework.org/schema/task/spring-task.xsd">
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+  	<import resource="security-context.xml"/>
 
 	<context:annotation-config />
 	<context:component-scan base-package="org.gsoft.openserv" />
 	<data:repositories base-package="org.gsoft.openserv.repositories" />
 	<task:annotation-driven/>
 	<aop:aspectj-autoproxy/>
+	<tx:annotation-driven />
 
 	<!-- Load in application properties reference -->
 	<bean id="applicationProperties"
 			class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="#{systemEnvironment['IS_CI']=='true'?'classpath:openserv/ci.application.properties':'classpath:openserv/application.properties'}" />
-	</bean>
-	
-	<bean id="facebook.clientId" class="java.lang.String">
-		<constructor-arg value="${facebook.clientId}"></constructor-arg>
-	</bean>
-	<bean id="facebook.clientSecret" class="java.lang.String">
-		<constructor-arg value="${facebook.clientSecret}"></constructor-arg>
-	</bean>
-	<bean id="twitter.consumerKey" class="java.lang.String">
-		<constructor-arg value="${twitter.consumerKey}"></constructor-arg>
-	</bean>
-	<bean id="twitter.consumerSecret" class="java.lang.String">
-		<constructor-arg value="${twitter.consumerSecret}"></constructor-arg>
-	</bean>
-	<bean id="facebook.redirectUrl" class="java.lang.String">
-		<constructor-arg value="${facebook.redirectUrl}"></constructor-arg>
 	</bean>
 	
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
@@ -93,12 +81,4 @@
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
-
-	<tx:annotation-driven />
-	
-	<bean class="org.springframework.social.connect.web.ProviderSignInController">
-    	<!-- relies on by-type autowiring for the constructor-args -->    
-	</bean>
-
-  	<import resource="security-context.xml"/>
 </beans>

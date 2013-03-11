@@ -6,12 +6,12 @@ import org.gsoft.openserv.domain.rates.Rate;
 import org.gsoft.openserv.util.time.FrequencyType;
 
 public class LoanProgramSettings {
-	private LoanTypeProfile defaultSettings;
-	private LenderLoanProgram lenderSpecificSettigs;
+	private DefaultLoanProgramSettings defaultSettings;
+	private LenderLoanProgramSettings lenderSpecificSettigs;
 	
 	public LoanProgramSettings(){}
 	
-	public LoanProgramSettings(LoanTypeProfile ltp, LenderLoanProgram llp){
+	public LoanProgramSettings(DefaultLoanProgramSettings ltp, LenderLoanProgramSettings llp){
 		this.defaultSettings = ltp;
 		this.lenderSpecificSettigs = llp;
 	}
