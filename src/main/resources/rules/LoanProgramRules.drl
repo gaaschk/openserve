@@ -6,6 +6,7 @@ import org.gsoft.openserv.rulesengine.event.LoanProgramChangedEvent
 import org.gsoft.openserv.rulesengine.event.DefaultLoanProgramSettingsChangedEvent
 import java.util.List
 import org.gsoft.openserv.repositories.loan.LoanRepository;
+import org.springframework.context.ApplicationContext
 
 global ApplicationContext springContext
 
