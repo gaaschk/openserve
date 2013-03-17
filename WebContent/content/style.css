@@ -1,0 +1,90 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+}
+ 
+#appLayout {
+    height: 100%;
+    padding: 0;
+}
+#leftCol {
+    width: 14em;
+}
+ 
+.claro .demoLayout .edgePanel {
+    background-color: rgb(113,139,166);
+    padding: 0;
+}
+ 
+#viewsChart {
+    width: 550px;
+    height: 550px;
+}
+
+#desktopTitlebar h2.tagline {
+	padding: 7px 0 0 0;	
+	font-family: Verdana, Arial, Helvetica, sans-serif;	
+	font-size: 10px;    
+	color: #b2b2b2;    
+	font-weight: bold;
+	text-align: center;
+	text-transform: uppercase;	
+}
+
+#desktopTitlebar h2.tagline .taglineEm {
+	color: #eee;
+	font-weight: bold;
+}
+
+#desktopTitlebar h1.applicationTitle {
+	display: none;
+	margin: 0;
+	padding: 0 5px 0 0;
+	font-size: 20px;
+	line-height: 25px;
+	font-weight: bold;
+	color: #eee;
+}
+
+#desktopNavbar {
+	background: #eee;
+	margin: 0 0px;
+	overflow: hidden; /* Remove this line if you want the menu to be backward compatible with Firefox 2 */	
+}
+
+#desktopNavbar ul {	
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	font-size: 12px;
+}
+
+#desktopNavbar li {
+	float: left;
+}
+
+#desktopNavbar a {
+	display: block;
+}	
+
+#topNav {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	color: #b2b2b2;
+	text-align: right;
+}
+
+.menu-right li {
+	list-style-type: none;
+	display: inline;	
+	margin: 0 10px 0 0;
+}
+
+#topNav a{
+	color: rgb(255,255,255);
+}
