@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.Person;
-import org.gsoft.openserv.domain.lender.Lender;
 import org.gsoft.openserv.domain.loan.Disbursement;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.repositories.lender.LenderRepository;
-import org.gsoft.openserv.repositories.loan.LoanTypeRepository;
+import org.gsoft.openserv.repositories.loan.LoanProgramRepository;
 import org.gsoft.openserv.web.models.DisbursementModel;
 import org.gsoft.openserv.web.models.LoanEntryModel;
 import org.springframework.core.convert.ConversionService;
@@ -22,7 +21,7 @@ public class LoanEntryModelToLoanConverter implements Converter<LoanEntryModel, 
 	@Resource
 	private ConversionService conversionService;
 	@Resource
-	private LoanTypeRepository loanTypeRepository;
+	private LoanProgramRepository loanProgramRepository;
 	@Resource
 	private LenderRepository lenderRepository;
 	
@@ -30,8 +29,8 @@ public class LoanEntryModelToLoanConverter implements Converter<LoanEntryModel, 
 	public Loan convert(LoanEntryModel loanModel){
 		Loan newLoan = new Loan();
 		newLoan.setServicingStartDate(loanModel.getEffectiveDate());
-		LoanProgram loanType = loanTypeRepository.findOne(Long.valueOf(loanModel.getSelectedLoanTypeID()));
-		newLoan.setLoanProgram(loanType);
+		LoanProgram loanProgram = loanProgramRepository.findOne(Long.valueOf(loanModel.getSelectedLoanProgramID()));
+		newLoan.setLoanProgram(loanProgram);
 		newLoan.setLenderID(Long.valueOf(loanModel.getSelectedLenderID()));
 		Person person = conversionService.convert(loanModel.getPerson(), Person.class);
 		newLoan.setBorrower(person);

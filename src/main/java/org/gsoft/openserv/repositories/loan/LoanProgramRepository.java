@@ -8,17 +8,17 @@ import org.gsoft.openserv.repositories.BaseSpringRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class LoanTypeRepository extends BaseRepository<LoanProgram, Long>{
+public class LoanProgramRepository extends BaseRepository<LoanProgram, Long>{
 	@Resource
-	private LoanTypeSpringRepository loanTypeSpringRepository;
+	private LoanProgramSpringRepository loanProgramSpringRepository;
 
 	@Override
-	protected LoanTypeSpringRepository getSpringRepository() {
-		return this.loanTypeSpringRepository;
+	protected LoanProgramSpringRepository getSpringRepository() {
+		return this.loanProgramSpringRepository;
 	}
 }
 
 @Repository
-interface LoanTypeSpringRepository extends BaseSpringRepository<LoanProgram, Long>{
+interface LoanProgramSpringRepository extends BaseSpringRepository<LoanProgram, Long>{
 
 }

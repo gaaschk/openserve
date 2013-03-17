@@ -41,6 +41,38 @@ public class AccountSummaryController {
 		return model;
 	}
 
+	@RequestMapping(value="/loanfinancialdata.do", method=RequestMethod.GET)
+	public ModelAndView showLoanFinancialData(@RequestParam("loandetailid") String loanid, ModelAndView model){
+		Loan theLoan = accountSummaryService.getLoanByID(new Long(loanid));
+		LoanDetailModel loanDetailModel = conversionService.convert(theLoan, LoanDetailModel.class);
+		model.addObject("loandetailmodel", loanDetailModel);
+		return model;
+	}
+
+	@RequestMapping(value="/transactionhistory.do", method=RequestMethod.GET)
+	public ModelAndView showTransactionHistory(@RequestParam("loandetailid") String loanid, ModelAndView model){
+		Loan theLoan = accountSummaryService.getLoanByID(new Long(loanid));
+		LoanDetailModel loanDetailModel = conversionService.convert(theLoan, LoanDetailModel.class);
+		model.addObject("loandetailmodel", loanDetailModel);
+		return model;
+	}
+
+	@RequestMapping(value="/amortizationschedule.do", method=RequestMethod.GET)
+	public ModelAndView showAmortizationSchedule(@RequestParam("loandetailid") String loanid, ModelAndView model){
+		Loan theLoan = accountSummaryService.getLoanByID(new Long(loanid));
+		LoanDetailModel loanDetailModel = conversionService.convert(theLoan, LoanDetailModel.class);
+		model.addObject("loandetailmodel", loanDetailModel);
+		return model;
+	}
+
+	@RequestMapping(value="/billingstatements.do", method=RequestMethod.GET)
+	public ModelAndView showBillingStatements(@RequestParam("loandetailid") String loanid, ModelAndView model){
+		Loan theLoan = accountSummaryService.getLoanByID(new Long(loanid));
+		LoanDetailModel loanDetailModel = conversionService.convert(theLoan, LoanDetailModel.class);
+		model.addObject("loandetailmodel", loanDetailModel);
+		return model;
+	}
+
 	@RequestMapping(value="/paymentdetail.do", method=RequestMethod.GET)
 	public ModelAndView showPaymentDetail(@RequestParam("paymentdetailid") String paymentid, ModelAndView model){
 		Payment thePayment = accountSummaryService.getPaymentByPaymentID(new Long(paymentid));

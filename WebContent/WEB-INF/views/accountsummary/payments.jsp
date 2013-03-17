@@ -38,5 +38,5 @@ window.addEvent('domready', function() {
 		</tr>
 	 </c:forEach>
   </table>
-  <div class="panel" id="paymentdetail">
+  <div id="paymentdetail">
   </div>

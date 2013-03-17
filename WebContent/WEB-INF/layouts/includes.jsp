@@ -11,5 +11,5 @@
 <c:url value="/content/magicbox/images" var="imagesUrl" />
 <c:url value="/content/magicbox/css" var="cssUrl" />
 <c:url value="style.css" var="cssName"/>
-<c:url value="/content/magicbox/js" var="jsUrl" />
+<c:url value="/content" var="jsUrl" />
 <c:url value="/web" var="baseUrl" />

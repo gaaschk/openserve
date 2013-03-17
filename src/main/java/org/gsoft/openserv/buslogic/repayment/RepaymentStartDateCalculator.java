@@ -24,7 +24,7 @@ public class RepaymentStartDateCalculator {
 	public Date calculateEarliestRepaymentStartDate(Loan loan){
 		Date repaymentStartDate = null;
 		if(loan.getDisbursements() != null && loan.getDisbursements().size() > 0){
-			LoanProgramSettings settings = loanProgramSettingsRepository.findLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(loan.getLenderID(), loan.getLoanProgram(), systemSettingsLogic.getCurrentSystemDate());
+			LoanProgramSettings settings = loanProgramSettingsRepository.findLoanProgramSettingsByLenderIDAndLoanProgramAndEffectiveDate(loan.getLenderID(), loan.getLoanProgram(), systemSettingsLogic.getCurrentSystemDate());
 			RepaymentStartType repaymentStartType = settings.getRepaymentStartType();
 			Disbursement firstDisb = null;
 			Disbursement lastDisb = null;

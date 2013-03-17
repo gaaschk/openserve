@@ -3,102 +3,91 @@
 <html>
 	<head>
 		<title>OpenServ :: Home</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<!-- load mootools for masked text fields -->
+		<script src="${jsUrl}/magicbox/js/mootools-core-1.4.1-full-compat.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${jsUrl}/magicbox/js/mootools-more-1.4.0.1.js" type="text/javascript" charset="utf-8"></script>
 
-		<link rel="stylesheet" type="text/css" href="/openserv/content/mocha/themes/default/css/Content.css" />
-		<link rel="stylesheet" type="text/css" href="/openserv/content/mocha/themes/default/css/Core.css" />
-		<link rel="stylesheet" type="text/css" href="/openserv/content/mocha/themes/default/css/Layout.css" />
-		<link rel="stylesheet" type="text/css" href="/openserv/content/mocha/themes/default/css/Dock.css" />
-		<link rel="stylesheet" type="text/css" href="/openserv/content/mocha/themes/default/css/Window.css" />
-		<link rel="stylesheet" type="text/css" href="/openserv/content/mocha/themes/default/css/Tabs.css" />
-		
-		<script src="${jsUrl}/mootools-core-1.4.1-full-compat.js" type="text/javascript" charset="utf-8"></script>
-		<script src="${jsUrl}/mootools-more-1.4.0.1.js" type="text/javascript" charset="utf-8"></script>
-		
-		<script src="${jsUrl}/mocha.js" type="text/javascript"></script>
-		<script src="${jsUrl}/mocha-init.js" type="text/javascript"></script>
-		
-		<script src="${jsUrl}/Meio.Mask.js" type="text/javascript"></script>
-		<script src="${jsUrl}/Meio.Mask.Fixed.js" type="text/javascript"></script>
-		<script src="${jsUrl}/Meio.Mask.Reverse.js" type="text/javascript"></script>
-		<script src="${jsUrl}/Meio.Mask.Repeat.js" type="text/javascript"></script>
-		<script src="${jsUrl}/Meio.Mask.Reverse.js" type="text/javascript"></script>
-		<script src="${jsUrl}/Meio.Mask.Regexp.js" type="text/javascript"></script>
-		<script src="${jsUrl}/Meio.Mask.Extras.js" type="text/javascript"></script>
-		<script type="text/javascript">
-			window.addEvent('domready', function() {
-  				//time to implement fancy show / hide
-  				Element.implement({
-    				//implement show
-				    fancyShow: function() {
-      					this.show();
-      					this.fade('in');
-    				},	
-    				//implement hide
-    				fancyHide: function() {
-      					this.fade('out');
-      					this.hide();
-    				}
-  				});
-  				$('page').set({
-  					scrollbars: true
-  				});
-			});		
-		</script>
-		<style type="text/css">
-			fieldset{ display: table; border-style: none;}
-			label{ float: left; width: 100px; }
+		<script src="${jsUrl}/magicbox/js/Meio.Mask.js" type="text/javascript"></script>
+		<script src="${jsUrl}/magicbox/js/Meio.Mask.Fixed.js" type="text/javascript"></script>
+		<script src="${jsUrl}/magicbox/js/Meio.Mask.Reverse.js" type="text/javascript"></script>
+		<script src="${jsUrl}/magicbox/js/Meio.Mask.Repeat.js" type="text/javascript"></script>
+		<script src="${jsUrl}/magicbox/js/Meio.Mask.Reverse.js" type="text/javascript"></script>
+		<script src="${jsUrl}/magicbox/js/Meio.Mask.Regexp.js" type="text/javascript"></script>
+		<script src="${jsUrl}/magicbox/js/Meio.Mask.Extras.js" type="text/javascript"></script>
+
+		<style type="text/css" title="text/css">
+			@import "/openserv/content/style.css";
+			@import "/openserv/content/dojo/resources/dojo.css";
+			@import "/openserv/content/dijit/themes/claro/claro.css";
 		</style>
-	</head>
-	<body>
-	  <div id="desktop">
-		<div id="dektopHeader">
-		  <div id="desktopTitlebarWrapper">
-		    <div id="desktopTitlebar">
-			  <h1 class="applicationTitle">OpenServ</h1>
-			  <h2 class="tagline">A <span class="taglineEm">Loan Servicing</span> Application</h2>
-			  <div id="topNav">
-			    <tiles:insertAttribute name="menu" />
-			  </div>
-			</div>
+
+		<script type="text/javascript" src="${jsUrl}/dojo/dojo.js" data-dojo-config="isDebug:true,async:true,parseOnLoad:true"></script>
+		<script type="text/javascript">
+			require([
+				'dojo/parser',
+				'dojo/request',
+				'dojo/dom',
+				'dojo/on',
+				'dojo/domReady!', 
+				'dijit/MenuBar', 
+				'dijit/MenuBarItem', 
+				'dijit/PopupMenuBarItem',
+    			'dijit/DropDownMenu', 
+    			'dijit/MenuItem', 
+    			'dijit/layout/BorderContainer', 
+    			'dijit/layout/TabContainer',
+        		'dijit/layout/ContentPane',
+        		'dijit/form/Form', 
+        		'dijit/form/TextBox', 
+        		'dijit/form/Button',
+		     	'dijit/form/RadioButton'
+        	]);
+        </script>
+  	</head>
+	<body class="claro">
+	  <div id="appLayout" class="demoLayout" data-dojo-type="dijit/layout/BorderContainer"
+           data-dojo-props="design: 'headline'" style="height: 100%; width: 100%">
+		<div id="dektopHeader" class="edgePanel" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'top'">
+		  <div id="desktopTitlebar">
+			<h1 class="applicationTitle">OpenServ</h1>
+			<h2 class="tagline">A <span class="taglineEm">Loan Servicing</span> Application</h2>
+			<div id="topNav">
+			  <tiles:insertAttribute name="menu" />
+	  	    </div>
 		  </div>
-		  <div id="desktopNavbar">	
+		  <div id="desktopNavbar" data-dojo-type="dijit/MenuBar">	
 			<ul>
-				<li class="menu-item"><a href="/openserv/web/addloan">Add a new Loan</a></li>
-				<li class="menu-item"><a href="/openserv/web/payment">Payment</a></li>
-				<li class="menu-item"><a href="/openserv/web/accountsummary">Account Summary</a></li>
-				<li class="menu-item"><a href="/openserv/web/loantype">Manage Loan Programs</a></li>
-				<li class="menu-item"><a href="/openserv/web/rates/stocks">Stocks</a></li>
+				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/addloan">Add a new Loan</a></li>
+				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/payment">Payment</a></li>
+				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/accountsummary">Account Summary</a></li>
+				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/loantype">Manage Loan Programs</a></li>
+				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/rates/stocks">Stocks</a></li>
 			</ul>
 		  </div>
 		</div><!-- desktop header end -->
-		<div id="pageWrapper">
-		  <div class="panel" id="page">
-		    <tiles:insertAttribute name="content" />
-		  </div>
+		<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'center'">
+		  <tiles:insertAttribute name="content" />
+		  <a href="/openserv/OpenService-AddLoan.mov">Add Loan Screencast</a>
+  		</div>
+		<div id="desktopFooter" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'bottom'">
+			<span>1.877.MYNUMBER</span>
+			<br/>
+			<span>
+				<a href="">Privacy Policy</a>
+			</span>
+			<br/>
+			<span>Copyright &copy; </span>
 		</div>
-		<a href="/openserv/OpenService-AddLoan.mov">Add Loan Screencast</a>
-		<div id="desktopFooterWrapper">
-			<div id="desktopFooter">
-				<span>1.877.MYNUMBER</span>
-				<br/>
-				<span>
-					<a href="">Privacy Policy</a>
-				</span>
-				<br/>
-				<span>Copyright &copy; </span>
-			</div>
-		</div>
-	</div><!-- desktop end -->
-	<script type="text/javascript">
-	  $$('input[data-meiomask]').each(
-		function(input) {
-		  input.meiomask(input.get('data-meiomask'), JSON
+	  </div><!-- desktop end -->
+		<script type="text/javascript">
+	  		$$('input[data-meiomask]').each(
+				function(input) {
+		  			input.meiomask(input.get('data-meiomask'), JSON
 							.decode(input.get('data-meiomask-options')));
+					});
+	  		$$('input[data-meiomask]').each(function(input) {
+				console.log("meiomask: " + input.get('data-meiomask'));
 			});
-	  $$('input[data-meiomask]').each(function(input) {
-			console.log("meiomask: " + input.get('data-meiomask'));
-		});
-	</script>
-</body>
+		</script>
+	</body>
 </html>

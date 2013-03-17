@@ -124,9 +124,9 @@ public class LoanStatementSummary {
 		this.addStatements(statements);
 	}
 	
-	public void setLoanTypeProfiles(List<LoanProgramSettings> loanTypeProfiles){
+	public void setLoanProgramSettings(List<LoanProgramSettings> loanProgramSettings){
 		this.getLoanProgramSettings().clear();
-		this.getLoanProgramSettings().addAll(loanTypeProfiles);
+		this.getLoanProgramSettings().addAll(loanProgramSettings);
 	}
 	
 	public void applyPayments(){

@@ -15,8 +15,8 @@ public class LoanEntryModel implements Serializable{
 	private static final long serialVersionUID = -4761897960840405245L;
 
 	private Long loanID;
-	private String selectedLoanTypeID;
-	private List<LoanProgram> loanTypeList;
+	private String selectedLoanProgramID;
+	private List<LoanProgram> loanProgramList;
 	private String selectedLenderID;
 	private List<Lender> lenderList;
 	private PersonModel person;
@@ -34,17 +34,17 @@ public class LoanEntryModel implements Serializable{
 	public void setLoanID(Long loanID) {
 		this.loanID = loanID;
 	}
-	public String getSelectedLoanTypeID() {
-		return selectedLoanTypeID;
+	public String getSelectedLoanProgramID() {
+		return selectedLoanProgramID;
 	}
-	public void setSelectedLoanTypeID(String loanTypeID) {
-		this.selectedLoanTypeID = loanTypeID;
+	public void setSelectedLoanProgramID(String loanProgramID) {
+		this.selectedLoanProgramID = loanProgramID;
 	}
-	public List<LoanProgram> getLoanTypeList() {
-		return loanTypeList;
+	public List<LoanProgram> getLoanProgramList() {
+		return loanProgramList;
 	}
-	public void setLoanTypeList(List<LoanProgram> loanTypeList) {
-		this.loanTypeList = loanTypeList;
+	public void setLoanProgramList(List<LoanProgram> loanProgramList) {
+		this.loanProgramList = loanProgramList;
 	}
 	public String getSelectedLenderID() {
 		return selectedLenderID;

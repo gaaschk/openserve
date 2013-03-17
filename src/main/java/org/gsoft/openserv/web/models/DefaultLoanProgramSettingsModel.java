@@ -6,7 +6,7 @@ import java.util.List;
 import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings;
 
-public class LoanTypeProfilesModel implements Serializable{
+public class DefaultLoanProgramSettingsModel implements Serializable{
 	private static final long serialVersionUID = 8854407098839115592L;
 	private LoanProgram loanType;
 	private List<DefaultLoanProgramSettings> loanTypeProfiles;
@@ -23,13 +23,13 @@ public class LoanTypeProfilesModel implements Serializable{
 	public LoanProgram getLoanType() {
 		return loanType;
 	}
-	public void setLoanType(LoanProgram loanType) {
+	public void setLoanProgram(LoanProgram loanType) {
 		this.loanType = loanType;
 	}
 	public List<DefaultLoanProgramSettings> getLoanTypeProfiles() {
 		return loanTypeProfiles;
 	}
-	public void setLoanTypeProfiles(List<DefaultLoanProgramSettings> loanTypeProfiles) {
+	public void setDefaultLoanProgramSettingsList(List<DefaultLoanProgramSettings> loanTypeProfiles) {
 		this.loanTypeProfiles = loanTypeProfiles;
 	}
 }

@@ -11,6 +11,22 @@
     	<put-attribute name="content" value="/WEB-INF/views/accountsummary/loandetail.jsp"/>
     </definition>
 
+    <definition name="accountsummary/loanfinancialdata" extends="emptyLayout">
+    	<put-attribute name="content" value="/WEB-INF/views/accountsummary/loanfinancialdata.jsp"/>
+    </definition>
+
+    <definition name="accountsummary/transactionhistory" extends="emptyLayout">
+    	<put-attribute name="content" value="/WEB-INF/views/accountsummary/transactionhistory.jsp"/>
+    </definition>
+
+    <definition name="accountsummary/amortizationschedule" extends="emptyLayout">
+    	<put-attribute name="content" value="/WEB-INF/views/accountsummary/amortizationschedule.jsp"/>
+    </definition>
+
+    <definition name="accountsummary/billingstatements" extends="emptyLayout">
+    	<put-attribute name="content" value="/WEB-INF/views/accountsummary/billingstatements.jsp"/>
+    </definition>
+
 	<definition name="accountsummary/paymentdetail" extends="emptyLayout">
 		<put-attribute name="content" value="/WEB-INF/views/accountsummary/loanpayments.jsp"/>
 	</definition>

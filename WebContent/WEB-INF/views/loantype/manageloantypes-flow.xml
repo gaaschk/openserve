@@ -5,7 +5,7 @@
                           http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
 	<on-start>
-		<evaluate expression="manageLoanTypeProfileController.loadLoanTypeProfileModel()" result="flowScope.loanTypeProfileModel"/>
+		<evaluate expression="manageLoanProgramSettingsController.loadDefaultLoanProgramSettingsListModel()" result="flowScope.defaultLoanProgramSettingsListModel"/>
 	</on-start>
 
 	<view-state id="manageloantypes" view="loantype/manageloantypes" model="loanTypeProfileModel" >

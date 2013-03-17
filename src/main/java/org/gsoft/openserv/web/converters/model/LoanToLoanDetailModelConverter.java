@@ -58,7 +58,7 @@ public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetai
 		LoanDetailModel model = new LoanDetailModel();
 		LoanFinancialDataModel finModel = new LoanFinancialDataModel();
 		finModel.setLoanID(loan.getLoanID());
-		finModel.setLoanType(loan.getLoanProgram());
+		finModel.setLoanProgram(loan.getLoanProgram());
 		LoanStateHistory loanStateHistory = accountSummaryService.getLoanStateHistoryForLoan(loan.getLoanID());
 		finModel.setCurrentPrincipal(loanStateHistory.getEndingPrincipal());
 		finModel.setCurrentInterest(loanStateHistory.getLoanStateAsOf(systemDate).getInterestThrough(systemDate));

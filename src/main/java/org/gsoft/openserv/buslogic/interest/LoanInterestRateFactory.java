@@ -62,7 +62,7 @@ public class LoanInterestRateFactory {
 	}
 	
 	private List<Date> findAllRateChangeDates(Loan loan){
-		List<LoanProgramSettings> lps = loanProgramSettingsRepo.findAllLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(loan.getLenderID(), loan.getLoanProgram(), loan.getServicingStartDate());
+		List<LoanProgramSettings> lps = loanProgramSettingsRepo.findAllLoanProgramSettingsByLenderIDAndLoanProgramAndEffectiveDate(loan.getLenderID(), loan.getLoanProgram(), loan.getServicingStartDate());
 		Collections.sort(lps, this.getLoanProgramSettingsComparator());
 		Date sysDate = systemSettignsLogic.getCurrentSystemDate();
 		Date startDate = loan.getServicingStartDate();
@@ -135,7 +135,7 @@ public class LoanInterestRateFactory {
 		List<Date> missingDates = this.findMissingLoanRateDates(allLRVs,allDates);
 		LoanRateValue lastRate = null;
 		for(Date date:missingDates){
-			LoanProgramSettings settings = loanProgramSettingsRepo.findLoanProgramSettingsByLenderIDAndLoanTypeAndEffectiveDate(loan.getLenderID(), loan.getLoanProgram(), date);
+			LoanProgramSettings settings = loanProgramSettingsRepo.findLoanProgramSettingsByLenderIDAndLoanProgramAndEffectiveDate(loan.getLenderID(), loan.getLoanProgram(), date);
 			Rate rate = settings.getBaseRate();
 			RateValue rateValue = rateValueRepository.findRateValue(rate, date);
 			LoanRateValue loanRateValue = new LoanRateValue();

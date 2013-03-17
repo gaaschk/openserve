@@ -13,7 +13,7 @@ public class LoanFinancialDataModel implements Serializable{
 	private static final long serialVersionUID = 2799991603651710288L;
 
 	private Long loanID;
-	private LoanProgram loanType;
+	private LoanProgram loanProgram;
 	private Integer currentPrincipal;
 	private BigDecimal currentInterest;
 	private Integer currentFees;
@@ -38,11 +38,11 @@ public class LoanFinancialDataModel implements Serializable{
 	public void setLoanID(Long loanID){
 		this.loanID = loanID;
 	}
-	public LoanProgram getLoanType() {
-		return loanType;
+	public LoanProgram getLoanProgram() {
+		return loanProgram;
 	}
-	public void setLoanType(LoanProgram loanType) {
-		this.loanType = loanType;
+	public void setLoanProgram(LoanProgram loanProgram) {
+		this.loanProgram = loanProgram;
 	}
 	@CurrencyInPenniesFormat
 	public Integer getCurrentPrincipal() {
