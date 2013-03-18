@@ -1,5 +1,5 @@
 <%@ include file="/WEB-INF/layouts/includes.jsp" %>
-<form:form commandName="loandetailmodel.loanFinancialData">
+<form:form commandName="loanfinancialdatamodel">
 	<table>
 		<tr>
 			<td>

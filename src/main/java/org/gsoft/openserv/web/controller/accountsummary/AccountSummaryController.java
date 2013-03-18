@@ -9,6 +9,7 @@ import org.gsoft.openserv.service.AccountSummaryService;
 import org.gsoft.openserv.service.PersonService;
 import org.gsoft.openserv.web.models.AccountSummaryModel;
 import org.gsoft.openserv.web.models.LoanDetailModel;
+import org.gsoft.openserv.web.models.LoanFinancialDataModel;
 import org.gsoft.openserv.web.models.PaymentModel;
 import org.gsoft.openserv.web.person.PersonSearchCriteria;
 import org.springframework.core.convert.ConversionService;
@@ -44,8 +45,8 @@ public class AccountSummaryController {
 	@RequestMapping(value="/loanfinancialdata.do", method=RequestMethod.GET)
 	public ModelAndView showLoanFinancialData(@RequestParam("loandetailid") String loanid, ModelAndView model){
 		Loan theLoan = accountSummaryService.getLoanByID(new Long(loanid));
-		LoanDetailModel loanDetailModel = conversionService.convert(theLoan, LoanDetailModel.class);
-		model.addObject("loandetailmodel", loanDetailModel);
+		LoanFinancialDataModel loanFinancialDataModel = conversionService.convert(theLoan, LoanFinancialDataModel.class);
+		model.addObject("loanfinancialdatamodel", loanFinancialDataModel);
 		return model;
 	}
 
