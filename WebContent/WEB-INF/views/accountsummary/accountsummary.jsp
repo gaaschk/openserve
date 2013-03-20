@@ -118,6 +118,7 @@ table.loans caption label{
 							<caption><label>Loans</label></caption>
 							<tr>
 								<th></th>
+								<th><label>Account Number</label></th>
 								<th><label>Loan Type</label></th>
 								<th><label>Current Principal</label></th>
 								<th><label>Current Interest</label></th>
@@ -126,6 +127,7 @@ table.loans caption label{
 							<c:forEach var="loan" items="${accountSummaryModel.loans}" varStatus="index">
 								<tr class="loanrow" >
 									<td><input type="radio" class="loanrowrb" id="${loan.loanID}" value="${loan.loanID}" name="loanrowrb"></td>
+									<td><form:input class="loancell" disabled="true" path="loans[${index.count-1}].accountNumber"/></td>
 									<td><form:input class="loancell" disabled="true" path="loans[${index.count-1}].loanProgram"/></td>
 									<td><form:input class="loancell" disabled="true" path="loans[${index.count-1}].currentPrincipal"/></td>
 									<td><form:input class="loancell" disabled="true" path="loans[${index.count-1}].currentInterest"/></td>

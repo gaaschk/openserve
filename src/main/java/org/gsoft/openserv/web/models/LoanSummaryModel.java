@@ -9,6 +9,7 @@ import org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormat;
 public class LoanSummaryModel implements Serializable{
 	private static final long serialVersionUID = -6256763851983742148L;
 	private Long loanID;
+	private String accountNumber;
 	private LoanProgram loanProgram;
 	private Integer currentPrincipal;
 	private BigDecimal currentInterest;
@@ -20,6 +21,12 @@ public class LoanSummaryModel implements Serializable{
 	}
 	public void setLoanID(Long loanID){
 		this.loanID = loanID;
+	}
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
 	}
 	public LoanProgram getLoanProgram() {
 		return loanProgram;
