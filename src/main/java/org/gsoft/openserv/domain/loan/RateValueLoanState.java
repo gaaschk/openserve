@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.gsoft.openserv.domain.interest.LoanRateValue;
-import org.gsoft.openserv.web.formatter.percent.PercentFormatter;
+import org.gsoft.openserv.web.support.formatter.percent.PercentFormatter;
 
 public class RateValueLoanState extends LoanState {
 	private LoanRateValue rateValue;

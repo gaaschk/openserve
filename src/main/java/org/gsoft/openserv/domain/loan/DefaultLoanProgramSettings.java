@@ -14,7 +14,7 @@ import javax.persistence.Transient;
 import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.domain.rates.Rate;
 import org.gsoft.openserv.util.time.FrequencyType;
-import org.gsoft.openserv.web.formatter.currency.CurrencyInPenniesFormat;
+import org.gsoft.openserv.web.support.formatter.currency.CurrencyInPenniesFormat;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;

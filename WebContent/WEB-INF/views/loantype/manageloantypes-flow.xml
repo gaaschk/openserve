@@ -8,15 +8,15 @@
 		<evaluate expression="manageLoanProgramSettingsController.loadDefaultLoanProgramSettingsListModel()" result="flowScope.defaultLoanProgramSettingsListModel"/>
 	</on-start>
 
-	<view-state id="manageloantypes" view="loantype/manageloantypes" model="loanTypeProfileModel" >
+	<view-state id="manageloantypes" view="loantype/managedefaultloanprogramsettings" model="defaultLoanProgramSettingsListModel" >
 		<transition on="addLoanType" to="manageloantypes">
-			<evaluate expression="manageLoanTypeProfileController.addLoanType(loanTypeProfileModel)"/>
+			<evaluate expression="manageLoanProgramSettingsController.addLoanType(defaultLoanProgramSettingsListModel)"/>
 		</transition>
 		<transition on="addLoanTypeProfile" to="manageloantypes">
-			<evaluate expression="manageLoanTypeProfileController.addLoanTypeProfile(loanTypeProfileModel)"/>
+			<evaluate expression="manageLoanProgramSettingsController.addLoanTypeProfile(defaultLoanProgramSettingsListModel)"/>
 		</transition>
 		<transition on="save" to="manageLoanTypeProfileComplete">
-			<evaluate expression="manageLoanTypeProfileController.save(loanTypeProfileModel)"/>
+			<evaluate expression="manageLoanProgramSettingsController.save(defaultLoanProgramSettingsListModel)"/>
 		</transition>
 	</view-state>
 

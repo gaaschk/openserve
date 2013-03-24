@@ -26,22 +26,22 @@ function inittables(thebutton){
 	}
 }
 </script>
-	<form:form modelAttribute="loanTypeProfileModel">
+	<form:form modelAttribute="defaultLoanProgramSettingsListModel">
 <div class="panel">
 <div class="panel">
 <table class="loanTypes" id="loantypetable">
 	<col style="width: 30px;"/>
-	<caption style="text-align: left;"><b>Loans Types</b></caption>
+	<caption style="text-align: left;"><b>Loans Programs</b></caption>
 	<tr>
 		<th></th>
 		<th><label>Name</label></th>
 		<th><label>Description</label></th>
 	</tr>
-	<c:forEach var="loanTypeProfilesModel" items="${loanTypeProfileModel.loanTypeProfilesModels}" varStatus="typeIndex">
+	<c:forEach var="loanTypeProfilesModel" items="${defaultLoanProgramSettingsListModel.defaultLoanProgramSettingsModels}" varStatus="typeIndex">
 		<tr class="loantyperow" >
-			<td><form:radiobutton class="loantyperowrb" id="${loanTypeProfilesModel.loanType.loanProgramID}" path="loanTypeProfilesModels[${typeIndex.count-1}].selected" value="true"/></td>
-			<td><form:input class="loantypecell" disabled="false" path="loanTypeProfilesModels[${typeIndex.count-1}].loanType.name"/></td>
-			<td><form:input class="loantypecell" disabled="false" path="loanTypeProfilesModels[${typeIndex.count-1}].loanType.description"/></td>
+			<td><form:radiobutton class="loantyperowrb" id="${loanTypeProfilesModel.loanProgram.loanProgramID}" path="defaultLoanProgramSettingsModels[${typeIndex.count-1}].selected" value="true"/></td>
+			<td><form:input class="loantypecell" disabled="false" path="defaultLoanProgramSettingsModels[${typeIndex.count-1}].loanProgram.name"/></td>
+			<td><form:input class="loantypecell" disabled="false" path="defaultLoanProgramSettingsModels[${typeIndex.count-1}].loanProgram.description"/></td>
 		</tr>
 	</c:forEach>
 </table>
@@ -49,13 +49,13 @@ function inittables(thebutton){
 <br>
 </div>
 <br>
-<caption style="text-align: left;"><b>Loans Type Profiles</b></caption>
+<caption style="text-align: left;"><b>Loans Program Settings</b></caption>
 <c:forEach var="loanTypeProfilesModel" items="${loanTypeProfileModel.loanTypeProfilesModels}" varStatus="typeIndex">
 <div id="${loanTypeProfilesModel.loanType.loanProgramID}-panel" class="loanTypeProfiles-panel">
 <table id="${loanTypeProfilesModel.loanType.loanProgramID}-loantypeprofiletable">
 	<col style="width: 30px;"/>
 	<tr>
-		<th><label>Loan Type</label></th>
+		<th>Loan Program</th>
 		<th><label>Effective Date</label></th>
 		<th><label>End Date</label></th>
 		<th><label>Days Late For Fee</label></th>

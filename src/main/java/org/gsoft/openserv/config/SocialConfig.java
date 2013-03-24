@@ -5,8 +5,8 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 
 import org.gsoft.openserv.service.security.SocialSecurityAdapter;
-import org.gsoft.openserv.web.controller.social.CustomConnectController;
-import org.gsoft.openserv.web.controller.social.CustomProviderSignInController;
+import org.gsoft.openserv.web.social.controller.CustomConnectController;
+import org.gsoft.openserv.web.social.controller.CustomProviderSignInController;
 import org.gsoft.openserv.web.social.facebook.PostToWallAfterConnectInterceptor;
 import org.gsoft.openserv.web.social.twitter.TweetAfterConnectInterceptor;
 import org.springframework.context.annotation.Bean;
