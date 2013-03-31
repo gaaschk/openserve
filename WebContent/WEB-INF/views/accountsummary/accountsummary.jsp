@@ -112,7 +112,7 @@ table.loans caption label{
 			</div>
 			<div data-dojo-type="dijit/layout/TabContainer" data-dojo-props="region:'center'">
 				<div data-dojo-type="dijit/layout/BorderContainer" title="Loan Information" id="loanDetailPane">
-					<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
+					<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'" style="height: 2cm">
 						<table class="loans" id="loantable">
 							<col style="width: 30px;"/>
 							<caption><label>Loans</label></caption>

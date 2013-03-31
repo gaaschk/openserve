@@ -32,6 +32,9 @@ public class LateFeeLogic {
 					lateFee.setCancelled(false);
 					lateFeeRepository.save(lateFee);
 				}
+				else if(lateFee.getFeeAmount() != sps.getEffectiveLateFeeAmount()){
+					lateFee.setFeeAmount(sps.getEffectiveLateFeeAmount());
+				}
 			}
 			else{
 				LateFee lateFee = lateFeeRepository.findByBillingStatementID(sps.getStatement().getBillingStatementID());

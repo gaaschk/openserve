@@ -40,6 +40,10 @@ public class StatementPaySummary {
 		return effectiveDate.after(lateFeeDate) && (this.getSatisfiedDate() == null || this.getSatisfiedDate().after(lateFeeDate));
 	}
 	
+	public int getEffectiveLateFeeAmount(){
+		return this.getEffectiveLoanProgramSettings().getLateFeeAmount();
+	}
+	
 	public Date expectedLateFeeDate(){
 		int dpdflf = this.getEffectiveLoanProgramSettings().getDaysLateForFee();
 		return new DateTime(this.getStatement().getDueDate()).plusDays(dpdflf).toDate();

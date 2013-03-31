@@ -1,18 +1,19 @@
 package billing
 
+import org.gsoft.openserv.buslogic.payment.LateFeeLogic
+
 import org.gsoft.openserv.domain.loan.Loan
 import org.gsoft.openserv.domain.payment.billing.BillingStatement
 import org.gsoft.openserv.domain.payment.LoanPayment
 import org.gsoft.openserv.domain.payment.billing.LoanStatementSummary
 
-import org.gsoft.openserv.buslogic.payment.LateFeeLogic
+import org.gsoft.openserv.repositories.payment.BillingStatementRepository
+import org.gsoft.openserv.repositories.payment.LoanStatementRepository
 
 import org.gsoft.openserv.rulesengine.event.LoanPaymentAppliedEvent
 import org.gsoft.openserv.rulesengine.event.BillingStatementCreatedEvent
 import org.gsoft.openserv.rulesengine.event.LoanTemporalEvent 
-
-import org.gsoft.openserv.repositories.payment.BillingStatementRepository
-import org.gsoft.openserv.repositories.payment.LoanStatementRepository
+import org.gsoft.openserv.rulesengine.event.DefaultLoanProgramSettingsChangedEvent
 
 import java.util.Date
 import java.util.Calendar
@@ -55,6 +56,18 @@ rule "Load LoanStatementSummary for LoanTemporalEvent"
   	System.out.println("Loading LoanStatementHistory");
 	LoanStatementRepository lsRepo = springContext.getBean(LoanStatementRepository.class);
 	LoanStatementSummary lss = lsRepo.getLoanStatementSummaryForLoan($lId);
+	insert(lss);  	
+end
+
+rule "Load LoanStatementSummary for LoanProgram Settings Change"
+  when
+  	DefaultLoanProgramSettingsChangedEvent($ltid:defaultLoanProgramSettings.loanProgram.loanProgramID)
+  	$l:Loan(loanProgram.loanProgramID == $ltid)
+  	not LoanStatementSummary($l.loanID == loan.loanID)
+  then
+  	System.out.println("Loading LoanStatementHistory");
+	LoanStatementRepository lsRepo = springContext.getBean(LoanStatementRepository.class);
+	LoanStatementSummary lss = lsRepo.getLoanStatementSummaryForLoan($l.getLoanID());
 	insert(lss);  	
 end
 

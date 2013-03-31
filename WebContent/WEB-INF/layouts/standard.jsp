@@ -60,7 +60,7 @@
 				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/addloan">Add a new Loan</a></li>
 				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/payment">Payment</a></li>
 				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/accountsummary">Account Summary</a></li>
-				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/loantype">Manage Loan Programs</a></li>
+				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/loanprogram">Manage Loan Programs</a></li>
 				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/rates/stocks">Stocks</a></li>
 			</ul>
 		  </div>

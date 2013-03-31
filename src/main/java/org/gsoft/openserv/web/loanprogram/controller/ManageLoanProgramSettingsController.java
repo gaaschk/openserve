@@ -5,14 +5,15 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.repositories.loan.DefaultLoanProgramSettingsRepository;
 import org.gsoft.openserv.repositories.loan.LoanProgramRepository;
 import org.gsoft.openserv.repositories.rates.RateRepository;
 import org.gsoft.openserv.service.loanprogram.LoanProgramSettingsService;
-import org.gsoft.openserv.web.loanprogram.model.DefaultLoanProgramSettingsListModel;
 import org.gsoft.openserv.web.loanprogram.model.DefaultLoanProgramSettingsModel;
+import org.gsoft.openserv.web.loanprogram.model.LoanProgramModel;
+import org.gsoft.openserv.web.loanprogram.model.ManageLoanProgramsModel;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,46 +27,58 @@ public class ManageLoanProgramSettingsController {
 	@Resource
 	private LoanProgramSettingsService loanProgramSettingsService;
 
-	public DefaultLoanProgramSettingsListModel loadDefaultLoanProgramSettingsListModel(){
-		DefaultLoanProgramSettingsListModel model = new DefaultLoanProgramSettingsListModel();
+	public ManageLoanProgramsModel loadManageLoanProgramsModel(){
+		ManageLoanProgramsModel model = new ManageLoanProgramsModel();
 		List<LoanProgram> loanPrograms = loanProgramRepository.findAll();
+		List<LoanProgramModel> loanProgramModels = new ArrayList<>();
+		model.setAllLoanProgramModels(loanProgramModels);
 		for(LoanProgram loanProgram:loanPrograms){
-			model.addDefaultLoanProgramSettingsList(loanProgram, defaultLoanProgramSettingsRepository.findAllDefaultLoanProgramSettingsByLoanProgram(loanProgram));
+			LoanProgramModel loanProgramModel = new LoanProgramModel();
+			loanProgramModels.add(loanProgramModel);
+			loanProgramModel.setLoanProgram(loanProgram);
+			List<DefaultLoanProgramSettings> allSettingsForLoanProgram = defaultLoanProgramSettingsRepository.findAllDefaultLoanProgramSettingsByLoanProgram(loanProgram);
+			List<DefaultLoanProgramSettingsModel> loanProgramSettingsModels = new ArrayList<>();
+			for(DefaultLoanProgramSettings settings:allSettingsForLoanProgram){
+				DefaultLoanProgramSettingsModel settingsModel = new DefaultLoanProgramSettingsModel();
+				settingsModel.setDefaultLoanProgramSettings(settings);
+				loanProgramSettingsModels.add(settingsModel);
+			}
+			loanProgramModel.setAllDefaultLoanProgramSettingsModels(loanProgramSettingsModels);
 		}
-		if(model.getDefaultLoanProgramSettingsModels().size()>0){
-			model.getDefaultLoanProgramSettingsModels().get(0).setSelected(true);
+		if(model.getAllLoanProgramModels().size()>0){
+			model.getAllLoanProgramModels().get(0).setSelected(true);
+			model.setDisplayedLoanProgram(model.getAllLoanProgramModels().get(0));
+			if(model.getDisplayedLoanProgram().getAllDefaultLoanProgramSettingsModels().size()>0){
+				model.getAllLoanProgramModels().get(0).setSelected(true);
+				model.setDisplayedLoanProgram(model.getAllLoanProgramModels().get(0));
+			}
 		}
 		model.setAllRates(rateRepostory.findAll());
 		return model;
 	}
 	
-	public void addDefaultLoanProgramSettingsListModel(DefaultLoanProgramSettingsListModel model){
+	public void addLoanProgram(ManageLoanProgramsModel model){
 		LoanProgram newType = new LoanProgram();
-		long newId = model.getDefaultLoanProgramSettingsModels().size();
-		newType.setLoanProgramID(newId*-1);
-		model.addDefaultLoanProgramSettingsList(newType,new ArrayList<DefaultLoanProgramSettings>());
+		LoanProgramModel lpModel = new LoanProgramModel();
+		lpModel.setAllDefaultLoanProgramSettingsModels(new ArrayList<DefaultLoanProgramSettingsModel>());
+		lpModel.setLoanProgram(newType);
+		model.getAllLoanProgramModels().add(lpModel);
 	}
 
-	public void addLoanTypeProfile(DefaultLoanProgramSettingsListModel model){
-		for(DefaultLoanProgramSettingsModel profModel:model.getDefaultLoanProgramSettingsModels()){
-			if(profModel.isSelected()){
-				DefaultLoanProgramSettings prof = new DefaultLoanProgramSettings();
-				prof.setLoanProgram(profModel.getLoanProgram());
-				profModel.getLoanTypeProfiles().add(prof);
-			}
-		}
+	public void addLoanProgramSettings(ManageLoanProgramsModel model){
+		DefaultLoanProgramSettings prof = new DefaultLoanProgramSettings();
+		prof.setLoanProgram(model.getDisplayedLoanProgram().getLoanProgram());
+		DefaultLoanProgramSettingsModel dlpsModel = new DefaultLoanProgramSettingsModel();
+		dlpsModel.setDefaultLoanProgramSettings(prof);
+		model.getDisplayedLoanProgram().getAllDefaultLoanProgramSettingsModels().add(dlpsModel);
 	}
 	
-	public void save(DefaultLoanProgramSettingsListModel model){
-		for(DefaultLoanProgramSettingsModel profModel:model.getDefaultLoanProgramSettingsModels()){
-			LoanProgram loanType = profModel.getLoanProgram();
-			if(loanType.getLoanProgramID()<=0){
-				loanType.setLoanProgramID(null);
-			}
+	public void save(ManageLoanProgramsModel model){
+		for(LoanProgramModel progModel:model.getAllLoanProgramModels()){
+			LoanProgram loanType = progModel.getLoanProgram();
 			loanType = this.loanProgramSettingsService.saveLoanProgram(loanType);
-			for(DefaultLoanProgramSettings loanTypeProfile:profModel.getLoanTypeProfiles()){
-				loanTypeProfile.setLoanProgram(loanType);
-				this.loanProgramSettingsService.saveDefaultLoanProgramSettings(loanTypeProfile);
+			for(DefaultLoanProgramSettingsModel loanProgSettingsModel:progModel.getAllDefaultLoanProgramSettingsModels()){
+				this.loanProgramSettingsService.saveDefaultLoanProgramSettings(loanProgSettingsModel.getDefaultLoanProgramSettings());
 			}
 		}
 	}
