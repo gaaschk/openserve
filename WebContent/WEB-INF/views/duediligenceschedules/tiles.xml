@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition name="duediligenceschedules/manageschedules" extends="standardLayout">
+        <put-attribute name="content" value="/WEB-INF/views/duediligenceschedules/manageduediligenceschedules.jsp" />
+    </definition>
+
+    <definition name="duediligence/schedules" extends="emptyLayout">
+    	<put-attribute name="content" value="/WEB-INF/views/duediligenceschedules/schedulesforloanprogram.jsp"/>
+    </definition>
+</tiles-definitions>
