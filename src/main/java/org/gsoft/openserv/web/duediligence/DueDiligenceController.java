@@ -1,6 +1,6 @@
 package org.gsoft.openserv.web.duediligence;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("duediligence")
@@ -51,15 +50,15 @@ public class DueDiligenceController {
 		ManageDueDiligenceSchedulesModel model = new ManageDueDiligenceSchedulesModel();
 		model.setAllEventTypes(dueDiligenceEventTypeRepo.findAll());
 		model.setAllLoanPrograms(loanProgramRepo.findAll());
-		model.setSchedules(new HashMap<Long,List<DueDiligenceSchedule>>());
+		model.setSchedules(new ArrayList<DueDiligenceSchedule>());
 		for(LoanProgram program:model.getAllLoanPrograms()){
-			model.getSchedules().put(program.getLoanProgramID(), dueDiligenceScheduleRepo.findAllByLoanProgramId(program.getLoanProgramID()));
+			model.getSchedules().addAll(dueDiligenceScheduleRepo.findAllByLoanProgramId(program.getLoanProgramID()));
 		}
 		return model;
 	}
 	
 	public void addNewDueDiligenceSchedule(ManageDueDiligenceSchedulesModel model){
-		model.getSchedules().get(model.getSelectedLoanProgram().getLoanProgramID()).add(new DueDiligenceSchedule());
+		model.getSchedules().add(new DueDiligenceSchedule());
 	}
 	
 	public void setLoanProgram(ManageDueDiligenceSchedulesModel model){

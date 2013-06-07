@@ -20,8 +20,13 @@
      		</script>
      	</form:select>
      	<div id="schedulePane" data-dojo-type="dijit/layout/StackContainer">
-     	<c:forEach var="scheduleList" items="">
-     	</c:forEach>
+			<table>
+				<c:forEach var="schedule" items="${schedules}" varStatus="index">
+					<tr>
+						<td><form:input path="${schedules[index.count-1]}.effectiveDate"/></td>
+					</tr>
+		</c:forEach>
+	</table>
      	</div>
 	</div>
 </form:form>

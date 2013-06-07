@@ -2,7 +2,6 @@ package org.gsoft.openserv.web.duediligence.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 import org.gsoft.openserv.domain.duediligence.DueDiligenceEventType;
 import org.gsoft.openserv.domain.duediligence.DueDiligenceSchedule;
@@ -13,16 +12,17 @@ public class ManageDueDiligenceSchedulesModel implements Serializable {
 	
 	//for comboboxes
 	private List<LoanProgram> allLoanPrograms = null;
+	private LoanProgram selectedLoanProgram = null;
+
 	private List<DueDiligenceEventType> allEventTypes = null;
 	
-	private Map<Long,List<DueDiligenceSchedule>> schedules = null;
-	private LoanProgram selectedLoanProgram = null;
+	private List<DueDiligenceSchedule> schedules = null;
 	
-	public Map<Long,List<DueDiligenceSchedule>> getSchedules() {
+	public List<DueDiligenceSchedule> getSchedules() {
 		return schedules;
 	}
 
-	public void setSchedules(Map<Long,List<DueDiligenceSchedule>> schedules) {
+	public void setSchedules(List<DueDiligenceSchedule> schedules) {
 		this.schedules = schedules;
 	}
 
