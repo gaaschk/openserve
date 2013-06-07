@@ -17,20 +17,20 @@
 
 		<style type="text/css" title="text/css">
 			@import "/openserv/content/style.css";
-			@import "/openserv/content/dojo/resources/dojo.css";
-			@import "/openserv/content/dijit/themes/claro/claro.css";
+			@import "<c:url value="/web/resources/content/dojo-1.8.3/dojo/resources/dojo.css" />";
+			@import "<c:url value="/web/resources/content/dojo-1.8.3/dijit/themes/claro/claro.css" />";
 		</style>
-
-		<script type="text/javascript" src="${jsUrl}/dojo/dojo.js" data-dojo-config="isDebug:true,async:true,parseOnLoad:true"></script>
+		
+		<script type="text/javascript" data-dojo-config="isDebug:true,async:true,parseOnLoad:true" src="<c:url value="/web/resources/content/dojo-1.8.3/dojo/dojo.js" />"></script>
 		<script type="text/javascript">
 			require([
 				'dojo/parser',
-				'dojo/request',
 				'dojo/dom',
 				'dojo/on',
 				'dojo/domReady!', 
 				'dijit/MenuBar', 
 				'dijit/MenuBarItem', 
+				'dijit/PopupMenuItem',
 				'dijit/PopupMenuBarItem',
     			'dijit/DropDownMenu', 
     			'dijit/MenuItem', 
@@ -56,13 +56,18 @@
 	  	    </div>
 		  </div>
 		  <div id="desktopNavbar" data-dojo-type="dijit/MenuBar">	
-			<ul>
-				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/addloan">Add a new Loan</a></li>
-				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/payment">Payment</a></li>
-				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/accountsummary">Account Summary</a></li>
-				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/loanprogram">Manage Loan Programs</a></li>
-				<li data-dojo-type="dijit/MenuBarItem"><a href="/openserv/web/rates/stocks">Stocks</a></li>
-			</ul>
+				<div data-dojo-type="dijit/MenuBarItem" onClick="window.location.href='/openserv/web/addloan'">Add Loan</div>
+				<div data-dojo-type="dijit/MenuBarItem" onClick="window.location.href='/openserv/web/payment'">Payment</div>
+				<div data-dojo-type="dijit/MenuBarItem" onClick="window.location.href='/openserv/web/accountsummary'">Account Summary</div>
+				<div data-dojo-type="dijit/MenuBarItem" onClick="window.location.href='/openserv/web/loanprogram'">Manage Loan Programs</div>
+				<div data-dojo-type="dijit/PopupMenuBarItem">
+					<span>Due Diligence</span>
+					<div data-dojo-type="dijit/DropDownMenu" id="dueDiligenceMenu">
+						<div data-dojo-type="dijit/MenuItem" onClick="window.location.href='/openserv/web/duediligencetypes'">Event Types</div>
+						<div data-dojo-type="dijit/MenuItem" onClick="window.location.href='/openserv/web/duediligenceschedules'">Schedules</div>
+					</div>
+				</div>
+				<div data-dojo-type="dijit/MenuBarItem" onClick="window.location.href='/openserv/web/rates/stocks'">Stocks</div>
 		  </div>
 		</div><!-- desktop header end -->
 		<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'center'">

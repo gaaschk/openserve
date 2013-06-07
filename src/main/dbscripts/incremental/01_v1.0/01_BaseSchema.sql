@@ -245,6 +245,31 @@ CREATE TABLE userconnection (
 	PRIMARY KEY(userId,providerId,providerUserId)
 );
 
+CREATE TABLE DueDiligenceEventType(
+	DueDiligenceEventTypeID BIGINT AUTO_INCREMENT NOT NULL,
+	Name					VARCHAR(50),
+	Description				VARCHAR(150),
+	PRIMARY KEY(DueDiligenceEventTypeID)
+);
+
+CREATE TABLE DueDiligenceEvent(
+	DueDiligenceEventID		BIGINT AUTO_INCREMENT NOT NULL,
+	DueDiligenceEventTypeID	BIGINT,
+	DueDiligenceScheduleID	BIGINT,
+	MinDelqDays				INT,
+	MaxDelqDays				INT,
+	DefaultDelqDays			INT,
+	PRIMARY KEY(DueDiligenceEventID)	
+);
+
+CREATE TABLE DueDiligenceSchedule(
+	DueDiligenceScheduleID	BIGINT AUTO_INCREMENT NOT NULL,
+	LoanProgramID			BIGINT,
+	EffectiveDate			DATE,
+	EndDate					DATE,
+	PRIMARY KEY(DueDiligenceScheduleID)
+);
+
 # System Configuration
 CREATE TABLE SystemSettings ( 
 	SystemSettingsID		BIGINT NOT NULL,
@@ -331,6 +356,11 @@ INSERT INTO secassignedpermission(AssignedPermissionID, PermissionID, PrincipalI
     (2, 2, 2),
     (3, 3, 2),
     (4, 4, 2);
+    
+INSERT INTO DueDiligenceEventType(DueDiligenceEventTypeID, Name, Description) 
+	VALUES
+		(10, 'Call', 'Call'),
+		(20, 'Letter', 'Letter');
 
 ALTER TABLE AmortizationSchedule
 	ADD CONSTRAINT amortizationschedule_account_fk
@@ -544,3 +574,15 @@ ALTER TABLE LoanRateValue
 ALTER TABLE Person
 	ADD CONSTRAINT ssn_unique
 		UNIQUE (SSN);
+		
+ALTER TABLE DueDiligenceEvent 
+	ADD CONSTRAINT duediligenceevent_duediligenceeventype_fk
+		FOREIGN KEY(DueDiligenceEventTypeID) 
+		REFERENCES DueDiligenceEventType(DueDiligenceEventTypeID)
+		ON DELETE RESTRICT
+		ON UPDATE RESTRICT,
+	ADD CONSTRAINT duediligenceevent_duediligenceschedule_fk
+		FOREIGN KEY(DueDiligenceScheduleID)
+		REFERENCES DueDiligenceSchedule(DueDiligenceScheduleID)
+		ON DELETE RESTRICT
+		ON UPDATE RESTRICT;
