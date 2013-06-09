@@ -12,6 +12,7 @@ import org.gsoft.openserv.repositories.duediligence.DueDiligenceEventTypeReposit
 import org.gsoft.openserv.repositories.duediligence.DueDiligenceScheduleRepository;
 import org.gsoft.openserv.repositories.loan.LoanProgramRepository;
 import org.gsoft.openserv.service.duediligence.ManageDueDiligenceService;
+import org.gsoft.openserv.web.duediligence.model.DueDiligenceScheduleModel;
 import org.gsoft.openserv.web.duediligence.model.ManageDueDiligenceEventTypesModel;
 import org.gsoft.openserv.web.duediligence.model.ManageDueDiligenceSchedulesModel;
 import org.springframework.stereotype.Controller;
@@ -50,15 +51,18 @@ public class DueDiligenceController {
 		ManageDueDiligenceSchedulesModel model = new ManageDueDiligenceSchedulesModel();
 		model.setAllEventTypes(dueDiligenceEventTypeRepo.findAll());
 		model.setAllLoanPrograms(loanProgramRepo.findAll());
-		model.setSchedules(new ArrayList<DueDiligenceSchedule>());
+		model.setScheduleModels(new ArrayList<DueDiligenceScheduleModel>());
 		for(LoanProgram program:model.getAllLoanPrograms()){
-			model.getSchedules().addAll(dueDiligenceScheduleRepo.findAllByLoanProgramId(program.getLoanProgramID()));
+			DueDiligenceScheduleModel scheduleModel = new DueDiligenceScheduleModel();
+			scheduleModel.setLoanProgramId(program.getLoanProgramID());
+			scheduleModel.setSchedules(dueDiligenceScheduleRepo.findAllByLoanProgramId(program.getLoanProgramID()));
+			model.getScheduleModels().add(scheduleModel);
 		}
 		return model;
 	}
 	
 	public void addNewDueDiligenceSchedule(ManageDueDiligenceSchedulesModel model){
-		model.getSchedules().add(new DueDiligenceSchedule());
+		model.getScheduleModels().add(new DueDiligenceScheduleModel());
 	}
 	
 	public void setLoanProgram(ManageDueDiligenceSchedulesModel model){

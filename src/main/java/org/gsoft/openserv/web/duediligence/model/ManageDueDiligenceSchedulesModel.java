@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.gsoft.openserv.domain.duediligence.DueDiligenceEventType;
-import org.gsoft.openserv.domain.duediligence.DueDiligenceSchedule;
 import org.gsoft.openserv.domain.loan.LoanProgram;
 
 public class ManageDueDiligenceSchedulesModel implements Serializable {
@@ -14,16 +13,18 @@ public class ManageDueDiligenceSchedulesModel implements Serializable {
 	private List<LoanProgram> allLoanPrograms = null;
 	private LoanProgram selectedLoanProgram = null;
 
+	private List<DueDiligenceScheduleModel> scheduleModels = null;
+	private DueDiligenceScheduleModel selectedScheduleModel = null;
+	
 	private List<DueDiligenceEventType> allEventTypes = null;
 	
-	private List<DueDiligenceSchedule> schedules = null;
 	
-	public List<DueDiligenceSchedule> getSchedules() {
-		return schedules;
+	public List<DueDiligenceScheduleModel> getScheduleModels() {
+		return scheduleModels;
 	}
 
-	public void setSchedules(List<DueDiligenceSchedule> schedules) {
-		this.schedules = schedules;
+	public void setScheduleModels(List<DueDiligenceScheduleModel> scheduleModels) {
+		this.scheduleModels = scheduleModels;
 	}
 
 	public List<DueDiligenceEventType> getAllEventTypes() {
