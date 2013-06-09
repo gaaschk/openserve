@@ -53,10 +53,13 @@ public class DueDiligenceController {
 		model.setAllLoanPrograms(loanProgramRepo.findAll());
 		model.setScheduleModels(new ArrayList<DueDiligenceScheduleModel>());
 		for(LoanProgram program:model.getAllLoanPrograms()){
-			DueDiligenceScheduleModel scheduleModel = new DueDiligenceScheduleModel();
-			scheduleModel.setLoanProgramId(program.getLoanProgramID());
-			scheduleModel.setSchedules(dueDiligenceScheduleRepo.findAllByLoanProgramId(program.getLoanProgramID()));
-			model.getScheduleModels().add(scheduleModel);
+			List<DueDiligenceSchedule> schedules = dueDiligenceScheduleRepo.findAllByLoanProgramId(program.getLoanProgramID());
+			if(schedules!=null &&schedules.size()>0){
+				DueDiligenceScheduleModel scheduleModel = new DueDiligenceScheduleModel();
+				scheduleModel.setLoanProgramId(program.getLoanProgramID());
+				scheduleModel.setSchedules(schedules);
+				model.getScheduleModels().add(scheduleModel);
+			}
 		}
 		return model;
 	}
