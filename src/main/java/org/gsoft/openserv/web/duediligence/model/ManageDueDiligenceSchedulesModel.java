@@ -11,19 +11,21 @@ public class ManageDueDiligenceSchedulesModel implements Serializable {
 	
 	//for comboboxes
 	private List<LoanProgram> allLoanPrograms = null;
+	
+	
 	private LoanProgram selectedLoanProgram = null;
 
-	private List<DueDiligenceScheduleModel> scheduleModels = null;
-	private DueDiligenceScheduleModel selectedScheduleModel = null;
+	private List<DueDiligenceSchedulesModel> scheduleModels = null;
+	private DueDiligenceSchedulesModel selectedScheduleModel = null;
 	
 	private List<DueDiligenceEventType> allEventTypes = null;
 	
 	
-	public List<DueDiligenceScheduleModel> getScheduleModels() {
+	public List<DueDiligenceSchedulesModel> getScheduleModels() {
 		return scheduleModels;
 	}
 
-	public void setScheduleModels(List<DueDiligenceScheduleModel> scheduleModels) {
+	public void setScheduleModels(List<DueDiligenceSchedulesModel> scheduleModels) {
 		this.scheduleModels = scheduleModels;
 	}
 

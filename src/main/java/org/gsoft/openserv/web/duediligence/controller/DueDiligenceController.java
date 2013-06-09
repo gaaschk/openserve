@@ -1,4 +1,4 @@
-package org.gsoft.openserv.web.duediligence;
+package org.gsoft.openserv.web.duediligence.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,10 @@ import org.gsoft.openserv.repositories.duediligence.DueDiligenceScheduleReposito
 import org.gsoft.openserv.repositories.loan.LoanProgramRepository;
 import org.gsoft.openserv.service.duediligence.ManageDueDiligenceService;
 import org.gsoft.openserv.web.duediligence.model.DueDiligenceScheduleModel;
+import org.gsoft.openserv.web.duediligence.model.DueDiligenceSchedulesModel;
 import org.gsoft.openserv.web.duediligence.model.ManageDueDiligenceEventTypesModel;
 import org.gsoft.openserv.web.duediligence.model.ManageDueDiligenceSchedulesModel;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +33,8 @@ public class DueDiligenceController {
 	private ManageDueDiligenceService dueDiligenceService;
 	@Resource
 	private LoanProgramRepository loanProgramRepo;
+	@Resource
+	private ConversionService conversionService;
 	
 	public ManageDueDiligenceEventTypesModel loadAllDueDiligenceEventTypes(){
 		List<DueDiligenceEventType> allTypes = dueDiligenceEventTypeRepo.findAll();
@@ -51,21 +55,24 @@ public class DueDiligenceController {
 		ManageDueDiligenceSchedulesModel model = new ManageDueDiligenceSchedulesModel();
 		model.setAllEventTypes(dueDiligenceEventTypeRepo.findAll());
 		model.setAllLoanPrograms(loanProgramRepo.findAll());
-		model.setScheduleModels(new ArrayList<DueDiligenceScheduleModel>());
+		model.setScheduleModels(new ArrayList<DueDiligenceSchedulesModel>());
 		for(LoanProgram program:model.getAllLoanPrograms()){
 			List<DueDiligenceSchedule> schedules = dueDiligenceScheduleRepo.findAllByLoanProgramId(program.getLoanProgramID());
 			if(schedules!=null &&schedules.size()>0){
-				DueDiligenceScheduleModel scheduleModel = new DueDiligenceScheduleModel();
-				scheduleModel.setLoanProgramId(program.getLoanProgramID());
-				scheduleModel.setSchedules(schedules);
-				model.getScheduleModels().add(scheduleModel);
+				DueDiligenceSchedulesModel schedulesModel = new DueDiligenceSchedulesModel();
+				schedulesModel.setLoanProgramId(program.getLoanProgramID());
+				schedulesModel.setSchedules(new ArrayList<DueDiligenceScheduleModel>());
+				for(DueDiligenceSchedule schedule:schedules){
+					schedulesModel.getSchedules().add(conversionService.convert(schedule, DueDiligenceScheduleModel.class));
+				}
+				model.getScheduleModels().add(schedulesModel);
 			}
 		}
 		return model;
 	}
 	
 	public void addNewDueDiligenceSchedule(ManageDueDiligenceSchedulesModel model){
-		model.getScheduleModels().add(new DueDiligenceScheduleModel());
+		model.getScheduleModels().add(new DueDiligenceSchedulesModel());
 	}
 	
 	public void setLoanProgram(ManageDueDiligenceSchedulesModel model){
