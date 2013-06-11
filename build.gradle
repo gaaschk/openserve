@@ -1,15 +1,11 @@
 import javax.security.auth.login.ConfigurationSpi;
 import com.sun.org.apache.bcel.internal.util.ClassPath;
 
-//this doesn't work right now. not sure why.
-buildscript {
-    apply from: 'https://github.com/valkolovos/gradle_cobertura/raw/master/repo/gradle_cobertura/gradle_cobertura/1.2.1/coberturainit.gradle'
-}
-
 apply plugin: 'eclipse'
 apply plugin: 'war'
-apply plugin: 'sonar'
+apply plugin: 'sonar-runner'
 apply plugin: 'java'
+//apply plugin: 'jacoco'
 
 webAppDirName = 'WebContent'
 
@@ -94,18 +90,14 @@ dependencies{
 	
 }
 
-sonar{
-	server{
-		url = "${sonarHost}/sonar"
-	}
-	database{
-		url = "jdbc:mysql://192.168.10.9:3306/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true"
-		driverClassName = "com.mysql.jdbc.Driver"
-		username = "sonar"
-		password = "sonar"
-	}
-	project{
-		key="openserv:openserv"
+sonarRunner{
+	sonarProperties{
+		property "sonar.host.url", "${sonarHost}/sonar"
+		property "sonar.jdbc.url", "jdbc:mysql://192.168.10.9:3306/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true"
+		property "sonar.jdbc.driverClassName", "com.mysql.jdbc.Driver"
+		property "sonar.jdbc.username", "sonar"
+		property "sonar.jdbc.password", "sonar"
+		property "sonar.projectKey", "openserv:openserv"
 	}
 }
 
@@ -117,9 +109,6 @@ def configureEnv(){
 	println "Building environment: $environment"
 	def config = new ConfigSlurper().parse(file('env/'+environment+'.gradle').toURI().toURL())
 	ext.config = config	
-}
-
-cobertura {
 }
 
 task generateQueryDSL (type: JavaCompile) {
@@ -157,7 +146,7 @@ test.dependsOn updateDatabase
 assemble.dependsOn packageScripts
 
 task wrapper(type: Wrapper){
-	gradleVersion = '1.3'
+	gradleVersion = "1.6"
 }
 
 // Find any 3rd party libraries which have released new versions

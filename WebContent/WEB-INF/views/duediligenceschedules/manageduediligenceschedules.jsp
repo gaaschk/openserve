@@ -77,5 +77,6 @@
 				</div>
 			</c:forEach>
      	</div>
+		<input data-dojo-type="dijit/form/Button" type="submit" name="_eventId_save" value="Save" label="Save"/>
 	</div>
 </form:form>

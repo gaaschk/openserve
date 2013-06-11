@@ -85,4 +85,8 @@ public class DueDiligenceController {
 		mv.setSelectedLoanProgram(loanProgramRepo.findOne(lpId));
 		return mv;
 	}
+	
+	public void save(ManageDueDiligenceSchedulesModel model){
+		System.out.println();
+	}
 }
