@@ -111,6 +111,17 @@ sonarRunner{
 	}
 }
 
+jacoco{
+	reportsDir = file("${buildDir}/target")
+}
+
+jacocoTestReport{
+	reports{
+		xml.enabled true
+		html.destination "${buildDir}/target"
+	}
+}
+
 task generateQueryDSL (type: JavaCompile) {
 		source = 'src/main/java'
 		classpath = configurations.compile
