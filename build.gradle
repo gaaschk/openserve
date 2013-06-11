@@ -5,7 +5,7 @@ apply plugin: 'eclipse'
 apply plugin: 'war'
 apply plugin: 'sonar-runner'
 apply plugin: 'java'
-//apply plugin: 'jacoco'
+apply plugin: 'jacoco'
 
 webAppDirName = 'WebContent'
 
