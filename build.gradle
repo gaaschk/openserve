@@ -90,6 +90,16 @@ dependencies{
 	
 }
 
+def configureEnv(){
+	ext.environment = hasProperty('teamcity')?'ci':hasProperty('environment')?environment:'local'
+	ext.repositoryHost = hasProperty('teamcity')?'http://192.168.10.9:8081':'https://www.laertessoft.biz'
+//	ext.repositoryHost = 'http://192.168.10.9:8081'
+	ext.sonarHost = hasProperty('teamcity')?'http://192.168.10.9:9000':'https://www.laertessoft.biz'
+	println "Building environment: $environment"
+	def config = new ConfigSlurper().parse(file('env/'+environment+'.gradle').toURI().toURL())
+	ext.config = config	
+}
+
 sonarRunner{
 	sonarProperties{
 		property "sonar.host.url", "${sonarHost}/sonar"
@@ -99,16 +109,6 @@ sonarRunner{
 		property "sonar.jdbc.password", "sonar"
 		property "sonar.projectKey", "openserv:openserv"
 	}
-}
-
-def configureEnv(){
-	ext.environment = hasProperty('teamcity')?'ci':hasProperty('environment')?environment:'local'
-	ext.repositoryHost = hasProperty('teamcity')?'http://192.168.10.9:8081':'https://www.laertessoft.biz'
-//	ext.repositoryHost = 'http://192.168.10.9:8081'
-	ext.sonarHost = hasProperty('teamcity')?'http://192.168.10.9:9000':'https://www.laertessoft.biz'
-	println "Building environment: $environment"
-	def config = new ConfigSlurper().parse(file('env/'+environment+'.gradle').toURI().toURL())
-	ext.config = config	
 }
 
 task generateQueryDSL (type: JavaCompile) {
