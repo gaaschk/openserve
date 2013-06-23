@@ -2,13 +2,18 @@ package org.gsoft.openserv.web.duediligence.model;
 
 import java.io.Serializable;
 
+import org.springframework.format.annotation.NumberFormat;
+
 public class DueDiligenceScheduleEventModel implements Serializable {
 	private static final long serialVersionUID = -2085521279517077929L;
 
 	private Long dueDiligenceEventID;
 	private Long dueDiligenceEventTypeId;
+	@NumberFormat
 	private Integer minDelqDays;
+	@NumberFormat
 	private Integer maxDelqDays;
+	@NumberFormat
 	private Integer defaultDelqDays;
 	
 	public Long getDueDiligenceEventID() {

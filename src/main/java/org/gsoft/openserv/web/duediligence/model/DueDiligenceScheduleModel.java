@@ -4,11 +4,15 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class DueDiligenceScheduleModel implements Serializable {
 	private static final long serialVersionUID = -8673146955293220827L;
 
 	private Long dueDiligenceScheduleID;
+	@DateTimeFormat(pattern="MM/dd/yyyy")
 	private Date effectiveDate;
+	@DateTimeFormat(pattern="MM/dd/yyyy")
 	private Date endDate;
 	private List<DueDiligenceScheduleEventModel> events;
 

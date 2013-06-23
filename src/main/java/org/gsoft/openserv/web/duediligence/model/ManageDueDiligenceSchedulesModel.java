@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.gsoft.openserv.domain.duediligence.DueDiligenceEventType;
 import org.gsoft.openserv.domain.loan.LoanProgram;
+import org.springframework.format.annotation.NumberFormat;
 
 public class ManageDueDiligenceSchedulesModel implements Serializable {
 	private static final long serialVersionUID = 7542664563507400359L;
@@ -12,8 +13,14 @@ public class ManageDueDiligenceSchedulesModel implements Serializable {
 	//for comboboxes
 	private List<LoanProgram> allLoanPrograms = null;
 	
+	@NumberFormat
+	private Long selectedLoanProgramID = null;
 	
-	private LoanProgram selectedLoanProgram = null;
+	/**
+	 * this is a junk property. for some reason spring webflow is insisting on 
+	 * setting this property on my model
+	 */
+	private String execution = null;
 
 	private List<DueDiligenceSchedulesModel> scheduleModels = null;
 	private DueDiligenceSchedulesModel selectedScheduleModel = null;
@@ -45,11 +52,19 @@ public class ManageDueDiligenceSchedulesModel implements Serializable {
 		this.allLoanPrograms = allLoanPrograms;
 	}
 
-	public LoanProgram getSelectedLoanProgram() {
-		return selectedLoanProgram;
+	public Long getSelectedLoanProgramID() {
+		return selectedLoanProgramID;
 	}
 
-	public void setSelectedLoanProgram(LoanProgram selectedLoanProgram) {
-		this.selectedLoanProgram = selectedLoanProgram;
+	public void setSelectedLoanProgramID(Long selectedLoanProgramID) {
+		this.selectedLoanProgramID = selectedLoanProgramID;
+	}
+
+	public String getExecution() {
+		return execution;
+	}
+
+	public void setExecution(String execution) {
+		this.execution = execution;
 	}
 }

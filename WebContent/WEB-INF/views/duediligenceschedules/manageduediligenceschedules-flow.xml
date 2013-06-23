@@ -8,9 +8,12 @@
 		<evaluate expression="dueDiligenceController.loadAllDueDiligenceSchedules()" result="flowScope.manageDueDiligenceSchedulesModel"/>
 	</on-start>
 
-	<view-state id="manageduediligenceschedules" view="duediligenceschedules/manageschedules">
+	<view-state id="manageduediligenceschedules" view="duediligenceschedules/manageschedules" model="manageDueDiligenceSchedulesModel">
 		<transition on="addDueDiligenceSchedule" to="manageduediligenceschedules">
 			<evaluate expression="dueDiligenceController.addNewDueDiligenceSchedule(manageDueDiligenceSchedulesModel)"></evaluate>
+		</transition>
+		<transition on="addEvent" to="manageduediligenceschedules">
+			<evaluate expression="dueDiligenceController.addEvent(manageDueDiligenceSchedulesModel)"></evaluate>
 		</transition>
 		<transition on="setLoanProgram" to="manageduediligenceschedules">
 			<evaluate expression="dueDiligenceController.setLoanProgram(manageDueDiligenceSchedulesModel)"></evaluate>

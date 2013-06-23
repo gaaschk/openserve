@@ -12,6 +12,7 @@ import org.gsoft.openserv.repositories.duediligence.DueDiligenceEventTypeReposit
 import org.gsoft.openserv.repositories.duediligence.DueDiligenceScheduleRepository;
 import org.gsoft.openserv.repositories.loan.LoanProgramRepository;
 import org.gsoft.openserv.service.duediligence.ManageDueDiligenceService;
+import org.gsoft.openserv.web.duediligence.model.DueDiligenceScheduleEventModel;
 import org.gsoft.openserv.web.duediligence.model.DueDiligenceScheduleModel;
 import org.gsoft.openserv.web.duediligence.model.DueDiligenceSchedulesModel;
 import org.gsoft.openserv.web.duediligence.model.ManageDueDiligenceEventTypesModel;
@@ -71,22 +72,43 @@ public class DueDiligenceController {
 		return model;
 	}
 	
-	public void addNewDueDiligenceSchedule(ManageDueDiligenceSchedulesModel model){
-		model.getScheduleModels().add(new DueDiligenceSchedulesModel());
+	public ManageDueDiligenceSchedulesModel addNewDueDiligenceSchedule(ManageDueDiligenceSchedulesModel model){
+		for(DueDiligenceSchedulesModel schedModel:model.getScheduleModels()){
+			if(schedModel.getLoanProgramId().equals(model.getSelectedLoanProgramID())){
+				DueDiligenceScheduleModel newModel = new DueDiligenceScheduleModel();
+				newModel.setDueDiligenceScheduleID(-1*System.currentTimeMillis());
+				schedModel.getSchedules().add(newModel);
+			}
+		}
+		return model;
 	}
 	
 	public void setLoanProgram(ManageDueDiligenceSchedulesModel model){
 		System.out.println("Loan Program Set");
 	}
 	
-	@RequestMapping(value="/schedules.do", method=RequestMethod.POST)
 	public ManageDueDiligenceSchedulesModel loadSchedules(@RequestParam("loanprogramid") String loanProgramID, ManageDueDiligenceSchedulesModel mv){
 		Long lpId = Long.parseLong(loanProgramID);
-		mv.setSelectedLoanProgram(loanProgramRepo.findOne(lpId));
+		mv.setSelectedLoanProgramID(lpId);
 		return mv;
 	}
 	
+	public void addEvent(ManageDueDiligenceSchedulesModel model){
+		for(DueDiligenceSchedulesModel schedsModel:model.getScheduleModels()){
+			if(schedsModel.getLoanProgramId().equals(model.getSelectedLoanProgramID())){
+				for(DueDiligenceScheduleModel schedModel:schedsModel.getSchedules()){
+					if(schedModel.getDueDiligenceScheduleID().equals(schedsModel.getSelectedScheduleId())){
+						if(schedModel.getEvents() == null){
+							schedModel.setEvents(new ArrayList<DueDiligenceScheduleEventModel>());
+						}
+						schedModel.getEvents().add(new DueDiligenceScheduleEventModel());
+					}
+				}
+			}
+		}
+	}
+	
 	public void save(ManageDueDiligenceSchedulesModel model){
-		System.out.println();
+		
 	}
 }
