@@ -2,7 +2,7 @@
 <style>
 	.dgrid {
 		width: 100%;
-		height: 60%;
+		height: 100%;
 	}
 	
 	.dgrid-column-lpid{
@@ -72,7 +72,7 @@
 		double click to edit
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'center'">
-		<div id="grid" data-dojo-props="region: 'center'"></div>
+		<div id="grid"></div>
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'right'">
 		<button id="addButton" data-dojo-type="dijit/form/Button" type="button">Add</button>

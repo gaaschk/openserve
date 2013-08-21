@@ -20,8 +20,6 @@ import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 @Entity
 public class DefaultLoanProgramSettings extends PersistentDomainObject{
 	private static final long serialVersionUID = 6245557328161056820L;
