@@ -1,5 +1,18 @@
 <%@ include file="/WEB-INF/layouts/includes.jsp" %>
 <style>
+	.dgrid {
+		width: 100%;
+		height: 60%;
+	}
+	
+	.dgrid-column-lpid{
+		width: 30px;
+	}
+
+	.dgrid-column-name{
+		width: 20%;
+	}
+	
 	.dgrid-column-desc{
 		width: auto;
 	}
@@ -7,17 +20,17 @@
 </style>
 <script>
 	require(["dgrid/OnDemandGrid", "dgrid/Selection", "dojo/_base/declare", "dojo/store/JsonRest", "dojo/store/Memory", "dojo/store/Cache", "dojo/store/Observable", 
-	         "dgrid/editor", "dojo/dom", "dojo/on", "dojo/parser", "dojo/_base/connect", "dijit/registry", "dijit/form/Button", "dojo/domReady!"],
-		function(OnDemandGrid, Selection, declare, JsonRest, Memory, Cache, Observable, editor, dom, on, parser, connect, registry, Button){
+	         "dgrid/editor", "dojo/dom", "dojo/on", "dojo/parser", "dojo/_base/connect", "dijit/registry", "dijit/form/Button", "dgrid/extensions/ColumnResizer", "dojo/domReady!"],
+		function(OnDemandGrid, Selection, declare, JsonRest, Memory, Cache, Observable, editor, dom, on, parser, connect, registry, Button, ColumnResizer){
 			var loanProgramStore = new JsonRest({target:"/openserv/web/loanprogram/allloanprograms.do"});
 			var loanProgramSet;
 			var grid;
 			var selectedRow;
 			loanProgramStore.get("").then(function(response){
-				grid = declare([OnDemandGrid, Selection])({
+				grid = declare([OnDemandGrid, Selection, ColumnResizer])({
 					columns: [
-						{label: "ID", field: "loanProgramID"},
-						editor({label: "Name", field: "name"}, "text", "dblclick"),
+						{id: "lpid", label: "ID", field: "loanProgramID"},
+						editor({id: "name", label: "Name", field: "name"}, "text", "dblclick"),
 						editor({id: "desc", label: "Description", field: "description", }, "text", "dblclick")
 					],
 					selectionMode: "single"
@@ -54,8 +67,15 @@
 	});
 </script>
 <div data-dojo-type="dijit/layout/BorderContainer">
+	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'top'">
+		<h2>Loan Programs</h2>
+		double click to edit
+	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'center'">
 		<div id="grid" data-dojo-props="region: 'center'"></div>
+	</div>
+	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'right'">
+		<button id="addButton" data-dojo-type="dijit/form/Button" type="button">Add</button>
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'bottom'">
 		<button id="saveLoanProgramsButton" data-dojo-type="dijit/form/Button" type="button">Save</button>
