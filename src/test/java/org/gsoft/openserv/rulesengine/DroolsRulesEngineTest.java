@@ -1,6 +1,6 @@
 package org.gsoft.openserv.rulesengine;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.system.SystemSettings;

@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.gsoft.openserv.domain.payment.LoanPayment;
-import org.gsoft.openserv.web.support.formatter.currency.CurrencyInPenniesFormat;
 import org.gsoft.openserv.web.support.formatter.currency.CurrencyInPenniesFormatter;
 
 public class PaymentLoanState extends LoanState {

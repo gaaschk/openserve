@@ -15,26 +15,30 @@
   		</div>
  	 	</c:if>
 	</div>
-	<fieldset>
-		<label for="login">Username</label>
-		<input id="login" name="j_username" type="text" size="25" <c:if test="${not empty signinErrorMessage}">value="${SPRING_SECURITY_LAST_USERNAME}"</c:if> />
-	</fieldset>
-	<fieldset>
-		<label for="password">Password</label>
-		<input id="password" name="j_password" type="password" size="25" />	
-	</fieldset>
-	<button type="submit">Sign In</button>
+	<table>
+		<tr>
+			<td><label for="login">Username</label></td>
+			<td><input id="login" name="j_username" type="text" size="25" <c:if test="${not empty signinErrorMessage}">value="${SPRING_SECURITY_LAST_USERNAME}"</c:if> /></td>
+		</tr>
+		<tr>
+			<td><label for="password">Password</label></td>
+			<td><input id="password" name="j_password" type="password" size="25" /></td>
+		</tr>
+	</table>
+	<button data-dojo-type="dijit/form/Button" type="submit">Sign In</button>
 	
-	<p>Or you can <a href="<c:url value="/web/signup"/>">signup</a> with a new account.</p>
+	<p>Or you can <a href="<c:url value="/web/signup"/>">signup</a> for a new account.</p>
 </form>
 
-	<!-- TWITTER SIGNIN -->
+	<!-- TWITTER SIGNIN 
 	<form id="tw_signin" action="<c:url value="/web/signin/twitter"/>" method="POST">
 		<button type="submit"><img src="<c:url value="/content/social/twitter/sign-in-with-twitter-d.png"/>" /></button>
 	</form>
+	-->
 
-	<!-- FACEBOOK SIGNIN -->
+	<!-- FACEBOOK SIGNIN
 	<form name="fb_signin" id="fb_signin" action="<c:url value="/web/signin/facebook"/>" method="POST">
         <input type="hidden" name="scope" value="publish_stream,user_photos,offline_access" />
 		<button type="submit"><img src="<c:url value="/content/social/facebook/sign-in-with-facebook.png"/>" /></button>
 	</form>
+	-->

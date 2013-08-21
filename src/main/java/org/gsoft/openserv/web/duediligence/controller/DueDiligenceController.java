@@ -20,7 +20,6 @@ import org.gsoft.openserv.web.duediligence.model.ManageDueDiligenceSchedulesMode
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -109,6 +108,14 @@ public class DueDiligenceController {
 	}
 	
 	public void save(ManageDueDiligenceSchedulesModel model){
-		
+		List<DueDiligenceSchedulesModel> schedulesModels = model.getScheduleModels();
+		for(DueDiligenceSchedulesModel schedulesModel:schedulesModels){
+			LoanProgram loanProgram = loanProgramRepo.findOne(schedulesModel.getLoanProgramId());
+			for(DueDiligenceScheduleModel scheduleModel:schedulesModel.getSchedules()){
+				DueDiligenceSchedule schedule = conversionService.convert(scheduleModel, DueDiligenceSchedule.class);
+				schedule.setLoanProgram(loanProgram);
+				dueDiligenceScheduleRepo.save(schedule);
+			}
+		}
 	}
 }

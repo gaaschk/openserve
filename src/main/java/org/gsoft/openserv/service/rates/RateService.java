@@ -11,7 +11,6 @@ import org.gsoft.openserv.domain.rates.Rate;
 import org.gsoft.openserv.domain.rates.RateValue;
 import org.gsoft.openserv.repositories.rates.RateRepository;
 import org.gsoft.openserv.repositories.rates.RateValueRepository;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

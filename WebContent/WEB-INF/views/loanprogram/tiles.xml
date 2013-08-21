@@ -3,7 +3,11 @@
        "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
        "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <tiles-definitions>
+    <definition name="loanprogram/managedefaultloanprograms" extends="standardLayout">
+        <put-attribute name="content" value="/WEB-INF/views/loanprogram/manageloanprograms.jsp" />
+    </definition>
+
     <definition name="loanprogram/managedefaultloanprogramsettings" extends="standardLayout">
-        <put-attribute name="content" value="/WEB-INF/views/loanprogram/manageloantypes.jsp" />
+        <put-attribute name="content" value="/WEB-INF/views/loanprogram/manageloanprogramsettings.jsp" />
     </definition>
 </tiles-definitions>

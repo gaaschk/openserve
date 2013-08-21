@@ -7,8 +7,8 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.domain.loan.RepaymentStartType;
 import org.junit.Test;
 import org.junit.runner.RunWith;

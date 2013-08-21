@@ -14,8 +14,8 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.gsoft.openserv.domain.rates.RateValue;
 import org.gsoft.openserv.domain.rates.Rate;
+import org.gsoft.openserv.domain.rates.RateValue;
 import org.springframework.stereotype.Repository;
 
 @Repository

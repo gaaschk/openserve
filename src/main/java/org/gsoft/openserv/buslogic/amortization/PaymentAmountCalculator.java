@@ -2,14 +2,7 @@ package org.gsoft.openserv.buslogic.amortization;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
 
-import org.gsoft.openserv.domain.amortization.AmortizationLoanPayment;
-import org.gsoft.openserv.domain.amortization.LoanAmortizationSchedule;
-import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.util.Constants;
 
 public class PaymentAmountCalculator {

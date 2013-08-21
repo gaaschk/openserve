@@ -4,21 +4,12 @@
       xsi:schemaLocation="http://www.springframework.org/schema/webflow
                           http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
-	<on-start>
-		<evaluate expression="manageLoanProgramSettingsController.loadManageLoanProgramsModel()" result="flowScope.manageLoanProgramsModel"/>
-	</on-start>
+        <view-state id="manageloanprograms" view="loanprogram/managedefaultloanprograms">
+			<transition on="editSettings" to="manageloanprogramsettings">
+				<set name="flowScope.selectedLoanProgramId" value="requestParameters.loanprogramid"/>
+			</transition>
+        </view-state>
 
-	<view-state id="manageloanprograms" view="loanprogram/managedefaultloanprogramsettings" model="manageLoanProgramsModel" >
-		<transition on="addLoanProgram" to="manageloanprograms">
-			<evaluate expression="manageLoanProgramSettingsController.addLoanProgram(manageLoanProgramsModel)"/>
-		</transition>
-		<transition on="addLoanProgramSettings" to="manageloanprograms">
-			<evaluate expression="manageLoanProgramSettingsController.addLoanProgramSettings(manageLoanProgramsModel)"/>
-		</transition>
-		<transition on="save" to="manageLoanProgramSettingsComplete">
-			<evaluate expression="manageLoanProgramSettingsController.save(manageLoanProgramsModel)"/>
-		</transition>
-	</view-state>
-
-	<end-state id="manageLoanProgramSettingsComplete" />
+        <view-state id="manageloanprogramsettings" view="loanprogram/managedefaultloanprogramsettings">
+        </view-state>
 </flow>

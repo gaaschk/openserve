@@ -2,13 +2,13 @@ package org.gsoft.openserv.service.loanprogram;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.repositories.loan.DefaultLoanProgramSettingsRepository;
 import org.gsoft.openserv.repositories.loan.LoanProgramRepository;
 import org.gsoft.openserv.rulesengine.annotation.RunRulesEngine;
-import org.gsoft.openserv.rulesengine.event.LoanProgramChangedEvent;
 import org.gsoft.openserv.rulesengine.event.DefaultLoanProgramSettingsChangedEvent;
+import org.gsoft.openserv.rulesengine.event.LoanProgramChangedEvent;
 import org.gsoft.openserv.rulesengine.event.SystemEventHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

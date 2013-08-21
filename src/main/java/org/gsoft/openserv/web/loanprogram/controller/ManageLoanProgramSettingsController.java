@@ -1,23 +1,43 @@
 package org.gsoft.openserv.web.loanprogram.controller;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings;
 import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.repositories.loan.DefaultLoanProgramSettingsRepository;
 import org.gsoft.openserv.repositories.loan.LoanProgramRepository;
 import org.gsoft.openserv.repositories.rates.RateRepository;
 import org.gsoft.openserv.service.loanprogram.LoanProgramSettingsService;
-import org.gsoft.openserv.web.loanprogram.model.DefaultLoanProgramSettingsModel;
 import org.gsoft.openserv.web.loanprogram.model.LoanProgramModel;
+import org.gsoft.openserv.web.loanprogram.model.LoanProgramsModel;
 import org.gsoft.openserv.web.loanprogram.model.ManageLoanProgramsModel;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
+@Controller
+@RequestMapping("loanprogram")
 public class ManageLoanProgramSettingsController {
+	private static final Logger LOG = LogManager.getLogger(ManageLoanProgramSettingsController.class);
+	
 	@Resource
 	private LoanProgramRepository loanProgramRepository;
 	@Resource
@@ -26,60 +46,48 @@ public class ManageLoanProgramSettingsController {
 	private RateRepository rateRepostory;
 	@Resource
 	private LoanProgramSettingsService loanProgramSettingsService;
-
-	public ManageLoanProgramsModel loadManageLoanProgramsModel(){
-		ManageLoanProgramsModel model = new ManageLoanProgramsModel();
+	@Resource
+	private ConversionService conversionService;
+	@Resource
+	private ObjectMapper objectMapper;
+	
+	@RequestMapping(value="/allloanprograms.do", method=RequestMethod.GET)
+	public ModelAndView loadLoanProgramsModel(){
 		List<LoanProgram> loanPrograms = loanProgramRepository.findAll();
-		List<LoanProgramModel> loanProgramModels = new ArrayList<>();
-		model.setAllLoanProgramModels(loanProgramModels);
+		LoanProgramsModel loanProgramsModel = new LoanProgramsModel();
+		List<LoanProgramModel> loanProgramModelList = new ArrayList<>();
+		loanProgramsModel.setLoanProgramModelList(loanProgramModelList);
 		for(LoanProgram loanProgram:loanPrograms){
-			LoanProgramModel loanProgramModel = new LoanProgramModel();
-			loanProgramModels.add(loanProgramModel);
-			loanProgramModel.setLoanProgram(loanProgram);
-			List<DefaultLoanProgramSettings> allSettingsForLoanProgram = defaultLoanProgramSettingsRepository.findAllDefaultLoanProgramSettingsByLoanProgram(loanProgram);
-			List<DefaultLoanProgramSettingsModel> loanProgramSettingsModels = new ArrayList<>();
-			for(DefaultLoanProgramSettings settings:allSettingsForLoanProgram){
-				DefaultLoanProgramSettingsModel settingsModel = new DefaultLoanProgramSettingsModel();
-				settingsModel.setDefaultLoanProgramSettings(settings);
-				loanProgramSettingsModels.add(settingsModel);
-			}
-			loanProgramModel.setAllDefaultLoanProgramSettingsModels(loanProgramSettingsModels);
+			loanProgramModelList.add(conversionService.convert(loanProgram, LoanProgramModel.class));
 		}
-		if(model.getAllLoanProgramModels().size()>0){
-			model.getAllLoanProgramModels().get(0).setSelected(true);
-			model.setDisplayedLoanProgram(model.getAllLoanProgramModels().get(0));
-			if(model.getDisplayedLoanProgram().getAllDefaultLoanProgramSettingsModels().size()>0){
-				model.getAllLoanProgramModels().get(0).setSelected(true);
-				model.setDisplayedLoanProgram(model.getAllLoanProgramModels().get(0));
-			}
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setView(new MappingJackson2JsonView());
+		modelAndView.getModel().put("loanprograms", loanProgramsModel);
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/allloanprograms.do", method={RequestMethod.POST,RequestMethod.PUT})
+	public void save(@RequestBody String model) throws JsonParseException, JsonMappingException, IOException{
+		LoanProgramsModel loanProgramsModel = objectMapper.readValue(model, LoanProgramsModel.class);
+		for(LoanProgramModel lpm:loanProgramsModel.getLoanProgramModelList()){
+			LoanProgram loanProgram = conversionService.convert(lpm, LoanProgram.class);
+			loanProgramRepository.save(loanProgram);
+			LOG.debug("Saved Loan Program");
 		}
-		model.setAllRates(rateRepostory.findAll());
-		return model;
+	}
+	
+	@RequestMapping(value="/loanprogramsettings.do", method={RequestMethod.GET})
+	public ModelAndView loanLoanProgramSettingsModels(@RequestParam("loanprogramid") String loanProgramID){
+		List<DefaultLoanProgramSettings> defaultSettings = defaultLoanProgramSettingsRepository.findAllDefaultLoanProgramSettingsByLoanProgramID(Long.valueOf(loanProgramID));
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setView(new MappingJackson2JsonView());
+		modelAndView.addObject(defaultSettings);
+		return modelAndView;
 	}
 	
 	public void addLoanProgram(ManageLoanProgramsModel model){
-		LoanProgram newType = new LoanProgram();
-		LoanProgramModel lpModel = new LoanProgramModel();
-		lpModel.setAllDefaultLoanProgramSettingsModels(new ArrayList<DefaultLoanProgramSettingsModel>());
-		lpModel.setLoanProgram(newType);
-		model.getAllLoanProgramModels().add(lpModel);
 	}
 
 	public void addLoanProgramSettings(ManageLoanProgramsModel model){
-		DefaultLoanProgramSettings prof = new DefaultLoanProgramSettings();
-		prof.setLoanProgram(model.getDisplayedLoanProgram().getLoanProgram());
-		DefaultLoanProgramSettingsModel dlpsModel = new DefaultLoanProgramSettingsModel();
-		dlpsModel.setDefaultLoanProgramSettings(prof);
-		model.getDisplayedLoanProgram().getAllDefaultLoanProgramSettingsModels().add(dlpsModel);
-	}
-	
-	public void save(ManageLoanProgramsModel model){
-		for(LoanProgramModel progModel:model.getAllLoanProgramModels()){
-			LoanProgram loanType = progModel.getLoanProgram();
-			loanType = this.loanProgramSettingsService.saveLoanProgram(loanType);
-			for(DefaultLoanProgramSettingsModel loanProgSettingsModel:progModel.getAllDefaultLoanProgramSettingsModels()){
-				this.loanProgramSettingsService.saveDefaultLoanProgramSettings(loanProgSettingsModel.getDefaultLoanProgramSettings());
-			}
-		}
 	}
 }

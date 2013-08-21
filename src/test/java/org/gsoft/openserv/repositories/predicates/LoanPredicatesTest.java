@@ -1,7 +1,5 @@
 package org.gsoft.openserv.repositories.predicates;
 
-import static org.junit.Assert.*;
-
 import java.util.Date;
 
 import org.gsoft.openserv.domain.loan.LoanProgram;

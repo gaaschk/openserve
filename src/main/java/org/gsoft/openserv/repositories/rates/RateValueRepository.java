@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.domain.rates.RateValue;
 import org.gsoft.openserv.domain.rates.Rate;
+import org.gsoft.openserv.domain.rates.RateValue;
 import org.gsoft.openserv.repositories.BaseRepository;
 import org.gsoft.openserv.repositories.BaseSpringRepository;
 import org.springframework.data.jpa.repository.Query;

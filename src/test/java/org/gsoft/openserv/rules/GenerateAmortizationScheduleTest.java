@@ -22,7 +22,6 @@ import org.drools.logger.KnowledgeRuntimeLoggerFactory;
 import org.drools.runtime.StatelessKnowledgeSession;
 import org.gsoft.openserv.buslogic.amortization.AmortizationLogic;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
-import org.gsoft.openserv.domain.loan.Account;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.util.ApplicationContextLocator;
 import org.junit.Test;

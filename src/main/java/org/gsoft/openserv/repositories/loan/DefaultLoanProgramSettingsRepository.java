@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.repositories.BaseRepository;
 import org.gsoft.openserv.repositories.BaseSpringRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -33,6 +33,10 @@ public class DefaultLoanProgramSettingsRepository extends BaseRepository<Default
 
 	public List<DefaultLoanProgramSettings> findAllDefaultLoanProgramSettingsByLoanProgram(LoanProgram loanProgram){
 		return this.getSpringRepository().findAllDefaultLoanProgramSettingsByLoanProgram(loanProgram.getLoanProgramID());
+	}
+
+	public List<DefaultLoanProgramSettings> findAllDefaultLoanProgramSettingsByLoanProgramID(Long loanProgramID){
+		return this.getSpringRepository().findAllDefaultLoanProgramSettingsByLoanProgram(loanProgramID);
 	}
 }
 

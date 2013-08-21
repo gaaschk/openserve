@@ -56,28 +56,29 @@ table.loans caption label{
 	
 	function loadAccount(loanid, request){
 		var documenturl = new URI(document.location.href);
-		var url = documenturl.get('scheme')+'://'+documenturl.get('host')+':'+documenturl.get('port')+documenturl.get('directory')+'accountsummary/loanfinancialdata.do?loandetailid='+loanid;
+		var urlBase = documenturl.get('scheme')+'://'+documenturl.get('host')+':'+documenturl.get('port')+documenturl.get('directory');
+		var url = urlBase+'accountsummary/loanfinancialdata.do?loandetailid='+loanid;
 		request.get(url).then(
 			function(response){
-				dojo.byId("loanFinancialPane").innerHTML = response;
+				document.getElementById("loanFinancialPane").innerHTML = response;
 			}		
 		);
-		var url = documenturl.get('scheme')+'://'+documenturl.get('host')+':'+documenturl.get('port')+documenturl.get('directory')+'accountsummary/transactionhistory.do?loandetailid='+loanid;
+		var url = urlBase+'accountsummary/transactionhistory.do?loandetailid='+loanid;
 		request.get(url).then(
 			function(response){
-				dojo.byId("transactionHistoryPane").innerHTML = response;
+				document.getElementById("transactionHistoryPane").innerHTML = response;
 			}		
 		);
-		var url = documenturl.get('scheme')+'://'+documenturl.get('host')+':'+documenturl.get('port')+documenturl.get('directory')+'accountsummary/amortizationschedule.do?loandetailid='+loanid;
+		var url = urlBase+'accountsummary/amortizationschedule.do?loandetailid='+loanid;
 		request.get(url).then(
 			function(response){
-				dojo.byId("amortizationPane").innerHTML = response;
+				document.getElementById("amortizationPane").innerHTML = response;
 			}		
 		);
-		var url = documenturl.get('scheme')+'://'+documenturl.get('host')+':'+documenturl.get('port')+documenturl.get('directory')+'accountsummary/billingstatements.do?loandetailid='+loanid;
+		var url = urlBase+'accountsummary/billingstatements.do?loandetailid='+loanid;
 		request.get(url).then(
 			function(response){
-				dojo.byId("billingStatementPane").innerHTML = response;
+				document.getElementById("billingStatementPane").innerHTML = response;
 			}		
 		);
 	}
@@ -87,35 +88,21 @@ table.loans caption label{
 			<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
 				<table>
 					<tr>
-						<td colspan="2">
-							<fieldset>
-								<strong>SSN:</strong>
-								<c:out value="${accountSummaryModel.borrower.ssn}"/>
-							</fieldset>
-						</td>
+						<td><strong>SSN:</strong></td>
+						<td><c:out value="${accountSummaryModel.borrower.ssn}"/></td>
 					</tr>
 					<tr>
-						<td>
-							<fieldset>
-								<strong>First Name:</strong>
-								<c:out value="${accountSummaryModel.borrower.firstName}"/>
-							</fieldset>
-						</td>
-						<td>
-							<fieldset>
-								<strong>Last Name:</strong>
-								<c:out value="${accountSummaryModel.borrower.lastName}"/>
-							</fieldset>
-						</td>
+						<td><strong>Name:</strong></td>
+						<td><c:out value="${accountSummaryModel.borrower.firstName}"/><span>  </span><c:out value="${accountSummaryModel.borrower.lastName}"/></td>
 					</tr>
 				</table>
 			</div>
 			<div data-dojo-type="dijit/layout/TabContainer" data-dojo-props="region:'center'">
 				<div data-dojo-type="dijit/layout/BorderContainer" title="Loan Information" id="loanDetailPane">
-					<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'" style="height: 2cm">
+					<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top', splitter: 'true'" style="height: 2cm">
 						<table class="loans" id="loantable">
 							<col style="width: 30px;"/>
-							<caption><label>Loans</label></caption>
+							<caption>Loans</caption>
 							<tr>
 								<th></th>
 								<th><label>Account Number</label></th>

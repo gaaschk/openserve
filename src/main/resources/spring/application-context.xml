@@ -60,6 +60,8 @@
 	<bean id="validator"
       class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
       
+	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
+	
 	<!-- DataSource configuration -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">

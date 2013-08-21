@@ -3,35 +3,23 @@
 <form:form modelAttribute="paymentModel">
 <table>
 	<tr>
-		<td colspan="2">
-			<fieldset>
-				<label>SSN:</label>
-				<c:out value="${paymentModel.theBorrower.ssn}"/>
-			</fieldset>
-		</td>
+		<td><strong>SSN:</strong></td>
+		<td><c:out value="${paymentModel.theBorrower.ssn}"/></td>
 	</tr>
 	<tr>
-		<td>
-			<fieldset>
-				<label>First Name:</label>
-				<c:out value="${paymentModel.theBorrower.firstName}"/>
-			</fieldset>
-		</td>
-		<td>
-			<fieldset>
-				<label>Last Name:</label>
-				<c:out value="${paymentModel.theBorrower.lastName}"/>
-			</fieldset>
-		</td>
+		<td><strong>Name:</strong></td>
+		<td><c:out value="${paymentModel.theBorrower.firstName}"/><span>  </span><c:out value="${paymentModel.theBorrower.lastName}"/></td>
 	</tr>
 </table>
-	<fieldset>
-		<label>Effective Date:</label>		
-		<form:input class="masked" path="paymentEffectiveDate" type="text" data-meiomask="fixed.date-us"/>
-	</fieldset>
-	<fieldset>
-		<label>Payment Amount:</label>		
-		<form:input class="masked" path="paymentAmount" type="text" data-meiomask="reverse.dollar"/>
-	</fieldset>
-	<input type="submit" name="_eventId_submitPayment" value="Apply Payment"></input>
+<table>
+	<tr>
+		<td><strong>Effective Date:</strong></td>
+		<td><form:input class="masked" path="paymentEffectiveDate" type="text" data-meiomask="fixed.date-us"/></td>
+	</tr>
+	<tr>
+		<td><strong>Payment Amount:</strong></td>
+		<td><form:input class="masked" path="paymentAmount" type="text" data-meiomask="reverse.dollar"/></td>
+	</tr>
+</table>
+	<input type="submit" name="_eventId_submitPayment" value="Apply Payment" label="Apply Payment" data-dojo-type="dijit/form/Button"></input>
 </form:form>

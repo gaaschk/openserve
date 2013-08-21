@@ -15,7 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
-import org.gsoft.openserv.buslogic.amortization.LoanTermCalculator;
 import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.domain.Person;
 import org.gsoft.openserv.domain.amortization.LoanAmortizationSchedule;
