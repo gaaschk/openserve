@@ -26,17 +26,8 @@ public class LoanProgramSettingsService {
 	@Transactional
 	@RunRulesEngine
 	public DefaultLoanProgramSettings saveDefaultLoanProgramSettings(DefaultLoanProgramSettings defaultLoanProgramSettings){
-		if(defaultLoanProgramSettings.getDefaultLoanProgramSettingsID() != null){
-			DefaultLoanProgramSettings oldLtp = defaultLoanProgramSettingsRepository.findOne(defaultLoanProgramSettings.getDefaultLoanProgramSettingsID());
-			if(!defaultLoanProgramSettings.equals(oldLtp)){
-				defaultLoanProgramSettings = defaultLoanProgramSettingsRepository.save(defaultLoanProgramSettings);
-				systemEventHandler.handleEvent(new DefaultLoanProgramSettingsChangedEvent(defaultLoanProgramSettings));
-			}
-		}
-		else{
-			defaultLoanProgramSettings = defaultLoanProgramSettingsRepository.save(defaultLoanProgramSettings);
-			systemEventHandler.handleEvent(new DefaultLoanProgramSettingsChangedEvent(defaultLoanProgramSettings));
-		}
+		defaultLoanProgramSettings = defaultLoanProgramSettingsRepository.save(defaultLoanProgramSettings);
+		systemEventHandler.handleEvent(new DefaultLoanProgramSettingsChangedEvent(defaultLoanProgramSettings));
 		return defaultLoanProgramSettings;
 	}
 

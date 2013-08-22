@@ -66,11 +66,13 @@
 				label: "Save",
 				onClick: function(){
 					updateLoanSettings();
+					console.log(grid.store.data);
+					loanProgramSettingsStore.put(grid.store.data);
 				}
 			}, "saveLoanProgramsButton");
 
 			loanProgramSettingsStore.query("?loanprogramid=${selectedLoanProgramId}").then(function(response){
-				var settingsStore = new Memory({data: response.defaultLoanProgramSettingsList, idProperty: "defaultLoanProgramSettingsID"});
+				var settingsStore = new Memory({data: response.defaultLoanProgramSettingsModelList, idProperty: "defaultLoanProgramSettingsID"});
 				grid = declare([OnDemandGrid,Selection])({
 					store: settingsStore,
 					columns: [

@@ -1,7 +1,6 @@
 package org.gsoft.openserv.web.loanprogram.controller;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +14,9 @@ import org.gsoft.openserv.repositories.loan.DefaultLoanProgramSettingsRepository
 import org.gsoft.openserv.repositories.loan.LoanProgramRepository;
 import org.gsoft.openserv.repositories.rates.RateRepository;
 import org.gsoft.openserv.service.loanprogram.LoanProgramSettingsService;
+import org.gsoft.openserv.web.loanprogram.model.DefaultLoanProgramSettingsModel;
 import org.gsoft.openserv.web.loanprogram.model.LoanProgramModel;
 import org.gsoft.openserv.web.loanprogram.model.LoanProgramsModel;
-import org.gsoft.openserv.web.loanprogram.model.ManageLoanProgramsModel;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -29,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -79,15 +79,22 @@ public class ManageLoanProgramSettingsController {
 	@RequestMapping(value="/loanprogramsettings.do", method={RequestMethod.GET})
 	public ModelAndView loanLoanProgramSettingsModels(@RequestParam("loanprogramid") String loanProgramID){
 		List<DefaultLoanProgramSettings> defaultSettings = defaultLoanProgramSettingsRepository.findAllDefaultLoanProgramSettingsByLoanProgramID(Long.valueOf(loanProgramID));
+		List<DefaultLoanProgramSettingsModel> defaultSettingsModelList = new ArrayList<>();
+		for(DefaultLoanProgramSettings settings:defaultSettings){
+			defaultSettingsModelList.add(conversionService.convert(settings, DefaultLoanProgramSettingsModel.class));
+		}
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setView(new MappingJackson2JsonView());
-		modelAndView.addObject(defaultSettings);
+		modelAndView.addObject(defaultSettingsModelList);
 		return modelAndView;
 	}
 	
-	public void addLoanProgram(ManageLoanProgramsModel model){
-	}
-
-	public void addLoanProgramSettings(ManageLoanProgramsModel model){
+	@RequestMapping(value="/loanprogramsettings.do", method={RequestMethod.POST,RequestMethod.PUT})
+	public void saveSettings(@RequestBody String model) throws JsonParseException, JsonMappingException, IOException{
+		List<DefaultLoanProgramSettingsModel> loanProgramSettingsList = objectMapper.readValue(model, new TypeReference<List<DefaultLoanProgramSettingsModel>>(){});
+		for(DefaultLoanProgramSettingsModel lpm:loanProgramSettingsList){
+			loanProgramSettingsService.saveDefaultLoanProgramSettings(conversionService.convert(lpm, DefaultLoanProgramSettings.class));
+			LOG.debug("Saved Loan Program Settings");
+		}
 	}
 }
