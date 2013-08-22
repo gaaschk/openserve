@@ -15,12 +15,13 @@
 		</div>
 		<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'bottom', splitter: 'true'">
 			<form data-dojo-type="dojox.form.Manager" id="settingsForm">
+				<input name="defaultLoanProgramSettingsID" type="hidden"/>
 				<table>
 					<tr>
 						<td>Effective Date:</td>
 						<td><input id="effectiveDate" data-dojo-type="dijit/form/DateTextBox" data-dojo-props="constraints:{datePattern:'yyyy-MM-dd'}" type="date" name="effectiveDate"/></td>
 						<td>End Date:</td>
-						<td><input id="endDate" type="date" name="endDate"/></td>
+						<td><input id="endDate" data-dojo-type="dijit/form/DateTextBox" data-dojo-props="constraints:{datePattern:'yyyy-MM-dd'}" type="date" name="endDate"/></td>
 					</tr>
 					<tr>
 						<td>Maximum Loan Term:</td>
@@ -55,43 +56,45 @@
 	</div>
 </div>	
 <script>
-	require(["dojo/store/JsonRest", "dgrid/OnDemandGrid", "dgrid/Selection", "dojo/_base/declare", "dgrid/editor", "dijit/form/DateTextBox", "dojo/date/locale", "dojo/on", "dojo/dom", "dojo/query", "dijit/registry", "dojo/parser", "dojo/_base/array", "dijit/form/Button",
+	require(["dojo/store/JsonRest", "dgrid/OnDemandGrid", "dgrid/Selection", "dojo/_base/declare", "dgrid/editor", "dijit/form/DateTextBox", "dojo/date/locale", "dojo/on", "dojo/dom", "dojo/query", "dijit/registry", "dojo/parser", "dojo/_base/array", "dijit/form/Button", "dojo/store/Memory", 
 			 "dojox/form/Manager", "dojo/domReady!"],
-		function(JsonRest, OnDemandGrid, Selection, declare, editor, DateTextBox, locale, on, dom, query, registry, parser, array, Button){
+		function(JsonRest, OnDemandGrid, Selection, declare, editor, DateTextBox, locale, on, dom, query, registry, parser, array, Button, Memory){
 			var grid;
 			var loanProgramSettingsStore = new JsonRest({target:"/openserv/web/loanprogram/loanprogramsettings.do"});
-
+			
 			new Button({
 				label: "Save",
 				onClick: function(){
-					var theForm = registry.byId("settingsForm");
-					var data = theForm.gatherFormValues();
-					console.log(data);
+					updateLoanSettings();
 				}
 			}, "saveLoanProgramsButton");
 
 			loanProgramSettingsStore.query("?loanprogramid=${selectedLoanProgramId}").then(function(response){
+				var settingsStore = new Memory({data: response.defaultLoanProgramSettingsList, idProperty: "defaultLoanProgramSettingsID"});
 				grid = declare([OnDemandGrid,Selection])({
+					store: settingsStore,
 					columns: [
 						{label: "ID", field: "defaultLoanProgramSettingsID"},
-						editor({label: "Effective Date", field:"effectiveDate",
-							formatter: function(value){if(value){
-								return locale.format(new Date(value), {datePattern: "yyyy-MM-dd", selector: "date"});
-							}
-							return '';
-							},
-							editOn:"dblclick",editorArgs:{required:true,constraints:{datePattern:"yyyy-MM-dd"}}},DateTextBox),
-						editor({label: "End Date", field: "endDate", 
-							formatter: function(value){if(value){
-								return locale.format(new Date(value), {datePattern: "yyyy-MM-dd", selector: "date"});
-							}
-							return '';
-							},
-							editOn:"dblclick",editorArgs:{required:true,constraints:{datePattern:"yyyy-MM-dd"}}},DateTextBox)
+						{label: "Effective Date", field:"effectiveDate",
+							formatter: function(value){
+										if(value){
+											return locale.format(new Date(value), {datePattern: "yyyy-MM-dd", selector: "date"});
+										}
+									return '';
+								},
+						},
+						{label: "End Date", field: "endDate", 
+							formatter: function(value){
+										if(value){
+											return locale.format(new Date(value), {datePattern: "yyyy-MM-dd", selector: "date"});
+										}
+									return '';
+								},
+						}
 					],
 					selectionMode: "single"
 				}, "grid");
-				grid.renderArray(response.defaultLoanProgramSettingsList);
+				grid.startup();
 				grid.on("dgrid-select", function(event){
 					var theForm = registry.byId("settingsForm");
 					theForm.setFormValues(event.rows[0].data);
@@ -102,6 +105,15 @@
 						}
 					}
 				});
+				grid.on("dgrid-deselect", function(event){
+					updateLoanSettings();
+				});
 			});
+			
+			function updateLoanSettings(){
+				var theForm = registry.byId("settingsForm");
+				grid.store.put(theForm.gatherFormValues());
+				grid.refresh();
+			}
 		});
 </script>
