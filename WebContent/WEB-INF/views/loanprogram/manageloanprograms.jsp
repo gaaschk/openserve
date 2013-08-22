@@ -43,7 +43,6 @@
 				});
 			});
 			
-			
 			new Button({
 				label: "Save",
 				onClick: function(){
