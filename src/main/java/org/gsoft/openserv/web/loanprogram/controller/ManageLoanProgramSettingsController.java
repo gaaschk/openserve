@@ -68,13 +68,14 @@ public class ManageLoanProgramSettingsController {
 	}
 	
 	@RequestMapping(value="/allloanprograms.do", method={RequestMethod.POST,RequestMethod.PUT})
-	public void save(@RequestBody String model) throws JsonParseException, JsonMappingException, IOException{
+	public ModelAndView save(@RequestBody String model) throws JsonParseException, JsonMappingException, IOException{
 		LoanProgramsModel loanProgramsModel = objectMapper.readValue(model, LoanProgramsModel.class);
 		for(LoanProgramModel lpm:loanProgramsModel.getLoanProgramModelList()){
 			LoanProgram loanProgram = conversionService.convert(lpm, LoanProgram.class);
 			loanProgramRepository.save(loanProgram);
 			LOG.debug("Saved Loan Program");
 		}
+		return this.loadLoanProgramsModel();
 	}
 	
 	@RequestMapping(value="/loanprogramsettings.do", method={RequestMethod.GET})

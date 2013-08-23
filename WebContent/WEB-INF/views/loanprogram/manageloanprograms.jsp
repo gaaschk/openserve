@@ -20,32 +20,37 @@
 </style>
 <script>
 	require(["dgrid/OnDemandGrid", "dgrid/Selection", "dojo/_base/declare", "dojo/store/JsonRest", "dojo/store/Memory", "dojo/store/Cache", "dojo/store/Observable", 
-	         "dgrid/editor", "dojo/dom", "dojo/on", "dojo/parser", "dojo/_base/connect", "dijit/registry", "dijit/form/Button", "dgrid/extensions/ColumnResizer", "dojo/domReady!"],
-		function(OnDemandGrid, Selection, declare, JsonRest, Memory, Cache, Observable, editor, dom, on, parser, connect, registry, Button, ColumnResizer){
+	         "dgrid/editor", "dojo/dom", "dojo/on", "dojo/parser", "dojo/_base/connect", "dijit/registry", "dijit/form/Button", "dgrid/extensions/ColumnResizer", "dojo/data/ObjectStore", "dojo/domReady!"],
+		function(OnDemandGrid, Selection, declare, JsonRest, Memory, Cache, Observable, editor, dom, on, parser, connect, registry, Button, ColumnResizer, ObjectStore){
 			var loanProgramStore = new JsonRest({target:"/openserv/web/loanprogram/allloanprograms.do"});
 			var loanProgramSet;
 			var grid;
 			var selectedRow;
+			var theStore;
 			loanProgramStore.get("").then(function(response){
+				console.log(response.loanprograms.loanProgramModelList);
+				theStore = new Memory({
+						idProperty: "loanProgramID",
+						data: response.loanprograms.loanProgramModelList
+					});
 				grid = declare([OnDemandGrid, Selection, ColumnResizer])({
+					store: theStore,
 					columns: [
-						{id: "lpid", label: "ID", field: "loanProgramID"},
 						editor({id: "name", label: "Name", field: "name"}, "text", "dblclick"),
 						editor({id: "desc", label: "Description", field: "description", }, "text", "dblclick")
 					],
 					selectionMode: "single"
-					
 				},"grid");
-				grid.renderArray(response.loanprograms.loanProgramModelList);
+				grid.startup();
 				loanProgramSet = response;
-				grid.on("dgrid-select", function(event){
-					selectedRow = event.rows[0];
-				});
 			});
 			
 			new Button({
 				label: "Save",
 				onClick: function(){
+					grid.save();
+					loanProgramSet.loanprograms.loanProgramModelList = grid.store.data;
+					console.log(grid.store.data);
 					loanProgramStore.put(loanProgramSet.loanprograms);
 				}
 			}, "saveLoanProgramsButton");
