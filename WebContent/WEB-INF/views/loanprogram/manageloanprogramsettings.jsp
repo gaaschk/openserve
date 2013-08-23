@@ -16,6 +16,7 @@
 		<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'bottom', splitter: 'true'">
 			<form data-dojo-type="dojox.form.Manager" id="settingsForm">
 				<input name="defaultLoanProgramSettingsID" type="hidden"/>
+				<input name="loanProgramID" type="hidden"/>
 				<table>
 					<tr>
 						<td>Effective Date:</td>
@@ -74,7 +75,17 @@
 					loanProgramSettingsStore.put(grid.store.data);
 				}
 			}, "saveLoanProgramsButton");
-
+			
+			new Button({
+				label: "Add",
+				onClick: function(){
+					grid.store.add({
+						defaultLoanProgramSettingsID:new Date().getMilliseconds()*(-1),
+						loanProgramID:Number("${selectedLoanProgramId}")
+					});
+				}
+			}, "addButton");
+			
 			var os;
 			var store;
 			frequencyTypeStore.query("").then(function(response){
@@ -94,7 +105,6 @@
 				grid = declare([OnDemandGrid,Selection])({
 					store: settingsStore,
 					columns: [
-						{label: "ID", field: "defaultLoanProgramSettingsID"},
 						{label: "Effective Date", field:"effectiveDate",
 							formatter: function(value){
 										if(value){

@@ -1,0 +1,1 @@
+ALTER TABLE `loanprogram` MODIFY COLUMN `LoanProgramID` bigint(20) NOT NULL AUTO_INCREMENT;

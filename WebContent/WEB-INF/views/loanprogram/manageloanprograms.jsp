@@ -55,6 +55,7 @@
 					loanProgramSet.loanprograms.loanProgramModelList = grid.store.data;
 					console.log(grid.store.data);
 					loanProgramStore.put(loanProgramSet.loanprograms);
+					alert("Update Successful");
 				}
 			}, "saveLoanProgramsButton");
 			
@@ -71,6 +72,18 @@
 					window.location = "/openserv/web/home/home.do";
 				}
 			}, "closeButton");
+			
+			new Button({
+				label: "Add",
+				onClick: function(){
+					grid.store.add({
+						loanProgramID:new Date().getMilliseconds()*(-1),
+						name:'',
+						description:''
+						});
+					grid.refresh();
+				}
+			},"addButton");
 	});
 </script>
 <div data-dojo-type="dijit/layout/BorderContainer">

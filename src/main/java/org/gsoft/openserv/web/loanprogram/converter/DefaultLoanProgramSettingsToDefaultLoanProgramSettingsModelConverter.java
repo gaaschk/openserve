@@ -14,6 +14,7 @@ public class DefaultLoanProgramSettingsToDefaultLoanProgramSettingsModelConverte
 	public DefaultLoanProgramSettingsModel convert(DefaultLoanProgramSettings source) {
 		DefaultLoanProgramSettingsModel model = new DefaultLoanProgramSettingsModel();
 		model.setDefaultLoanProgramSettingsID(source.getDefaultLoanProgramSettingsID());
+		model.setLoanProgramID(source.getLoanProgram().getLoanProgramID());
 		model.setBaseRateUpdateFrequency(String.valueOf(source.getBaseRateUpdateFrequency().getID()));
 		model.setDaysBeforeDueToBill(source.getDaysBeforeDueToBill());
 		model.setDaysLateForFee(source.getDaysLateForFee());

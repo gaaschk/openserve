@@ -11,6 +11,7 @@ public class DefaultLoanProgramSettingsModel implements Serializable{
 	private static final long serialVersionUID = 8854407098839115592L;
 
 	private Long defaultLoanProgramSettingsID;
+	private Long loanProgramID;
 	private Date effectiveDate;
 	private Date endDate;
 	private Integer maximumLoanTerm;
@@ -28,6 +29,12 @@ public class DefaultLoanProgramSettingsModel implements Serializable{
 	}
 	public void setDefaultLoanProgramSettingsID(Long defaultLoanProgramSettingsID) {
 		this.defaultLoanProgramSettingsID = defaultLoanProgramSettingsID;
+	}
+	public Long getLoanProgramID() {
+		return loanProgramID;
+	}
+	public void setLoanProgramID(Long loanProgramID) {
+		this.loanProgramID = loanProgramID;
 	}
 	public Date getEffectiveDate() {
 		return effectiveDate;

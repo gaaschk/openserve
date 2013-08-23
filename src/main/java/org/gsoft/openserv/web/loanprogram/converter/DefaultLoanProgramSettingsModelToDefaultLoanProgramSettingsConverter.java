@@ -5,7 +5,9 @@ import java.math.BigDecimal;
 import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings;
+import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.repositories.loan.DefaultLoanProgramSettingsRepository;
+import org.gsoft.openserv.repositories.loan.LoanProgramRepository;
 import org.gsoft.openserv.service.loanprogram.LoanProgramSettingsService;
 import org.gsoft.openserv.util.time.FrequencyType;
 import org.gsoft.openserv.web.loanprogram.model.DefaultLoanProgramSettingsModel;
@@ -18,6 +20,8 @@ public class DefaultLoanProgramSettingsModelToDefaultLoanProgramSettingsConverte
 	private DefaultLoanProgramSettingsRepository defaultLoanProgramSettingsRepository;
 	@Resource
 	private LoanProgramSettingsService loanProgramSettingsService;
+	@Resource
+	private LoanProgramRepository loanProgramRepository;
 	
 	@Override
 	public DefaultLoanProgramSettings convert(DefaultLoanProgramSettingsModel model){
@@ -25,12 +29,13 @@ public class DefaultLoanProgramSettingsModelToDefaultLoanProgramSettingsConverte
 		DefaultLoanProgramSettings lp = null;
 		if(id == null || id < 0){
 			lp = new DefaultLoanProgramSettings();
+			LoanProgram loanProgram = loanProgramRepository.findOne(model.getLoanProgramID());
+			lp.setLoanProgram(loanProgram);
 			defaultLoanProgramSettingsRepository.save(lp);
 		}
 		else{
 			lp = defaultLoanProgramSettingsRepository.findOne(id);
 		}
-		lp.setDefaultLoanProgramSettingsID(model.getDefaultLoanProgramSettingsID());
 		lp.setBaseRateUpdateFrequency(FrequencyType.forID(Long.valueOf(model.getBaseRateUpdateFrequency())));
 		lp.setDaysBeforeDueToBill(model.getDaysBeforeDueToBill());
 		lp.setDaysLateForFee(model.getDaysLateForFee());
@@ -43,6 +48,5 @@ public class DefaultLoanProgramSettingsModelToDefaultLoanProgramSettingsConverte
 		lp.setMinDaysToFirstDue(model.getMinDaysToFirstDue());
 		lp.setPrepaymentDays(model.getPrepaymentDays());
 		return lp;
-	
 	}
 }
