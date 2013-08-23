@@ -9,6 +9,9 @@ import org.joda.time.DateTime;
 import org.joda.time.MonthDay;
 import org.joda.time.Period;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape=JsonFormat.Shape.OBJECT)
 public enum FrequencyType implements OpenServEnum<FrequencyType>{
 	MONTHLY(10L, Period.months(1)),
 	QUARTERLY(20L, Period.months(3)),
@@ -18,6 +21,11 @@ public enum FrequencyType implements OpenServEnum<FrequencyType>{
 	private Long frequencyTypeID;
 	private Period periodLength = null;
 	private List<MonthDay> monthDays = null;
+	
+	private FrequencyType(Long id, Period periodLength) {
+		this.frequencyTypeID = id;
+		this.periodLength = periodLength;
+	}
 	
 	private List<MonthDay> getMonthDays(){
 		if(monthDays == null){
@@ -30,11 +38,6 @@ public enum FrequencyType implements OpenServEnum<FrequencyType>{
 			}while(!newYears.equals(addedPeriodEnd));
 		}
 		return monthDays;
-	}
-	
-	private FrequencyType(Long id, Period periodLength) {
-		this.frequencyTypeID = id;
-		this.periodLength = periodLength;
 	}
 	
 	private boolean isPeriodEnd(DateTime dateTime){
@@ -72,10 +75,15 @@ public enum FrequencyType implements OpenServEnum<FrequencyType>{
 		return quarterEnds;
 	}
 
+	@JsonFormat(shape=JsonFormat.Shape.STRING)
 	public Long getID() {
 		return this.frequencyTypeID;
 	}
 
+	public String getLabel(){
+		return this.name();
+	}
+	
 	public static FrequencyType forID(Long id) {
 		for (final FrequencyType frequencyType : values()) {
 			if (frequencyType.getID().equals(id)) {
@@ -84,5 +92,5 @@ public enum FrequencyType implements OpenServEnum<FrequencyType>{
 		}
 		return null;
 	}
-
+	
 }

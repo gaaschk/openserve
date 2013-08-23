@@ -1,6 +1,7 @@
 package org.gsoft.openserv.web.loanprogram.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -18,8 +19,9 @@ public class DefaultLoanProgramSettingsModel implements Serializable{
 	private Integer prepaymentDays;
 	private Integer daysBeforeDueToBill;
 	private Integer daysLateForFee;
-	private Integer lateFeeAmount;
+	private BigDecimal lateFeeAmount;
 	private Boolean isVariableRate;
+	private String baseRateUpdateFrequency;
 	
 	public Long getDefaultLoanProgramSettingsID() {
 		return defaultLoanProgramSettingsID;
@@ -75,10 +77,10 @@ public class DefaultLoanProgramSettingsModel implements Serializable{
 	public void setDaysLateForFee(Integer daysLateForFee) {
 		this.daysLateForFee = daysLateForFee;
 	}
-	public Integer getLateFeeAmount() {
+	public BigDecimal getLateFeeAmount() {
 		return lateFeeAmount;
 	}
-	public void setLateFeeAmount(Integer lateFeeAmount) {
+	public void setLateFeeAmount(BigDecimal lateFeeAmount) {
 		this.lateFeeAmount = lateFeeAmount;
 	}
 	public Boolean getIsVariableRate() {
@@ -86,5 +88,11 @@ public class DefaultLoanProgramSettingsModel implements Serializable{
 	}
 	public void setIsVariableRate(Boolean isVariableRate) {
 		this.isVariableRate = isVariableRate;
+	}
+	public String getBaseRateUpdateFrequency() {
+		return baseRateUpdateFrequency;
+	}
+	public void setBaseRateUpdateFrequency(String baseRateUpdateFrequency) {
+		this.baseRateUpdateFrequency = baseRateUpdateFrequency;
 	}
 }

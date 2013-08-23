@@ -22,6 +22,8 @@
 						<td><input id="effectiveDate" data-dojo-type="dijit/form/DateTextBox" data-dojo-props="constraints:{datePattern:'yyyy-MM-dd'}" type="date" name="effectiveDate"/></td>
 						<td>End Date:</td>
 						<td><input id="endDate" data-dojo-type="dijit/form/DateTextBox" data-dojo-props="constraints:{datePattern:'yyyy-MM-dd'}" type="date" name="endDate"/></td>
+						<td>Base Rate Update Freq.:</td>
+						<td><div id="baseRateUpdateFrequency"></div></td>
 					</tr>
 					<tr>
 						<td>Maximum Loan Term:</td>
@@ -41,7 +43,7 @@
 						<td>Days Late For Fee:</td>
 						<td><input type="number" name="daysLateForFee"/></td>
 						<td>Late Fee Amount:</td>
-						<td><input type="number" name="lateFeeAmount"/></td>
+						<td><input data-dojo-type="dijit/form/CurrencyTextBox" data-dojo-props="constraints:{fractional:true},currency:'USD'" name="lateFeeAmount"/></td>
 					</tr>
 				</table>
 			</form>
@@ -56,11 +58,13 @@
 	</div>
 </div>	
 <script>
-	require(["dojo/store/JsonRest", "dgrid/OnDemandGrid", "dgrid/Selection", "dojo/_base/declare", "dgrid/editor", "dijit/form/DateTextBox", "dojo/date/locale", "dojo/on", "dojo/dom", "dojo/query", "dijit/registry", "dojo/parser", "dojo/_base/array", "dijit/form/Button", "dojo/store/Memory", 
-			 "dojox/form/Manager", "dojo/domReady!"],
-		function(JsonRest, OnDemandGrid, Selection, declare, editor, DateTextBox, locale, on, dom, query, registry, parser, array, Button, Memory){
+	require(["dojo/store/JsonRest", "dgrid/OnDemandGrid", "dgrid/Selection", "dojo/_base/declare", "dgrid/editor", "dijit/form/DateTextBox", "dojo/date/locale", "dojo/on", "dojo/dom", "dojo/query", "dijit/registry", "dojo/parser", "dojo/_base/array", "dijit/form/Button", "dojo/store/Memory", "dijit/form/Select", "dojo/data/ObjectStore",  
+			 "dijit/form/CurrencyTextBox", "dojox/form/Manager", "dojo/domReady!"],
+		function(JsonRest, OnDemandGrid, Selection, declare, editor, DateTextBox, locale, on, dom, query, registry, parser, array, Button, Memory, Select, ObjectStore){
 			var grid;
+			var updating = false;
 			var loanProgramSettingsStore = new JsonRest({target:"/openserv/web/loanprogram/loanprogramsettings.do"});
+			var frequencyTypeStore = new JsonRest({target:"/openserv/web/loanprogram/loanprogramsettings/frequencytype"});
 			
 			new Button({
 				label: "Save",
@@ -70,6 +74,20 @@
 					loanProgramSettingsStore.put(grid.store.data);
 				}
 			}, "saveLoanProgramsButton");
+
+			var os;
+			var store;
+			frequencyTypeStore.query("").then(function(response){
+				store = new Memory({
+					data: response.frequencyTypeList
+				});
+				os = new ObjectStore({objectStore: store});
+				var rateFreqSelect = new Select({
+					store: os,
+					name: "baseRateUpdateFrequency"
+				}, "baseRateUpdateFrequency");
+				rateFreqSelect.startup();
+  			});
 
 			loanProgramSettingsStore.query("?loanprogramid=${selectedLoanProgramId}").then(function(response){
 				var settingsStore = new Memory({data: response.defaultLoanProgramSettingsModelList, idProperty: "defaultLoanProgramSettingsID"});
@@ -105,16 +123,26 @@
 							var dateBox = registry.byId(field);
 							dateBox.set("value", new Date(event.rows[0].data[field]));
 						}
+ 						else if(field == 'baseRateUpdateFrequency'){
+							var baseRateBox = registry.byId(field);
+							baseRateBox.set("value", event.rows[0].data[field]);
+						}
 					}
 				});
 				grid.on("dgrid-deselect", function(event){
-					updateLoanSettings();
+					if(!updating){
+						updating = true;
+						updateLoanSettings();
+						updating = false;
+					}
 				});
 			});
 			
 			function updateLoanSettings(){
 				var theForm = registry.byId("settingsForm");
-				grid.store.put(theForm.gatherFormValues());
+				var theData = theForm.gatherFormValues();
+				theData["baseRateUpdateFrequency"] = registry.byId("baseRateUpdateFrequency").get("value");
+				grid.store.put(theData);
 				grid.refresh();
 			}
 		});

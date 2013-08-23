@@ -14,6 +14,7 @@ import org.gsoft.openserv.repositories.loan.DefaultLoanProgramSettingsRepository
 import org.gsoft.openserv.repositories.loan.LoanProgramRepository;
 import org.gsoft.openserv.repositories.rates.RateRepository;
 import org.gsoft.openserv.service.loanprogram.LoanProgramSettingsService;
+import org.gsoft.openserv.util.time.FrequencyType;
 import org.gsoft.openserv.web.loanprogram.model.DefaultLoanProgramSettingsModel;
 import org.gsoft.openserv.web.loanprogram.model.LoanProgramModel;
 import org.gsoft.openserv.web.loanprogram.model.LoanProgramsModel;
@@ -96,5 +97,13 @@ public class ManageLoanProgramSettingsController {
 			loanProgramSettingsService.saveDefaultLoanProgramSettings(conversionService.convert(lpm, DefaultLoanProgramSettings.class));
 			LOG.debug("Saved Loan Program Settings");
 		}
+	}
+	
+	@RequestMapping(value="/loanprogramsettings/frequencytype", method={RequestMethod.GET})
+	public ModelAndView getAllFrequencyTypes(){
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setView(new MappingJackson2JsonView());
+		modelAndView.addObject(FrequencyType.values());
+		return modelAndView;
 	}
 }

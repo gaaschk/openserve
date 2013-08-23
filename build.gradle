@@ -27,6 +27,7 @@ ext.dbmaintainVersion = '2.4'
 ext.aspectjVersion = '1.7.2'
 ext.tilesVersion = '3.0.1'
 ext.jacksonVersion = '2.2.2'
+ext.jsonAssertVersiont = '1.2.0'
 
 sourceSets.main.java.srcDir 'src/querydsl/java'
 
@@ -91,6 +92,7 @@ dependencies{
 	runtime ("mysql:mysql-connector-java:5.1.22")
 	runtime ("org.aspectj:aspectjweaver:${aspectjVersion}")
 	compile ("org.mockito:mockito-all:1.9.5")
+	compile ("org.skyscreamer:jsonassert:1.2.0")
 }
 
 def configureEnv(){
