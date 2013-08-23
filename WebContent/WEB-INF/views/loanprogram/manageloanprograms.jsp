@@ -43,6 +43,9 @@
 				},"grid");
 				grid.startup();
 				loanProgramSet = response;
+				grid.on("dgrid-select", function(event){
+					selectedRow = event.rows[0];
+				});
 			});
 			
 			new Button({
