@@ -29,8 +29,6 @@ public class LenderLoanProgramSettings extends PersistentDomainObject {
 	private Long lenderID;
 	@DateTimeFormat(pattern="MM/dd/yyyy")
 	private Date programBeginDate;
-	@DateTimeFormat(pattern="MM/dd/yyyy")
-	private Date programEndDate;
 	@NumberFormat
 	private Integer maximumLoanTerm;
 	@NumberFormat
@@ -79,12 +77,6 @@ public class LenderLoanProgramSettings extends PersistentDomainObject {
 	}
 	public void setProgramBeginDate(Date effectiveDate) {
 		this.programBeginDate = (effectiveDate==null)?null:(Date)effectiveDate.clone();
-	}
-	public Date getProgramEndDate() {
-		return (programEndDate==null)?null:(Date)programEndDate.clone();
-	}
-	public void setProgramEndDate(Date endDate) {
-		this.programEndDate = (endDate==null)?null:(Date)endDate.clone();
 	}
 	public Integer getMaximumLoanTerm() {
 		return maximumLoanTerm;

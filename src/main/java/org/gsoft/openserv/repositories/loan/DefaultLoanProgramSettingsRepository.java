@@ -44,10 +44,10 @@ public class DefaultLoanProgramSettingsRepository extends BaseRepository<Default
 interface DefaultLoanProgramSettingsSpringRepository extends BaseSpringRepository<DefaultLoanProgramSettings, Long>{
 
 	@Query("select ltp from DefaultLoanProgramSettings ltp where ltp.loanProgram.loanProgramID = :loanProgramID and ltp.effectiveDate <= :effectiveDate " +
-			"and (ltp.endDate is null or ltp.endDate > :effectiveDate)")
+			"and ltp.effectiveDate >= (select max(ltp2.effectiveDate) from  DefaultLoanProgramSettings ltp2 where ltp2.loanProgram.loanProgramID = :loanProgramID and ltp2.effectiveDate <= :effectiveDate)")
 	public DefaultLoanProgramSettings findDefaultLoanProgramSettingsByLoanProgramAndEffectiveDate(@Param("loanProgramID") Long loanProgramID, @Param("effectiveDate") Date effectiveDate);
 
-	@Query("select ltp from DefaultLoanProgramSettings ltp where ltp.loanProgram.loanProgramID = :loanProgramID and (ltp.endDate is null or ltp.endDate > :effectiveDate)")
+	@Query("select ltp from DefaultLoanProgramSettings ltp where (ltp.loanProgram.loanProgramID = :loanProgramID and ltp.effectiveDate >= :effectiveDate) or ltp.effectiveDate >= (select max(ltp2.effectiveDate) from  DefaultLoanProgramSettings ltp2 where ltp2.loanProgram.loanProgramID = :loanProgramID and ltp2.effectiveDate <= :effectiveDate) order by ltp.effectiveDate DESC")
 	public List<DefaultLoanProgramSettings> findAllDefaultLoanProgramSettingsByLoanProgramAndEffectiveDate(@Param("loanProgramID") Long loanProgramID, @Param("effectiveDate") Date effectiveDate);
 
 	@Query("select ltp from DefaultLoanProgramSettings ltp where ltp.loanProgram.loanProgramID = :loanProgramID")

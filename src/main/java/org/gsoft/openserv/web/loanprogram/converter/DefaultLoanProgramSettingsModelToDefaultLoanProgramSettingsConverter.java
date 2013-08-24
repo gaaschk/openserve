@@ -6,8 +6,10 @@ import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings;
 import org.gsoft.openserv.domain.loan.LoanProgram;
+import org.gsoft.openserv.domain.loan.RepaymentStartType;
 import org.gsoft.openserv.repositories.loan.DefaultLoanProgramSettingsRepository;
 import org.gsoft.openserv.repositories.loan.LoanProgramRepository;
+import org.gsoft.openserv.repositories.rates.RateRepository;
 import org.gsoft.openserv.service.loanprogram.LoanProgramSettingsService;
 import org.gsoft.openserv.util.time.FrequencyType;
 import org.gsoft.openserv.web.loanprogram.model.DefaultLoanProgramSettingsModel;
@@ -22,6 +24,8 @@ public class DefaultLoanProgramSettingsModelToDefaultLoanProgramSettingsConverte
 	private LoanProgramSettingsService loanProgramSettingsService;
 	@Resource
 	private LoanProgramRepository loanProgramRepository;
+	@Resource
+	private RateRepository rateRepository;
 	
 	@Override
 	public DefaultLoanProgramSettings convert(DefaultLoanProgramSettingsModel model){
@@ -40,13 +44,14 @@ public class DefaultLoanProgramSettingsModelToDefaultLoanProgramSettingsConverte
 		lp.setDaysBeforeDueToBill(model.getDaysBeforeDueToBill());
 		lp.setDaysLateForFee(model.getDaysLateForFee());
 		lp.setEffectiveDate(model.getEffectiveDate());
-		lp.setEndDate(model.getEndDate());
 		lp.setGraceMonths(model.getGraceMonths());
 		lp.setVariableRate(model.getIsVariableRate());
 		lp.setLateFeeAmount(model.getLateFeeAmount().multiply(new BigDecimal(100)).intValue());
 		lp.setMaximumLoanTerm(model.getMaximumLoanTerm());
 		lp.setMinDaysToFirstDue(model.getMinDaysToFirstDue());
 		lp.setPrepaymentDays(model.getPrepaymentDays());
+		lp.setRepaymentStartType(RepaymentStartType.forID(Long.valueOf(model.getRepaymentStartType())));
+		lp.setBaseRate(rateRepository.findOne(Long.valueOf(model.getBaseRate())));
 		return lp;
 	}
 }

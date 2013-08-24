@@ -10,9 +10,6 @@
 		<h2>Default Loan Program Settings</h2>
 	</div>
 	<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="region: 'center'">
-		<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'center'">
-			<div id="grid"></div>
-		</div>
 		<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'bottom', splitter: 'true'">
 			<form data-dojo-type="dojox.form.Manager" id="settingsForm">
 				<input name="defaultLoanProgramSettingsID" type="hidden"/>
@@ -21,8 +18,8 @@
 					<tr>
 						<td>Effective Date:</td>
 						<td><input id="effectiveDate" data-dojo-type="dijit/form/DateTextBox" data-dojo-props="constraints:{datePattern:'yyyy-MM-dd'}" type="date" name="effectiveDate"/></td>
-						<td>End Date:</td>
-						<td><input id="endDate" data-dojo-type="dijit/form/DateTextBox" data-dojo-props="constraints:{datePattern:'yyyy-MM-dd'}" type="date" name="endDate"/></td>
+						<td>Late Fee Amount:</td>
+						<td><input data-dojo-type="dijit/form/CurrencyTextBox" data-dojo-props="constraints:{fractional:true},currency:'USD'" name="lateFeeAmount"/></td>
 						<td>Base Rate Update Freq.:</td>
 						<td><div id="baseRateUpdateFrequency"></div></td>
 					</tr>
@@ -31,23 +28,28 @@
 						<td><input type="number" name="maximumLoanTerm"/></td>
 						<td>Grace Months:</td>
 						<td><input type="number" name="graceMonths"/></td>
+						<td>Repayment Start Type:</td>
+						<td><div id="repaymentStartType"></div></td>
 					</tr>
 					<tr>
 						<td>Min. Days To 1st Due:</td>
 						<td><input type="number" name="minDaysToFirstDue"/></td>
 						<td>Prepayment Days:</td>
 						<td><input type="number" name="prepaymentDays"/></td>
+						<td>Base Rate:</td>
+						<td><div id="baseRate"></div></td>
 					</tr>
 					<tr>
 						<td>Days Before Due To Bill:</td>
 						<td><input type="number" name="daysBeforeDueToBill"/></td>
 						<td>Days Late For Fee:</td>
 						<td><input type="number" name="daysLateForFee"/></td>
-						<td>Late Fee Amount:</td>
-						<td><input data-dojo-type="dijit/form/CurrencyTextBox" data-dojo-props="constraints:{fractional:true},currency:'USD'" name="lateFeeAmount"/></td>
 					</tr>
 				</table>
 			</form>
+		</div>
+		<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'center'">
+			<div id="grid"></div>
 		</div>
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'right'">
@@ -66,6 +68,8 @@
 			var updating = false;
 			var loanProgramSettingsStore = new JsonRest({target:"/openserv/web/loanprogram/loanprogramsettings.do"});
 			var frequencyTypeStore = new JsonRest({target:"/openserv/web/loanprogram/loanprogramsettings/frequencytype"});
+			var repaymentStartTypeStore = new JsonRest({target:"/openserv/web/loanprogram/loanprogramsettings/repaymentstarttype"});
+			var baseRateStore = new JsonRest({target:"/openserv/web/loanprogram/loanprogramsettings/baserate"});
 			
 			new Button({
 				label: "Save",
@@ -73,6 +77,7 @@
 					updateLoanSettings();
 					console.log(grid.store.data);
 					loanProgramSettingsStore.put(grid.store.data);
+					alert("Update Successful");
 				}
 			}, "saveLoanProgramsButton");
 			
@@ -86,18 +91,40 @@
 				}
 			}, "addButton");
 			
-			var os;
-			var store;
 			frequencyTypeStore.query("").then(function(response){
-				store = new Memory({
+				var store = new Memory({
 					data: response.frequencyTypeList
 				});
-				os = new ObjectStore({objectStore: store});
+				var os = new ObjectStore({objectStore: store});
 				var rateFreqSelect = new Select({
 					store: os,
 					name: "baseRateUpdateFrequency"
 				}, "baseRateUpdateFrequency");
 				rateFreqSelect.startup();
+  			});
+
+			repaymentStartTypeStore.query("").then(function(response){
+				var store = new Memory({
+					data: response.repaymentStartTypeList
+				});
+				var os = new ObjectStore({objectStore: store});
+				var repaymentStartSelect = new Select({
+					store: os,
+					name: "repaymentStartType"
+				}, "repaymentStartType");
+				repaymentStartSelect.startup();
+  			});
+
+			baseRateStore.query("").then(function(response){
+				var store = new Memory({
+					data: response.rateList
+				});
+				var os = new ObjectStore({objectStore: store});
+				var baseRateSelect = new Select({
+					store: os,
+					name: "baseRate"
+				}, "baseRate");
+				baseRateSelect.startup();
   			});
 
 			loanProgramSettingsStore.query("?loanprogramid=${selectedLoanProgramId}").then(function(response){
@@ -106,14 +133,6 @@
 					store: settingsStore,
 					columns: [
 						{label: "Effective Date", field:"effectiveDate",
-							formatter: function(value){
-										if(value){
-											return locale.format(new Date(value), {datePattern: "yyyy-MM-dd", selector: "date"});
-										}
-									return '';
-								},
-						},
-						{label: "End Date", field: "endDate", 
 							formatter: function(value){
 										if(value){
 											return locale.format(new Date(value), {datePattern: "yyyy-MM-dd", selector: "date"});
@@ -137,6 +156,14 @@
 							var baseRateBox = registry.byId(field);
 							baseRateBox.set("value", event.rows[0].data[field]);
 						}
+ 						else if(field == 'repaymentStartType'){
+							var repaymentStartTypeBox = registry.byId(field);
+							repaymentStartTypeBox.set("value", event.rows[0].data[field]);
+						}
+ 						else if(field == 'baseRate'){
+							var baseRateBox = registry.byId(field);
+							baseRateBox.set("value", event.rows[0].data[field]);
+						}
 					}
 				});
 				grid.on("dgrid-deselect", function(event){
@@ -152,6 +179,8 @@
 				var theForm = registry.byId("settingsForm");
 				var theData = theForm.gatherFormValues();
 				theData["baseRateUpdateFrequency"] = registry.byId("baseRateUpdateFrequency").get("value");
+				theData["repaymentStartType"] = registry.byId("repaymentStartType").get("value");
+				theData["baseRate"] = registry.byId("baseRate").get("value");
 				grid.store.put(theData);
 				grid.refresh();
 			}

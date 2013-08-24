@@ -2,6 +2,9 @@ package org.gsoft.openserv.domain.loan;
 
 import org.gsoft.openserv.util.jpa.OpenServEnum;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape=JsonFormat.Shape.OBJECT)
 public enum RepaymentStartType implements OpenServEnum<RepaymentStartType> {
 	FIRST_DISBUREMENT(10L, "FIRST_DISBURSEMENT", "Repayment begins after first disbursement."),
 	LAST_DISBURSEMENT(20L, "LAST_DISBURSEMENT", "Repayment begins after last disbursement.");
@@ -16,10 +19,15 @@ public enum RepaymentStartType implements OpenServEnum<RepaymentStartType> {
 		this.description = desc;
 	}
 	
+	@JsonFormat(shape=JsonFormat.Shape.STRING)
 	public Long getID() {
 		return this.getRepaymentStartTypeID();
 	}
 
+	public String getLabel(){
+		return this.name();
+	}
+	
 	public static RepaymentStartType forID(Long id) {
 		for (final RepaymentStartType rpsType : values()) {
 			if (rpsType.getID().equals(id)) {

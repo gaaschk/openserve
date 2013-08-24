@@ -23,14 +23,6 @@ public class LoanProgramSettings {
 		return effectiveDate;
 	}
 
-	public Date getEndDate(){
-		Date endDate = this.defaultSettings.getEndDate();
-		Date lenderEndDate = this.lenderSpecificSettigs.getProgramEndDate();
-		if(endDate == null || (lenderEndDate != null && endDate.after(lenderEndDate)))
-			endDate = lenderEndDate;
-		return endDate;
-	}
-	
 	public FrequencyType getBaseRateUpdateFrequency() {
 		if(this.lenderSpecificSettigs.getBaseRateUpdateFrequency() == null)
 			return this.defaultSettings.getBaseRateUpdateFrequency();

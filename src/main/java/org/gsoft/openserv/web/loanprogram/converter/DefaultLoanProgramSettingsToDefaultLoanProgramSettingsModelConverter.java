@@ -19,13 +19,14 @@ public class DefaultLoanProgramSettingsToDefaultLoanProgramSettingsModelConverte
 		model.setDaysBeforeDueToBill(source.getDaysBeforeDueToBill());
 		model.setDaysLateForFee(source.getDaysLateForFee());
 		model.setEffectiveDate(source.getEffectiveDate());
-		model.setEndDate(source.getEndDate());
 		model.setGraceMonths(source.getGraceMonths());
 		model.setIsVariableRate(source.isVariableRate());
 		model.setLateFeeAmount(new BigDecimal(source.getLateFeeAmount()).divide(new BigDecimal(100)));
 		model.setMaximumLoanTerm(source.getMaximumLoanTerm());
 		model.setMinDaysToFirstDue(source.getMinDaysToFirstDue());
 		model.setPrepaymentDays(source.getPrepaymentDays());
+		model.setRepaymentStartType(String.valueOf(source.getRepaymentStartType().getID()));
+		model.setBaseRate(String.valueOf(source.getBaseRate().getID()));
 		return model;
 	}
 

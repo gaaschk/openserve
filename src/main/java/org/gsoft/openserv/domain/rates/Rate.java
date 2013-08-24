@@ -9,6 +9,9 @@ import javax.persistence.Transient;
 import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @RulesEngineEntity
 public class Rate extends PersistentDomainObject{
@@ -32,6 +35,7 @@ public class Rate extends PersistentDomainObject{
 		this.rateId = rateId;
 	}
 
+	@JsonProperty("label")
 	public String getRateName() {
 		return rateName;
 	}
@@ -58,6 +62,7 @@ public class Rate extends PersistentDomainObject{
 
 	@Override
 	@Transient
+	@JsonFormat(shape=JsonFormat.Shape.STRING)
 	public Long getID() {
 		return this.getRateId();
 	}

@@ -23,6 +23,8 @@ public class DefaultLoanProgramSettingsModel implements Serializable{
 	private BigDecimal lateFeeAmount;
 	private Boolean isVariableRate;
 	private String baseRateUpdateFrequency;
+	private String repaymentStartType;
+	private String baseRate;
 	
 	public Long getDefaultLoanProgramSettingsID() {
 		return defaultLoanProgramSettingsID;
@@ -101,5 +103,17 @@ public class DefaultLoanProgramSettingsModel implements Serializable{
 	}
 	public void setBaseRateUpdateFrequency(String baseRateUpdateFrequency) {
 		this.baseRateUpdateFrequency = baseRateUpdateFrequency;
+	}
+	public String getRepaymentStartType() {
+		return repaymentStartType;
+	}
+	public void setRepaymentStartType(String repaymentStartType) {
+		this.repaymentStartType = repaymentStartType;
+	}
+	public String getBaseRate() {
+		return baseRate;
+	}
+	public void setBaseRate(String baseRate) {
+		this.baseRate = baseRate;
 	}
 }

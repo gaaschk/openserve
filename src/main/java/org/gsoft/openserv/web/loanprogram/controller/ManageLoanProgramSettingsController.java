@@ -10,6 +10,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings;
 import org.gsoft.openserv.domain.loan.LoanProgram;
+import org.gsoft.openserv.domain.loan.RepaymentStartType;
 import org.gsoft.openserv.repositories.loan.DefaultLoanProgramSettingsRepository;
 import org.gsoft.openserv.repositories.loan.LoanProgramRepository;
 import org.gsoft.openserv.repositories.rates.RateRepository;
@@ -105,6 +106,22 @@ public class ManageLoanProgramSettingsController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setView(new MappingJackson2JsonView());
 		modelAndView.addObject(FrequencyType.values());
+		return modelAndView;
+	}
+
+	@RequestMapping(value="/loanprogramsettings/repaymentstarttype", method={RequestMethod.GET})
+	public ModelAndView getAllRepaymentStartTypes(){
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setView(new MappingJackson2JsonView());
+		modelAndView.addObject(RepaymentStartType.values());
+		return modelAndView;
+	}
+
+	@RequestMapping(value="/loanprogramsettings/baserate", method={RequestMethod.GET})
+	public ModelAndView getAllBaseRates(){
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setView(new MappingJackson2JsonView());
+		modelAndView.addObject(rateRepostory.findAll());
 		return modelAndView;
 	}
 }

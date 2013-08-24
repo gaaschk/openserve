@@ -33,7 +33,7 @@ public class LoanProgramSettingsRepository {
 	}
 	
 	public List<LoanProgramSettings> findAllLoanProgramSettingsForLoan(Loan loan){
-		return this.findAllLoanProgramSettingsByLenderIDAndLoanProgramAndEffectiveDate(loan.getLenderID(), loan.getLoanProgram(), systemSettingsLogic.getCurrentSystemDate());
+		return this.findAllLoanProgramSettingsByLenderIDAndLoanProgramAndEffectiveDate(loan.getLenderID(), loan.getLoanProgram(), loan.getServicingStartDate());
 	}
 
 	public List<LoanProgramSettings> findAllLoanProgramSettingsByLenderIDAndLoanProgramAndEffectiveDate(Long lenderID, LoanProgram loanProgram, Date effectiveDate) {
@@ -46,30 +46,23 @@ public class LoanProgramSettingsRepository {
 		ArrayList<LoanProgramSettings> loanProgramSettings = new ArrayList<>();
 		LoanProgramSettings lastSettings = null;
 		while(defaultSettingsStack.size() > 0 && lenderSettingsStack.size() > 0){
-			DefaultLoanProgramSettings currentDefaultSettings = defaultSettingsStack.peek();
-			LenderLoanProgramSettings currentLenderSettings = lenderSettingsStack.peek();
+			DefaultLoanProgramSettings currentDefaultSettings = defaultSettingsStack.pop();
+			LenderLoanProgramSettings currentLenderSettings = lenderSettingsStack.pop();
 			LoanProgramSettings lpSettings = new LoanProgramSettings(currentDefaultSettings, currentLenderSettings);
 			loanProgramSettings.add(lpSettings);
-			if(lastSettings == null){
-				if(this.isEndDateBeforeOrEqual(currentDefaultSettings.getEndDate(), currentLenderSettings.getProgramEndDate())){
-					defaultSettingsStack.pop();
+			if(lastSettings == null && !(lenderSettingsStack.isEmpty() && defaultSettingsStack.isEmpty())){
+				if(lenderSettingsStack.isEmpty() || (!defaultSettingsStack.isEmpty() && defaultSettingsStack.peek().getEffectiveDate().before(lenderSettingsStack.peek().getProgramBeginDate()))){
+					lenderSettingsStack.push(currentLenderSettings);
 				}
-				if(this.isEndDateBeforeOrEqual(currentLenderSettings.getProgramEndDate(), currentDefaultSettings.getEndDate())){
-					lenderSettingsStack.pop();
+				else if(defaultSettingsStack.isEmpty() || (!lenderSettingsStack.isEmpty() && defaultSettingsStack.peek().getEffectiveDate().after(lenderSettingsStack.peek().getProgramBeginDate()))){
+					defaultSettingsStack.push(currentDefaultSettings);
 				}
 			} 
-			loanProgramSettings.add(lpSettings);
 			lastSettings = lpSettings;
 		}
 		return loanProgramSettings;
 	}
 	
-	private boolean isEndDateBeforeOrEqual(Date one, Date two){
-		if(one == two || (one != null && two != null && one.before(two)))
-			return true;
-		return false;
-	}
-
 	public LoanProgramSettings findLoanProgramSettingsByLenderIDAndLoanProgramAndEffectiveDate(Long lenderID, LoanProgram loanProgram, Date effectiveDate) {
 		DefaultLoanProgramSettings defaultSettings = defaultLoanProgramSettingsRepository.findDefaultLoanProgramSettingsByLoanProgramAndEffectiveDate(loanProgram, effectiveDate);
 		LenderLoanProgramSettings lenderSettings = lenderLoanProgramRepository.findByLoanProgramAndEffectiveDate(lenderID, loanProgram, effectiveDate);

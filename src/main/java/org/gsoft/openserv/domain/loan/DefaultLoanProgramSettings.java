@@ -26,8 +26,6 @@ public class DefaultLoanProgramSettings extends PersistentDomainObject{
 	private Long defaultLoanProgramSettingsID;
 	@DateTimeFormat(pattern="MM/dd/yyyy")
 	private Date effectiveDate;
-	@DateTimeFormat(pattern="MM/dd/yyyy")
-	private Date endDate;
 	@NumberFormat
 	private Integer maximumLoanTerm;
 	@NumberFormat
@@ -70,12 +68,6 @@ public class DefaultLoanProgramSettings extends PersistentDomainObject{
 	}
 	public void setEffectiveDate(Date effectiveDate) {
 		this.effectiveDate = (effectiveDate==null)?null:(Date)effectiveDate.clone();
-	}
-	public Date getEndDate() {
-		return (endDate==null)?null:(Date)endDate.clone();
-	}
-	public void setEndDate(Date endDate) {
-		this.endDate = (endDate==null)?null:(Date)endDate.clone();
 	}
 	public Integer getMaximumLoanTerm() {
 		return maximumLoanTerm;
@@ -178,7 +170,6 @@ public class DefaultLoanProgramSettings extends PersistentDomainObject{
 				+ ((daysLateForFee == null) ? 0 : daysLateForFee.hashCode());
 		result = prime * result
 				+ ((effectiveDate == null) ? 0 : effectiveDate.hashCode());
-		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
 		result = prime * result
 				+ ((graceMonths == null) ? 0 : graceMonths.hashCode());
 		result = prime * result
@@ -235,11 +226,6 @@ public class DefaultLoanProgramSettings extends PersistentDomainObject{
 			if (other.effectiveDate != null)
 				return false;
 		} else if (!effectiveDate.equals(other.effectiveDate))
-			return false;
-		if (endDate == null) {
-			if (other.endDate != null)
-				return false;
-		} else if (!endDate.equals(other.endDate))
 			return false;
 		if (graceMonths == null) {
 			if (other.graceMonths != null)
