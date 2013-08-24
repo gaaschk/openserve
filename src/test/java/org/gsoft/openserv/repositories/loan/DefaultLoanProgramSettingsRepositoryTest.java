@@ -32,7 +32,6 @@ public class DefaultLoanProgramSettingsRepositoryTest {
 		ltp.setDaysBeforeDueToBill(1);
 		ltp.setDaysLateForFee(1);
 		ltp.setEffectiveDate(today);
-		ltp.setEndDate(null);
 		ltp.setGraceMonths(1);
 		ltp.setLateFeeAmount(1000);
 		LoanProgram loanType = new LoanProgram();
