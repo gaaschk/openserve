@@ -8,8 +8,14 @@
 			<transition on="editSettings" to="manageloanprogramsettings">
 				<set name="flowScope.selectedLoanProgramId" value="requestParameters.loanprogramid"/>
 			</transition>
+			<transition on="dueDiligence" to="manageduediligenceschedules">
+				<set name="flowScope.selectedLoanProgramId" value="requestParameters.loanprogramid"/>
+			</transition>
         </view-state>
 
         <view-state id="manageloanprogramsettings" view="loanprogram/managedefaultloanprogramsettings">
+        </view-state>
+
+		<view-state id="manageduediligenceschedules" view="loanprogram/duediligenceschedules">
         </view-state>
 </flow>

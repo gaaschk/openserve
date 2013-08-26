@@ -91,6 +91,13 @@
 				}
 			}, "addButton");
 			
+			new Button({
+				label: "Close",
+				onClick: function(){
+					window.location = "/openserv/web/loanprogram";
+				}
+			}, "closeButton");
+			
 			frequencyTypeStore.query("").then(function(response){
 				var store = new Memory({
 					data: response.frequencyTypeList

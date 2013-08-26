@@ -24,7 +24,6 @@ public class DueDiligenceSchedule extends PersistentDomainObject {
 	private Long dueDiligenceScheduleID;
 	private LoanProgram loanProgram;
 	private Date effectiveDate;
-	private Date endDate;
 	//Relationships
 	private List<DueDiligenceEvent> events;
 	
@@ -56,14 +55,6 @@ public class DueDiligenceSchedule extends PersistentDomainObject {
 		this.effectiveDate = effectiveDate;
 	}
 
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-	
 	@OneToMany(mappedBy="dueDiligenceSchedule")
 	public List<DueDiligenceEvent> getEvents() {
 		return events;

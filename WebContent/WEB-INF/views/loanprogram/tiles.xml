@@ -10,4 +10,8 @@
     <definition name="loanprogram/managedefaultloanprogramsettings" extends="standardLayout">
         <put-attribute name="content" value="/WEB-INF/views/loanprogram/manageloanprogramsettings.jsp" />
     </definition>
+
+    <definition name="loanprogram/duediligenceschedules" extends="standardLayout">
+        <put-attribute name="content" value="/WEB-INF/views/loanprogram/manageduediligenceschedules.jsp" />
+    </definition>
 </tiles-definitions>

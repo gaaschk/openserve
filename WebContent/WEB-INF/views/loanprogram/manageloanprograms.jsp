@@ -67,6 +67,13 @@
 			}, "editButton");
 
 			new Button({
+				label: "Due Diligence",
+				onClick: function(){
+					window.location = "${flowExecutionUrl}&_eventId=dueDiligence&loanprogramid="+selectedRow.data.loanProgramID;
+				}
+			}, "dueDilButton");
+
+			new Button({
 				label: "Close",
 				onClick: function(){
 					window.location = "/openserv/web/home/home.do";
@@ -95,11 +102,20 @@
 		<div id="grid"></div>
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'right'">
-		<button id="addButton" data-dojo-type="dijit/form/Button" type="button">Add</button>
+		<table>
+			<tr>
+				<td><button id="addButton" data-dojo-type="dijit/form/Button" type="button">Add</button></td>
+			</tr>
+			<tr>
+				<td><button id="editButton" data-dojo-type="dijit/form/Button" type="button">Edit</button></td>
+			</tr>
+			<tr>
+				<td><button id="dueDilButton" data-dojo-type="dijit/form/Button" type="button">Due Diligence</button></td>
+			</tr>
+		</table>
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'bottom'">
 		<button id="saveLoanProgramsButton" data-dojo-type="dijit/form/Button" type="button">Save</button>
-		<button id="editButton" data-dojo-type="dijit/form/Button" type="button">Edit</button>
 		<button id="closeButton" data-dojo-type="dijit/form/Button" type="button">Close</button>
 	</div>
 </div>	
