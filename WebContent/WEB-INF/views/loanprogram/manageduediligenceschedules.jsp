@@ -97,7 +97,12 @@
 			new Button({
 				label: "Save",
 				onClick: function(){
- 					when(scheduleStore.put(scheduleGrid.store.data), function(){
+					if(selectedSchedule){
+						var dateBox = registry.byId("effectiveDate");
+						var date = dateBox.get("value");
+						selectedSchedule.effectiveDate = date;
+					}
+					when(scheduleStore.put(scheduleGrid.store.data), function(){
  						alert("Update Successful");
 					});
 				}
@@ -146,13 +151,10 @@
 				scheduleGrid.startup();
 				scheduleGrid.on("dgrid-select", function(event){
 					selectedSchedule = event.rows[0].data;
-					console.log("select event");
 					var dateBox = registry.byId("effectiveDate");
-					console.log(selectedSchedule);
 					dateBox.set("value", new Date(selectedSchedule["effectiveDate"]));
 					eventMemStore.setData(selectedSchedule.events);
 					eventGrid.refresh();
-					console.log("event grid data on select: " + JSON.stringify(eventGrid.store.data));
 				});
 			});
 		}
