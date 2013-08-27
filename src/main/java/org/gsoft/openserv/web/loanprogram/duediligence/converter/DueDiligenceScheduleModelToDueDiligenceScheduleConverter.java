@@ -8,6 +8,7 @@ import org.gsoft.openserv.domain.duediligence.DueDiligenceEvent;
 import org.gsoft.openserv.domain.duediligence.DueDiligenceSchedule;
 import org.gsoft.openserv.repositories.duediligence.DueDiligenceEventRepository;
 import org.gsoft.openserv.repositories.duediligence.DueDiligenceScheduleRepository;
+import org.gsoft.openserv.repositories.loan.LoanProgramRepository;
 import org.gsoft.openserv.web.loanprogram.duediligence.model.DueDiligenceScheduleEventModel;
 import org.gsoft.openserv.web.loanprogram.duediligence.model.DueDiligenceScheduleModel;
 import org.springframework.core.convert.ConversionService;
@@ -21,6 +22,8 @@ public class DueDiligenceScheduleModelToDueDiligenceScheduleConverter implements
 	@Resource
 	private DueDiligenceEventRepository dueDiligenceEventRepo;
 	@Resource
+	private LoanProgramRepository loanProgramRepository;
+	@Resource
 	private ConversionService conversionService;
 	
 	@Override
@@ -28,6 +31,8 @@ public class DueDiligenceScheduleModelToDueDiligenceScheduleConverter implements
 		DueDiligenceSchedule schedule = null;
 		if(source.getDueDiligenceScheduleID() == null || source.getDueDiligenceScheduleID() < 0){
 			schedule = new DueDiligenceSchedule();
+			schedule = dueDiligenceScheduleRepo.save(schedule);
+			schedule.setLoanProgram(loanProgramRepository.findOne(source.getLoanProgramID()));
 		}
 		else{
 			schedule = this.dueDiligenceScheduleRepo.findOne(source.getDueDiligenceScheduleID());

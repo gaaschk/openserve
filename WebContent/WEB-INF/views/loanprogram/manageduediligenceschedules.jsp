@@ -24,6 +24,9 @@
 			<input id="effectiveDate" data-dojo-type="dijit/form/DateTextBox" data-dojo-props="constraints:{datePattern:'yyyy-MM-dd'}" type="date" name="effectiveDate"/>
 			<div id="eventGrid"></div>
 		</div>
+		<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'right'">
+			<button id="addEventButton" data-dojo-type="dijit/form/Button" type="button">Add Event</button>
+		</div>
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'right'">
 		<button id="addScheduleButton" data-dojo-type="dijit/form/Button" type="button">Add Schedule</button>
@@ -33,12 +36,12 @@
 	</div>
 </div>
 <script type="text/javascript">
-	require(["dojo/store/JsonRest", "dojo/store/Memory", "dojo/data/ObjectStore", "dojox/rpc/Rest", "dojo/_base/declare", "dgrid/OnDemandGrid", "dgrid/Selection", "dojo/date/locale", "dijit/registry", "dijit/form/NumberSpinner", "dgrid/editor", "dijit/form/Select", "dijit/form/Button",   
+	require(["dojo/store/JsonRest", "dojo/store/Memory", "dojo/data/ObjectStore", "dojox/rpc/Rest", "dojo/_base/declare", "dgrid/OnDemandGrid", "dgrid/Selection", "dojo/date/locale", "dijit/registry", "dijit/form/NumberSpinner", "dgrid/editor", "dijit/form/Select", "dijit/form/Button", "dojo/when",   
 			"dijit/form/DateTextBox", "dijit/form/Button", "dojo/domReady!"],
-		function(JsonRest, Memory, ObjectStore, Rest, declare, OnDemandGrid, Selection, locale, registry, NumberSpinner, editor, Select, Button){
+		function(JsonRest, Memory, ObjectStore, Rest, declare, OnDemandGrid, Selection, locale, registry, NumberSpinner, editor, Select, Button, when){
 			var scheduleGrid;
+			var eventGrid;
 			var scheduleStore = new JsonRest({target:"/openserv/web/duediligence/duediligenceschedules"});
-			var scheduleService = new Rest("/openserv/web/duediligence/duediligenceschedules");
 			var eventTypeRestStore = new JsonRest({target:"/openserv/web/duediligence/duediligenceeventtypes"});
 			var eventTypeStore;
 			var eventTypeMemStore;
@@ -53,20 +56,50 @@
 							}, idProperty: "dueDiligenceEventID"});
 
 			new Button({
-				label: "Save",
+				label: "Add Event",
 				onClick: function(){
 					if(selectedSchedule){
-						var dateBox = registry.byId("effectiveDate");
-						selectedSchedule.effectiveDate = dateBox.get("value");
-						var eventStore = eventMemStore;
-						console.log("Event Store: " + eventStore);
-						selectedSchedule.events = eventStore.data;
-						console.log("Event Store data: " + eventStore.data);
-						console.log("Updated Row: " + JSON.stringify(selectedSchedule));
-						scheduleGrid.store.put(selectedSchedule);
+ 						var newEvent = {};
+ 						newEvent["dueDiligenceEventID"] = new Date().getMilliseconds()*(-1);;
+						newEvent["dueDiligenceEventTypeId"] = 10;
+						newEvent["minDelqDays"] = 0;
+						newEvent["maxDelqDays"] = 0;
+						newEvent["defaultDelqDays"] = 0;
+						if(!selectedSchedule.events)
+							selectedSchedule["events"] = [];
+						selectedSchedule.events.push(newEvent);
+						eventGrid.refresh();
 					}
-					scheduleStore.put(scheduleGrid.store.data);
-					alert("Update Successful");
+				}
+			}, "addEventButton");
+
+			new Button({
+				label: "Add Schedule",
+				onClick: function(){
+ 						var newSchedule = {
+							dueDiligenceScheduleID: new Date().getMilliseconds()*(-1),
+							loanProgramID: Number("${selectedLoanProgramId}"),
+							effectiveDate: new Date(),
+							events: []
+ 						};
+ 						var newEvent = {};
+ 						newEvent["dueDiligenceEventID"] = new Date().getMilliseconds()*(-1);;
+						newEvent["dueDiligenceEventTypeId"] = 10;
+						newEvent["minDelqDays"] = 0;
+						newEvent["maxDelqDays"] = 0;
+						newEvent["defaultDelqDays"] = 0;
+						newSchedule.events.push(newEvent);
+ 						scheduleGrid.store.add(newSchedule);
+						scheduleGrid.refresh();
+					}
+			}, "addScheduleButton");
+
+			new Button({
+				label: "Save",
+				onClick: function(){
+ 					when(scheduleStore.put(scheduleGrid.store.data), function(){
+ 						alert("Update Successful");
+					});
 				}
 			}, "saveButton");
 	
@@ -76,9 +109,23 @@
 					eventTypeStore = new ObjectStore({
 						objectStore: eventTypeMemStore,
 						labelProperty: "name"
+					});
+			eventGrid = declare([OnDemandGrid, Selection])({
+				store: eventMemStore,
+				columns: [
+					editor({id: "type", label: "Event Type", field: "dueDiligenceEventTypeId", 
+						formatter: function(value){
+							return eventTypeMemStore.get(value).name;
+						}, 
+						editorArgs: {store: eventTypeStore}, autoSave: true}, Select, "dblclick"),
+					
+					editor({id: "min", label: "Min", field: "minDelqDays", autoSave: true}, NumberSpinner, "dblclick"),
+					editor({id: "max", label: "Max", field: "maxDelqDays", autoSave: true}, NumberSpinner, "dblclick"),
+					editor({id: "default", label: "Default", field: "defaultDelqDays", autoSave: true}, NumberSpinner, "dblclick")
+				]
+			}, "eventGrid");
+			eventGrid.startup();
 				});
-				
-			});
 			
 			scheduleStore.query("?loanprogramid=${selectedLoanProgramId}").then(function(response){
 				var scheduleGridStore = new Memory({data: response.dueDiligenceScheduleModelList, idProperty: "dueDiligenceScheduleID"});
@@ -107,21 +154,6 @@
 					eventGrid.refresh();
 					console.log("event grid data on select: " + JSON.stringify(eventGrid.store.data));
 				});
-				var eventGrid = declare([OnDemandGrid, Selection])({
-					store: eventMemStore,
-					columns: [
-						editor({id: "type", label: "Event Type", field: "dueDiligenceEventTypeId", 
-							formatter: function(value){
-								return eventTypeMemStore.get(value).name;
-							}, 
-							editorArgs: {store: eventTypeStore}, autoSave: true}, Select, "dblclick"),
-						
-						editor({id: "min", label: "Min", field: "minDelqDays", autoSave: true}, NumberSpinner, "dblclick"),
-						editor({id: "max", label: "Max", field: "maxDelqDays", autoSave: true}, NumberSpinner, "dblclick"),
-						editor({id: "default", label: "Default", field: "defaultDelqDays", autoSave: true}, NumberSpinner, "dblclick")
-					]
-				}, "eventGrid");
-				eventGrid.startup();
 			});
 		}
 	);

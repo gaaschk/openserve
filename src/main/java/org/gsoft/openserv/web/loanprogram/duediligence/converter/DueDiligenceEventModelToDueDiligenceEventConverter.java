@@ -19,11 +19,12 @@ public class DueDiligenceEventModelToDueDiligenceEventConverter  implements Conv
 	@Override
 	public DueDiligenceEvent convert(DueDiligenceScheduleEventModel source) {
 		DueDiligenceEvent event = null;
-		if(source.getDueDiligenceEventID()!=null){
+		if(source.getDueDiligenceEventID()!=null && source.getDueDiligenceEventID() >= 0){
 			event = dueDiligenceEventRepo.findOne(source.getDueDiligenceEventID());
 		}
 		else{
 			event = new DueDiligenceEvent();
+			event = dueDiligenceEventRepo.save(event);
 		}
 		event.setDefaultDelqDays(source.getDefaultDelqDays());
 		if(source.getDueDiligenceEventTypeId() != null){

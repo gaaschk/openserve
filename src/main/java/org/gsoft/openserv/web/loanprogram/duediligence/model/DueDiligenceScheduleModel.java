@@ -10,6 +10,7 @@ public class DueDiligenceScheduleModel implements Serializable {
 	private static final long serialVersionUID = -8673146955293220827L;
 
 	private Long dueDiligenceScheduleID;
+	private Long loanProgramID;
 	@DateTimeFormat(pattern="MM/dd/yyyy")
 	private Date effectiveDate;
 	private List<DueDiligenceScheduleEventModel> events;
@@ -19,6 +20,12 @@ public class DueDiligenceScheduleModel implements Serializable {
 	}
 	public void setDueDiligenceScheduleID(Long dueDiligenceScheduleID) {
 		this.dueDiligenceScheduleID = dueDiligenceScheduleID;
+	}
+	public Long getLoanProgramID() {
+		return loanProgramID;
+	}
+	public void setLoanProgramID(Long loanProgramID) {
+		this.loanProgramID = loanProgramID;
 	}
 	public Date getEffectiveDate() {
 		return effectiveDate;

@@ -22,6 +22,7 @@ public class DueDiligenceScheduleToDueDiligenceScheduleModelConverter implements
 	public DueDiligenceScheduleModel convert(DueDiligenceSchedule source) {
 		DueDiligenceScheduleModel model = new DueDiligenceScheduleModel();
 		model.setDueDiligenceScheduleID(source.getDueDiligenceScheduleID());
+		model.setLoanProgramID(source.getLoanProgram().getLoanProgramID());
 		model.setEffectiveDate(source.getEffectiveDate());
 		model.setEvents(new ArrayList<DueDiligenceScheduleEventModel>());
 		for(DueDiligenceEvent event:source.getEvents()){
