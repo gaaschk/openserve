@@ -26,6 +26,7 @@
 		</div>
 		<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'right'">
 			<button id="addEventButton" data-dojo-type="dijit/form/Button" type="button">Add Event</button>
+			<button id="eventTypesButton" data-dojo-type="dijit/form/Button" type="button">Event Types</button>
 		</div>
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'right'">
@@ -72,7 +73,14 @@
 					}
 				}
 			}, "addEventButton");
-
+			
+			new Button({
+				label: "Event Types",
+				onClick: function(){
+					window.location = "${flowExecutionUrl}&_eventId=duediligenceeventtypes";
+				}
+			},"eventTypesButton");
+			
 			new Button({
 				label: "Add Schedule",
 				onClick: function(){

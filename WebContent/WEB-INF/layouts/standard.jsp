@@ -89,13 +89,6 @@
 				<div id="makePayment" data-dojo-type="dijit/MenuBarItem" onClick="window.location.href='/openserv/web/payment'">Payment</div>
 				<div id="accountSummary" data-dojo-type="dijit/MenuBarItem" onClick="window.location.href='/openserv/web/accountsummary'">Account Summary</div>
 				<div id="loanProgram" data-dojo-type="dijit/MenuBarItem" onClick="window.location.href='/openserv/web/loanprogram'">Manage Loan Programs</div>
-				<div data-dojo-type="dijit/PopupMenuBarItem">
-					<span>Due Diligence</span>
-					<div data-dojo-type="dijit/DropDownMenu" id="dueDiligenceMenu" class="claro">
-						<div data-dojo-type="dijit/MenuItem" onClick="window.location.href='/openserv/web/duediligencetypes'">Event Types</div>
-						<div data-dojo-type="dijit/MenuItem" onClick="window.location.href='/openserv/web/duediligenceschedules'">Schedules</div>
-					</div>
-				</div>
 			</div>
 		</div>
 		<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'center'">

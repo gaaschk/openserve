@@ -18,7 +18,6 @@ import org.gsoft.openserv.web.loanprogram.duediligence.model.DueDiligenceSchedul
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -75,7 +74,6 @@ public class DueDiligenceController {
 	}
 	
 	@RequestMapping(value="/duediligenceschedules", method={RequestMethod.POST,RequestMethod.PUT})
-	@Transactional
 	public ModelAndView saveSchedules(@RequestBody String model) throws JsonParseException, JsonMappingException, IOException{
 		List<DueDiligenceScheduleModel> loanProgramSettingsList = objectMapper.readValue(model, new TypeReference<List<DueDiligenceScheduleModel>>(){});
 		List<DueDiligenceSchedule> convertedSchedules = new ArrayList<>();
@@ -90,6 +88,24 @@ public class DueDiligenceController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setView(new MappingJackson2JsonView());
 		modelAndView.addObject(updatedScheduleModels);
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/duediligenceeventtypes", method={RequestMethod.POST, RequestMethod.PUT})
+	public ModelAndView saveDueDiligenceEventTypes(@RequestBody String eventTypeModels) throws JsonParseException, JsonMappingException, IOException{
+		List<DueDiligenceEventTypeModel> eventTypeModelList = objectMapper.readValue(eventTypeModels, new TypeReference<List<DueDiligenceEventTypeModel>>(){});
+		List<DueDiligenceEventType> convertedTypeList = new ArrayList<>();
+		for(DueDiligenceEventTypeModel type:eventTypeModelList){
+			convertedTypeList.add(conversionService.convert(type, DueDiligenceEventType.class));
+		}
+		List<DueDiligenceEventType> updatedEventTypes = dueDiligenceService.saveDueDiligenceTypes(convertedTypeList);
+		List<DueDiligenceEventTypeModel> updatedEventTypeModels = new ArrayList<>();
+		for(DueDiligenceEventType type:updatedEventTypes){
+			updatedEventTypeModels.add(conversionService.convert(type, DueDiligenceEventTypeModel.class));
+		}
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setView(new MappingJackson2JsonView());
+		modelAndView.addObject(updatedEventTypeModels);
 		return modelAndView;
 	}
 }

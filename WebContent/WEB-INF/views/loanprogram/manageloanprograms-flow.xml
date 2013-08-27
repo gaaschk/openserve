@@ -17,5 +17,10 @@
         </view-state>
 
 		<view-state id="manageduediligenceschedules" view="loanprogram/duediligenceschedules">
+        	<transition on="duediligenceeventtypes" to="manageduediligenceeventtypes"/>
+        </view-state>
+        
+        <view-state id="manageduediligenceeventtypes" view="loanprogram/manageduediligenceeventtypes">
+        	<transition on="closeDueDiligenceTypes" to="manageduediligenceschedules"/>
         </view-state>
 </flow>
