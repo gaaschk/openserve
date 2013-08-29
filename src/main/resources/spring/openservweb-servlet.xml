@@ -25,15 +25,20 @@
 		</property>
 	</bean>
 
-	<bean
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-		p:order="1"
-		p:prefix="/WEB-INF/" p:suffix=".jsp" />
 
 	<bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"
-		p:order="0"
+		p:order="1"
 		p:viewClass="org.springframework.web.servlet.view.tiles3.TilesView">
 	</bean>
+	
+	<bean id="ajaxTilesViewResolver" class="org.springframework.js.ajax.AjaxUrlBasedViewResolver"
+		p:order="0"
+		p:viewClass="org.gsoft.springframework.webflow.mvc.view.FlowAjaxTilesView">
+	</bean>
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:order="3"
+		p:prefix="/WEB-INF/" p:suffix=".jsp" />
 	
 	<import resource="openservweb-webflow.xml"/>
 </beans>

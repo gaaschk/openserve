@@ -41,7 +41,6 @@ public class DefaultLoanProgramSettingsRepositoryTest {
 		ltp.setMinDaysToFirstDue(1);
 		ltp.setPrepaymentDays(1);
 		ltp.setRepaymentStartType(RepaymentStartType.FIRST_DISBUREMENT);
-		ltp.setVariableRate(true);
 		ltp = defaultLoanProgramSettingsRepository.save(ltp);
 		assertNotNull("Expected primary key to be generated", ltp.getDefaultLoanProgramSettingsID());
 		ltp = defaultLoanProgramSettingsRepository.findOne(ltp.getDefaultLoanProgramSettingsID());

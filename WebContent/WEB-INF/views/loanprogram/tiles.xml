@@ -18,4 +18,8 @@
     <definition name="loanprogram/manageduediligenceeventtypes" extends="standardLayout">
         <put-attribute name="content" value="/WEB-INF/views/loanprogram/manageduediligenceeventtypes.jsp" />
     </definition>
+
+    <definition name="loanprogram/managerepaymentplans" extends="standardLayout">
+        <put-attribute name="content" value="/WEB-INF/views/loanprogram/managerepaymentplans.jsp" />
+    </definition>
 </tiles-definitions>

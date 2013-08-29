@@ -13,7 +13,7 @@ public class FrequencyTypeJsonTest {
 	public void testSerialize() throws JsonProcessingException, JSONException {
 		ObjectMapper mapper = new ObjectMapper();
 		String json = mapper.writeValueAsString(FrequencyType.values());
-		String expected = "[{\"label\":\"MONTHLY\",\"id\":10},{\"label\":\"QUARTERLY\",\"id\":20},{\"label\":\"SEMI_ANNUALLY\",\"id\":30},{\"label\":\"ANNUALLY\",\"id\":40}]";
+		String expected = "[{\"label\":\"NONE\",\"id\":0},{\"label\":\"MONTHLY\",\"id\":10},{\"label\":\"QUARTERLY\",\"id\":20},{\"label\":\"SEMI_ANNUALLY\",\"id\":30},{\"label\":\"ANNUALLY\",\"id\":40}]";
 		JSONAssert.assertEquals(expected, json, false);
 	}
 

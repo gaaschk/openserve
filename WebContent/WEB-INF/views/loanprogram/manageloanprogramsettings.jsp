@@ -53,7 +53,14 @@
 		</div>
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'right'">
-		<button id="addButton" data-dojo-type="dijit/form/Button" type="button">Add</button>
+		<table>
+			<tr>
+				<td><button id="addButton" data-dojo-type="dijit/form/Button" type="button">Add</button></td>
+			</tr>
+			<tr>
+				<td><button id="repaymentPlansButton" data-dojo-type="dijit/form/Button" type="button">Repayment Plans</button></td>
+			</tr>
+		</table>
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'bottom'">
 		<button id="saveLoanProgramsButton" data-dojo-type="dijit/form/Button" type="button">Save</button>
@@ -91,6 +98,13 @@
 				}
 			}, "addButton");
 			
+			new Button({
+				label: "Repayment Plans",
+				onClick: function(){
+					window.location = "${flowExecutionUrl}&_eventId=repaymentPlans";
+				}
+			}, "repaymentPlansButton");
+
 			new Button({
 				label: "Close",
 				onClick: function(){

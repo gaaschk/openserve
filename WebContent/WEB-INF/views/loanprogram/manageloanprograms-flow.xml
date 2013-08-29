@@ -14,6 +14,7 @@
         </view-state>
 
         <view-state id="manageloanprogramsettings" view="loanprogram/managedefaultloanprogramsettings">
+        	<transition on="repaymentPlans" to="managerepaymentplans"/>
         </view-state>
 
 		<view-state id="manageduediligenceschedules" view="loanprogram/duediligenceschedules">
@@ -22,5 +23,9 @@
         
         <view-state id="manageduediligenceeventtypes" view="loanprogram/manageduediligenceeventtypes">
         	<transition on="closeDueDiligenceTypes" to="manageduediligenceschedules"/>
+        </view-state>
+        
+        <view-state id="managerepaymentplans" view="loanprogram/managerepaymentplans">
+        	<transition on="closeRepaymentPlans" to="manageloanprogramsettings"/>
         </view-state>
 </flow>

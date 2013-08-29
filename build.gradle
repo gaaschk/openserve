@@ -80,8 +80,8 @@ dependencies{
 	compile ("org.drools:drools-core:${droolsVersion}")
 	compile ("org.drools:drools-compiler:${droolsVersion}")
 
-	runtime ("org.apache.tiles:tiles-core:${tilesVersion}")
-	runtime ("org.apache.tiles:tiles-jsp:${tilesVersion}")
+	compile ("org.apache.tiles:tiles-core:${tilesVersion}")
+	compile ("org.apache.tiles:tiles-jsp:${tilesVersion}")
 	
 	compile ("junit:junit:${junitVersion}")
 	compile ("joda-time:joda-time:${jodaTimeVersion}")

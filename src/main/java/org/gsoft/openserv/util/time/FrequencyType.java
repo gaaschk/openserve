@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape=JsonFormat.Shape.OBJECT)
 public enum FrequencyType implements OpenServEnum<FrequencyType>{
+	NONE(0L, null),
 	MONTHLY(10L, Period.months(1)),
 	QUARTERLY(20L, Period.months(3)),
 	SEMI_ANNUALLY(30L, Period.months(6)),
@@ -50,11 +51,15 @@ public enum FrequencyType implements OpenServEnum<FrequencyType>{
 	}
 
 	public Date findNextDateAfter(Date theDate){
-		DateTime adjustedDate = new DateTime(theDate).plusDays(1);
-		while(!this.isPeriodEnd(adjustedDate)){
-			adjustedDate = adjustedDate.plusDays(1);
+		Date nextDate = null;
+		if(this != NONE){
+			DateTime adjustedDate = new DateTime(theDate).plusDays(1);
+			while(!this.isPeriodEnd(adjustedDate)){
+				adjustedDate = adjustedDate.plusDays(1);
+			}
+			nextDate = adjustedDate.toDate();
 		}
-		return adjustedDate.toDate();
+		return nextDate;
 	}
 
 	/**
@@ -65,12 +70,14 @@ public enum FrequencyType implements OpenServEnum<FrequencyType>{
 	 * @return
 	 */
 	public List<Date> findAllDatesBetween(Date fromDate, Date toDate){
-		DateTime endDate = new DateTime(toDate);
 		ArrayList<Date> quarterEnds = new ArrayList<Date>();
-		DateTime checkDate = new DateTime(this.findNextDateAfter(fromDate));
-		while(!checkDate.isAfter(endDate)){
-			quarterEnds.add(checkDate.toDate());
-			checkDate = checkDate.plus(periodLength);
+		if(this != NONE){
+			DateTime endDate = new DateTime(toDate);
+			DateTime checkDate = new DateTime(this.findNextDateAfter(fromDate));
+			while(!checkDate.isAfter(endDate)){
+				quarterEnds.add(checkDate.toDate());
+				checkDate = checkDate.plus(periodLength);
+			}
 		}
 		return quarterEnds;
 	}

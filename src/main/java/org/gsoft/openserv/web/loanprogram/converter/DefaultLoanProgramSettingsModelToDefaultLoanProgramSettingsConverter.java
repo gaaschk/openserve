@@ -45,7 +45,6 @@ public class DefaultLoanProgramSettingsModelToDefaultLoanProgramSettingsConverte
 		lp.setDaysLateForFee(model.getDaysLateForFee());
 		lp.setEffectiveDate(model.getEffectiveDate());
 		lp.setGraceMonths(model.getGraceMonths());
-		lp.setVariableRate(model.getIsVariableRate());
 		lp.setLateFeeAmount(model.getLateFeeAmount().multiply(new BigDecimal(100)).intValue());
 		lp.setMaximumLoanTerm(model.getMaximumLoanTerm());
 		lp.setMinDaysToFirstDue(model.getMinDaysToFirstDue());
