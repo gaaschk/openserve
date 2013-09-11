@@ -5,8 +5,11 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.domain.repayment.RepaymentPlanSettings;
-import org.gsoft.openserv.repositories.repayment.RepaymentPlanSettingsRepository;
+import org.gsoft.openserv.domain.repayment.FixedRepaymentPlan;
+import org.gsoft.openserv.domain.repayment.RepaymentPlan;
+import org.gsoft.openserv.domain.repayment.StandardRepaymentPlan;
+import org.gsoft.openserv.repositories.repayment.FixedRepaymentPlanRepository;
+import org.gsoft.openserv.repositories.repayment.StandardRepaymentPlanRepository;
 import org.gsoft.openserv.rulesengine.annotation.RunRulesEngine;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,14 +18,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly=true)
 public class RepaymentPlanSettingsService {
 	@Resource
-	private RepaymentPlanSettingsRepository repository;
+	private StandardRepaymentPlanRepository standardRepository;
+	@Resource
+	private FixedRepaymentPlanRepository fixedRepository;
 	
 	@Transactional
 	@RunRulesEngine
-	public List<RepaymentPlanSettings> saveRepaymentPlanSettings(List<RepaymentPlanSettings> dirtySettings){
-		List<RepaymentPlanSettings> savedSettingsList = new ArrayList<>();
-		for(RepaymentPlanSettings settings:dirtySettings){
-			savedSettingsList.add(repository.save(settings));
+	public List<RepaymentPlan> saveRepaymentPlanSettings(List<RepaymentPlan> dirtySettings){
+		List<RepaymentPlan> savedSettingsList = new ArrayList<>();
+		for(RepaymentPlan settings:dirtySettings){
+			if(settings instanceof StandardRepaymentPlan){
+				savedSettingsList.add(this.standardRepository.save((StandardRepaymentPlan)settings));
+			}
+			else if(settings instanceof FixedRepaymentPlan){
+				savedSettingsList.add(this.fixedRepository.save((FixedRepaymentPlan)settings));
+			}
 		}
 		return savedSettingsList;
 	}

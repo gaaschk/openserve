@@ -1,6 +1,7 @@
 package org.gsoft.openserv.domain.loan;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,10 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.domain.rates.Rate;
+import org.gsoft.openserv.domain.repayment.RepaymentPlan;
 import org.gsoft.openserv.util.time.FrequencyType;
 import org.gsoft.openserv.web.support.formatter.currency.CurrencyInPenniesFormat;
 import org.hibernate.annotations.Parameter;
@@ -46,6 +49,7 @@ public class DefaultLoanProgramSettings extends PersistentDomainObject{
 	private FrequencyType baseRateUpdateFrequency;
 	//Relationships
 	private Rate baseRate;
+	private List<RepaymentPlan> repaymentPlanList;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -112,6 +116,12 @@ public class DefaultLoanProgramSettings extends PersistentDomainObject{
 	public void setLateFeeAmount(Integer lateFeeAmount){
 		this.lateFeeAmount = lateFeeAmount;
 	} 
+	public Boolean isVariableRate() {
+		return isVariableRate;
+	}
+	public void setVariableRate(Boolean isVariableRate) {
+		this.isVariableRate = isVariableRate;
+	}
 	@Override
 	@Transient
 	public Long getID() {
@@ -145,124 +155,11 @@ public class DefaultLoanProgramSettings extends PersistentDomainObject{
 	public void setBaseRate(Rate baseRate) {
 		this.baseRate = baseRate;
 	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result
-				+ ((baseRate == null) ? 0 : baseRate.hashCode());
-		result = prime
-				* result
-				+ ((baseRateUpdateFrequency == null) ? 0
-						: baseRateUpdateFrequency.hashCode());
-		result = prime
-				* result
-				+ ((daysBeforeDueToBill == null) ? 0 : daysBeforeDueToBill
-						.hashCode());
-		result = prime * result
-				+ ((daysLateForFee == null) ? 0 : daysLateForFee.hashCode());
-		result = prime * result
-				+ ((effectiveDate == null) ? 0 : effectiveDate.hashCode());
-		result = prime * result
-				+ ((graceMonths == null) ? 0 : graceMonths.hashCode());
-		result = prime * result
-				+ ((isVariableRate == null) ? 0 : isVariableRate.hashCode());
-		result = prime * result
-				+ ((lateFeeAmount == null) ? 0 : lateFeeAmount.hashCode());
-		result = prime * result
-				+ ((loanProgram == null) ? 0 : loanProgram.hashCode());
-		result = prime
-				* result
-				+ ((defaultLoanProgramSettingsID == null) ? 0 : defaultLoanProgramSettingsID
-						.hashCode());
-		result = prime * result
-				+ ((maximumLoanTerm == null) ? 0 : maximumLoanTerm.hashCode());
-		result = prime
-				* result
-				+ ((minDaysToFirstDue == null) ? 0 : minDaysToFirstDue
-						.hashCode());
-		result = prime * result
-				+ ((prepaymentDays == null) ? 0 : prepaymentDays.hashCode());
-		result = prime
-				* result
-				+ ((repaymentStartType == null) ? 0 : repaymentStartType
-						.hashCode());
-		return result;
+	@OneToMany(mappedBy="defaultLoanProgramSettings")
+	public List<RepaymentPlan> getRepaymentPlanList() {
+		return repaymentPlanList;
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DefaultLoanProgramSettings other = (DefaultLoanProgramSettings) obj;
-		if (baseRate == null) {
-			if (other.baseRate != null)
-				return false;
-		} else if (!baseRate.equals(other.baseRate))
-			return false;
-		if (baseRateUpdateFrequency != other.baseRateUpdateFrequency)
-			return false;
-		if (daysBeforeDueToBill == null) {
-			if (other.daysBeforeDueToBill != null)
-				return false;
-		} else if (!daysBeforeDueToBill.equals(other.daysBeforeDueToBill))
-			return false;
-		if (daysLateForFee == null) {
-			if (other.daysLateForFee != null)
-				return false;
-		} else if (!daysLateForFee.equals(other.daysLateForFee))
-			return false;
-		if (effectiveDate == null) {
-			if (other.effectiveDate != null)
-				return false;
-		} else if (!effectiveDate.equals(other.effectiveDate))
-			return false;
-		if (graceMonths == null) {
-			if (other.graceMonths != null)
-				return false;
-		} else if (!graceMonths.equals(other.graceMonths))
-			return false;
-		if (isVariableRate == null) {
-			if (other.isVariableRate != null)
-				return false;
-		} else if (!isVariableRate.equals(other.isVariableRate))
-			return false;
-		if (lateFeeAmount == null) {
-			if (other.lateFeeAmount != null)
-				return false;
-		} else if (!lateFeeAmount.equals(other.lateFeeAmount))
-			return false;
-		if (loanProgram == null) {
-			if (other.loanProgram != null)
-				return false;
-		} else if (!loanProgram.equals(other.loanProgram))
-			return false;
-		if (defaultLoanProgramSettingsID == null) {
-			if (other.defaultLoanProgramSettingsID != null)
-				return false;
-		} else if (!defaultLoanProgramSettingsID.equals(other.defaultLoanProgramSettingsID))
-			return false;
-		if (maximumLoanTerm == null) {
-			if (other.maximumLoanTerm != null)
-				return false;
-		} else if (!maximumLoanTerm.equals(other.maximumLoanTerm))
-			return false;
-		if (minDaysToFirstDue == null) {
-			if (other.minDaysToFirstDue != null)
-				return false;
-		} else if (!minDaysToFirstDue.equals(other.minDaysToFirstDue))
-			return false;
-		if (prepaymentDays == null) {
-			if (other.prepaymentDays != null)
-				return false;
-		} else if (!prepaymentDays.equals(other.prepaymentDays))
-			return false;
-		if (repaymentStartType != other.repaymentStartType)
-			return false;
-		return true;
+	public void setRepaymentPlanList(List<RepaymentPlan> repaymentPlanList) {
+		this.repaymentPlanList = repaymentPlanList;
 	}
 }

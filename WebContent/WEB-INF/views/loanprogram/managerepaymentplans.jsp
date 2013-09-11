@@ -15,57 +15,75 @@
 		
 </style>
 <div data-dojo-type="dijit/layout/BorderContainer">
+	<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="region:'center'">
+		<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
+			<div id="grid" style="min-height: 6em"></div>
+		</div>
+		<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="region:'center'">
+			<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
+				<form data-dojo-type="dijit/form/Form" id="settingsForm">
+					<input id="repaymentPlanID" type="hidden" data-dojo-type="dijit/form/TextBox" name="repaymentPlanID"/>
+					<input id="defaultLoanProgramSettingsID" type="hidden" data-dojo-type="dijit/form/TextBox" name="defaultLoanProgramSettingsID" value="${selectedDefaultLoanSettingsId}"/>
+					<table><tr>
+						<td>Plan Type:</td>
+						<td><div id="repaymentPlanTypeSelect"></div></td>
+					</tr><tr>
+						<td>Start Date:</td>
+						<td><div id="planStartDateSelect"></div></td>
+					</tr>
+					<tr>
+						<td>Grace Months:</td>
+						<td><input id="graceMonths" data-dojo-type="dijit/form/NumberTextBox" type="number" name="graceMonths"/></td>
+					</tr></table>
+				</form>
+			</div>
+			<div id="planDetailContainer" data-dojo-type="dijit/layout/StackContainer" data-dojo-id="planDetailContainer" data-dojo-props="region:'center'">
+				<div id="standardPlanDetail" data-dojo-type="dijit/layout/ContentPane">
+					<form data-dojo-type="dijit/form/Form" id="standardSettingsForm">
+						<table>
+							<tr>
+								<td>Maximum Loan Term:</td>
+								<td><input id="maxLoanTerm" data-dojo-type="dijit/form/NumberTextBox" type="number" name="maxLoanTerm"/></td>
+							</tr>
+							<tr>
+								<td>Minimum Payment Amount:</td>
+								<td><input id="minPaymentAmount" data-dojo-type="dijit/form/CurrencyTextBox" data-dojo-props="constraints:{fractional:true},currency:'USD'" name="minPaymentAmount"/></td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<div id="fixedPlanDetail" data-dojo-type="dijit/layout/ContentPane">
+					<form data-dojo-type="dijit/form/Form" id="fixedSettingsForm">
+						<table>
+							<tr>
+								<td>Payment Amount:</td>
+								<td><input id="paymentAmount" data-dojo-type="dijit/form/CurrencyTextBox" data-dojo-props="constraints:{fractional:true},currency:'USD'" name="paymentAmount"/></td>
+							</tr>
+							<tr>
+								<td>Cap. Frequency:</td>
+								<td><div id="capFrequencySelect"></div></td>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'right'">
 		<button id="addButton" data-dojo-type="dijit/form/Button" type="button">Add</button>	
-	</div>
-	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
-		<div id="grid"></div>
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom'">
 		<button id="saveButton" data-dojo-type="dijit/form/Button" type="button">Save</button>	
 		<button id="closeButton" data-dojo-type="dijit/form/Button" type="button">Close</button>	
 	</div>
 </div>
+<script src="${jsUrl}/openservweb/loanprogram/js/managerepaymentplans.js" type="text/javascript"></script>
 <script type="text/javascript">
-	var grid;
-	require(["dijit/form/Button", "dojo/store/JsonRest", "dojo/store/Memory", "dgrid/OnDemandGrid", "dojo/_base/declare", "dgrid/extensions/ColumnResizer", "dgrid/editor"], 
-			function(Button, JsonRest, Memory, OnDemandGrid, declare, ColumnResizer, editor){
-		var repaymentPlanStore = new JsonRest({target:"/openserv/web/loanprogram/repaymentplans"});
-		
-		repaymentPlanStore.get("").then(function(response){
-			var theStore = new Memory({
-				idProperty: "repaymentPlanSettingsID",
-				data: response.repaymentPlanSettingsModelList
-			});
-			grid = declare([OnDemandGrid, ColumnResizer])({
-				store: theStore,
-				columns:[
-					editor({id: "name", label: "Name", field: "name"}, "text", "dblclick"),
-					editor({id: "desc", label: "Description", field: "description", }, "text", "dblclick")
-				]
-			}, "grid");
-		});
-
+	require(["dijit/form/Button"],function(Button){
 		new Button({
-			onClick: function(){
-				repaymentPlanStore.put(grid.store.data);
-				alert("Update Successful");
-			}
-		},"saveButton");
-		new Button({
-			onClick: function(){
+			onClick : function() {
 				window.location = "${flowExecutionUrl}&_eventId=closeRepaymentPlans";
 			}
-		},"closeButton");
-		new Button({
-			onClick: function(){
-				grid.store.add({
-					repaymentPlanSettingsID:new Date().getMilliseconds()*(-1),
-					name:'<name>',
-					description:'<description>'
-					});
-				grid.refresh();
-			}
-		},"addButton");
+		}, "closeButton");
 	});
 </script>

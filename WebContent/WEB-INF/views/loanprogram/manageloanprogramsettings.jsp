@@ -101,7 +101,10 @@
 			new Button({
 				label: "Repayment Plans",
 				onClick: function(){
-					window.location = "${flowExecutionUrl}&_eventId=repaymentPlans";
+					var theForm = registry.byId("settingsForm");
+					var theData = theForm.gatherFormValues();
+					console.log(theData);
+					window.location = "${flowExecutionUrl}&_eventId=repaymentPlans&loansettingsid="+theData["defaultLoanProgramSettingsID"];
 				}
 			}, "repaymentPlansButton");
 

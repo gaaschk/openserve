@@ -14,7 +14,9 @@
         </view-state>
 
         <view-state id="manageloanprogramsettings" view="loanprogram/managedefaultloanprogramsettings">
-        	<transition on="repaymentPlans" to="managerepaymentplans"/>
+        	<transition on="repaymentPlans" to="managerepaymentplans">
+				<set name="flowScope.selectedDefaultLoanSettingsId" value="requestParameters.loansettingsid"/>
+        	</transition>
         </view-state>
 
 		<view-state id="manageduediligenceschedules" view="loanprogram/duediligenceschedules">
