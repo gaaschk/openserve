@@ -33,6 +33,8 @@ ext{
 
 sourceSets.main.java.srcDir 'src/querydsl/java'
 
+configureEnv()
+
 repositories{
 	maven{
 		url "${repositoryHost}/artifactory/repo"
