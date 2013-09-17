@@ -35,6 +35,10 @@ sourceSets.main.java.srcDir 'src/querydsl/java'
 
 configureEnv()
 
+buildvcs {
+    type = 'git'
+}
+
 repositories{
 	maven{
 		url "${repositoryHost}/artifactory/repo"
