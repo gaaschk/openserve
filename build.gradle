@@ -1,41 +1,52 @@
-
 apply plugin: 'eclipse'
 apply plugin: 'war'
 apply plugin: 'sonar-runner'
 apply plugin: 'java'
 apply plugin: 'jacoco'
+apply plugin: 'gradlecm'
 
 webAppDirName = 'WebContent'
 
 sourceCompatibility=1.7
 targetCompatibility=1.7
 
-ext.springVersion = '3.2.3.RELEASE'
-ext.springSecurityVersion = '3.1.4.RELEASE'
-ext.springDataVersion = '1.3.4.RELEASE'
-ext.springWebFlowVersion = '2.3.2.RELEASE'
-ext.springSocialVersion = '1.0.2.RELEASE' 
-ext.querydslVersion = '2.9.0'
-ext.hibernateVersion = '4.2.4.Final'
-ext.hibernateValidatorVersion = '5.0.1.Final'
-ext.droolsVersion = '5.5.0.Final'
-ext.junitVersion = '4.11'
-ext.jodaTimeVersion = '2.2'
-ext.apacheCommonsCodecVersion = '1.8'
-ext.log4jVersion = '1.2.17'
-ext.dbmaintainVersion = '2.4'
-ext.aspectjVersion = '1.7.2'
-ext.tilesVersion = '3.0.1'
-ext.jacksonVersion = '2.2.2'
-ext.jsonAssertVersiont = '1.2.0'
+ext{
+	springVersion = '3.2.3.RELEASE'
+	springSecurityVersion = '3.1.4.RELEASE'
+	springDataVersion = '1.3.4.RELEASE'
+	springWebFlowVersion = '2.3.2.RELEASE'
+	springSocialVersion = '1.0.2.RELEASE' 
+	querydslVersion = '3.2.3'
+	hibernateVersion = '4.2.4.Final'
+	hibernateValidatorVersion = '5.0.1.Final'
+	droolsVersion = '5.5.0.Final'
+	junitVersion = '4.11'
+	jodaTimeVersion = '2.2'
+	apacheCommonsCodecVersion = '1.8'
+	log4jVersion = '1.2.17'
+	dbmaintainVersion = '2.4'
+	aspectjVersion = '1.7.2'
+	tilesVersion = '3.0.1'
+	jacksonVersion = '2.2.2'
+	jsonAssertVersiont = '1.2.0'
+}
 
 sourceSets.main.java.srcDir 'src/querydsl/java'
-
-configureEnv()
 
 repositories{
 	maven{
 		url "${repositoryHost}/artifactory/repo"
+	}
+}
+
+uploadArchives{
+	repositories{
+		ivy{
+			credentials{
+				username "${repoUsername}"
+				password "${repoPassword}"
+			}
+		}
 	}
 }
 
@@ -44,6 +55,7 @@ configurations {
 }
 
 dependencies{
+	compile ("org.kercheval:GradleCMPlugin:1.15-SNAPSHOT")
 	compile ("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
 	compile ("org.springframework.security:spring-security-web:${springSecurityVersion}")
 	runtime ("org.springframework.security:spring-security-taglibs:${springSecurityVersion}")
@@ -76,7 +88,7 @@ dependencies{
 
 	compile ("com.mysema.querydsl:querydsl-jpa:${querydslVersion}")
 	compile ("com.mysema.querydsl:querydsl-apt:${querydslVersion}")
-
+	
 	compile ("org.drools:drools-core:${droolsVersion}")
 	compile ("org.drools:drools-compiler:${droolsVersion}")
 
@@ -128,13 +140,13 @@ jacocoTestReport{
 }
 
 task generateQueryDSL (type: JavaCompile) {
-		source = 'src/main/java'
-		classpath = configurations.compile
-		options.compilerArgs = [
-			"-proc:only",
-			"-processor", "com.mysema.query.apt.hibernate.HibernateAnnotationProcessor"
-		]
-		destinationDir = file('src/querydsl/java')
+	source = 'src/main/java'
+	classpath = configurations.compile
+	options.compilerArgs = [
+		"-proc:only",
+		"-processor", "com.mysema.query.apt.hibernate.HibernateAnnotationProcessor"
+	]
+	destinationDir = file('src/querydsl/java')
 }
 
 task updateDatabase{
@@ -162,7 +174,7 @@ test.dependsOn updateDatabase
 assemble.dependsOn packageScripts
 
 task wrapper(type: Wrapper){
-	gradleVersion = "1.6"
+	gradleVersion = "1.7"
 }
 
 // Find any 3rd party libraries which have released new versions
@@ -196,4 +208,30 @@ task checkLibVersions << {
   }	
 }
 
+buildversion{
+	version.pattern = '%M%.%m%.%b%-%d%.%t%'
+	doLast{
+		println "Project Version: " + project.version
+	}
+}
 
+buildscript{
+	ext.environment = hasProperty('teamcity')?'ci':hasProperty('environment')?environment:'local'
+	ext.repositoryHost = hasProperty('teamcity')?'http://192.168.10.9:8081':'https://www.laertessoft.biz'
+//	ext.repositoryHost = 'http://192.168.10.9:8081'
+	ext.sonarHost = hasProperty('teamcity')?'http://192.168.10.9:9000':'https://www.laertessoft.biz'
+	println "Building environment: $environment"
+	def config = new ConfigSlurper().parse(file('env/'+environment+'.gradle').toURI().toURL())
+	ext.config = config	
+	
+	repositories{
+		maven{
+			url "${repositoryHost}/artifactory/repo"
+		}
+	}
+
+	dependencies{
+		classpath(group: 'org.kercheval', name: 'GradleCMPlugin', version: '1.15', classifier: '20130917.171703')
+		classpath group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '2.3.1.201302201838-r'
+	}
+}
