@@ -222,7 +222,8 @@ task checkLibVersions << {
   }	
 }
 
-buildMajorVersion = 0
+ext.buildMajorVersion = 0
+ext.buildMinorVersion = 1
 group = 'org.gsoft'
 
 buildversion{
