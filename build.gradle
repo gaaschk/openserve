@@ -33,6 +33,13 @@ ext{
 
 sourceSets.main.java.srcDir 'src/querydsl/java'
 
+buildversion{
+	version.pattern = '%M%.%m%.%b%-%d%.%t%'
+	doLast{
+		println "Project Version: " + project.version
+	}
+}
+
 configureEnv()
 
 buildvcs {
@@ -146,6 +153,7 @@ jacocoTestReport{
 }
 
 task generateQueryDSL (type: JavaCompile) {
+	println "Project Version: " + project.version
 	source = 'src/main/java'
 	classpath = configurations.compile
 	options.compilerArgs = [
@@ -177,7 +185,7 @@ task packageScripts{
 
 compileJava.dependsOn generateQueryDSL
 test.dependsOn updateDatabase
-assemble.dependsOn packageScripts
+assemble.dependsOn packageScripts, buildversion
 
 task wrapper(type: Wrapper){
 	gradleVersion = "1.7"
@@ -212,13 +220,6 @@ task checkLibVersions << {
 		  }
 	  }
   }	
-}
-
-buildversion{
-	version.pattern = '%M%.%m%.%b%-%d%.%t%'
-	doLast{
-		println "Project Version: " + project.version
-	}
 }
 
 buildscript{
