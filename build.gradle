@@ -47,7 +47,7 @@ repositories{
 
 uploadArchives{
 	repositories{
-		ivy{
+		maven{
 			credentials{
 				username "${repoUsername}"
 				password "${repoPassword}"
@@ -223,6 +223,7 @@ task checkLibVersions << {
 }
 
 buildMajorVersion = 0
+group = 'org.gsoft'
 
 buildversion{
 	version.pattern = '%M%.%m%.%b%-%d%.%t%'
