@@ -61,12 +61,6 @@ uploadArchives{
 			}
 		}
 	}
-	doFirst{
-		def branchName = buildvcs.getBranchName()
-		if (branchName == 'release') {
-			tasks.buildversiontag.execute()
-		}
-	}
 }
 
 configurations {
