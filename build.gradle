@@ -228,7 +228,7 @@ group = 'org.gsoft'
 
 buildversion{
     version.updateMajor(new Integer(buildMajorVersion)) 
-    version.updateMinor(new Integer(buildMinorVersion)) 
+    version.setMinor(new Integer(buildMinorVersion)) 
 	version.pattern = '%M%.%m%.%b%-%d%.%t%'
 	doLast{
 		println "Project Version: " + project.version
