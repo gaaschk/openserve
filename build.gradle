@@ -214,30 +214,32 @@ task checkLibVersions << {
   }	
 }
 
+buildMajorVersion = 0
+
 buildversion{
 	version.pattern = '%M%.%m%.%b%-%d%.%t%'
 	doLast{
 		println "Project Version: " + project.version
-	}
+		//
+        // Set the pattern after the tags have been used to set the initial 
+        // values.  Release gets the default pattern of the maven default 
+        //
+        def branchName = buildvcs.getBranchName()
+        if (branchName != 'release' &&
+            !project.hasProperty('noSnapshot')) {
+            version.setPattern("%M%.%m%-SNAPSHOT") 
+        }
+        version.updateMajor(new Integer(buildMajorVersion)) 
+        println("Currently working on sources for " + version);
+    }
 }
 
-buildscript{
-	ext.environment = hasProperty('teamcity')?'ci':hasProperty('environment')?environment:'local'
-	ext.repositoryHost = hasProperty('teamcity')?'http://192.168.10.9:8081':'https://www.laertessoft.biz'
-//	ext.repositoryHost = 'http://192.168.10.9:8081'
-	ext.sonarHost = hasProperty('teamcity')?'http://192.168.10.9:9000':'https://www.laertessoft.biz'
-	println "Building environment: $environment"
-	def config = new ConfigSlurper().parse(file('env/'+environment+'.gradle').toURI().toURL())
-	ext.config = config	
-	
-	repositories{
-		maven{
-			url "${repositoryHost}/artifactory/repo"
-		}
-	}
-
-	dependencies{
-		classpath(group: 'org.kercheval', name: 'GradleCMPlugin', version: '1.15', classifier: '20130917.171703')
-		classpath group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '2.3.1.201302201838-r'
-	}
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenRepo url: 'http://kercheval.org/mvn-repo/releases'
+    }
+    dependencies {
+        classpath 'org.kercheval:GradleCMPlugin:+'
+    }
 }
