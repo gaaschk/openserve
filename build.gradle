@@ -185,6 +185,7 @@ task packageScripts{
 compileJava.dependsOn generateQueryDSL
 test.dependsOn updateDatabase
 assemble.dependsOn packageScripts
+uploadArchives.dependsOn buildversion
 
 task wrapper(type: Wrapper){
 	gradleVersion = "1.7"
