@@ -52,6 +52,13 @@ uploadArchives{
 				username "${repoUsername}"
 				password "${repoPassword}"
 			}
+			def branchName = buildvcs.getBranchName()
+			if (branchName == 'release') {
+				url "${repositoryHost}/artifactory/libs-release-local"
+			}
+			else {
+				url "${repositoryHost}/artifactory/libs-snapshot-local"
+			}
 		}
 	}
 	doFirst{
