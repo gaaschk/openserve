@@ -3,7 +3,7 @@ bin
 .settings
 .gradle
 src/querydsl
-openserv-scripts
 openserv-scripts.zip
+openserv-dbscripts.zip
 /target
 /syncToRemoteMaster.sh
