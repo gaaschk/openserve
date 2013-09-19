@@ -244,6 +244,10 @@ task checkLibVersions << {
   }	
 }
 
+buildreleaseinit {
+	fastforwardonly = false
+}
+
 buildversion{
 	version.pattern = '%M%.%m%.%b%'
 	doLast{
