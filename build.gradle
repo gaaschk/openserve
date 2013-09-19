@@ -4,11 +4,14 @@ apply plugin: 'sonar-runner'
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'gradlecm'
+apply plugin: 'maven'
 
 webAppDirName = 'WebContent'
 
 sourceCompatibility=1.7
 targetCompatibility=1.7
+
+group = 'org.gsoft.openserv'
 
 ext{
 	springVersion = '3.2.3.RELEASE'
@@ -33,13 +36,6 @@ ext{
 
 sourceSets.main.java.srcDir 'src/querydsl/java'
 
-buildversion{
-	version.pattern = '%M%.%m%.%b%-%d%.%t%'
-	doLast{
-		println "Project Version: " + project.version
-	}
-}
-
 configureEnv()
 
 buildvcs {
@@ -54,11 +50,26 @@ repositories{
 
 uploadArchives{
 	repositories{
-		ivy{
-			credentials{
-				username "${repoUsername}"
-				password "${repoPassword}"
+		mavenDeployer{
+			def repoUrl = "${repositoryHost}/artifactory/"
+			def branchName = buildvcs.getBranchName()
+			if (branchName == 'release') {
+				repoUrl += "libs-release-local"
 			}
+			else {
+				repoUrl += "libs-snapshot-local"
+			}
+			repository(url: repoUrl){
+				authentication(userName: "${repoUsername}", password: "${repoPassword}")
+			}
+			addFilter('war') {artifact, file ->
+				!artifact.name.contains('script')
+			}
+			addFilter('dbscripts'){artifact, file ->
+				artifact.name.contains('script')
+			}
+			pom('war').artifactId = 'openserv-war'
+			pom('dbscripts').artifactId = 'openserv-dbscripts'
 		}
 	}
 }
@@ -153,7 +164,6 @@ jacocoTestReport{
 }
 
 task generateQueryDSL (type: JavaCompile) {
-	println "Project Version: " + project.version
 	source = 'src/main/java'
 	classpath = configurations.compile
 	options.compilerArgs = [
@@ -175,17 +185,29 @@ task updateDatabase{
 	}
 }
 
-task packageScripts{
+task packageScripts(){
 	ant.taskdef(resource: "dbmaintain-anttasks.xml", classpath: configurations.runtime.asPath)
 	ant.projectDir = projectDir
-	ant.createScriptArchive(scriptLocations: '${projectDir}/src/main/dbscripts', 
-							qualifiers: 'scripts', 
-							archiveFileName: "openserv-scripts.zip")
+	ant.createScriptArchive(scriptLocations: '${projectDir}/src/main/dbscripts',
+							qualifiers: 'scripts',
+							archiveFileName: 'openserv-dbscripts.zip')
+	ext.dbScriptsFile = file('openserv-dbscripts.zip')
+}
+
+task moveDbScriptsArchive(type: Copy) {
+	from 'openserv-dbscripts.zip'
+	into 'build/libs'
+}
+
+artifacts{
+	archives packageScripts.dbScriptsFile
 }
 
 compileJava.dependsOn generateQueryDSL
 test.dependsOn updateDatabase
-assemble.dependsOn packageScripts, buildversion
+moveDbScriptsArchive.dependsOn packageScripts
+assemble.dependsOn moveDbScriptsArchive
+uploadArchives.dependsOn buildversion,assemble
 
 task wrapper(type: Wrapper){
 	gradleVersion = "1.7"
@@ -222,23 +244,31 @@ task checkLibVersions << {
   }	
 }
 
-buildscript{
-	ext.environment = hasProperty('teamcity')?'ci':hasProperty('environment')?environment:'local'
-	ext.repositoryHost = hasProperty('teamcity')?'http://192.168.10.9:8081':'https://www.laertessoft.biz'
-//	ext.repositoryHost = 'http://192.168.10.9:8081'
-	ext.sonarHost = hasProperty('teamcity')?'http://192.168.10.9:9000':'https://www.laertessoft.biz'
-	println "Building environment: $environment"
-	def config = new ConfigSlurper().parse(file('env/'+environment+'.gradle').toURI().toURL())
-	ext.config = config	
-	
-	repositories{
-		maven{
-			url "${repositoryHost}/artifactory/repo"
-		}
-	}
+buildversion{
+	version.pattern = '%M%.%m%.%b%-%d%.%t%'
+	doLast{
+	    version.major = 0 
+	    version.minor = 2 
+		println "Project Version: " + project.version
+		//
+        // Set the pattern after the tags have been used to set the initial 
+        // values.  Release gets the default pattern of the maven default 
+        //
+        def branchName = buildvcs.getBranchName()
+        if (branchName != 'release' &&
+            !project.hasProperty('noSnapshot')) {
+            version.setPattern("%M%.%m%-SNAPSHOT") 
+        }
+        println("Currently working on sources for " + version);
+    }
+}
 
-	dependencies{
-		classpath(group: 'org.kercheval', name: 'GradleCMPlugin', version: '1.15', classifier: '20130917.171703')
-		classpath group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '2.3.1.201302201838-r'
-	}
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenRepo url: 'http://kercheval.org/mvn-repo/releases'
+    }
+    dependencies {
+        classpath 'org.kercheval:GradleCMPlugin:+'
+    }
 }
