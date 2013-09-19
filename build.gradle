@@ -4,11 +4,14 @@ apply plugin: 'sonar-runner'
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'gradlecm'
+apply plugin: 'maven'
 
 webAppDirName = 'WebContent'
 
 sourceCompatibility=1.7
 targetCompatibility=1.7
+
+group = 'org.gsoft.openserv'
 
 ext{
 	springVersion = '3.2.3.RELEASE'
@@ -47,18 +50,26 @@ repositories{
 
 uploadArchives{
 	repositories{
-		maven{
-			credentials{
-				username "${repoUsername}"
-				password "${repoPassword}"
-			}
+		mavenDeployer{
+			def repoUrl = "${repositoryHost}/artifactory/"
 			def branchName = buildvcs.getBranchName()
 			if (branchName == 'release') {
-				url "${repositoryHost}/artifactory/libs-release-local"
+				repoUrl += "libs-release-local"
 			}
 			else {
-				url "${repositoryHost}/artifactory/libs-snapshot-local"
+				repoUrl += "libs-snapshot-local"
 			}
+			repository(url: repoUrl){
+				authentication(userName: "${repoUsername}", password: "${repoPassword}")
+			}
+			addFilter('war') {artifact, file ->
+				!artifact.name.contains('script')
+			}
+			addFilter('dbscripts'){artifact, file ->
+				artifact.name.contains('script')
+			}
+			pom('war').artifactId = 'openserv-war'
+			pom('dbscripts').artifactId = 'openserv-dbscripts'
 		}
 	}
 }
@@ -174,18 +185,29 @@ task updateDatabase{
 	}
 }
 
-task packageScripts{
+task packageScripts(){
 	ant.taskdef(resource: "dbmaintain-anttasks.xml", classpath: configurations.runtime.asPath)
 	ant.projectDir = projectDir
-	ant.createScriptArchive(scriptLocations: '${projectDir}/src/main/dbscripts', 
-							qualifiers: 'scripts', 
-							archiveFileName: "openserv-scripts.zip")
+	ant.createScriptArchive(scriptLocations: '${projectDir}/src/main/dbscripts',
+							qualifiers: 'scripts',
+							archiveFileName: 'openserv-dbscripts.zip')
+	ext.dbScriptsFile = file('openserv-dbscripts.zip')
+}
+
+task moveDbScriptsArchive(type: Copy) {
+	from 'openserv-dbscripts.zip'
+	into 'build/libs'
+}
+
+artifacts{
+	archives packageScripts.dbScriptsFile
 }
 
 compileJava.dependsOn generateQueryDSL
 test.dependsOn updateDatabase
-assemble.dependsOn packageScripts
-uploadArchives.dependsOn buildversion
+moveDbScriptsArchive.dependsOn packageScripts
+assemble.dependsOn moveDbScriptsArchive
+uploadArchives.dependsOn buildversion,assemble
 
 task wrapper(type: Wrapper){
 	gradleVersion = "1.7"
@@ -222,15 +244,11 @@ task checkLibVersions << {
   }	
 }
 
-ext.buildMajorVersion = 0
-ext.buildMinorVersion = 2
-group = 'org.gsoft'
-
 buildversion{
-    version.updateMajor(new Integer(buildMajorVersion)) 
-    version.setMinor(new Integer(buildMinorVersion)) 
 	version.pattern = '%M%.%m%.%b%-%d%.%t%'
 	doLast{
+	    version.major = 0 
+	    version.minor = 2 
 		println "Project Version: " + project.version
 		//
         // Set the pattern after the tags have been used to set the initial 
