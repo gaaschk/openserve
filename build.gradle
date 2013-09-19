@@ -245,7 +245,7 @@ task checkLibVersions << {
 }
 
 buildversion{
-	version.pattern = '%M%.%m%.%b%-%d%.%t%'
+	version.pattern = '%M%.%m%.%b%
 	doLast{
 	    version.major = 0 
 	    version.minor = 2 
