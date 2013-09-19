@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration("classpath:spring/application-context.xml")
 @Transactional(readOnly=true)
 public class AmortizationScheduleRepositoryTest {
+	//la ti da ti daaaaaaaa
+	
 	@Resource
 	private AmortizationScheduleRepository amortizationRepository;
 	
