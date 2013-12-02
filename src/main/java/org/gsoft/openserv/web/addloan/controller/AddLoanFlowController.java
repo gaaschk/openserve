@@ -1,7 +1,6 @@
 package org.gsoft.openserv.web.addloan.controller;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -13,14 +12,19 @@ import org.gsoft.openserv.repositories.lender.LenderRepository;
 import org.gsoft.openserv.repositories.loan.LoanProgramRepository;
 import org.gsoft.openserv.service.PersonService;
 import org.gsoft.openserv.service.loanentry.LoanEntryService;
+import org.gsoft.openserv.util.ListUtility;
 import org.gsoft.openserv.web.addloan.model.DisbursementModel;
 import org.gsoft.openserv.web.addloan.model.LoanEntryModel;
 import org.gsoft.openserv.web.person.PersonSearchCriteria;
 import org.gsoft.openserv.web.person.model.PersonModel;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-@Service
+@Controller
 public class AddLoanFlowController {
 	@Resource
 	private PersonService personService;
@@ -33,19 +37,28 @@ public class AddLoanFlowController {
 	@Resource
 	private LenderRepository lenderRepository;
 	
-	public LoanEntryModel findPerson(PersonSearchCriteria personSearchCriteria){
-		Person person = personService.findPersonBySSN(personSearchCriteria.getSsn());
+	@RequestMapping(value="addloan/personsearch", method=RequestMethod.GET)
+	public String loadPersonSearch(Model model){
+		model.addAttribute("personSearchCriteria", new PersonSearchCriteria());
+		return "addloan/personsearch";
+	}
+
+	@RequestMapping(value="addloan/personsearch", method=RequestMethod.POST)
+	public String findPerson(@ModelAttribute String ssn, Model model){
+		ssn = ssn.replace("-", "");
+		Person person = personService.findPersonBySSN(ssn);
 		PersonModel newPersonModel = conversionService.convert(person, PersonModel.class);
 		if(newPersonModel == null)newPersonModel = new PersonModel();
-		newPersonModel.setSsn(personSearchCriteria.getSsn());
+		newPersonModel.setSsn(ssn);
 		LoanEntryModel loanModel = new LoanEntryModel();
 		loanModel.setNewDisbursement(new DisbursementModel());
-		List<LoanProgram> loanPrograms = loanProgramRepository.findAll();
-		List<Lender> lenders = lenderRepository.findAll();
-		loanModel.setLenderList(lenders);
-		loanModel.setLoanProgramList(loanPrograms);
+		Iterable<LoanProgram> loanPrograms = loanProgramRepository.findAll();
+		Iterable<Lender> lenders = lenderRepository.findAll();
+		loanModel.setLenderList(ListUtility.addAll(new ArrayList<Lender>(), lenders));
+		loanModel.setLoanProgramList(ListUtility.addAll(new ArrayList<LoanProgram>(), loanPrograms));
 		loanModel.setPerson(newPersonModel);
-		return loanModel;
+		model.addAttribute("loanEntryModel", loanModel);
+		return "addloan/disbursemententry";
 	}
 
 	public void addDisbursement(LoanEntryModel loanModel){

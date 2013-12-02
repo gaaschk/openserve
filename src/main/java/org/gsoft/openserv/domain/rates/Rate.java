@@ -1,5 +1,6 @@
 package org.gsoft.openserv.domain.rates;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -44,6 +45,7 @@ public class Rate extends PersistentDomainObject{
 		this.rateName = rateName;
 	}
 
+	@Column(columnDefinition = "SMALLINT")
 	public Boolean getShouldAutoUpdate() {
 		return shouldAutoUpdate;
 	}

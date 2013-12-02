@@ -2,6 +2,7 @@ package org.gsoft.openserv.domain.payment;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -42,6 +43,7 @@ public class LateFee extends PersistentDomainObject{
 	public void setBillingStatementID(Long billingStatementID) {
 		this.billingStatementID = billingStatementID;
 	}
+	@Column(columnDefinition = "SMALLINT")
 	public Boolean isCancelled() {
 		return isCancelled;
 	}

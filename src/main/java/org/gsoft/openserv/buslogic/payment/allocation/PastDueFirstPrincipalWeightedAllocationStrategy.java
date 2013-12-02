@@ -12,12 +12,14 @@ import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.NullComparator;
 import org.gsoft.openserv.buslogic.payment.PaymentAllocationLogic;
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.loan.LoanStateHistory;
+import org.gsoft.openserv.domain.loan.loanstate.LoanStateHistory;
+import org.gsoft.openserv.domain.loan.loanstate.LoanStateHistoryBuilder;
+import org.gsoft.openserv.domain.loan.loanstate.LoanStateHistoryBuilderFactoryBean;
 import org.gsoft.openserv.domain.payment.LoanPayment;
 import org.gsoft.openserv.domain.payment.Payment;
 import org.gsoft.openserv.domain.payment.billing.LoanStatementSummary;
-import org.gsoft.openserv.repositories.loan.LoanStateHistoryRepository;
 import org.gsoft.openserv.repositories.payment.LoanStatementRepository;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 /**
@@ -32,12 +34,16 @@ import org.springframework.stereotype.Component;
 public class PastDueFirstPrincipalWeightedAllocationStrategy implements
 		PaymentAllocationLogic {
 	@Resource
-	private LoanStateHistoryRepository loanStateHistoryRepo;
-	@Resource
 	private LoanStatementRepository statementRepo;
+	@Resource
+	private ApplicationContext applicationContext;
+	@Resource
+	private LoanStateHistoryBuilderFactoryBean loanStateHistoryBuilderFactory;
 	
+	@SuppressWarnings("rawtypes")
 	private Comparator comparator = null;
 	
+	@SuppressWarnings("rawtypes")
 	private Comparator getLoanAllocationComparator(){
 		if(this.comparator == null){
 			comparator = new NullComparator(new BeanComparator("projectedPrepayDate", new NullComparator()));
@@ -50,7 +56,9 @@ public class PastDueFirstPrincipalWeightedAllocationStrategy implements
 		ArrayList<LoanAllocation> allocations = new ArrayList<>();
 		ArrayList<LoanPayment> newLoanPayments = new ArrayList<>();
 		for(Loan loan:loans){
-			LoanStateHistory history = loanStateHistoryRepo.findLoanStateHistoryAsOf(loan, payment.getEffectiveDate());
+			LoanStateHistoryBuilder builder = loanStateHistoryBuilderFactory.createBuilder();
+			builder.buildLoanStateHistoryForLoanAsOf(loan, payment.getEffectiveDate());
+			LoanStateHistory history = builder.getLoanStateHistory();
 			LoanStatementSummary statementSummary = statementRepo.getLoanStatementSummaryForLoanAsOfDate(loan, payment.getEffectiveDate());
 			LoanPayment loanPayment = new LoanPayment();
 			loanPayment.setAppliedAmount(0);

@@ -1,9 +1,0 @@
-openserv{
-	db{
-		driver='com.mysql.jdbc.Driver'
-		url='jdbc:mysql://192.168.10.9:3306/openservci'
-		schemas='openservci'
-		username='root'
-		password='5eqUxet7'
-	}
-}

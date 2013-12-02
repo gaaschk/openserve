@@ -3,6 +3,7 @@ package org.gsoft.openserv.domain.rates;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -62,6 +63,7 @@ public class RateValue extends PersistentDomainObject {
 		this.rateValueDate = rateValueDate;
 	}
 
+	@Column(columnDefinition = "SMALLINT")
 	public Boolean getIsValid() {
 		return isValid;
 	}

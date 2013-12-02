@@ -3,7 +3,7 @@ package org.gsoft.openserv.buslogic.person;
 import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.Person;
-import org.gsoft.openserv.repositories.PersonRepository;
+import org.gsoft.openserv.repositories.person.PersonRepository;
 import org.springframework.stereotype.Component;
 
 @Component

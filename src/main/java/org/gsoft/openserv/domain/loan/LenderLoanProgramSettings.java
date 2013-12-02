@@ -25,7 +25,9 @@ import org.springframework.format.annotation.NumberFormat;
 @RulesEngineEntity
 public class LenderLoanProgramSettings extends PersistentDomainObject {
 	private static final long serialVersionUID = 2305820144103922657L;
-	private Long loanProgramID;
+	
+	private Long lenderLoanProgramSettingsID;
+	
 	private Long lenderID;
 	@DateTimeFormat(pattern="MM/dd/yyyy")
 	private Date programBeginDate;
@@ -52,11 +54,11 @@ public class LenderLoanProgramSettings extends PersistentDomainObject {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	public Long getLoanProgramID() {
-		return loanProgramID;
+	public Long getLenderLoanProgramSettingsID() {
+		return lenderLoanProgramSettingsID;
 	}
-	public void setLoanProgramID(Long loanProgramID) {
-		this.loanProgramID = loanProgramID;
+	public void setLenderLoanProgramSettingsID(Long lenderLoanProgramSettingsID) {
+		this.lenderLoanProgramSettingsID = lenderLoanProgramSettingsID;
 	}
 	public Long getLenderID() {
 		return lenderID;
@@ -124,7 +126,7 @@ public class LenderLoanProgramSettings extends PersistentDomainObject {
 	@Override
 	@Transient
 	public Long getID() {
-		return this.getLoanProgramID();
+		return this.getLenderLoanProgramSettingsID();
 	}
 	@Type( type = "org.gsoft.openserv.util.jpa.GenericEnumUserType", parameters={
 			@Parameter(name = "enumClass", value = "org.gsoft.openserv.domain.loan.RepaymentStartType")
@@ -136,6 +138,7 @@ public class LenderLoanProgramSettings extends PersistentDomainObject {
 	public void setRepaymentStartType(RepaymentStartType repaymentStartType) {
 		this.repaymentStartType = repaymentStartType;
 	}
+	@Column(columnDefinition = "SMALLINT")
 	public Boolean isVariableRate() {
 		return isVariableRate;
 	}

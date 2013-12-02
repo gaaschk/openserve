@@ -116,6 +116,8 @@ public class DefaultLoanProgramSettings extends PersistentDomainObject{
 	public void setLateFeeAmount(Integer lateFeeAmount){
 		this.lateFeeAmount = lateFeeAmount;
 	} 
+
+	@Column(columnDefinition = "SMALLINT")
 	public Boolean isVariableRate() {
 		return isVariableRate;
 	}

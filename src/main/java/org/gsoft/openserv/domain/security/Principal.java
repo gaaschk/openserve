@@ -1,5 +1,6 @@
 package org.gsoft.openserv.domain.security;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,6 +35,7 @@ public class Principal extends PersistentDomainObject{
 	public void setName(String name) {
 		this.name = name;
 	}
+	@Column(columnDefinition = "SMALLINT")
 	public Boolean isActive() {
 		return isActive;
 	}

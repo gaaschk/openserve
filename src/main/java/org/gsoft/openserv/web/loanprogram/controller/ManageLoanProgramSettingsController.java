@@ -55,7 +55,7 @@ public class ManageLoanProgramSettingsController {
 	
 	@RequestMapping(value="/allloanprograms.do", method=RequestMethod.GET)
 	public ModelAndView loadLoanProgramsModel(){
-		List<LoanProgram> loanPrograms = loanProgramRepository.findAll();
+		Iterable<LoanProgram> loanPrograms = loanProgramRepository.findAll();
 		LoanProgramsModel loanProgramsModel = new LoanProgramsModel();
 		List<LoanProgramModel> loanProgramModelList = new ArrayList<>();
 		loanProgramsModel.setLoanProgramModelList(loanProgramModelList);
@@ -81,7 +81,7 @@ public class ManageLoanProgramSettingsController {
 	
 	@RequestMapping(value="/loanprogramsettings.do", method={RequestMethod.GET})
 	public ModelAndView loanLoanProgramSettingsModels(@RequestParam("loanprogramid") String loanProgramID){
-		List<DefaultLoanProgramSettings> defaultSettings = defaultLoanProgramSettingsRepository.findAllDefaultLoanProgramSettingsByLoanProgramID(Long.valueOf(loanProgramID));
+		Iterable<DefaultLoanProgramSettings> defaultSettings = defaultLoanProgramSettingsRepository.findAllDefaultLoanProgramSettingsByLoanProgram(Long.valueOf(loanProgramID));
 		List<DefaultLoanProgramSettingsModel> defaultSettingsModelList = new ArrayList<>();
 		for(DefaultLoanProgramSettings settings:defaultSettings){
 			defaultSettingsModelList.add(conversionService.convert(settings, DefaultLoanProgramSettingsModel.class));

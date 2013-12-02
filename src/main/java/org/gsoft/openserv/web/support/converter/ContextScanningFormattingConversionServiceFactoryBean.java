@@ -22,7 +22,9 @@ public class ContextScanningFormattingConversionServiceFactoryBean{
 	
 	@PostConstruct
 	public void scanContextForFormattersAndConverters(){
+		@SuppressWarnings("rawtypes")
 		Collection<Converter> converters = applicationContext.getBeansOfType(Converter.class).values();
+		@SuppressWarnings("rawtypes")
 		Set<Converter> converterSet = new HashSet<Converter>();
 		converterSet.addAll(converters);
 		ConversionServiceFactory.registerConverters(converterSet, this.conversionService);

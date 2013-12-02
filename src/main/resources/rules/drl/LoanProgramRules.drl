@@ -1,0 +1,33 @@
+package loan
+
+import org.gsoft.openserv.domain.loan.LoanProgram
+import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings
+import org.gsoft.openserv.rulesengine.event.LoanProgramChangedEvent
+import org.gsoft.openserv.rulesengine.event.DefaultLoanProgramSettingsChangedEvent
+import java.util.List
+import org.gsoft.openserv.repositories.loan.LoanRepository;
+import org.springframework.context.ApplicationContext
+
+global ApplicationContext springContext
+
+rule "Load Loans on LoanProgram change"
+	when
+		LoanProgramChangedEvent($lt:loanProgram)
+	then
+		System.out.println("Loading Loans based on loan type");
+		List loans = springContext.getBean(LoanRepository.class).findAllByLoanProgram($lt.getLoanProgramID());
+		for(Object loan:loans){
+			insert(loan);
+		}
+end
+
+rule "Load Loans on DefaultLoanProgramSettings change"
+	when
+		DefaultLoanProgramSettingsChangedEvent($lt:defaultLoanProgramSettings.loanProgram)
+	then
+		System.out.println("Loading Loans based on loan type");
+		List loans = springContext.getBean(LoanRepository.class).findAllByLoanProgram($lt.getLoanProgramID());
+		for(Object loan:loans){
+			insert(loan);
+		}
+end

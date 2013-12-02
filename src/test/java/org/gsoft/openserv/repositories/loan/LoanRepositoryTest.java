@@ -8,19 +8,22 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
+import org.gsoft.openserv.config.CoreConfig;
+import org.gsoft.openserv.config.PersistenceConfig;
 import org.gsoft.openserv.domain.Person;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.test.SpringApplicationContextLoader;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:spring/application-context.xml")
 @Transactional(readOnly=true)
+@ContextConfiguration(classes = {PersistenceConfig.class, CoreConfig.class}, loader = SpringApplicationContextLoader.class)
 public class LoanRepositoryTest {
 	@Resource
 	private LoanRepository loanRepository;
@@ -49,6 +52,7 @@ public class LoanRepositoryTest {
 		assertNotNull("Expected primary key to be generated", loan.getLoanID());
 		loan = loanRepository.findOne(loan.getLoanID());
 		assertTrue("Expected loan term of 180 but was " + loan.getInitialUsedLoanTerm(), loan.getInitialUsedLoanTerm() == 180);
+		loanRepository.findAll();
 	}
 
 }

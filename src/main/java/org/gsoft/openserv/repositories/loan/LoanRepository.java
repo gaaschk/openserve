@@ -3,40 +3,23 @@ package org.gsoft.openserv.repositories.loan;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.repositories.BaseRepository;
-import org.gsoft.openserv.repositories.BaseSpringRepository;
-import org.gsoft.openserv.repositories.predicates.LoanPredicates;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class LoanRepository extends BaseRepository<Loan, Long>{
-	@Resource
-	private LoanRepoIF loanRepo;
+public interface LoanRepository extends BaseRepository<Loan, Long>{
+	@Query("select loan from Loan loan where loan.borrower.personID = :borrowerID and loan.servicingStartDate <= :activeDate")
+	public List<Loan> findAllForBorrowerActiveOnOrBefore(@Param("borrowerID") Long borrowerID, @Param("activeDate") Date activeDate);
 	
-	protected LoanRepoIF getSpringRepository(){
-		return loanRepo;
-	}
+	@Query("select loan from Loan loan where loan.borrower.personID = :borrowerID")
+	public List<Loan> findAllForBorrower(@Param("borrowerID") Long borrowerID);
 	
-	public List<Loan> findAllForBorrowerActiveOnOrBefore(Long borrowerID, Date activeDate){
-		return this.findAll(LoanPredicates.borrowerIdIsAndActiveOnOrBefore(borrowerID, activeDate));
-	}
+	@Query("select loan from Loan loan where loan.loanProgram.loanProgramID = :loanProgramID")
+	public List<Loan> findAllByLoanProgram(@Param("loanProgramID") Long loanProgramID);
 	
-	public List<Loan> findAllForBorrower(Long borrowerID){
-		return this.findAll(LoanPredicates.borrowerIdIs(borrowerID));
-	}
-	
-	public List<Loan> findAllByLoanProgram(LoanProgram loanProgram){
-		return this.findAll(LoanPredicates.loanProgramIs(loanProgram));
-	}
-	
-	public List<Loan> findAllByAccountID(Long accountID){
-		return this.findAll(LoanPredicates.accountIDIs(accountID));
-	}
+	@Query("select loan from Loan loan where loan.account.accountID = :accountID")
+	public List<Loan> findAllByAccountID(@Param("accountID") Long accountID);
 }
-
-@Repository
-interface LoanRepoIF extends BaseSpringRepository<Loan, Long>{} 

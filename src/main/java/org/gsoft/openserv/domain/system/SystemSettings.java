@@ -1,5 +1,6 @@
 package org.gsoft.openserv.domain.system;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
@@ -30,6 +31,7 @@ public class SystemSettings extends PersistentDomainObject{
 		this.daysDelta = daysDelta;
 	}
 
+	@Column(columnDefinition = "SMALLINT")
 	public Boolean getShouldTriggerBatch() {
 		return shouldTriggerBatch;
 	}

@@ -1,0 +1,33 @@
+spring:
+    datasource:
+        driverClassName: com.mysql.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/openserv
+        username: root
+        password:
+        schema: openserv
+    jpa:
+        hibernate:
+            naming_strategy: org.hibernate.cfg.EJB3NamingStrategy
+            ddl-auto: validate
+    view:
+        prefix: /WEB-INF/layouts
+        suffix: .jsp
+
+facebook:
+    clientId: 232538010161222
+    clientSecret: 6041fe7de4cb3d04ab26d2125090173a
+    redirectUrl: https://gaaschk.dyndns-home.com/openservweb/
+twitter:
+    consumerKey: YR571S2JiVBOFyJS5MEg
+    consumerSecret: Kb8hS0luftwCJX3qVoyiLUMfZDtK1EozFoUkjNLUMx4
+server:
+    contextPath: /openserv
+
+---
+spring:
+    profiles: ci
+    datasource:
+        url=jdbc:mysql://192.168.10.9:3306/openservci
+        password=5eqUxet7
+
+      

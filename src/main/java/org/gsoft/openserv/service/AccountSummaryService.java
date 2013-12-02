@@ -6,11 +6,12 @@ import javax.annotation.Resource;
 
 import org.gsoft.openserv.domain.amortization.LoanAmortizationSchedule;
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.loan.LoanStateHistory;
+import org.gsoft.openserv.domain.loan.loanstate.LoanStateHistory;
+import org.gsoft.openserv.domain.loan.loanstate.LoanStateHistoryBuilder;
+import org.gsoft.openserv.domain.loan.loanstate.LoanStateHistoryBuilderFactoryBean;
 import org.gsoft.openserv.domain.payment.Payment;
 import org.gsoft.openserv.repositories.amortization.AmortizationScheduleRepository;
 import org.gsoft.openserv.repositories.loan.LoanRepository;
-import org.gsoft.openserv.repositories.loan.LoanStateHistoryRepository;
 import org.gsoft.openserv.repositories.payment.PaymentRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class AccountSummaryService {
 	@Resource
 	private AmortizationScheduleRepository amortizationRepository;
 	@Resource
-	private LoanStateHistoryRepository loanStateHistory;
+	private LoanStateHistoryBuilderFactoryBean historyBuilderFactoryBean;
 	
 	@PreAuthorize("hasRole('PERM_ViewAccountSummary')")
 	public List<Loan> getAllLoansForBorrower(Long borrowerID){
@@ -40,7 +41,9 @@ public class AccountSummaryService {
 	
 	@PreAuthorize("hasRole('PERM_ViewAccountSummary')")
 	public LoanStateHistory getLoanStateHistoryForLoan(Long loanID){
-		return loanStateHistory.findLoanStateHistory(loanID);
+		LoanStateHistoryBuilder loanStateHistoryBuilder = historyBuilderFactoryBean.createBuilder();
+		loanStateHistoryBuilder.buildLoanStateHistoryForLoan(loanRepository.findOne(loanID));
+		return loanStateHistoryBuilder.getLoanStateHistory();
 	}
 	
 	@PreAuthorize("hasRole('PERM_ViewAccountSummary')")

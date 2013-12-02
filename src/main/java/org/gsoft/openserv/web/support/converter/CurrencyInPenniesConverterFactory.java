@@ -17,7 +17,8 @@ public class CurrencyInPenniesConverterFactory implements ConverterFactory<Strin
         	this.currencyType = currencyType;
         }
 
-        public T convert(String source) {
+        @SuppressWarnings("unchecked")
+		public T convert(String source) {
         	String noUnits = source.replace("$", "");
         	String noDenom = noUnits.replace("US", "");
         	String noSeparator = noDenom.replaceAll(",", "");

@@ -1,14 +1,16 @@
 package org.gsoft.openserv.rulesengine;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
-import javax.annotation.Resource;
+import javax.inject.Inject;
 
+import org.apache.commons.io.IOUtils;
 import org.drools.KnowledgeBase;
 import org.drools.KnowledgeBaseFactory;
 import org.drools.builder.KnowledgeBuilder;
@@ -28,27 +30,33 @@ public class DroolsRulesEngine implements RulesEngine{
 	private boolean knowledgeModified = false;
 	private KnowledgeBase base = null;
 	private ArrayList<Object> knowledge = new ArrayList<Object>();
-	@Resource
+	@Inject
 	private ApplicationContext springContext;
-	@Resource
+	@Inject
 	private SystemSettingsLogic systemSettingsLogic;
 	
 	private KnowledgeBase getKnowledgeBase(){
 		if(base == null){
 			KnowledgeBuilder builder = KnowledgeBuilderFactory.newKnowledgeBuilder();
-			File ruleDir;
+			List<URL> packages = new ArrayList<>();
+			List<URL> drls = new ArrayList<>();
 			try {
-				ruleDir = ResourceUtils.getFile("classpath:rules");
-			} catch (FileNotFoundException e) {
+				List<String> packageNames = IOUtils.readLines(ResourceUtils.getURL("classpath:rules/packages/index.list").openStream());
+				for(String packageName:packageNames){
+					packages.add(ResourceUtils.getURL("classpath:rules/packages/"+packageName));
+				}
+				List<String> drlNames = IOUtils.readLines(ResourceUtils.getURL("classpath:rules/drl/index.list").openStream());
+				for(String drlName:drlNames){
+					packages.add(ResourceUtils.getURL("classpath:rules/drl/"+drlName));
+				}
+				for(URL packageFile:packages){
+					builder.add(ResourceFactory.newInputStreamResource(packageFile.openStream()), ResourceType.DRL);
+				}
+				for(URL drlFile:drls){
+					builder.add(ResourceFactory.newInputStreamResource(drlFile.openStream()), ResourceType.DRL);
+				}
+			} catch (IOException e) {
 				throw new RulesEngineException("Unable to load DRL files.", e);
-			}
-			for(File packageFile:ruleDir.listFiles()){
-				if(packageFile.getName().endsWith(".package"))
-					builder.add(ResourceFactory.newFileResource(packageFile), ResourceType.DRL);
-			}
-			for(File ruleFile:ruleDir.listFiles()){
-				if(ruleFile.getName().endsWith(".drl"))
-					builder.add(ResourceFactory.newFileResource(ruleFile), ResourceType.DRL);
 			}
 			if(builder.hasErrors()){
 				StringBuilder errorMessage = new StringBuilder("Errors parsing DRLs.  KnowledgeBuilder errors: ");
@@ -105,5 +113,4 @@ public class DroolsRulesEngine implements RulesEngine{
 			throw new RulesEngineException("RulesEngine must be open before objects can be added to the context.");
 		knowledge.addAll(Arrays.asList(addedContext));
 	}
-
 }

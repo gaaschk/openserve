@@ -45,7 +45,7 @@ public class LoanStatementRepository {
 	
 	public LoanStatementSummary getLoanStatementSummaryForLoanAsOfDate(Loan loan, Date asOfDate){
 		List<BillingStatement> billingStatements = statementRepository.findAllBillsForLoanOnOrBefore(loan.getLoanID(), asOfDate);
-		List<LoanPayment> loanPayments = loanPaymentRepository.findAllLoanPaymentsEffectiveOnOrBefore(loan.getLoanID(), asOfDate);
+		List<LoanPayment> loanPayments = loanPaymentRepository.findAllLoanPaymentsForLoanEffectiveOnOrBefore(loan.getLoanID(), asOfDate);
 		List<LoanProgramSettings> loanProgramSettings = loanProgramSettingsRepository.findAllLoanProgramSettingsForLoan(loan);
 		LoanStatementSummary summary = new LoanStatementSummary(loan, billingStatements, loanPayments, loanProgramSettings);
 		return summary;

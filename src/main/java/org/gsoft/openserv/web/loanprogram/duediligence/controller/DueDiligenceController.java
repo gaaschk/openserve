@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.gsoft.openserv.domain.duediligence.DueDiligenceEventType;
 import org.gsoft.openserv.domain.duediligence.DueDiligenceSchedule;
 import org.gsoft.openserv.repositories.duediligence.DueDiligenceEventTypeRepository;
@@ -34,7 +32,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Controller
 @RequestMapping("duediligence")
 public class DueDiligenceController {
-	private static final Logger LOG = LogManager.getLogger(DueDiligenceController.class);
 
 	@Resource
 	private ConversionService conversionService;
@@ -62,7 +59,7 @@ public class DueDiligenceController {
 	
 	@RequestMapping(value="/duediligenceeventtypes", method={RequestMethod.GET})
 	public ModelAndView getAllDueDiligenceEventTypes(){
-		List<DueDiligenceEventType> dueDiligenceEventList = dueDiligenceEventTypeRepository.findAll();
+		Iterable<DueDiligenceEventType> dueDiligenceEventList = dueDiligenceEventTypeRepository.findAll();
 		List<DueDiligenceEventTypeModel> dueDiligenceEventTypes = new ArrayList<>();
 		for(DueDiligenceEventType type:dueDiligenceEventList){
 			dueDiligenceEventTypes.add(conversionService.convert(type, DueDiligenceEventTypeModel.class));

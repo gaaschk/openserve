@@ -22,7 +22,7 @@ public class AccountLogic {
 	public Loan addLoanToAccount(Loan loan){
 		if(loan.getAccount() == null){
 			Date repaymentStartDate = repaymentStartDateCalculator.calculateEarliestRepaymentStartDate(loan);
-			List<Account> possibleAccounts = accountRepository.findAccountsByBorrowerAndLoanProgramAndLenderID(loan.getBorrower().getPersonID(), loan.getLoanProgram().getLoanProgramID(), loan.getLenderID());
+			List<Account> possibleAccounts = accountRepository.findAccountsByBorrowerAndLoanProgramAndLenderIDAndNotInRepaymentBy(loan.getBorrower().getPersonID(), loan.getLoanProgram().getLoanProgramID(), loan.getLenderID());
 			for(Account possibleAccount:possibleAccounts){
 				Date accountRepayStart = repaymentStartDateCalculator.calculateRepaymentStartDateForAccount(possibleAccount);
 				if(!accountRepayStart.before(repaymentStartDate)){

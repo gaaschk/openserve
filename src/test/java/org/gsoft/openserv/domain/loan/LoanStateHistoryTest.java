@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import org.gsoft.openserv.domain.interest.LoanRateValue;
+import org.gsoft.openserv.domain.loan.loanstate.LoanStateHistory;
+import org.gsoft.openserv.domain.loan.loanstate.LoanStateHistoryBuilder;
 import org.gsoft.openserv.domain.payment.LoanPayment;
 import org.gsoft.openserv.domain.payment.Payment;
 import org.gsoft.openserv.domain.rates.RateValue;
@@ -13,11 +15,11 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 public class LoanStateHistoryTest {
-
+	
 	@Test
 	public void test() {
 		Date today = new Date();
-		LoanStateHistory history = new LoanStateHistory();
+		LoanStateHistoryBuilder history = new LoanStateHistoryBuilder(new LoanStateHistory());
 		Disbursement disbursement = new Disbursement();
 		disbursement.setDisbursementAmount(10000000);
 		disbursement.setDisbursementEffectiveDate(today);
@@ -60,6 +62,6 @@ public class LoanStateHistoryTest {
 		loanRate.setRateValue(rateValue);
 		history.addRateChange(loanRate);
 		System.out.println(history);
-		assertTrue("Expecting principal to be " + 9585799, history.getEndingPrincipal() == 9585799);
+		assertTrue("Expecting principal to be " + 9585799, history.getLoanStateHistory().getEndingPrincipal() == 9585799);
 	}
 }

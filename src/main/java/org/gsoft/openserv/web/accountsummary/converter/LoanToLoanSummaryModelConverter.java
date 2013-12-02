@@ -6,7 +6,7 @@ import javax.annotation.Resource;
 
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.loan.LoanStateHistory;
+import org.gsoft.openserv.domain.loan.loanstate.LoanStateHistory;
 import org.gsoft.openserv.service.AccountSummaryService;
 import org.gsoft.openserv.web.accountsummary.model.LoanSummaryModel;
 import org.springframework.core.convert.converter.Converter;

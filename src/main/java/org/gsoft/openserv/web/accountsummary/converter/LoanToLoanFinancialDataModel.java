@@ -1,7 +1,9 @@
 package org.gsoft.openserv.web.accountsummary.converter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -11,7 +13,7 @@ import org.gsoft.openserv.buslogic.repayment.RepaymentStartDateCalculator;
 import org.gsoft.openserv.buslogic.system.SystemSettingsLogic;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanProgramSettings;
-import org.gsoft.openserv.domain.loan.LoanStateHistory;
+import org.gsoft.openserv.domain.loan.loanstate.LoanStateHistory;
 import org.gsoft.openserv.domain.payment.LoanPayment;
 import org.gsoft.openserv.domain.payment.billing.LoanStatementSummary;
 import org.gsoft.openserv.repositories.loan.LoanProgramSettingsRepository;
@@ -19,6 +21,7 @@ import org.gsoft.openserv.repositories.payment.LoanPaymentRepository;
 import org.gsoft.openserv.repositories.payment.LoanStatementRepository;
 import org.gsoft.openserv.service.AccountSummaryService;
 import org.gsoft.openserv.util.Constants;
+import org.gsoft.openserv.util.ListUtility;
 import org.gsoft.openserv.web.accountsummary.model.LoanFinancialDataModel;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
@@ -62,7 +65,10 @@ public class LoanToLoanFinancialDataModel implements Converter<Loan, LoanFinanci
 		finModel.setMinimumPaymentAmount(amortizationLogic.findPaymentAmountForDate(loan,systemSettings.getCurrentSystemDate()));
 		LoanStatementSummary statementSummary = statementRepository.getLoanStatementSummaryForLoan(loan);
 		finModel.setNextDueDate(statementSummary.getNextDueDate());
-		LoanPayment lastPayment = loanPaymentRepository.findMostRecentLoanPayment(loan.getLoanID());
+		List<LoanPayment> allPayments = ListUtility.addAll(new ArrayList<LoanPayment>(), loanPaymentRepository.findAllLoanPayments(loan.getLoanID())); 
+		LoanPayment lastPayment = null;
+		if(allPayments != null && allPayments.size()>0)
+			lastPayment = allPayments.get(allPayments.size()-1);
 		if(lastPayment != null){
 			finModel.setLastPaidDate(lastPayment.getPayment().getEffectiveDate());
 		}

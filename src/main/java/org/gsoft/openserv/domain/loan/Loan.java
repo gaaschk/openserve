@@ -33,7 +33,6 @@ public class Loan extends PersistentDomainObject{
 	private Integer initialUsedLoanTerm;
 	private Date firstDueDate;
 	private Date initialDueDate;
-	private Date repaymentStartDate;
 	//Enumerations
 	private LoanProgram loanProgram;
 	//Relationships

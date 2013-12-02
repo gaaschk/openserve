@@ -82,9 +82,9 @@ public class GenerateBillingStatementTest {
 		});
 		
 		KnowledgeBuilder builder= KnowledgeBuilderFactory.newKnowledgeBuilder();
-		File ruleFile = ResourceUtils.getFile("classpath:rules/loan.package");
+		File ruleFile = ResourceUtils.getFile("classpath:rules/packages/loan.package");
 		builder.add(ResourceFactory.newFileResource(ruleFile), ResourceType.DRL);
-		ruleFile = ResourceUtils.getFile("classpath:rules/BillingRules.drl");
+		ruleFile = ResourceUtils.getFile("classpath:rules/drl/BillingRules.drl");
 		builder.add(ResourceFactory.newFileResource(ruleFile), ResourceType.DRL);
 		if(builder.hasErrors())
 			System.out.println(builder.getErrors());

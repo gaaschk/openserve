@@ -11,6 +11,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.gsoft.openserv.config.CoreConfig;
+import org.gsoft.openserv.config.PersistenceConfig;
 import org.gsoft.openserv.domain.PersistentDomainObject;
 import org.gsoft.openserv.domain.loan.Loan;
 import org.gsoft.openserv.domain.loan.LoanBalanceAdjustment;
@@ -19,14 +21,15 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.test.SpringApplicationContextLoader;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:spring/application-context.xml")
 @Transactional(readOnly=true)
+@ContextConfiguration(classes = {PersistenceConfig.class, CoreConfig.class}, loader = SpringApplicationContextLoader.class)
 public class LoanBalanceAdjustmentRepositoryTest {
 	@Resource
 	private LoanBalanceAdjustmentRepository loanBalAdjRepo;
@@ -71,7 +74,7 @@ public class LoanBalanceAdjustmentRepositoryTest {
 			loanID = loan.getLoanID();
 			loanBalAdjRepo.save(lba);
 		}
-		List<LoanBalanceAdjustment> adjs = loanBalAdjRepo.findAllLoanBalanceAdjustmentsForLoan(loanID);
+		List<LoanBalanceAdjustment> adjs = loanBalAdjRepo.findAllByLoanID(loanID);
 		assertNotNull("Expected at least one LoanBalanceAdjustment", adjs);
 		assertTrue("Expected at least one LoanBalanceAdjustment", adjs.size() > 0);
 		assertTrue("Expecting 1 LoanBalanceAdjustment, found " + adjs.size(), adjs.size() == 1);

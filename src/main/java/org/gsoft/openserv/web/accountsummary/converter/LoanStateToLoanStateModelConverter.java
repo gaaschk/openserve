@@ -1,6 +1,6 @@
 package org.gsoft.openserv.web.accountsummary.converter;
 
-import org.gsoft.openserv.domain.loan.LoanState;
+import org.gsoft.openserv.domain.loan.loanstate.LoanState;
 import org.gsoft.openserv.web.accountsummary.model.LoanStateModel;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

@@ -33,6 +33,7 @@ public class FixedRepaymentPlan extends RepaymentPlan{
 	public void setCapFrequency(FrequencyType capFrequency) {
 		this.capFrequency = capFrequency;
 	}
+	@Column(columnDefinition = "SMALLINT")
 	public Boolean getCapAtEnd() {
 		return capAtEnd;
 	}

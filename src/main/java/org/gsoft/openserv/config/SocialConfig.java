@@ -1,6 +1,5 @@
 package org.gsoft.openserv.config;
 
-import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
@@ -9,6 +8,7 @@ import org.gsoft.openserv.web.social.controller.CustomConnectController;
 import org.gsoft.openserv.web.social.controller.CustomProviderSignInController;
 import org.gsoft.openserv.web.social.facebook.PostToWallAfterConnectInterceptor;
 import org.gsoft.openserv.web.social.twitter.TweetAfterConnectInterceptor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -37,15 +37,15 @@ public class SocialConfig {
 
 	@Inject
 	private DataSource dataSource;
-	@Resource(name="twitter.consumerKey")
+	@Value("${twitter.consumerKey}")
 	private String twitterConsumerKey;
-	@Resource(name="twitter.consumerSecret")
+	@Value("${twitter.consumerSecret}")
 	private String twitterConsumerSecret;
-	@Resource(name="facebook.clientId")
+	@Value("${facebook.clientId}")
 	private String facebookClientId;
-	@Resource(name="facebook.clientSecret")
+	@Value("${facebook.clientSecret}")
 	private String facebookClientSecret;
-	@Resource(name="facebook.redirectUrl")
+	@Value("${facebook.redirectUrl}")
 	private String facebookRedirectUrl;
 
 	@Bean

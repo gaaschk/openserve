@@ -42,7 +42,6 @@ public class RulesEngineAspect {
 	public void openRulesEngine(){
 		rulesEngine.open();
 		//need to do this to ensure that it runs at least once.  
-		//TODO consider renaming this property
 		rulesEngine.setModified();
 	}
 

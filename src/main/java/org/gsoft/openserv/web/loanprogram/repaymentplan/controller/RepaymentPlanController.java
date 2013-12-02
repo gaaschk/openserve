@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.gsoft.openserv.domain.loan.LoanPhaseEvent;
 import org.gsoft.openserv.domain.repayment.RepaymentPlan;
 import org.gsoft.openserv.repositories.repayment.RepaymentPlanRepository;
@@ -35,8 +33,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping("loanprogram/repaymentplans")
 @Transactional(readOnly=true)
 public class RepaymentPlanController {
-	private static final Logger LOG = LogManager.getLogger(RepaymentPlanController.class);
-
 	@Resource
 	private RepaymentPlanRepository repaymentPlanRepository;
 	@Resource

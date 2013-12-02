@@ -23,7 +23,6 @@ public class ManageDueDiligenceSchedulesModel implements Serializable {
 	private String execution = null;
 
 	private List<DueDiligenceSchedulesModel> scheduleModels = null;
-	private DueDiligenceSchedulesModel selectedScheduleModel = null;
 	
 	private List<DueDiligenceEventType> allEventTypes = null;
 	

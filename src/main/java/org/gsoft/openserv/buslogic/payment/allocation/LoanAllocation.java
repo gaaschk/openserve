@@ -3,14 +3,15 @@ package org.gsoft.openserv.buslogic.payment.allocation;
 import java.util.Date;
 
 import org.gsoft.openserv.domain.loan.Loan;
-import org.gsoft.openserv.domain.loan.LoanStateHistory;
+import org.gsoft.openserv.domain.loan.loanstate.LoanStateHistory;
+import org.gsoft.openserv.domain.loan.loanstate.LoanStateHistoryBuilder;
 import org.gsoft.openserv.domain.payment.LoanPayment;
 import org.gsoft.openserv.domain.payment.billing.LoanStatementSummary;
 import org.gsoft.openserv.domain.payment.billing.StatementPaySummary;
 
 public class LoanAllocation {
 	private Loan loan;
-	private LoanStateHistory loanStateHistory;
+	private LoanStateHistoryBuilder loanStateHistoryBuilder;
 	private LoanStatementSummary statementSummary;
 	private LoanPayment newLoanPayment;
 	
@@ -18,8 +19,8 @@ public class LoanAllocation {
 		this.loan = loan;
 		this.statementSummary = statementSummary;
 		this.newLoanPayment = newLoanPayment;
-		this.loanStateHistory = loanStateHistory;
-		loanStateHistory.addPayment(newLoanPayment);
+		this.loanStateHistoryBuilder = new LoanStateHistoryBuilder(loanStateHistory);
+		loanStateHistoryBuilder.addPayment(newLoanPayment);
 		statementSummary.addPayment(newLoanPayment);
 		statementSummary.applyPayments();
 	}
@@ -30,11 +31,11 @@ public class LoanAllocation {
 	public void setLoan(Loan loan) {
 		this.loan = loan;
 	}
-	public LoanStateHistory getLoanStateHistory() {
-		return loanStateHistory;
+	public LoanStateHistoryBuilder getLoanStateHistoryBuilder() {
+		return loanStateHistoryBuilder;
 	}
-	public void setLoanStateHistory(LoanStateHistory loanStateHistory) {
-		this.loanStateHistory = loanStateHistory;
+	public void setLoanStateHistoryBuilder(LoanStateHistoryBuilder loanStateHistoryBuilder) {
+		this.loanStateHistoryBuilder = loanStateHistoryBuilder;
 	}
 
 	public Date getProjectedPrepayDate() {
@@ -47,7 +48,7 @@ public class LoanAllocation {
 	public Integer getMinimumPaymentAmount() {
 		Integer minReq = this.statementSummary.getMinimumPaymentToAdvanceDueDate();
 		if(minReq == null){
-			minReq = this.getLoanStateHistory().getEndingPrincipal();
+			minReq = this.getLoanStateHistoryBuilder().getLoanStateHistory().getEndingPrincipal();
 		}
 		return minReq;
 	}
