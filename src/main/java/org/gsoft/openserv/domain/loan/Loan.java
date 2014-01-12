@@ -20,6 +20,8 @@ import org.gsoft.openserv.domain.Person;
 import org.gsoft.openserv.domain.amortization.LoanAmortizationSchedule;
 import org.gsoft.openserv.rulesengine.annotation.RulesEngineEntity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @RulesEngineEntity
 public class Loan extends PersistentDomainObject{
@@ -71,6 +73,7 @@ public class Loan extends PersistentDomainObject{
 	}
 	@ManyToOne
 	@JoinColumn(name = "AccountID")
+	@JsonIgnore
 	public Account getAccount() {
 		return account;
 	}

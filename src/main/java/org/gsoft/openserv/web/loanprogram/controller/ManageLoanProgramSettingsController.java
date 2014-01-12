@@ -48,7 +48,7 @@ public class ManageLoanProgramSettingsController {
 	private RateRepository rateRepostory;
 	@Resource
 	private LoanProgramSettingsService loanProgramSettingsService;
-	@Resource
+	@Resource(name="customConversionService")
 	private ConversionService conversionService;
 	@Resource
 	private ObjectMapper objectMapper;

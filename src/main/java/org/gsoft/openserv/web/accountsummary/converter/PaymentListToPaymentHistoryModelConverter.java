@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PaymentListToPaymentHistoryModelConverter implements Converter<List<Payment>, PaymentHistoryModel>{
-	@Resource
+	@Resource(name="customConversionService")
 	private ConversionService conversionService;
 	
 	public PaymentHistoryModel convert(List<Payment> payments){

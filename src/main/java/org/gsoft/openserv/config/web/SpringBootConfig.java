@@ -1,4 +1,4 @@
-package org.gsoft.openserv.config;
+package org.gsoft.openserv.config.web;
 
 import java.util.Arrays;
 
@@ -7,12 +7,15 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan(basePackages="org.gsoft.openserv")
+@Import(WebConfig.class)
 public class SpringBootConfig {
     private static Log logger = LogFactory.getLog(SpringBootConfig.class);
 

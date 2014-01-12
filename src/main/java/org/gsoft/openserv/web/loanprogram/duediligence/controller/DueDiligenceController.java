@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping("duediligence")
 public class DueDiligenceController {
 
-	@Resource
+	@Resource(name="customConversionService")
 	private ConversionService conversionService;
 	@Resource
 	private DueDiligenceScheduleRepository dueDiligenceScheduleRepository;

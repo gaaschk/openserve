@@ -12,6 +12,8 @@ import javax.persistence.Transient;
 
 import org.gsoft.openserv.domain.PersistentDomainObject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Disbursement extends PersistentDomainObject{
 	private static final long serialVersionUID = -8488460178826929454L;
@@ -30,6 +32,7 @@ public class Disbursement extends PersistentDomainObject{
 	}
 	@ManyToOne
 	@JoinColumn(name="LoanID")
+	@JsonIgnore
 	public Loan getLoan() {
 		return loan;
 	}

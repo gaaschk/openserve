@@ -1,4 +1,4 @@
-package org.gsoft.openserv.config;
+package org.gsoft.openserv.config.web;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;

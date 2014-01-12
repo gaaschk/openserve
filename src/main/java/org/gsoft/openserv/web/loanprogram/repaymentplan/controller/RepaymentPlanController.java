@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class RepaymentPlanController {
 	@Resource
 	private RepaymentPlanRepository repaymentPlanRepository;
-	@Resource
+	@Resource(name="customConversionService")
 	private ConversionService conversionService;
 	@Resource
 	private ObjectMapper objectMapper;

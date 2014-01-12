@@ -5,8 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
-import org.gsoft.openserv.config.CoreConfig;
-import org.gsoft.openserv.config.PersistenceConfig;
+import org.gsoft.openserv.config.core.CoreConfig;
 import org.gsoft.openserv.domain.amortization.AmortizationSchedule;
 import org.joda.time.DateTimeComparator;
 import org.joda.time.DateTimeFieldType;
@@ -21,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional(readOnly=true)
-@ContextConfiguration(classes = {PersistenceConfig.class, CoreConfig.class}, loader = SpringApplicationContextLoader.class)
+@ContextConfiguration(classes = {CoreConfig.class}, loader = SpringApplicationContextLoader.class)
 public class AmortizationScheduleRepositoryTest {
 	
 	@Autowired

@@ -7,8 +7,7 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.config.CoreConfig;
-import org.gsoft.openserv.config.PersistenceConfig;
+import org.gsoft.openserv.config.core.CoreConfig;
 import org.gsoft.openserv.domain.loan.DefaultLoanProgramSettings;
 import org.gsoft.openserv.domain.loan.LoanProgram;
 import org.gsoft.openserv.domain.loan.RepaymentStartType;
@@ -22,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional(readOnly=true)
-@ContextConfiguration(classes = {PersistenceConfig.class, CoreConfig.class}, loader = SpringApplicationContextLoader.class)
+@ContextConfiguration(classes = {CoreConfig.class}, loader = SpringApplicationContextLoader.class)
 public class DefaultLoanProgramSettingsRepositoryTest {
 	@Resource
 	private DefaultLoanProgramSettingsRepository defaultLoanProgramSettingsRepository;

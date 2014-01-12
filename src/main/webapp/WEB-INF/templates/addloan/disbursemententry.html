@@ -5,10 +5,58 @@
     <div id="main" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'headline'" style="height: 100%; width: 100%; padding: 0">
         <div th:replace="layout/standard :: desktopHeader"></div>
         <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'center'">
-	        <h1>This is a really cool application</h1>
-	        When asked to login, use admin/password to gain full access to the system.<br/>
+			<form th:action="@{adddisbursement}" th:object="${loanEntryModel}" th:method="post">
+                <table style="border-right-style: none; border-left-style: none; border-bottom-style: none; border-top-style: none">
+					<tr>
+						<td><label>Loan Type:</label></td>
+						<td><select th:field="*{selectedLoanProgramID}">
+								<option value="-">Select Loan Type</option>
+								<option
+									th:each="loanProgram : ${loanEntryModel.loanProgramList}"
+									th:value="${loanProgram.loanProgramID}"
+									th:text="${loanProgram.name}" />
+						</select></td>
+					</tr>
+					<tr>
+						<td><label>Lender:</label></td>
+						<td><select th:field="*{selectedLenderID}">
+								<option value="-">Select Lender</option>
+
+								<option th:each="lender : ${loanEntryModel.lenderList}"
+									th:value="${lender.lenderID}" th:text="${lender.name}" />
+						</select></td>
+					</tr>
+				</table>
+				<table>
+			        <tr>
+			            <th>Disbursement Date</th>
+			            <th>Disbursement Amount</th>
+			        </tr>
+		            <tr th:each="disb : ${loanEntryModel.addedDisbursements}">
+		                <td th:text="${#dates.format(disb.disbursementDate, 'MM/dd/yyyy')}">01/01/2013</td>
+		                <td th:text="${disb.disbursementAmount}">1500.00</td>
+		            </tr>
+			    </table>
+                <table style="border-right-style: none; border-left-style: none; border-bottom-style: none; border-top-style: none">
+					<tr>
+						<td><label>Date:</label></td>
+						<td><input type="text" class="masked"
+							th:field="*{newDisbDate}" data-meiomask="fixed.date-us" /></td>
+						<td><p th:if="${#fields.hasErrors('newDisbDate')}"
+								th:errors="*{newDisbDate}">Invalid Date</p></td>
+					</tr>
+					<tr>
+						<td><label>Amount:</label></td>
+						<td><input type="text" class="masked"
+							th:field="*{newDisbAmount}" data-meiomask="reverse.dollar" /></td>
+					</tr>
+				</table>
+				<input type="submit" name="addDisbursement" value="Add Disbursement"/>
+			    <input type="submit" name="disbursementsAdded" value="Done"/>
+			</form>
         </div>
         <div th:replace="layout/standard :: desktopFooter"></div>
+        <div th:replace="layout/standard :: mieoScript"></div>
     </div>
   </body>
 </html>

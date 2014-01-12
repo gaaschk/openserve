@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:include="layout/standard :: headerFragment"></head>
+	<body class="soria">
+		<div id="main" data-dojo-type="dijit/layout/BorderContainer"
+			data-dojo-props="design:'headline'"
+			style="height: 100%; width: 100%; padding: 0">
+			<div th:replace="layout/standard :: desktopHeader"></div>
+			<div data-dojo-type="dijit/layout/ContentPane"
+				data-dojo-props="region: 'center'">
+                <form th:action="@{saveloan}"
+                    th:object="${loanEntryModel}" th:method="post">
+				    <h3>Person Data</h3>
+                    <table style="border-right-style: none; border-left-style: none; border-bottom-style: none; border-top-style: none">
+                        <tr>
+					        <td><label>SSN:</label></td>
+					        <td th:text="${loanEntryModel.person.ssn}">000000000</td>
+				        </tr>
+						<tr>
+				            <td><label>First Name:</label></td>
+				            <td><input th:field="*{person.firstName}" type="text" value="John"/></td>
+				        </tr>
+				        <tr>
+				            <td><label>Last Name:</label></td>
+				            <td><input th:field="*{person.lastName}" type="text" value="Doe"/></td>
+                        </tr>
+                    </table>
+				    <h3>Loan Data</h3>
+					<table>
+						<tr>
+							<th>Disbursement Date</th>
+							<th>Disbursement Amount</th>
+						</tr>
+						<tr th:each="disb : ${loanEntryModel.addedDisbursements}">
+							<td th:text="${#dates.format(disb.disbursementDate, 'MM/dd/yyyy')}">01/01/2001</td>
+							<td th:text="${disb.disbursementAmount}">$5,000.00</td>
+						</tr>
+					</table>
+					<table
+						style="border-right-style: none; border-left-style: none; border-bottom-style: none; border-top-style: none">
+						<tr>
+							<td><label>Effective Date:</label></td>
+							<td><input type="text" class="masked"
+								th:field="*{effectiveDate}" data-meiomask="fixed.date-us" /></td>
+							<td><p th:if="${#fields.hasErrors('effectiveDate')}"
+									th:errors="*{effectiveDate}">Invalid Date</p></td>
+						</tr>
+						<tr>
+							<td><label class="nobr">Starting Principal:</label></td>
+							<td><input type="text" class="masked"
+								th:field="*{startingPrincipal}" data-meiomask="reverse.dollar" /></td>
+						</tr>
+						<tr>
+							<td><label>Starting Interest:</label></td>
+							<td><input type="text" class="masked"
+								th:field="*{startingInterest}" data-meiomask="reverse.dollar" /></td>
+						</tr>
+						<tr>
+							<td><label>Starting Fees:</label></td>
+							<td><input type="text" class="masked"
+								th:field="*{startingFees}" data-meiomask="reverse.dollar" /></td>
+						</tr>
+					</table>
+					<input type="submit" name="saveLoan" value="Save Loan"></input>
+				</form>
+			</div>
+        <div th:replace="layout/standard :: desktopFooter"></div>
+        <div th:replace="layout/standard :: mieoScript"></div>
+    </div>
+  </body>
+</html>

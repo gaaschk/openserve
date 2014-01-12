@@ -1,0 +1,43 @@
+        <table>
+            <tr>
+                <td><strong>SSN: </strong></td>
+                <td><input id="ssnField" type="text" value="000000000"
+                    data-dojo-type="dijit/form/TextBox"
+                    data-meiomask-options="{mask: '999-99-9999', autoTab: true, removeIfInvalid: true}"
+                    data-meiomask="fixed">
+                </input></td>
+            </tr>
+        </table>
+        <button id="personSearch" type="button">Search
+        </button>
+        <script>
+            require(["dijit/form/Button", "dojo/topic", "dojo/request", "dojo/domReady!"], function(Button, topic, request){
+                console.log("looking for masked fields");
+                $$('input[data-meiomask]').each(
+                    function(input) {
+                        input.meiomask(input.get('data-meiomask'), JSON
+                                .decode(input.get('data-meiomask-options')));
+                        console.log("meiomask: " + input.get('data-meiomask'));
+                });
+                var searchButton = new Button({
+                    label: "Search",
+                    onClick: function(){
+                        console.log("search clicked");
+                        var ssnValue = document.getElementById("ssnField").value.replace(/-/g,"");
+                        request("http://localhost:8080/openserv/persons/search/findPersonBySsn", {
+                            query: {
+                                ssn:ssnValue
+                            }
+                        }).then(function(data){
+                            var jsonData = JSON.parse(data);
+                            var content = jsonData.content;
+                            if(content.length <= 0){
+                                alert("No results found")
+                            }else{
+                                topic.publish("personSearchComplete",content);
+                            }
+                        });
+                    }
+                }, "personSearch");
+            });
+        </script>

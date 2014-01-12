@@ -1,0 +1,4 @@
+ALTER TABLE `Loan` MODIFY COLUMN `StartingPrincipal` int(11) NOT NULL DEFAULT '0';
+ALTER TABLE `Loan` MODIFY COLUMN `StartingInterest` decimal(20,6) NOT NULL DEFAULT '0';
+ALTER TABLE `Loan` MODIFY COLUMN `StartingFees` int(11) NOT NULL DEFAULT '0';
+

@@ -1,4 +1,4 @@
-package org.gsoft.openserv.config;
+package org.gsoft.openserv.config.core;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;

@@ -1,0 +1,56 @@
+<div data-dojo-type="dijit/layout/ContentPane">
+    <div id="addLoanContent" data-dojo-type="dijit/layout/ContentPane">
+    </div>
+</div>
+<script>
+    var newLoanStore;
+    require(["dojo/request", "dojo/request/script", "dijit/registry", "dojo/topic", "dojo/_base/array"],
+        function(request, script,registry,topic, array){
+            console.log("loading addloan page");
+            newLoanStore = {};
+            request("../person/personsearch.html").then(function(data){
+                registry.byId("addLoanContent").set("content", data);
+                var scriptNodeList = document.getElementById("addLoanContent").getElementsByTagName("script");
+                for(var i = 0; i < scriptNodeList.length; ++i){
+                    eval(scriptNodeList[i].innerHTML);
+                }
+            });
+            topic.subscribe("personSearchComplete", function(personValue){
+                if(personValue){
+                    console.log("Person from search: " + JSON.stringify(personValue));
+                    newLoanStore["person"] = personValue[0];
+                    var personId;
+                    array.forEach(newLoanStore.person.links, function(personLink){
+                        if(personLink.rel == 'self'){
+                            personId = personLink.href.substring(personLink.href.lastIndexOf("/")+1);
+                            console.log("ID for " + personLink.href + " = " + personId);
+                        }
+                    });
+                    newLoanStore.person["personID"] = personId;
+                    delete newLoanStore.person.links;
+                }
+                else
+                    newLoanStore["person"] = {};
+                request("../addloan/disbursemententry.html").then(function(data){
+                    registry.byId("addLoanContent").set("content", data);
+                    var scriptNodeList = document.getElementById("addLoanContent").getElementsByTagName("script");
+                    for(var i = 0; i < scriptNodeList.length; ++i){
+                        eval(scriptNodeList[i].innerHTML);
+                    }
+                    console.log("Publishing loan information");
+                    topic.publish("loanDataUpdated", newLoanStore);
+                });
+            });
+            topic.subscribe("loanEntryComplete", function(loanData){
+                newLoanStore = loanData;
+                request("http://localhost:8080/openserv/newloan", {
+                    method: "POST",
+                    data: JSON.stringify(newLoanStore),
+                    handleAs: "json",
+                    headers: { "Content-Type": "application/json"}
+                }).then(function(response){
+                    document.getElementById("addLoanContent").innerHTML = JSON.stringify(response);
+                });
+            });
+        });
+</script>

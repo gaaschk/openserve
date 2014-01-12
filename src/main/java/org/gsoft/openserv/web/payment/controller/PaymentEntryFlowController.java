@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class PaymentEntryFlowController {
 	@Resource
 	private PersonService personService;
-	@Resource
+	@Resource(name="customConversionService")
 	private ConversionService conversionService;
 	@Resource
 	private PaymentService paymentService;

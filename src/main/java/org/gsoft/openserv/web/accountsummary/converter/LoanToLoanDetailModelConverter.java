@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
 public class LoanToLoanDetailModelConverter implements Converter<Loan, LoanDetailModel>{
 	@Resource
 	private AccountSummaryService accountSummaryService;
-	@Resource
+	@Resource(name="customConversionService")
 	private ConversionService conversionService;
 	@Resource
 	private SystemSettingsLogic systemSettings;

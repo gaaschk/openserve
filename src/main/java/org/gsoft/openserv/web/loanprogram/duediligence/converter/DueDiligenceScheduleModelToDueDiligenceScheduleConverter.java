@@ -23,7 +23,7 @@ public class DueDiligenceScheduleModelToDueDiligenceScheduleConverter implements
 	private DueDiligenceEventRepository dueDiligenceEventRepo;
 	@Resource
 	private LoanProgramRepository loanProgramRepository;
-	@Resource
+	@Resource(name="customConversionService")
 	private ConversionService conversionService;
 	
 	@Override

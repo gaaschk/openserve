@@ -1,4 +1,4 @@
-package org.gsoft.openserv.config;
+package org.gsoft.openserv.config.web;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;

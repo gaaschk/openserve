@@ -22,14 +22,7 @@ public class LoanModelValidator implements Validator{
 	
 	@Override
 	public void validate(Object loanModel, Errors e){
-		this.validateEnterDisbursements((LoanEntryModel)loanModel, e);
 		this.validateEnterLoanDetails((LoanEntryModel)loanModel, e);
-	}
-	
-	public void validateEnterDisbursements(LoanEntryModel loanModel, Errors e){
-		if(systemSettings.getCurrentSystemDate().before(loanModel.getNewDisbursement().getDisbursementDate())){
-			e.rejectValue("newDisbursement.disbursementDate", "error.future.disbursement");
-		}
 	}
 	
 	public void validateEnterLoanDetails(LoanEntryModel loanModel, Errors e){

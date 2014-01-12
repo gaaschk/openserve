@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DueDiligenceScheduleToDueDiligenceScheduleModelConverter implements
 		Converter<DueDiligenceSchedule, DueDiligenceScheduleModel> {
-	@Resource
+	@Resource(name="customConversionService")
 	private ConversionService conversionService;
 
 	@Override

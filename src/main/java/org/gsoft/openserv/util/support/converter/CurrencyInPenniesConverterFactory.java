@@ -1,4 +1,4 @@
-package org.gsoft.openserv.web.support.converter;
+package org.gsoft.openserv.util.support.converter;
 
 import java.math.BigDecimal;
 

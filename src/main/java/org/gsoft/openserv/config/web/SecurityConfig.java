@@ -1,4 +1,4 @@
-package org.gsoft.openserv.config;
+package org.gsoft.openserv.config.web;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,5 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
 		http.authorizeRequests().anyRequest().permitAll();
+		http.csrf().disable();
 	}
 }

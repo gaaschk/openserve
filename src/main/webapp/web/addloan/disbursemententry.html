@@ -1,0 +1,260 @@
+        <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'center'">
+            <h3>Person Data</h3>
+            <table style="border-right-style: none; border-left-style: none; border-bottom-style: none; border-top-style: none">
+                <tr>
+                    <td><label>SSN:</label></td>
+                    <td><input id="ssnField"></input></td>
+                </tr>
+                <tr>
+                    <td><label>First Name:</label></td>
+                    <td><input id="firstNameField" type="dijit/form/TextBox"/></td>
+                </tr>
+                <tr>
+                    <td><label>Last Name:</label></td>
+                    <td><input id="lastNameField" type="dijit/form/TextBox"/></td>
+                </tr>
+            </table>
+            <h3>Loan Data</h3>
+            <table style="border-right-style: none; border-left-style: none; border-bottom-style: none; border-top-style: none">
+                <tr>
+                    <td><label>Loan Type:</label></td>
+                    <td><input id="loanTypeSelect"></input></td>
+                </tr>
+                <tr>
+                    <td><label>Lender:</label></td>
+                    <td><input id="lenderSelect"></input></td>
+                </tr>
+            </table>
+            <h4>Disbursements</h4>
+            <div id="disbursementGrid"></div>
+            <button id="addDisbursement" type="button">Add</button>
+            <button id="removeDisbursement" type="button">Remove</button>
+            <table style="border-right-style: none; border-left-style: none; border-bottom-style: none; border-top-style: none">
+                <tr>
+                    <td><label>Effective Date:</label></td>
+                    <td><input id="effectiveDate" data-dojo-type="dijit/form/DateTextBox" data-dojo-props="constraints:{datePattern:'yy-MM-dd'}"></input></td>
+                </tr>
+                <tr>
+                    <td><label>Starting Principal:</label></td>
+                    <td><input id="startingPrincipal" data-dojo-type="dijit/form/CurrencyTextBox" value="0"></input></td>
+                </tr>
+                <tr>
+                    <td><label>Starting Interest:</label></td>
+                    <td><input id="startingInterest" data-dojo-type="dijit/form/CurrencyTextBox" value="0"/></td>
+                </tr>
+                <tr>
+                    <td><label>Starting Fees:</label></td>
+                    <td><input id="startingFees" data-dojo-type="dijit/form/CurrencyTextBox" value="0"/></td>
+                </tr>
+            </table>
+            <button id="disbEntryComplete" type="button">Done</button>
+        </div>
+        <style>
+            .dgrid {
+                width: 425px;
+                height: 25%;
+            }
+            .dgrid-column-id{
+                width: 25px;
+            }
+            .dgrid-column-disbursementDate{
+                width: 175px;
+            }
+            .dgrid-column-disbursementAmount{
+                width: 175px;
+            }
+        </style>
+        <script>
+            var loanData;
+
+            require(["dojo/topic", "dijit/registry", "dijit/form/TextBox"], function(topic, registry, TextBox){
+                console.log("Subscribing to loan information");
+                topic.subscribe("loanDataUpdated", function(newLoanData){
+                    loanData = newLoanData;
+                    console.log("Setting SSN field to: " + loanData.person.ssn);
+                    new TextBox({
+                        name: "ssnField",
+                        value: loanData.person.ssn,
+                        disabled: true
+                    },"ssnField");
+                    new TextBox({
+                        name: "firstNameField",
+                        value: loanData.person.firstName
+                    },"firstNameField");
+                    new TextBox({
+                        name: "lastNameField",
+                        value: loanData.person.lastName
+                    },"lastNameField");
+                });
+            });
+
+            require(["dijit/form/Button", "dojo/topic", "dojo/request", "dojo/store/Memory",
+                     "dgrid/OnDemandGrid", "dojo/_base/declare", "dgrid/Keyboard", "dgrid/Selection",
+                     "dgrid/editor", "dojo/date/locale", "dijit/form/DateTextBox", "dijit/form/CurrencyTextBox",
+                     "dgrid/selector", "dojo/_base/array", "dojo/data/ObjectStore", "dijit/form/Select", "dojo/domReady!"],
+                    function(Button, topic, request, Memory, OnDemandGrid, declare, Keyboard, Selection,
+                              editor, locale, DateTextBox, CurrencyTextBox, selector, array, ObjectStore, Select){
+                var loanProgramSelect;
+                var lenderSelect;
+                console.log("looking for masked fields");
+                $$('input[data-meiomask]').each(
+                    function(input) {
+                        input.meiomask(input.get('data-meiomask'), JSON
+                                .decode(input.get('data-meiomask-options')));
+                        console.log("meiomask: " + input.get('data-meiomask'));
+                });
+                var currentEffectiveDateField = registry.byId("effectiveDate");
+                currentEffectiveDateField.set("value", new Date());
+                var memoryStore = new Memory({idProperty: "id", data: [
+                    {
+                        id: Date.now() * -1,
+                        disbursementDate: new Date(),
+                        disbursementAmount: 0
+                    }
+                ]});
+                var grid = new declare([OnDemandGrid, editor, Keyboard, Selection])({
+                    columns: [
+                        selector({id: "id", label: '', sortable: false}),
+                        editor({id: "disbursementDate", field:"disbursementDate", label: "Date", editorArgs:{constraints:{datePattern:'yy-MM-dd'}}}, DateTextBox),
+                        editor({id: "disbursementAmount", field: "disbursementAmount", label: "Amount"}, CurrencyTextBox)
+                    ],
+                    store: memoryStore,
+                    selectionMode: "single"
+                }, "disbursementGrid");
+
+                grid.on("dgrid-datachange", function(evt){
+                    if(evt.cell.column.id == 'disbursementDate'){
+                        var currentEffectiveDateField = registry.byId("effectiveDate");
+                        console.log("Current Effective Date: " + currentEffectiveDateField.get('value'));
+                        var earliestDate = evt.value;
+                        array.forEach(grid.store.data, function(row){
+                            if(!earliestDate || row.disbursementDate < earliestDate)
+                                earliestDate = row.disbursementDate;
+                        })
+                        currentEffectiveDateField.set('value', earliestDate);
+                    }
+                    else if(evt.cell.column.id == 'disbursementAmount'){
+                        var currentStartingPrincipal = registry.byId("startingPrincipal");
+                        var eventRowId = evt.cell.row.data.id;
+                        var startingPrincipal = evt.value;
+                        array.forEach(grid.store.data, function(storeRow){
+                            if(storeRow.id != eventRowId)
+                                startingPrincipal += storeRow.disbursementAmount;
+                        })
+                        currentStartingPrincipal.set('value', startingPrincipal);
+                    }
+                });
+
+                new Button({
+                    label: "Add",
+                    onClick: function(){
+                        grid.save();
+                        var newDisb = {
+                            id: Date.now() * -1,
+                            disbursementDate: new Date(),
+                            disbursementAmount: 0
+                        };
+                        grid.store.add(newDisb);
+                        grid.refresh();
+                        console.log(JSON.stringify(grid.store.data));
+                    }
+                },"addDisbursement");
+
+                new Button({
+                    label: "Remove",
+                    onClick: function(){
+                        grid.save();
+                        array.forEach(grid.store.data, function(row){
+                            if(row && grid.selection[row.id])
+                                grid.store.remove(row.id);
+                        });
+                        grid.refresh();
+                    }
+                },"removeDisbursement");
+
+                new Button({
+                    label: "Done",
+                    onClick: function(){
+                        grid.save();
+                        loanData.person.firstName = registry.byId("firstNameField").value;
+                        loanData.person.lastName = registry.byId("lastNameField").value;
+                        loanData.selectedLoanProgramID = loanProgramSelect.value;
+                        loanData.selectedLenderID = lenderSelect.value;
+                        loanData.addedDisbursements = grid.store.data;
+                        loanData.effectiveDate = registry.byId("effectiveDate").get('value');
+                        loanData.startingPrincipal = registry.byId("startingPrincipal").get('value');
+                        loanData.startingInterest = registry.byId("startingInterest").get('value');
+                        loanData.startingFees = registry.byId("startingFees").get('value');
+                        topic.publish("loanEntryComplete", loanData);
+                    }
+                },"disbEntryComplete");
+
+                //populate the loan type select box
+                request("http://localhost:8080/openserv/loanPrograms").then(function(data){
+                    var jsonData = JSON.parse(data);
+                    var content = jsonData.content;
+
+                    var programArray = [{
+                        id:"",
+                        label:"-- SELECT --"
+                    }];
+
+                    array.forEach(content, function(program){
+                        var progId;
+                        array.forEach(program.links, function(progLink){
+                            if(progLink.rel == 'self'){
+                                progId = progLink.href.substring(progLink.href.lastIndexOf("/")+1);
+                                console.log("ID for " + progLink.href + " = " + progId);
+                            }
+                        });
+                        programArray.push(
+                            {
+                                id: progId,
+                                label: program.name
+                            }
+                        );
+                    });
+
+                    var memStore = new Memory({idProperty: "id", data:programArray});
+                    var objStore = new ObjectStore({objectStore: memStore});
+                    loanProgramSelect = new Select({
+                        store: objStore
+                    },"loanTypeSelect");
+                    loanProgramSelect.startup();
+                });
+
+                //populate the lender select box
+                request("http://localhost:8080/openserv/lenders").then(function(data){
+                    var jsonData = JSON.parse(data);
+                    var content = jsonData.content;
+
+                    var lenderArray = [{
+                        id:"",
+                        label:"-- SELECT --"
+                    }];
+
+                    array.forEach(content, function(lender){
+                        var lenderId;
+                        array.forEach(lender.links, function(lenderLink){
+                            if(lenderLink.rel == 'self'){
+                                lenderId = lenderLink.href.substring(lenderLink.href.lastIndexOf("/")+1);
+                                console.log("ID for " + lenderLink.href + " = " + lenderId);
+                            }
+                        });
+                        lenderArray.push(
+                            {
+                                id: lenderId,
+                                label: lender.name
+                            }
+                        );
+                    });
+
+                    var memStore = new Memory({idProperty: "id", data:lenderArray});
+                    var objStore = new ObjectStore({objectStore: memStore});
+                    lenderSelect = new Select({
+                        store: objStore
+                    },"lenderSelect");
+                    lenderSelect.startup();
+                });
+            });
+        </script>

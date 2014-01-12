@@ -13,20 +13,33 @@ apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
 
+ext {
+    springBootVersion = '0.5.0.M6'
+    springFrameworkVersion = '4.0.0.RELEASE'
+    springDataRestVersion = '2.0.0.M1'
+    
+    springSecurityVersion = '3.2.0.RELEASE'
+    droolsVersion = '5.5.0.Final'
+    jodaTimeVersion = '2.2'
+    springSocialVersion = '1.0.3.RELEASE' 
+    dbmaintainVersion = '2.4'
+}
+
+configurations.all{
+    resolutionStrategy{
+        eachDependency { DependencyResolveDetails details ->
+            //specifying a fixed version for all libraries with 'org.springframework' group
+            if (details.requested.group == 'org.springframework') {
+                details.useVersion"${springFrameworkVersion}"
+            }
+        }
+    }
+}
+
 eclipse {
     classpath {
        downloadSources=true
     }
-}
-
-ext {
-    springSecurityVersion = '3.2.+'
-    droolsVersion = '5.5.0.Final'
-    jodaTimeVersion = '2.2'
-    springSocialVersion = '1.0.3.RELEASE' 
-    springWebFlowVersion = '2.4.+'
-    tilesVersion = '3.0.3'
-	dbmaintainVersion = '2.4'
 }
 
 jar {
@@ -36,23 +49,18 @@ jar {
 
 repositories {
     maven { url "https://www.laertessoft.biz/artifactory/repo" }
-    mavenCentral()
-    maven { url "http://repo.spring.io/libs-snapshot" }
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web:0.5.0.BUILD-SNAPSHOT")
-    compile("org.springframework.boot:spring-boot-starter-tomcat:0.5.0.BUILD-SNAPSHOT")
-    compile("org.springframework.boot:spring-boot-starter-actuator:0.5.0.BUILD-SNAPSHOT")
-    compile("org.springframework.boot:spring-boot-starter-data-jpa:0.5.0.BUILD-SNAPSHOT")
-	compile("org.springframework.boot:spring-boot-starter-test:0.5.0.BUILD-SNAPSHOT")
-    compile("org.springframework.boot:spring-boot-starter-logging:0.5.0.BUILD-SNAPSHOT")
-    compile("org.springframework.boot:spring-boot-starter-security:0.5.0.BUILD-SNAPSHOT")
-    compile("org.springframework.data:spring-data-rest-webmvc:2.0.0.M1")
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-logging:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-security:${springBootVersion}")
 
-    compile ("org.springframework:spring-test:4.0.0.RC1")
-	
-    compile ("org.thymeleaf:thymeleaf-spring3:2.1.2-SNAPSHOT")
+    compile("org.springframework.data:spring-data-rest-webmvc:${springDataRestVersion}")
     
 	compile ("commons-collections:commons-collections:3.2.1")
     compile ("commons-beanutils:commons-beanutils:1.8.0")
@@ -80,7 +88,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.8'
+    gradleVersion = '1.10'
 }
 
 task updateDatabase{

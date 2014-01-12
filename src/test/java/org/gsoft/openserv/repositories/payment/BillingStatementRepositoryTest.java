@@ -6,8 +6,7 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
-import org.gsoft.openserv.config.CoreConfig;
-import org.gsoft.openserv.config.PersistenceConfig;
+import org.gsoft.openserv.config.core.CoreConfig;
 import org.gsoft.openserv.domain.payment.billing.BillingStatement;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional(readOnly=true)
-@ContextConfiguration(classes = {PersistenceConfig.class, CoreConfig.class}, loader = SpringApplicationContextLoader.class)
+@ContextConfiguration(classes = {CoreConfig.class}, loader = SpringApplicationContextLoader.class)
 public class BillingStatementRepositoryTest {
 	@Resource
 	private BillingStatementRepository repository;

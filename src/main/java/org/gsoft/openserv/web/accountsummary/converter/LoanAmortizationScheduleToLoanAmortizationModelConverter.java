@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LoanAmortizationScheduleToLoanAmortizationModelConverter implements Converter<LoanAmortizationSchedule, LoanAmortizationModel>{
-	@Resource
+	@Resource(name="customConversionService")
 	private ConversionService conversionService;
 	
 	@Override

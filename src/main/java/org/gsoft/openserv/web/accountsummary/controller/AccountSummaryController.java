@@ -26,7 +26,7 @@ public class AccountSummaryController {
 	private PersonService personService;
 	@Resource
 	private AccountSummaryService accountSummaryService;
-	@Resource
+	@Resource(name="customConversionService")
 	private ConversionService conversionService;
 
 	public AccountSummaryModel loadAccount(PersonSearchCriteria personSearchCriteria){

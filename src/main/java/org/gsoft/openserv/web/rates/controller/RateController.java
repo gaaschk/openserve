@@ -19,7 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class RateController {
 	@Resource
 	private RateService rateService;
-	@Resource
+	@Resource(name="customConversionService")
 	private ConversionService conversionService;
 	
 	@RequestMapping(method=RequestMethod.GET)

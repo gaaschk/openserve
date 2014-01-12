@@ -24,7 +24,7 @@ public class RatesFlowController {
 	private RateValueRepository rateValueRepository;
 	@Resource
 	private RateRepository rateRepository;
-	@Resource
+	@Resource(name="customConversionService")
 	private ConversionService conversionService;
 	@Resource
 	private SystemSettingsLogic systemSettings;

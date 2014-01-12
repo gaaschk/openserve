@@ -1,4 +1,4 @@
-package org.gsoft.openserv.web.support.formatter;
+package org.gsoft.openserv.util.support.formatter;
 
 import javax.annotation.Resource;
 

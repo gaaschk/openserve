@@ -1,5 +1,6 @@
 package org.gsoft.openserv.web.addloan.converter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import javax.annotation.Resource;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LoanEntryModelToLoanConverter implements Converter<LoanEntryModel, Loan>{
-	@Resource
+	@Resource(name="customConversionService")
 	private ConversionService conversionService;
 	@Resource
 	private LoanProgramRepository loanProgramRepository;
@@ -38,9 +39,9 @@ public class LoanEntryModelToLoanConverter implements Converter<LoanEntryModel, 
 		for(DisbursementModel disbModel: loanModel.getAddedDisbursements()){
 			newLoan.getDisbursements().add(this.convertFromModel(newLoan,disbModel));
 		}
-		newLoan.setStartingPrincipal(loanModel.getStartingPrincipal());
-		newLoan.setStartingInterest(loanModel.getStartingInterest());
-		newLoan.setStartingFees(loanModel.getStartingFees());
+		newLoan.setStartingPrincipal(loanModel.getStartingPrincipal().getAmount().intValue());
+		newLoan.setStartingInterest(loanModel.getStartingInterest().getAmount());
+		newLoan.setStartingFees(loanModel.getStartingFees().getAmount().intValue());
 		return newLoan;
 	}
 	
@@ -48,7 +49,7 @@ public class LoanEntryModelToLoanConverter implements Converter<LoanEntryModel, 
 		Disbursement disb = new Disbursement();
 		disb.setLoan(newLoan);
 		disb.setDisbursementEffectiveDate(disbModel.getDisbursementDate());
-		disb.setDisbursementAmount(disbModel.getDisbursementAmount());
+		disb.setDisbursementAmount(disbModel.getDisbursementAmount().getAmount().multiply(new BigDecimal(100)).intValue());
 		return disb;
 	}
 }

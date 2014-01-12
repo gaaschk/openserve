@@ -1,7 +1,7 @@
 package org.gsoft.openserv.web.support.formatter.currency;
 
-import java.math.BigDecimal;
-import java.util.Collections;
+import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,18 +13,11 @@ import org.springframework.format.Printer;
 public class CurrencyInPenniesFormatAnnotationFormatterFactory implements
 		AnnotationFormatterFactory<CurrencyInPenniesFormat> {
 	
-	private final Set<Class<?>> fieldTypes; 
-	
-	public CurrencyInPenniesFormatAnnotationFormatterFactory(){
-		Set<Class<?>> rawFieldTypes = new HashSet<Class<?>>(7);
-		rawFieldTypes.add(Integer.class);
-		rawFieldTypes.add(BigDecimal.class);
-		this.fieldTypes = Collections.unmodifiableSet(rawFieldTypes);
-	}
-	
     public Set<Class<?>> getFieldTypes() {
-    	return fieldTypes;
-    }
+        return new HashSet<Class<?>>(Arrays.asList(new Class<?>[] {
+                Integer.class, 
+                BigInteger.class }));    
+        }
 
     public Printer<Number> getPrinter(CurrencyInPenniesFormat annotation, Class<?> fieldType) {
         return configureFormatterFrom(annotation, fieldType);

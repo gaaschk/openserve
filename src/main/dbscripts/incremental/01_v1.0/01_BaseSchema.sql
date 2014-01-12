@@ -1,4 +1,4 @@
-# edit me to force a db rebuild
+# edit  me to force a db rebuild
 # Amortization
 CREATE TABLE Account(
 	AccountID			BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,

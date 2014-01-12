@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 public class PersonToAccountSummaryModel implements Converter<Person,AccountSummaryModel>{
 	@Resource
 	private AccountSummaryService accountSummaryService;
-	@Resource
+	@Resource(name="customConversionService")
 	private ConversionService conversionService;
 	
 	@Override
