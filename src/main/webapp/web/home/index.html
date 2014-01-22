@@ -64,7 +64,7 @@
                 <h2 class="tagline">A <span class="taglineEm" style="color: #EEEEEE; font-weight: bold">Loan Servicing</span> Application</h2>
                 <div class="topNav">
                     <ul class="menu-right">
-                        <li class="menu-item"><a href="/home/home.do">Home</a></li>
+                        <li class="menu-item"><a href="../home/index.html">Home</a></li>
                     </ul>
                 </div>
             </div>
@@ -92,31 +92,41 @@
     <script src="../../content/magicbox/js/Meio.Mask.Extras.js" type="text/javascript"></script>
 
     <script type="text/javascript">
-            require([
-                'dijit/registry',
-                'dojo/request',
-                'dijit/MenuBar',
-                'dijit/MenuBarItem',
-                'dijit/layout/ContentPane'], function(registry, request, MenuBar, MenuBarItem){
-                    var mainMenu = new MenuBar({
-                        style: 'background: none repeat scroll 0 0 #EEEEEE'
-                    });
-                    var addLoan = new MenuBarItem({
-                        label: 'Add Loan',
-                        onClick: function(){
-                                    request("../addloan/addloan.html").then(function(data){
-                                        registry.byId("content-panel").set("content", data);
-                                        var scriptNodeList = document.getElementById("content-panel").getElementsByTagName("script");
-                                        for(var i = 0; i < scriptNodeList.length; ++i){
-                                            eval(scriptNodeList[i].innerHTML);
-                                        }
-                                    });
-                                }
-                    });
-                    mainMenu.addChild(addLoan);
-                    mainMenu.placeAt("mainMenu");
-                    mainMenu.startup();
-                    });
+            require(['dijit/registry', 'dojo/request', 'dijit/MenuBar', 'dijit/MenuBarItem', 'dojo/topic', 'dijit/layout/ContentPane'],
+                    function(registry, request, MenuBar, MenuBarItem, topic){
+                        var mainMenu = new MenuBar({
+                            style: 'background: none repeat scroll 0 0 #EEEEEE'
+                        });
+                        var addLoan = new MenuBarItem({
+                            label: 'Add Loan',
+                            onClick: function(){
+                                loadAddLoan(request,topic,registry);
+                            }
+                        });
+                        mainMenu.addChild(addLoan);
+                        mainMenu.placeAt("mainMenu");
+                        mainMenu.startup();
+                        }
+                    );
+
+        function loadAddLoan(request, topic, registry){
+            request("../addloan/addloan.html").then(function(data){
+                registry.byId("content-panel").set("content", data);
+                var scriptNodeList = document.getElementById("content-panel").getElementsByTagName("script");
+                for(var i = 0; i < scriptNodeList.length; ++i){
+                    eval(scriptNodeList[i].innerHTML);
+                }
+            });
+            var loanEntryCompleteHandle = topic.subscribe("addloansuccess", function(command){
+                if(command == 'addAnother'){
+                    loadAddLoan(request, topic, registry);
+                }
+                else{
+                    window.location = "../home/index.html";
+                }
+                loanEntryCompleteHandle.remove();
+            });
+        }
     </script>
     </body>
 </html>

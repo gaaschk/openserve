@@ -67,25 +67,21 @@
         <script>
             var loanData;
 
-            require(["dojo/topic", "dijit/registry", "dijit/form/TextBox"], function(topic, registry, TextBox){
-                console.log("Subscribing to loan information");
-                topic.subscribe("loanDataUpdated", function(newLoanData){
-                    loanData = newLoanData;
-                    console.log("Setting SSN field to: " + loanData.person.ssn);
-                    new TextBox({
-                        name: "ssnField",
-                        value: loanData.person.ssn,
-                        disabled: true
-                    },"ssnField");
-                    new TextBox({
-                        name: "firstNameField",
-                        value: loanData.person.firstName
-                    },"firstNameField");
-                    new TextBox({
-                        name: "lastNameField",
-                        value: loanData.person.lastName
-                    },"lastNameField");
-                });
+            require(["dijit/form/TextBox"], function(TextBox){
+                loanData = newLoanStore;
+                new TextBox({
+                    name: "ssnField",
+                    value: loanData.person.ssn,
+                    disabled: true
+                },"ssnField");
+                new TextBox({
+                    name: "firstNameField",
+                    value: loanData.person.firstName
+                },"firstNameField");
+                new TextBox({
+                    name: "lastNameField",
+                    value: loanData.person.lastName
+                },"lastNameField");
             });
 
             require(["dijit/form/Button", "dojo/topic", "dojo/request", "dojo/store/Memory",

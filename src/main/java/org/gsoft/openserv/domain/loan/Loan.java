@@ -80,6 +80,12 @@ public class Loan extends PersistentDomainObject{
 	public void setAccount(Account account) {
 		this.account = account;
 	}
+	
+	@Transient
+	public String getAccountNumber(){
+		return (this.getAccount() != null)?this.getAccount().getAccountNumber():"";
+	}
+	
 	@OneToOne
 	@JoinColumn(name="CurrentLoanAmortizationScheduleID")
 	public LoanAmortizationSchedule getCurrentAmortizationSchedule() {

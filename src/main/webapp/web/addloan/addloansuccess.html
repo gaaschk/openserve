@@ -1,0 +1,29 @@
+<h1>Loan added successfully</h1>
+<table>
+    <tr>
+        <td>Account Number:</td>
+        <td><input id="accountNumberField" type="text" data-dojo-type="dijit/form/TextBox" disabled="true"></input></td>
+    </tr>
+</table>
+<button id="addAnother" type="button">Add Another</button>
+<button id="addLoanSuccessdone" type="button">Done</button>
+
+<script>
+    require(["dijit/form/Button", "dojo/topic", "dijit/registry", "dojo/domReady!"],
+        function(Button, topic, registry){
+            new Button({
+                label: "Add Another",
+                onClick: function(){
+                    topic.publish("addloansuccess", "addAnother");
+                }
+            },"addAnother");
+            new Button({
+                label: "Done",
+                onClick: function(){
+                    topic.publish("addloansuccess", "done");
+                }
+            },"addLoanSuccessdone");
+            registry.byId("accountNumberField").set("value", newLoanStore.accountNumber);
+        }
+    );
+</script>
